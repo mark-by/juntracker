@@ -17,83 +17,78 @@ namespace templates {
 
     class Node {
     public:
+        Node(std::string name, std::string content) : content(content), name(name) {}
+
         virtual std::string render(templates::Context context) = 0;
 
-        virtual std::vector<Node*> expand() = 0;
+        virtual std::vector<Node *> expand() = 0;
+
+        std::string get_content() { return content; }
+
+        std::string get_name() { return name; }
+
+        short int get_type() { return type; }
+
+    protected:
+        std::string content;
+        std::string name;
+        short int type;
     };
 
 
     class TextNode : public Node {
     public:
-        TextNode(std::string name, std::string content) : content(std::move(content)), name(std::move(name)),
-                                                          type(TEXTNODE) {};
+        TextNode(std::string name, std::string content) : Node(name, content) {
+            type = TEXTNODE;
+        };
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node*> expand() override;
-
-    private:
-        std::string content;
-        std::string name;
-        short int type;
+        std::vector<Node *> expand() override;
     };
 
     class BlockNode : public Node {
     public:
-        BlockNode(std::string name, std::string content) : content(std::move(content)), name(std::move(name)),
-                                                           type(BLOCKNODE) {};
+        BlockNode(std::string name, std::string content) : Node(name, content) {
+            type = BLOCKNODE;
+        };
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node*> expand() override;
-
-    private:
-        std::string content;
-        std::string name;
-        short int type;
+        std::vector<Node *> expand() override;
     };
 
     class VarNode : public Node {
     public:
-        VarNode(std::string name, std::string content) : content(std::move(content)), name(std::move(name)),
-                                                         type(VARNODE) {};
+        VarNode(std::string name, std::string content) : Node(name, content) {
+            type = VARNODE;
+        };
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node*> expand() override;
-
-    private:
-        std::string content;
-        std::string name;
-        short int type;
+        std::vector<Node *> expand() override;
     };
 
     class ForNode : public Node {
     public:
-        ForNode(std::string name, std::string content) : content(std::move(content)), name(std::move(name)),
-                type(FORNODE) {};
+        ForNode(std::string name, std::string content) : Node(name, content) {
+            type = FORNODE;
+        };
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node*> expand() override;
-    private:
-        std::string content;
-        std::string name;
-        short int type;
+        std::vector<Node *> expand() override;
     };
 
     class IfNode : public Node {
     public:
-        IfNode(std::string name, std::string content) : content(std::move(content)), name(std::move(name)),
-                type(IFNODE) {};
+        IfNode(std::string name, std::string content) : Node(name, content) {
+            type = IFNODE;
+        };
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node*> expand() override;
-    private:
-        std::string content;
-        std::string name;
-        short int type;
+        std::vector<Node *> expand() override;
     };
 
 }

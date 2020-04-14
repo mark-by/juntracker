@@ -10,29 +10,32 @@ namespace templates {
     template <class T>
     struct DefaultSerializer;
 
+
     class Context {
     public:
         Context() = default;
         explicit Context(boost::property_tree::ptree &root) : root(root) {};
 
-        template <class T, class Serializer = DefaultSerializer<T>>
-        void putArray(const char * name, const T * array, size_t count, Serializer serial = Serializer());
+        explicit Context(std::string json);
 
         template <class T, class Serializer = DefaultSerializer<T>>
-        void putArray(const char * name, const std::vector<T> & array, Serializer serial = Serializer());
+        inline void putArray(const char * name, const T * array, size_t count, Serializer serial = Serializer());
 
-        std::string str() const;
+        template <class T, class Serializer = DefaultSerializer<T>>
+        inline void putArray(const char * name, const std::vector<T> & array, Serializer serial = Serializer());
 
-        template<class T>
-        void put(const char *name, T value);
-
-        template<class T>
-        T get(const char *name);
+        inline std::string str() const;
 
         template<class T>
-        std::vector <T> getArray(boost::property_tree::ptree::key_type const &key);
+        inline void put(const char *name, T value);
 
-        std::vector<Context> getObjects(boost::property_tree::ptree::key_type const &key);
+        template<class T>
+        inline T get(const char *name);
+
+        template<class T>
+        inline std::vector <T> getArray(boost::property_tree::ptree::key_type const &key);
+
+        inline std::vector<Context> getObjects(boost::property_tree::ptree::key_type const &key);
 
     private:
         boost::property_tree::ptree root;

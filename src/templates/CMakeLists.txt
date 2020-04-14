@@ -8,5 +8,7 @@ set(node_source
 set(loader_source
         loader/loader.cpp)
 
+set(parser_source
+        parser/parser.cpp)
 
-add_library(templates STATIC ${node_source} ${loader_source})
+add_library(templates STATIC ${node_source} ${loader_source} ${parser_source})

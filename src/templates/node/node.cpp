@@ -1,7 +1,7 @@
 #include <node/node.h>
 
 std::string templates::TextNode::render(templates::Context context) {
-    return std::string();
+    return content;
 }
 
 std::vector<templates::Node*> templates::TextNode::expand() {
