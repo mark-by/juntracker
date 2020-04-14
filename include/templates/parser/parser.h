@@ -1,0 +1,6 @@
+#ifndef TEMPLATES_PARSER_INCLUDED
+#define TEMPLATES_PARSER_INCLUDED
+
+#include <node/node.h>
+
+#endif //TEMPLATES_PARSER_INCLUDED

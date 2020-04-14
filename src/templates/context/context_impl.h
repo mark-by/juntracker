@@ -1,4 +1,5 @@
-#include "context/context.h"
+#ifndef CONTEXT_IMPL_INCLUDED
+#define CONTEXT_IMPL_INCLUDED
 
 std::string templates::Context::str() const {
     // Представление context в json в строковом виде
@@ -60,3 +61,5 @@ std::vector<templates::Context> templates::Context::getObjects(boost::property_t
         temp.push_back(Context(item.second));
     return temp;
 }
+
+#endif

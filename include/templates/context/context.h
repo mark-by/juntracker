@@ -46,8 +46,7 @@ namespace templates {
             return temp;
         }
     };
-
 }
 
-#include "context/context_impl.h"
+#include "../../src/templates/context/context_impl.h"
 #endif //CONTEXT_INCLUDED
