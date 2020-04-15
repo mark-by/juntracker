@@ -9,10 +9,6 @@
 
 // Need realisation to do tests
 
-// test connection
-
-// test connection manager
-
 // test server
 
 int main () {
