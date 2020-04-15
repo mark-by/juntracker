@@ -1,0 +1,3 @@
+/home/timofei/work/parkmail/c/core/juntracker/test/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/timofei/work/parkmail/c/core/juntracker/test/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/timofei/work/parkmail/c/core/juntracker/test/cmake-build-debug/CMakeFiles/test.dir

@@ -1,5 +1,8 @@
 include_directories("${PROJECT_SOURCE_DIR}/include/boost")
-include_directories("${PROJECT_SOURCE_DIR}/include/templates")
+include_directories("${PROJECT_SOURCE_DIR}/include/core")
 
 set(sorce
-        templates/core/core.cpp)
+        /core/adminAPI.cpp
+        /core/financeAPI.cpp
+        /core/scheduleAPI.cpp
+        /core/studentAPI.cpp)
