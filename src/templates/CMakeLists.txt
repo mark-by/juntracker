@@ -3,7 +3,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/templates")
 
 set(node_source
         node/node.cpp
-        node/node_list.cpp )
+        node/node_list.cpp)
 
 set(loader_source
         loader/loader.cpp)
@@ -11,4 +11,11 @@ set(loader_source
 set(parser_source
         parser/parser.cpp)
 
-add_library(templates STATIC ${node_source} ${loader_source} ${parser_source})
+set(template_source
+        template/template.cpp)
+
+add_library(templates STATIC
+        ${node_source}
+        ${loader_source}
+        ${parser_source}
+        ${template_source})
