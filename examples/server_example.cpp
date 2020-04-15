@@ -61,9 +61,9 @@ public:
         request_stream << "Connection: close\r\n\r\n";
 
         resolver_.async_resolve(server, "http",
-                                boost::bind(&client::handleResolve, this,
-                                            boost::asio::placeholders::error,
-                                            boost::asio::placeholders::results));
+                boost::bind(&client::handleResolve, this,
+                        boost::asio::placeholders::error,
+                        boost::asio::placeholders::results));
     };
 
 private:
@@ -74,8 +74,8 @@ private:
         }
 
         boost::asio::async_connect(sock_, endpoints,
-                                   boost::bind(&client::handleConnect, this,
-                                               boost::asio::placeholders::error));
+                boost::bind(&client::handleConnect, this,
+                        boost::asio::placeholders::error));
     }
 
     void handleConnect(const boost::system::error_code& err) {
@@ -84,8 +84,8 @@ private:
         }
 
         boost::asio::async_write(sock_, request_,
-                                 boost::bind(&client::handleWriteRequest, this,
-                                             boost::asio::placeholders::error));
+                boost::bind(&client::handleWriteRequest, this,
+                        boost::asio::placeholders::error));
     }
 
     void handleWriteRequest(const boost::system::error_code& err) {
@@ -94,8 +94,8 @@ private:
         }
 
         boost::asio::async_read_until(sock_, response_, "\r\n",
-                                      boost::bind(&client::handleReadStatusLine, this,
-                                                  boost::asio::placeholders::error));
+                boost::bind(&client::handleReadStatusLine, this,
+                        boost::asio::placeholders::error));
     }
 
     void handleReadStatusLine(const boost::system::error_code& err) {
@@ -125,8 +125,8 @@ private:
         }
 
         boost::asio::async_read_until(sock_, response_, "\r\n\r\n",
-                                      boost::bind(&client::handleReadHeaders, this,
-                                                  boost::asio::placeholders::error));
+                boost::bind(&client::handleReadHeaders, this,
+                        boost::asio::placeholders::error));
 
     }
 
@@ -148,18 +148,18 @@ private:
         }
 
         boost::asio::async_read(sock_, response_,
-                                boost::asio::transfer_at_least(1),
-                                boost::bind(&client::handleReadContent, this,
-                                            boost::asio::placeholders::error));
+                boost::asio::transfer_at_least(1),
+                boost::bind(&client::handleReadContent, this,
+                        boost::asio::placeholders::error));
     }
 
     void handleReadContent(const boost::system::error_code& err) {
         if (!err) {
             std::cout << &response_;
             boost::asio::async_read(sock_, response_,
-                                    boost::asio::transfer_at_least(1),
-                                    boost::bind(&client::handleReadContent, this,
-                                                boost::asio::placeholders::error));
+                    boost::asio::transfer_at_least(1),
+                    boost::bind(&client::handleReadContent, this,
+                            boost::asio::placeholders::error));
         } else if (err == boost::asio::error::eof) {
             std::cout << "Error:" << err << std::endl;
         }
