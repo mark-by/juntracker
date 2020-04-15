@@ -9,7 +9,7 @@ std::vector<templates::Node*> templates::TextNode::expand() {
 }
 
 std::string templates::BlockNode::render(templates::Context context) {
-    return std::string();
+    return content;
 }
 
 std::vector<templates::Node*> templates::BlockNode::expand() {
@@ -17,7 +17,7 @@ std::vector<templates::Node*> templates::BlockNode::expand() {
 }
 
 std::string templates::VarNode::render(templates::Context context) {
-    return std::string();
+    return context.get<std::string>(name);
 }
 
 std::vector<templates::Node*> templates::VarNode::expand() {

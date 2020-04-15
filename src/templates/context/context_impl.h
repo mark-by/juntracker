@@ -16,7 +16,7 @@ inline templates::Context::Context(std::string json) {
 }
 
 template<class T>
-inline void templates::Context::put(const char *name, T value) {
+inline void templates::Context::put(std::string name, T value) {
     // Метод добавляет переменную c именем name и значение value  в context
     // В случе, если name содержит '.', напрмер "person.name", то создается обхект person с полем name
     // Последующие указание с тем же именем объекта (например "person.age") добавит к объекту поле age
@@ -24,7 +24,7 @@ inline void templates::Context::put(const char *name, T value) {
 }
 
 template<class T>
-inline T templates::Context::get(const char *name) {
+inline T templates::Context::get(std::string name) {
     // Метод позволяет взять переменную по ключу
     return root.get<T>(name);
 }
@@ -39,7 +39,7 @@ inline std::vector<T> templates::Context::getArray(boost::property_tree::ptree::
 }
 
 template<class T, class Serializer>
-inline void templates::Context::putArray(const char *name, const T *array, size_t count, Serializer serial) {
+inline void templates::Context::putArray(std::string name, const T *array, size_t count, Serializer serial) {
     // Метод позволяет создать массив в контексте. Для простых данных собственный serializer не нужен
     // Для пользовательских данных, объектов, необходимо создать функцию Serializer, которая возвращает объект
     // Context - представление объекта в контексте
@@ -51,7 +51,7 @@ inline void templates::Context::putArray(const char *name, const T *array, size_
 }
 
 template<class T, class Serializer>
-inline void templates::Context::putArray(const char *name, const std::vector<T> &array, Serializer serial) {
+inline void templates::Context::putArray(std::string name, const std::vector<T> &array, Serializer serial) {
     // Метод позволяет создать массив в контексте. Для простых данных собственный serializer не нужен
     // Для пользовательских данных, объектов, необходимо создать функцию Serializer, которая возвращает объект
     // Context - представление объекта в контексте

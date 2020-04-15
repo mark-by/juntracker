@@ -4,6 +4,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/boost")
 include_directories("${PROJECT_SOURCE_DIR}/include/templates")
 
 file(GLOB tests
+        node_list.cpp
         node.cpp
         context.cpp
         main.cpp

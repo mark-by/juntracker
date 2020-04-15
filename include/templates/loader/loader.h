@@ -10,13 +10,14 @@ namespace templates {
     public:
         explicit Loader(std::string filename);
 
-        std::string load();
+        void load();
+        std::string getResult();
 
     private:
         templates::NodeList merge(templates::NodeList &l, templates::NodeList &r);
 
         std::string filename;
-        Parser parser;
+        std::string result;
     };
 }
 
