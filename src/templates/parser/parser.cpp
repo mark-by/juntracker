@@ -4,14 +4,58 @@ templates::Node * templates::Parser::parse() {
     return nullptr;
 }
 
-void templates::Parser::init(std::string initContent) {
-    content = initContent;
+templates::Node *templates::TextParser::parse() {
+    return nullptr;
 }
 
-std::string templates::Parser::getBlockName(size_t begin, size_t end) {
+templates::Node *templates::VarParser::parse() {
+    return nullptr;
+}
+
+std::string templates::VarParser::getVar() {
     return std::string();
 }
 
-std::string templates::Parser::getVarName(size_t begin, size_t end) {
+std::string templates::VarParser::getProperty() {
+    return std::string();
+}
+
+templates::Node *templates::ForParser::parse() {
+    return nullptr;
+}
+
+std::string templates::ForParser::getIterator() {
+    return std::string();
+}
+
+std::string templates::ForParser::getVar() {
+    return std::string();
+}
+
+templates::Node *templates::BlockParser::parse() {
+    return nullptr;
+}
+
+std::string templates::BlockParser::getName() {
+    return std::string();
+}
+
+std::string templates::BlockParser::getContent() {
+    return std::string();
+}
+
+templates::Node *templates::IfParser::parse() {
+    return nullptr;
+}
+
+std::string templates::IfParser::getStatement() {
+    return std::string();
+}
+
+std::string templates::IfParser::getBlockTrue() {
+    return std::string();
+}
+
+std::string templates::IfParser::getBlockFalse() {
     return std::string();
 }
