@@ -1,0 +1,3 @@
+include/boost/*
+cmake-build-debug/*
+.idea/*

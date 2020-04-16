@@ -9,6 +9,7 @@
 #include <string>
 #include "ConnectionManager.h"
 #include "RequestHandler.h"
+#include "Request.h"
 
 class Server {
 public:
@@ -25,7 +26,7 @@ private:
      *
      *
      *
-     * */
+     */
     // void waitStop()  <- from documentation. On studying
 
     // from Ilya Saneev lection. On studying
