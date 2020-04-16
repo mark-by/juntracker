@@ -10,6 +10,7 @@ before_install:
     - cd include/boost
     - ./bootstrap.sh
     - ./b2 --with-thread
+    - cd ../..
 script:
     - cppcheck --inconclusive --enable=all --check-config --suppress=missingIncludeSystem -I include src
     - ./configure
