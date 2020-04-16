@@ -4,16 +4,10 @@ sudo: true
 
 before_install:
     - sudo apt-get install cppcheck valgrind -y
-    - wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2
-    - tar --bzip2 -xf boost_1_72_0.tar.bz2
-    - mv boost_1_72_0 include/boost
-    - cd include/boost
-    - ./bootstrap.sh
-    - ./b2 --with-thread
-    - cd ../..
+    - ./ci/install_boost
 script:
     - cppcheck --inconclusive --enable=all --check-config --suppress=missingIncludeSystem -I include src
-    - ./configure
+    - ./ci/configure
     - cd build
     - make test
     - valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-resolution=med  --track-origins=yes --child-silent-after-fork=yes ./test/run_tests
