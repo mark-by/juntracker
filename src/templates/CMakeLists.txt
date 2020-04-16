@@ -1,6 +1,3 @@
-include_directories("${PROJECT_SOURCE_DIR}/include/boost")
-include_directories("${PROJECT_SOURCE_DIR}/include/templates")
-
 set(node_source
         node/node.cpp
         node/node_list.cpp)
