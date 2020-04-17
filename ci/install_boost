@@ -1,0 +1,8 @@
+wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2
+tar --bzip2 -xf boost_1_72_0.tar.bz2
+mv boost_1_72_0 include/boost
+cd include/boost
+./bootstrap.sh
+./b2 --with-thread
+cd ../..
+rm boost_1_72_0.tar.bz2
