@@ -2,12 +2,6 @@
 // Created by gg on 14.04.2020.
 //
 
-
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-#include <iostream>
-
 /*using namespace boost::asio;
 io_service service;
 
@@ -27,9 +21,16 @@ int main(int argc, char* argv[]) {
     service.run();
 }*/
 
-#include <boost/bind.hpp>
-#include "include/server/Server.h"
-#include "include/server/Client.h"
+#include "boost/bind.hpp"
+#include "boost/thread.hpp"
+#include "boost/asio.hpp"
+#include "boost/asio/placeholders.hpp"
+#include "boost/asio/detail/config.hpp"
+#include "boost/asio/ip/address.hpp"
+#include "boost/tuple/tuple_comparison.hpp"
+
+#include <iostream>
+
 
 /*void test() {
     std::cout << "\ntest\n" << std::endl;
@@ -52,7 +53,7 @@ int main(int argc, char* argv[]) {
 
 class client {
 public:
-    client(boost::asio::io_context& context, const std::string& server,
+    client(boost::asio::io_service& context, const std::string& server,
            const std::string& path): resolver_(context), sock_(context) {
         std::ostream request_stream(&request_);
         request_stream << "GET " << path << " HTTP/1.0\r\n";
@@ -68,7 +69,7 @@ public:
 
 private:
     void handleResolve(const boost::system::error_code& err,
-                       const boost::asio::ip::tcp::resolver::results_type& endpoints) {
+                       const boost::asio::ip::tcp::resolver::endpoint_type & endpoints) {
         if (err) {
             std::cout << "Error: " << err.message() << std::endl;
         }
@@ -178,7 +179,7 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-        boost::asio::io_context context_;
+        boost::asio::io_service context_;
         client client(context_, argv[1], argv[2]);
         context_.run();
     } catch (std::exception& exception) {

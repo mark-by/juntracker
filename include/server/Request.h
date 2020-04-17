@@ -6,6 +6,7 @@
 #define SERVER_REQUEST_H
 
 #include <string>
+#include <map>
 
 class Request {
 public:

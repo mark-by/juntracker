@@ -8,13 +8,14 @@
 #include <array>
 #include <memory>
 #include <boost/asio.hpp>
+#include <iostream>
 
 #include "Response.h"
 #include "Handler.h"
 
 class ConnectionManager;
 
-class Connection: public std::enable_shared_from_this<this> {
+class Connection: public std::enable_shared_from_this<Connection> {
 public:
     Connection(const Connection&) = delete;
     Connection& operator=(const Connection&) = delete;
