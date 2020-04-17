@@ -8,9 +8,9 @@
 #include <array>
 #include <memory>
 #include <boost/asio.hpp>
+
 #include "Response.h"
 #include "Handler.h"
-#include "RequestParser.h"
 
 class ConnectionManager;
 
@@ -29,7 +29,6 @@ public:
 private:
     // ConnectionManager manager_;
     // Response callback_;
-    // RequestParser parser_;
     // Handler handler_;
     // Request request_;
     std::array<char, 1024> buffer;

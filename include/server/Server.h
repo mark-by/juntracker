@@ -31,7 +31,6 @@ private:
 
     // Request request_;
     // Response response_;
-
     boost::asio::io_context context_;
     boost::asio::ip::tcp::acceptor acceptor_;
 
