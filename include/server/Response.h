@@ -7,19 +7,21 @@
 
 #include <string>
 
-struct Header {
-    std::string name;
-    std::string value;
+enum codes {
+
+};  // like 404 to client
+
+class Response {
+public:
+    Response();
+    Response(std::string request, int status, std::string data = "");
+    std::string toString();
+    void setBody(std::string data);
+    void setHeader(std::string key, std::value);
+
+private:
+    std::map<std::string, std::string> headers;
+    std::string body;
 };
-
-struct Response {
-    enum codes {
-
-    };  // like 404 to client
-
-    std::vector<Header> headers;
-
-    std::string content;
-};  // improve in future
 
 #endif //SERVER_RESPONSE_H

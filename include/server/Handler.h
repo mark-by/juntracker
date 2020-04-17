@@ -7,7 +7,7 @@
 
 #include <string>
 
-struct Response;
+// Response;
 // Request
 
 class Handler {

@@ -69,7 +69,7 @@ public:
 
 private:
     void handleResolve(const boost::system::error_code& err,
-                       const boost::asio::ip::tcp::resolver::endpoint_type & endpoints) {
+            const boost::asio::ip::tcp::resolver::endpoint_type & endpoints) {
         if (err) {
             std::cout << "Error: " << err.message() << std::endl;
         }
