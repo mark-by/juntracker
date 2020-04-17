@@ -8,7 +8,7 @@
 #include <boost/asio.hpp>
 #include <string>
 #include "ConnectionManager.h"
-#include "RequestHandler.h"
+#include "Handler.h"
 #include "Request.h"
 
 class Server {
@@ -29,12 +29,14 @@ private:
      */
     // void waitStop()  <- from documentation. On studying
 
-    // from Ilya Saneev lection. On studying
+    // Request request_;
+    // Response response_;
+
     boost::asio::io_context context_;
     boost::asio::ip::tcp::acceptor acceptor_;
 
     ConnectionManager manager_;
-    RequestHandler handler_;
+    Handler handler_;
 };
 
 

@@ -8,8 +8,8 @@
 #include <array>
 #include <memory>
 #include <boost/asio.hpp>
-#include "Reply.h"
-#include "RequestHandler.h"
+#include "Response.h"
+#include "Handler.h"
 #include "RequestParser.h"
 
 class ConnectionManager;
@@ -21,16 +21,16 @@ public:
     // decline "="
 
     explicit Connection(boost::asio::ip::tcp::socket socket,
-            ConnectionManager& manager, RequestHandler& handler);
+                        ConnectionManager& manager, Handler& handler);
     // create socket to connect with server
     // connection manager toi manage connections
     // handler to handle requests
 
 private:
     // ConnectionManager manager_;
-    // Reply callback_;
+    // Response callback_;
     // RequestParser parser_;
-    // RequestHandler handler_;
+    // Handler handler_;
     // Request request_;
     std::array<char, 1024> buffer;
 

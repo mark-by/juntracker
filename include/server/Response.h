@@ -2,8 +2,8 @@
 // Created by gg on 15.04.2020.
 //
 
-#ifndef SERVER_REPLY_H
-#define SERVER_REPLY_H
+#ifndef SERVER_RESPONSE_H
+#define SERVER_RESPONSE_H
 
 #include <string>
 
@@ -12,7 +12,7 @@ struct Header {
     std::string value;
 };
 
-struct Reply {
+struct Response {
     enum codes {
 
     };  // like 404 to client
@@ -22,4 +22,4 @@ struct Reply {
     std::string content;
 };  // improve in future
 
-#endif //SERVER_REPLY_H
+#endif //SERVER_RESPONSE_H
