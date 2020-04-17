@@ -4,38 +4,38 @@ std::string templates::TextNode::render(templates::Context context) {
     return content;
 }
 
-std::vector<templates::Node*> templates::TextNode::expand() {
-    return std::vector<templates::Node*>();
+templates::NodeQueue templates::TextNode::expand() {
+    return templates::NodeQueue();
 }
 
 std::string templates::BlockNode::render(templates::Context context) {
     return content;
 }
 
-std::vector<templates::Node*> templates::BlockNode::expand() {
-    return std::vector<templates::Node*>();
+templates::NodeQueue templates::BlockNode::expand() {
+    return templates::NodeQueue();
 }
 
 std::string templates::VarNode::render(templates::Context context) {
     return context.get<std::string>(name);
 }
 
-std::vector<templates::Node*> templates::VarNode::expand() {
-    return std::vector<templates::Node*>();
+templates::NodeQueue templates::VarNode::expand() {
+    return templates::NodeQueue();
 }
 
 std::string templates::ForNode::render(templates::Context context) {
     return std::string();
 }
 
-std::vector<templates::Node*> templates::ForNode::expand() {
-    return std::vector<templates::Node*>();
+templates::NodeQueue templates::ForNode::expand() {
+    return templates::NodeQueue();
 }
 
 std::string templates::IfNode::render(templates::Context context) {
     return std::string();
 }
 
-std::vector<templates::Node*> templates::IfNode::expand() {
-    return std::vector<templates::Node*>();
+templates::NodeQueue templates::IfNode::expand() {
+    return templates::NodeQueue();
 }

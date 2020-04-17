@@ -2,7 +2,7 @@
 #define TEMPLATES_TEMPLATE_H
 #include <context/context.h>
 #include <parser/parser.h>
-#include <node/node_list.h>
+#include <node/node.h>
 
 namespace templates {
     class Template {
@@ -15,7 +15,7 @@ namespace templates {
         templates::VarParser varParser;
         templates::ForParser forParser;
         templates::IfParser ifParser;
-        templates::NodeList nodeList;
+        templates::NodeQueue nodeList;
     };
 }
 

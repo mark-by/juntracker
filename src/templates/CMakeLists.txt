@@ -1,6 +1,6 @@
 set(node_source
         node/node.cpp
-        node/node_list.cpp)
+        node/node_queue.cpp)
 
 set(loader_source
         loader/loader.cpp)

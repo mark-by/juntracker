@@ -2,8 +2,8 @@
 #define TEMPLATES_LOADER_INCLUDED
 
 #include <node/node.h>
-#include <node/node_list.h>
 #include <parser/parser.h>
+#include <map>
 
 namespace templates {
     class Loader {
@@ -11,14 +11,15 @@ namespace templates {
         explicit Loader(std::string filename);
 
         void load();
-        std::string getResult();
+        std::string& getResult();
 
     private:
-        templates::NodeList merge(templates::NodeList &l, templates::NodeList &r);
+        void merge();
 
+        std::map<std::string, std::unique_ptr<Node>> blocks;
         std::string filename;
         std::string result;
-        templates::NodeList nodeList;
+        templates::NodeQueue nodeList;
         templates::BlockParser blockParser;
         templates::TextParser textParser;
     };

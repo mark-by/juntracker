@@ -1,14 +1,14 @@
 #include <parser/parser.h>
 
-templates::Node * templates::Parser::parse() {
+std::unique_ptr<templates::Node> templates::Parser::parse() {
     return nullptr;
 }
 
-templates::Node *templates::TextParser::parse() {
+std::unique_ptr<templates::Node>templates::TextParser::parse() {
     return nullptr;
 }
 
-templates::Node *templates::VarParser::parse() {
+std::unique_ptr<templates::Node>templates::VarParser::parse() {
     return nullptr;
 }
 
@@ -20,7 +20,7 @@ std::string templates::VarParser::getProperty() {
     return std::string();
 }
 
-templates::Node *templates::ForParser::parse() {
+std::unique_ptr<templates::Node>templates::ForParser::parse() {
     return nullptr;
 }
 
@@ -32,7 +32,7 @@ std::string templates::ForParser::getVar() {
     return std::string();
 }
 
-templates::Node *templates::BlockParser::parse() {
+std::unique_ptr<templates::Node>templates::BlockParser::parse() {
     return nullptr;
 }
 
@@ -44,7 +44,7 @@ std::string templates::BlockParser::getContent() {
     return std::string();
 }
 
-templates::Node *templates::IfParser::parse() {
+std::unique_ptr<templates::Node>templates::IfParser::parse() {
     return nullptr;
 }
 

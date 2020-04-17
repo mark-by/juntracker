@@ -2,10 +2,9 @@
 #define NODE_INCLUDED
 
 #include <string>
-#include <vector>
+#include <queue>
 #include <list>
 #include <context/context.h>
-//#include <utility>
 
 namespace templates {
 #define TEXTNODE 0
@@ -14,6 +13,7 @@ namespace templates {
 #define FORNODE 3
 #define IFNODE 4
 
+    class NodeQueue;
 
     class Node {
     public:
@@ -21,7 +21,7 @@ namespace templates {
 
         virtual std::string render(templates::Context context) = 0;
 
-        virtual std::vector<Node *> expand() = 0;
+        virtual templates::NodeQueue expand() = 0;
 
         std::string get_content() { return content; }
 
@@ -44,7 +44,7 @@ namespace templates {
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node *> expand() override;
+        templates::NodeQueue expand() override;
     };
 
     class BlockNode : public Node {
@@ -55,7 +55,7 @@ namespace templates {
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node *> expand() override;
+        templates::NodeQueue expand() override;
     };
 
     class VarNode : public Node {
@@ -66,7 +66,7 @@ namespace templates {
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node *> expand() override;
+        templates::NodeQueue expand() override;
     };
 
     class ForNode : public Node {
@@ -77,7 +77,7 @@ namespace templates {
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node *> expand() override;
+        templates::NodeQueue expand() override;
     };
 
     class IfNode : public Node {
@@ -88,9 +88,23 @@ namespace templates {
 
         std::string render(templates::Context context) override;
 
-        std::vector<Node *> expand() override;
+        templates::NodeQueue expand() override;
     };
 
+
+    class NodeQueue : public std::queue<std::unique_ptr<Node>> {
+    public:
+        NodeQueue() : result("") {};
+        explicit NodeQueue(templates::Context context): context(std::move(context)), result("") {};
+        bool render();
+        std::string renderAll();
+
+        std::string getResult();
+
+    private:
+        templates::Context context;
+        std::string result;
+    };
 }
 
 #endif //NODE_INCLUDED

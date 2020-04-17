@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
-#include <node/node_list.h>
+#include <node/node.h>
 
 TEST(NodeList, renderList) {
     templates::Context context;
     context.put("name", "Mark");
     context.putArray("array", std::vector<int>({1,2,3}));
-    templates::NodeList nodeList(context);
-    nodeList.push_back(new templates::TextNode("", "some text"));
-    nodeList.push_back(new templates::TextNode("", " some text2"));
-    nodeList.push_back(new templates::VarNode("name", "{{ name }}"));
-    nodeList.push_back(new templates::ForNode("number:array", "Number: {{ number }}"));
+    templates::NodeQueue nodeList(context);
+    nodeList.push(std::make_unique<templates::TextNode>("", "some text"));
+    nodeList.push(std::make_unique<templates::TextNode>("", " some text2"));
+    nodeList.push(std::make_unique<templates::VarNode>("name", "{{ name }}"));
+    nodeList.push(std::make_unique<templates::ForNode>("number:array", "Number: {{ number }}"));
     EXPECT_TRUE(nodeList.render());
     EXPECT_EQ(nodeList.getResult(), "some text");
     EXPECT_TRUE(nodeList.render());
@@ -26,11 +26,11 @@ TEST(NodeList, renderAllList) {
     templates::Context context;
     context.put("name", "Mark");
     context.putArray("array", std::vector<int>({1,2,3}));
-    templates::NodeList nodeList(context);
-    nodeList.push_back(new templates::TextNode("", "some text"));
-    nodeList.push_back(new templates::TextNode("", " some text2"));
-    nodeList.push_back(new templates::VarNode("name", "{{ name }}"));
-    nodeList.push_back(new templates::ForNode("number:array", "Number: {{ number }}"));
+    templates::NodeQueue nodeList(context);
+    nodeList.push(std::make_unique<templates::TextNode>("", "some text"));
+    nodeList.push(std::make_unique<templates::TextNode>("", " some text2"));
+    nodeList.push(std::make_unique<templates::VarNode>("name", "{{ name }}"));
+    nodeList.push(std::make_unique<templates::ForNode>("number:array", "Number: {{ number }}"));
     EXPECT_EQ(nodeList.renderAll(), "some text some text2MarkNumber: 1Number: 2Number: 3");
 }
 

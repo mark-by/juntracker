@@ -8,7 +8,7 @@ namespace templates {
     public:
         Parser() : content(""), buffer("") {};
         explicit Parser(std::string content) : content(content), buffer("") {}
-        virtual templates::Node * parse() = 0;
+        virtual std::unique_ptr<templates::Node> parse() = 0;
     protected:
         std::string content;
         std::string buffer;
@@ -16,13 +16,13 @@ namespace templates {
 
     class TextParser: public Parser {
     public:
-        templates::Node * parse() override;
+        std::unique_ptr<templates::Node> parse() override;
     };
 
 
     class VarParser: public Parser {
     public:
-        templates::Node * parse() override;
+        std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getVar();
         std::string getProperty();
@@ -30,7 +30,7 @@ namespace templates {
 
     class ForParser: public Parser {
     public:
-        templates::Node * parse() override;
+        std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getIterator();
         std::string getVar();
@@ -38,7 +38,7 @@ namespace templates {
 
     class BlockParser: public Parser {
     public:
-        templates::Node * parse() override;
+        std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getName();
         std::string getContent();
@@ -46,7 +46,7 @@ namespace templates {
 
     class IfParser: public Parser {
     public:
-        templates::Node * parse() override;
+        std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getStatement();
         std::string getBlockTrue();
