@@ -6,6 +6,7 @@
 namespace templates {
     class Parser {
     public:
+        Parser() : content(""), buffer("") {};
         explicit Parser(std::string content) : content(content), buffer("") {}
         virtual templates::Node * parse() = 0;
     protected:

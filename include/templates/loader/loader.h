@@ -18,6 +18,9 @@ namespace templates {
 
         std::string filename;
         std::string result;
+        templates::NodeList nodeList;
+        templates::BlockParser blockParser;
+        templates::TextParser textParser;
     };
 }
 

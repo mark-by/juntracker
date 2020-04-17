@@ -1,6 +1,8 @@
 #ifndef TEMPLATES_TEMPLATE_H
 #define TEMPLATES_TEMPLATE_H
 #include <context/context.h>
+#include <parser/parser.h>
+#include <node/node_list.h>
 
 namespace templates {
     class Template {
@@ -9,6 +11,11 @@ namespace templates {
         std::string render(templates::Context context);
     private:
         std::string filename;
+        templates::TextParser textParser;
+        templates::VarParser varParser;
+        templates::ForParser forParser;
+        templates::IfParser ifParser;
+        templates::NodeList nodeList;
     };
 }
 

@@ -7,6 +7,7 @@ file(GLOB tests
         node_list.cpp
         node.cpp
         context.cpp
+        loader.cpp
         main.cpp
         )
 
