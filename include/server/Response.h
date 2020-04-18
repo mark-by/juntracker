@@ -13,11 +13,11 @@ enum codes {
 
 class Response {
 public:
-    Response();
-    Response(std::string request, int status, std::string data = "");
-    std::string toString();
-    void setBody(std::string data);
-    void setHeader(std::string key, std::value);
+    //Response();
+   // Response(std::string request, int status, std::string data = "");
+    //std::string toString();
+    //void setBody(std::string data);
+    //void setHeader(std::string key, std::value);
 
 private:
     std::map<std::string, std::string> headers;

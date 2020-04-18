@@ -13,8 +13,8 @@
 class Handler {
 public:
     Handler(/*Request req, Response rep*/);
-    Response getResponse();
-    Response requestToCore(/*request*/);
+    //Response getResponse();
+    //Response requestToCore(/*request*/);
 
 private:
     // Request request_;

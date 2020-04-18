@@ -4,4 +4,4 @@ include_directories("${PROJECT_SOURCE_DIR}/include/server")
 
 add_executable(server server_example.cpp)
 
-target_link_libraries(server boost_thread serverlib)
+target_link_libraries(server boost_thread pthread)

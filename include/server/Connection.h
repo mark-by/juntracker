@@ -11,6 +11,8 @@
 #include <iostream>
 
 #include "Response.h"
+#include "Request.h"
+#include "ConnectionManager.h"
 #include "Handler.h"
 
 class ConnectionManager;
@@ -27,16 +29,20 @@ public:
     // connection manager toi manage connections
     // handler to handle requests
 
+    void start() { doRead();}
+    void stop() { socket_.close();}
+
 private:
-    // ConnectionManager manager_;
-    // Response callback_;
-    // Handler handler_;
-    // Request request_;
+    boost::asio::ip::tcp::socket socket_;
+    ConnectionManager manager_;
+    Response response_;
+    Handler handler_;
+    Request request_;
+
     std::array<char, 1024> buffer;
 
     void doRead();  // async read
     void doWrite();  // async write
-    boost::asio::ip::tcp::socket socket_;
 };
 
 #endif //SERVER_CONNECTION_H
