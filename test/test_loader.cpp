@@ -4,7 +4,7 @@
 #include <fstream>
 #include <streambuf>
 
-TEST(LoaderTest, SomeTest) {
+TEST(LoaderTest, ResultTest) {
     std::cout << "Help";
     templates::Loader loader("../../test/test_files/loader/loader_extends.html");
     loader.load();

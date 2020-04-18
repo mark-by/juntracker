@@ -7,7 +7,7 @@
 namespace templates {
     class Template {
     public:
-        explicit Template(std::string filename) : filename(filename) {};
+        explicit Template(std::string filename) : filename(filename) {}
         std::string render(templates::Context context);
     private:
         std::string filename;

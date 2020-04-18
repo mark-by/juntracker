@@ -1,15 +1,11 @@
 #include <parser/parser.h>
 
-std::unique_ptr<templates::Node> templates::Parser::parse() {
-    return nullptr;
-}
-
 std::unique_ptr<templates::Node>templates::TextParser::parse() {
-    return nullptr;
+    return std::make_unique<templates::TextNode>("", content);
 }
 
 std::unique_ptr<templates::Node>templates::VarParser::parse() {
-    return nullptr;
+    return std::make_unique<templates::VarNode>("", content);
 }
 
 std::string templates::VarParser::getVar() {
@@ -21,7 +17,7 @@ std::string templates::VarParser::getProperty() {
 }
 
 std::unique_ptr<templates::Node>templates::ForParser::parse() {
-    return nullptr;
+    return std::make_unique<templates::ForNode>("", content);
 }
 
 std::string templates::ForParser::getIterator() {
@@ -33,7 +29,7 @@ std::string templates::ForParser::getVar() {
 }
 
 std::unique_ptr<templates::Node>templates::BlockParser::parse() {
-    return nullptr;
+    return std::make_unique<templates::BlockNode>("", content);
 }
 
 std::string templates::BlockParser::getName() {
@@ -45,7 +41,7 @@ std::string templates::BlockParser::getContent() {
 }
 
 std::unique_ptr<templates::Node>templates::IfParser::parse() {
-    return nullptr;
+    return std::make_unique<templates::IfNode>("", content);
 }
 
 std::string templates::IfParser::getStatement() {

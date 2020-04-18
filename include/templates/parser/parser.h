@@ -3,12 +3,16 @@
 
 #include <node/node.h>
 
+#include <utility>
+
 namespace templates {
     class Parser {
     public:
         Parser() : content(""), buffer("") {};
-        explicit Parser(std::string content) : content(content), buffer("") {}
         virtual std::unique_ptr<templates::Node> parse() = 0;
+        void init(std::string _content) {
+            content = std::move(_content);
+        }
     protected:
         std::string content;
         std::string buffer;
