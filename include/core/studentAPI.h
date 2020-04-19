@@ -10,7 +10,7 @@
 class StudentAPI {
 public:
     StudentAPI();
-    Response getStudent(std::string);
+    Response getStudent(Request);
     response::Context studentSerializer(Student);
     
 private:

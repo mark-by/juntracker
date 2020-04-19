@@ -8,8 +8,8 @@
 class FinanceAPI {
 public:
     FinanceAPI();
-    std::string getStatistic(std::string);
-    std::string getPayments(std::string);
+    std::string getStatistic(Request);
+    std::string getPayments(Request);
     templates::Context paymentHistorySerializer(PaymentHistory);
 private:
     managerPaymentHistory paymentHistory;

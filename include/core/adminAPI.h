@@ -8,17 +8,22 @@
 class AdminAPI {
 public:
     AdminAPI();
-    std::string getStudent(std::string);
-    std::string addStudent(std::string);
-    std::string deleteStudent(std::string);
-    std::string addToScedule(std::string);
-    std::string deleteFromScedule(std::string);
-    std::string visitedCourse(std::string);
-    std::string paidForCourse(std::string);
-    std::string addNewCourse(std::string);
-    std::string deleteCourse(std::string);
-    std::string getStudentMarks(std::string);
-    std::string getCourseMarks(std::string);
+    std::string getStudent(Request);
+    std::string addStudent(Request);
+    std::string deleteStudent(Request);
+
+    std::string addToScedule(Request);
+    std::string deleteFromScedule(Request);
+
+    std::string visitedCourse(Request);
+
+    std::string paidForCourse(Request);
+    std::string addNewCourse(Request);
+    std::string deleteCourse(Request);
+
+    std::string getStudentMarks(Request);
+    std::string getCourseMarks(Request);
+
     templates::Context studentSerializer(Student);
     templates::Context scheduleSerializer(Schedule);
     templates::Context visitHistorySerializer(VisitHistory);

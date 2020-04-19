@@ -6,10 +6,10 @@
 
 ScheduleAPI::ScheduleAPI() {}
 
-std::string ScheduleAPI::getStudentSchedule(std::string) {}
+std::string ScheduleAPI::getStudentSchedule(Request) {}
 
-std::string ScheduleAPI::getTeacherSchedule(std::string) {}
+std::string ScheduleAPI::getTeacherSchedule(Request) {}
 
-std::string ScheduleAPI::getGeneralSchedule(std::string) {}
+std::string ScheduleAPI::getGeneralSchedule(Request) {}
 
 templates::Context ScheduleAPI::scheduleSerializer(Schedule) {}

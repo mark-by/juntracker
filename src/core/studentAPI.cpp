@@ -4,6 +4,6 @@
 
 #include "../../include/core/studentAPI.h"
 
-Response StudentAPI::getStudent(std::string) {}
+Response StudentAPI::getStudent(Request) {}
 
 templates::Context StudentAPI::studentSerializer(Student student) {}

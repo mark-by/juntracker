@@ -6,8 +6,8 @@
 
 FinanceAPI::FinanceAPI() {}
 
-std::string FinanceAPI::getStatistic(std::string) {}
+std::string FinanceAPI::getStatistic(Request) {}
 
-std::string FinanceAPI::getPayments(std::string) {}
+std::string FinanceAPI::getPayments(Request) {}
 
 templates::Context FinanceAPI::paymentHistorySerializer(PaymentHistory) {}

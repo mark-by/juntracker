@@ -6,27 +6,27 @@
 
 AdminAPI::AdminAPI() {}
 
-std::string AdminAPI::getStudent(std::string) {}
+std::string AdminAPI::getStudent(Request) {}
 
-std::string AdminAPI::addStudent(std::string){}
+std::string AdminAPI::addStudent(Request){}
 
-std::string AdminAPI::deleteStudent(std::string) {}
+std::string AdminAPI::deleteStudent(Request) {}
 
-std::string AdminAPI::addToScedule(std::string) {}
+std::string AdminAPI::addToScedule(Request) {}
 
-std::string AdminAPI::deleteFromScedule(std::string) {}
+std::string AdminAPI::deleteFromScedule(Request) {}
 
-std::string AdminAPI::visitedCourse(std::string) {}
+std::string AdminAPI::visitedCourse(Request) {}
 
-std::string AdminAPI::paidForCourse(std::string) {}
+std::string AdminAPI::paidForCourse(Request) {}
 
-std::string AdminAPI::addNewCourse(std::string) {}
+std::string AdminAPI::addNewCourse(Request) {}
 
-std::string AdminAPI::deleteCourse(std::string) {}
+std::string AdminAPI::deleteCourse(Request) {}
 
-std::string AdminAPI::getStudentMarks(std::string) {}
+std::string AdminAPI::getStudentMarks(Request) {}
 
-std::string AdminAPI::getCourseMarks(std::string) {}
+std::string AdminAPI::getCourseMarks(Request) {}
 
 templates::Context AdminAPI::studentSerializer(Student) {}
 
