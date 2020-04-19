@@ -1,5 +1,7 @@
 #include <node/node.h>
 
+#include <utility>
+
 std::string templates::TextNode::render(templates::Context context) {
     return content;
 }
@@ -38,4 +40,12 @@ std::string templates::IfNode::render(templates::Context context) {
 
 templates::NodeQueue templates::IfNode::expand() {
     return templates::NodeQueue();
+}
+
+std::string templates::IfNode::getElseContent() {
+    return elseContent;
+}
+
+void templates::IfNode::setElseContent(std::string _content) {
+   content = std::move(_content);
 }

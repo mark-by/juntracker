@@ -3,14 +3,14 @@
 
 TEST(Node, TestTextNode) {
     templates::TextNode textNode("", "some text");
-    EXPECT_EQ(textNode.get_type(), TEXTNODE);
+    EXPECT_EQ(textNode.getType(), TEXTNODE);
     EXPECT_EQ(textNode.render(templates::Context()), "some text");
     EXPECT_TRUE(textNode.expand().empty());
 }
 
 TEST(Node, TestBlockNode) {
     templates::BlockNode blockNode("menu", "some content");
-    EXPECT_EQ(blockNode.get_type(), BLOCKNODE);
+    EXPECT_EQ(blockNode.getType(), BLOCKNODE);
     EXPECT_EQ(blockNode.render(templates::Context()), "some content");
     EXPECT_TRUE(blockNode.expand().empty());
 }
@@ -31,19 +31,18 @@ TEST(Node, TestForNode) {
     EXPECT_EQ(forNode.render(context), "Number: 1Number: 2Number: 3Number: 4");
     templates::NodeQueue expandedFor = forNode.expand();
     ASSERT_EQ(expandedFor.size(), 2);
-    EXPECT_EQ(expandedFor.front()->get_type(), TEXTNODE);
+    EXPECT_EQ(expandedFor.front()->getType(), TEXTNODE);
     expandedFor.pop();
-    EXPECT_EQ(expandedFor.front()->get_type(), VARNODE);
+    EXPECT_EQ(expandedFor.front()->getType(), VARNODE);
 }
 
 TEST(Node, TestIfNode) {
     templates::Context context;
     context.put("isLogged", true);
-    templates::IfNode ifNode("isLogged", "{% if isLogged %}Hello!{% else %}You should be logged in{% endif %}");
+    templates::Context falseContext;
+    context.put("isLogged", false);
+    templates::IfNode ifNode("isLogged", "Hello!{% endif %}");
+    ifNode.setElseContent("You should be logged in");
     EXPECT_EQ(ifNode.render(context), "Hello!");
-    templates::NodeQueue expandedIf = ifNode.expand();
-    ASSERT_EQ(expandedIf.size(), 2);
-    EXPECT_EQ(expandedIf.front()->get_content(), "Hello!");
-    expandedIf.pop();
-    EXPECT_EQ(expandedIf.front()->get_content(), "You should be logged in");
+    EXPECT_EQ(ifNode.render(falseContext), "You should be logged in");
 }

@@ -41,7 +41,7 @@ namespace templates {
     };
 
     class BlockParser: public Parser {
-    public:
+   public:
         std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getName();
@@ -50,7 +50,8 @@ namespace templates {
 
     class IfParser: public Parser {
     public:
-        std::unique_ptr<templates::Node> parse() override;
+
+       std::unique_ptr<templates::Node> parse() override;
     private:
         std::string getStatement();
         std::string getBlockTrue();

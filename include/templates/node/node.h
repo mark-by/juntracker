@@ -23,11 +23,11 @@ namespace templates {
 
         virtual templates::NodeQueue expand() = 0;
 
-        std::string get_content() { return content; }
+        std::string getContent() { return content; }
 
-        std::string get_name() { return name; }
+        std::string getName() { return name; }
 
-        short int get_type() { return type; }
+        short int getType() { return type; }
 
     protected:
         std::string content;
@@ -89,6 +89,10 @@ namespace templates {
         std::string render(templates::Context context) override;
 
         templates::NodeQueue expand() override;
+        std::string getElseContent();
+        void setElseContent(std::string _content);
+    private:
+        std::string elseContent;
     };
 
 
