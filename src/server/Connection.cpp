@@ -29,7 +29,7 @@ void Connection::doRead(const boost::system::error_code& error,
             // big switch to choose api for request
             switch (request_.getWish()) {
                 case wishes::schedule:  // enum wishes {}
-                    ;
+                    ;  // call handler
             }
             // need to write to response_.buffer or something like this
             boost::asio::async_write(socket_, response_.setBody(buffer_.data()),
