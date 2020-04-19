@@ -7,8 +7,11 @@
 
 #include <array>
 #include <memory>
-#include <boost/asio.hpp>
 #include <iostream>
+#include "boost/asio.hpp"
+#include "boost/bind.hpp"
+#include "boost/logic/tribool.hpp"
+#include "boost/tuple/tuple.hpp"
 
 #include "Response.h"
 #include "Request.h"
@@ -29,7 +32,7 @@ public:
     // connection manager toi manage connections
     // handler to handle requests
 
-    void start() { doRead();}
+    void start();
     void stop() { socket_.close();}
 
 private:
@@ -39,10 +42,11 @@ private:
     Handler handler_;
     Request request_;
 
-    std::array<char, 1024> buffer;
+    std::array<char, 1024> buffer_;
 
-    void doRead();  // async read
-    void doWrite();  // async write
+    void doRead(const boost::system::error_code& e,
+                std::size_t bytes_transferred);  // async read
+    void doWrite(const boost::system::error_code& e);  // async write
 };
 
 #endif //SERVER_CONNECTION_H
