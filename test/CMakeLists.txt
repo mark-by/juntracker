@@ -1,9 +1,5 @@
-find_package(GTest REQUIRED)
-include_directories("${GTEST_INCLUDE_DIRS}")
-
 find_package(Threads REQUIRED)
-
-include_directories(include)
+include_directories("${PROJECT_SOURCE_DIR}/include/database")
 
 add_executable(
         tests
