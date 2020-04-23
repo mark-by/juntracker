@@ -16,4 +16,9 @@ public:
     std::variant<std::string, int, double> value;
 };
 
+std::shared_ptr<PGConnection>  m_connection;
+SqlWrapper postgres(m_connection);
+
+ResultSet resultSet;
+
 #endif  // PROJECT_TESTS_INCLUDE_TEST_H_

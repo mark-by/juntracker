@@ -40,6 +40,7 @@ private:
     size_t tCols{0};
 
 public:
+    explicit ResultSet() = default;
     explicit ResultSet(size_t rows, size_t cols,
                        std::vector<std::pair<std::string, std::variant<std::string, int, double>>>& result);
 
