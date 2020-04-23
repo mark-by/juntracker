@@ -1,5 +1,6 @@
 find_package(Threads REQUIRED)
 include_directories("${PROJECT_SOURCE_DIR}/include/database")
+include_directories("${PROJECT_SOURCE_DIR}/test/include")
 
 add_executable(
         tests
