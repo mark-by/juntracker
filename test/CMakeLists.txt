@@ -3,13 +3,18 @@ include_directories("${PROJECT_SOURCE_DIR}/include/database")
 include_directories("${PROJECT_SOURCE_DIR}/test/include")
 
 add_executable(
-        tests
+        run_tests
         src/main.cpp src/test.cpp
 )
 
-target_link_libraries(tests pq stdc++fs)
+target_link_libraries(
+        run_tests
+        pq
+        stdc++fs
+        pthread
+)
 
 add_test(
-        NAME BaseTest
-        COMMAND tests ${CMAKE_SOURCE_DIR}/project/tests/data --gtest_filter=-*Extra*
+        NAME run_tests
+        COMMAND run_tests
 )
