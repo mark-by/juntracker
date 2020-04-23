@@ -96,7 +96,7 @@ namespace templates {
     };
 
 
-    class NodeQueue : public std::queue<std::unique_ptr<Node>> {
+    class NodeQueue  {
     public:
         NodeQueue() : result("") {};
         explicit NodeQueue(templates::Context context): context(std::move(context)), result("") {};
@@ -105,7 +105,15 @@ namespace templates {
 
         std::string getResult();
 
+        void push(std::unique_ptr<Node> ptr);
+        bool empty();
+        std::unique_ptr<Node> front();
+        size_t size();
+        void pop();
+
+
     private:
+        std::queue<std::unique_ptr<Node>> nodes;
         templates::Context context;
         std::string result;
     };
