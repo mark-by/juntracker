@@ -12,7 +12,7 @@ public:
  private:
     enum Type { TEXT, INTEGER, DOUBLE, NULL_VALUE };
     Type type;
-    std::string columnName;
+    std::string column_name;
     std::variant<std::string, int, double> value;
 };
 
