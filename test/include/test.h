@@ -1,7 +1,7 @@
 #ifndef PROJECT_TESTS_INCLUDE_TEST_H_
 #define PROJECT_TESTS_INCLUDE_TEST_H_
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include "sql_wrapper.h"
 #include <string>
 

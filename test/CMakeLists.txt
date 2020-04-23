@@ -10,6 +10,7 @@ add_executable(
 target_link_libraries(
         run_tests
         pq
+        gtest_main
         stdc++fs
         pthread
 )
