@@ -4,30 +4,29 @@
 #include <string>
 #include <queue>
 #include <list>
+#include <utility>
 #include <context/context.h>
 
 namespace templates {
-#define TEXTNODE 0
-#define BLOCKNODE 1
-#define VARNODE 2
-#define FORNODE 3
-#define IFNODE 4
+    enum TypeNode {
+        TEXTNODE, BLOCKNODE, VARNODE, FORNODE, IFNODE
+    };
 
     class NodeQueue;
 
     class Node {
     public:
-        Node(std::string name, std::string content) : content(content), name(name) {}
+        Node(std::string name, std::string content) : content(std::move(content)), name(std::move(name)) {}
 
         virtual std::string render(templates::Context context) = 0;
 
         virtual templates::NodeQueue expand() = 0;
 
-        std::string getContent() { return content; }
+        std::string getContent() const { return content; }
 
-        std::string getName() { return name; }
+        std::string getName() const { return name; }
 
-        short int getType() { return type; }
+        short int getType() const { return type; }
 
     protected:
         std::string content;
@@ -38,7 +37,7 @@ namespace templates {
 
     class TextNode : public Node {
     public:
-        TextNode(std::string name, std::string content) : Node(name, content) {
+        TextNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
             type = TEXTNODE;
         };
 
@@ -49,7 +48,7 @@ namespace templates {
 
     class BlockNode : public Node {
     public:
-        BlockNode(std::string name, std::string content) : Node(name, content) {
+        BlockNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
             type = BLOCKNODE;
         };
 
@@ -60,7 +59,7 @@ namespace templates {
 
     class VarNode : public Node {
     public:
-        VarNode(std::string name, std::string content) : Node(name, content) {
+        VarNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
             type = VARNODE;
         };
 
@@ -71,7 +70,7 @@ namespace templates {
 
     class ForNode : public Node {
     public:
-        ForNode(std::string name, std::string content) : Node(name, content) {
+        ForNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
             type = FORNODE;
         };
 
@@ -82,33 +81,43 @@ namespace templates {
 
     class IfNode : public Node {
     public:
-        IfNode(std::string name, std::string content) : Node(name, content) {
+        IfNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
             type = IFNODE;
         };
 
         std::string render(templates::Context context) override;
 
         templates::NodeQueue expand() override;
+
         std::string getElseContent();
+
         void setElseContent(std::string _content);
+
     private:
         std::string elseContent;
     };
 
 
-    class NodeQueue  {
+    class NodeQueue {
     public:
         NodeQueue() : result("") {};
-        explicit NodeQueue(templates::Context context): context(std::move(context)), result("") {};
+
+        explicit NodeQueue(templates::Context context) : context(std::move(context)), result("") {};
+
         bool render();
+
         std::string renderAll();
 
         std::string getResult();
 
         void push(std::unique_ptr<Node> ptr);
+
         bool empty();
+
         std::unique_ptr<Node> front();
+
         size_t size();
+
         void pop();
 
 

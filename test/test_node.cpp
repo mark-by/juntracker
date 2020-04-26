@@ -3,14 +3,14 @@
 
 TEST(Node, TestTextNode) {
     templates::TextNode textNode("", "some text");
-    EXPECT_EQ(textNode.getType(), TEXTNODE);
+    EXPECT_EQ(textNode.getType(), templates::TEXTNODE);
     EXPECT_EQ(textNode.render(templates::Context()), "some text");
     EXPECT_TRUE(textNode.expand().empty());
 }
 
 TEST(Node, TestBlockNode) {
     templates::BlockNode blockNode("menu", "some content");
-    EXPECT_EQ(blockNode.getType(), BLOCKNODE);
+    EXPECT_EQ(blockNode.getType(), templates::BLOCKNODE);
     EXPECT_EQ(blockNode.render(templates::Context()), "some content");
     EXPECT_TRUE(blockNode.expand().empty());
 }
@@ -31,9 +31,9 @@ TEST(Node, TestForNode) {
     EXPECT_EQ(forNode.render(context), "Number: 1Number: 2Number: 3Number: 4");
     templates::NodeQueue expandedFor = forNode.expand();
     ASSERT_EQ(expandedFor.size(), 2);
-    EXPECT_EQ(expandedFor.front()->getType(), TEXTNODE);
+    EXPECT_EQ(expandedFor.front()->getType(), templates::TEXTNODE);
     expandedFor.pop();
-    EXPECT_EQ(expandedFor.front()->getType(), VARNODE);
+    EXPECT_EQ(expandedFor.front()->getType(), templates::VARNODE);
 }
 
 TEST(Node, TestIfNode) {

@@ -9,28 +9,28 @@ inline std::string templates::Context::str() const {
     return oss.str();
 }
 
-inline templates::Context::Context(std::string json) {
+inline templates::Context::Context(const std::string &json) {
     std::stringstream ss;
     ss << json;
     boost::property_tree::read_json(ss, root);
 }
 
 template<class T>
-inline void templates::Context::put(std::string name, T value) {
+void templates::Context::put(std::string name, T value) {
     // Метод добавляет переменную c именем name и значение value  в context
     // В случе, если name содержит '.', напрмер "person.name", то создается обхект person с полем name
     // Последующие указание с тем же именем объекта (например "person.age") добавит к объекту поле age
-    root.put(name, value);
+    root.put(std::move(name), std::move(value));
 }
 
 template<class T>
-inline T templates::Context::get(std::string name) {
+T templates::Context::get(std::string name) {
     // Метод позволяет взять переменную по ключу
-    return root.get<T>(name);
+    return root.get<T>(std::move(name));
 }
 
 template<class T>
-inline std::vector<T> templates::Context::getArray(boost::property_tree::ptree::key_type const &key) {
+std::vector<T> templates::Context::getArray(boost::property_tree::ptree::key_type const &key) {
     // Метод позволяет получить массив в качестве вектора
     std::vector<T> temp;
     for (auto& item : root.get_child(key))
@@ -39,7 +39,7 @@ inline std::vector<T> templates::Context::getArray(boost::property_tree::ptree::
 }
 
 template<class T, class Serializer>
-inline void templates::Context::putArray(std::string name, const T *array, size_t count, Serializer serial) {
+void templates::Context::putArray(std::string name, const T *array, size_t count, Serializer serial) {
     // Метод позволяет создать массив в контексте. Для простых данных собственный serializer не нужен
     // Для пользовательских данных, объектов, необходимо создать функцию Serializer, которая возвращает объект
     // Context - представление объекта в контексте
@@ -47,11 +47,11 @@ inline void templates::Context::putArray(std::string name, const T *array, size_
     for (size_t i=0; i< count; i++) {
         ptArray.push_back(std::make_pair("", serial(array[i]).root));
     }
-    root.add_child(name, ptArray);
+    root.add_child(std::move(name), ptArray);
 }
 
 template<class T, class Serializer>
-inline void templates::Context::putArray(std::string name, const std::vector<T> &array, Serializer serial) {
+void templates::Context::putArray(std::string name, const std::vector<T> &array, Serializer serial) {
     // Метод позволяет создать массив в контексте. Для простых данных собственный serializer не нужен
     // Для пользовательских данных, объектов, необходимо создать функцию Serializer, которая возвращает объект
     // Context - представление объекта в контексте
@@ -59,7 +59,7 @@ inline void templates::Context::putArray(std::string name, const std::vector<T> 
     for (auto &item : array) {
         ptArray.push_back(std::make_pair("", serial(item).root));
     }
-    root.add_child(name, ptArray);
+    root.add_child(std::move(name), ptArray);
 }
 
 inline std::vector<templates::Context> templates::Context::getObjects(boost::property_tree::ptree::key_type const &key) {
