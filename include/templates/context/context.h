@@ -19,18 +19,18 @@ namespace templates {
         explicit Context(const std::string &json);
 
         template <class T, class Serializer = DefaultSerializer<T>>
-        void putArray(std::string name, const T * array, size_t count, Serializer serial = Serializer());
+        void putArray(const std::string &name, const T * array, size_t count, Serializer serial = Serializer());
 
         template <class T, class Serializer = DefaultSerializer<T>>
-        void putArray(std::string name, const std::vector<T> & array, Serializer serial = Serializer());
+        void putArray(const std::string &name, const std::vector<T> & array, Serializer serial = Serializer());
 
         inline std::string str() const;
 
         template<class T>
-        void put(std::string name, T value);
+        void put(const std::string &name, const T &value);
 
         template<class T>
-        T get(std::string name);
+        T get(const std::string &name);
 
         template<class T>
         std::vector <T> getArray(boost::property_tree::ptree::key_type const &key);
