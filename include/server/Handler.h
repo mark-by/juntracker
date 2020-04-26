@@ -12,7 +12,7 @@
 
 class Handler {
 public:
-    Handler(/*Request req, Response rep*/);
+    Handler(/*Request& req, Response& rep*/);
     //Response getResponse();
     //Response requestToCore(/*request*/);
 

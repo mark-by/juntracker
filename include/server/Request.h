@@ -13,9 +13,9 @@ public:
     Request();
     Request(std::string);
     std::string getMethod();
-    std::string getHeader(std::string);
+    std::string getHeader(const std::string& header);
     std::string getPath();
-    std::string getData(std::string key, std::string returnNotFound = "");
+    std::string getData(const std::string& key, std::string returnNotFound = "");
 
 private:
     std::string method;
@@ -23,8 +23,8 @@ private:
     std::string path;
     std::string body;
     std::map<std::string, std::string> data;
-    std::map<std::string, std::string> parseRequest(std::string request);
-    std::map<std::string, std::string> parseHeaders(std::string headers);
+    std::map<std::string, std::string> parseRequest(const std::string& request);
+    std::map<std::string, std::string> parseHeaders(const std::string& headers);
 };
 
 
