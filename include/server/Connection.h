@@ -42,7 +42,7 @@ private:
     Handler handler_;
     Request request_;
 
-    std::array<char, 1024> buffer_;
+    std::array<char, 1024> buffer_;  // nead to find best variant
 
     void doRead(const boost::system::error_code& e,
                 std::size_t bytes_transferred);  // async read
