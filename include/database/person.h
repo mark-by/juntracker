@@ -5,12 +5,8 @@
 
 class Person {
  public:
-    virtual std::string get_name() const;
-    virtual std::string get_surname() const;
- private:
-    int id;
-    std::string name;
-    std::string surname;
+    virtual std::string get_name(int id) const = 0;
+    virtual std::string get_surname(int id) const = 0;
 };
 
 #endif  // _PERSON_H_

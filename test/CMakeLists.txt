@@ -5,7 +5,7 @@ include_directories("${PROJECT_SOURCE_DIR}/test/include")
 add_executable(
         run_tests
         src/main.cpp src/test.cpp
-)
+        ../include/database/abstract_db.h)
 
 target_link_libraries(
         run_tests

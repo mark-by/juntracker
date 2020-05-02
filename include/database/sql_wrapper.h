@@ -4,6 +4,7 @@
 #include <postgresql/libpq-fe.h>
 
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <variant>
@@ -52,15 +53,17 @@ public:
 
 class SqlWrapper {
 private:
+    PGconn *conn;
     using HandlerFunc = std::function<void (const ResultSet&)>;
     std::shared_ptr<PGConnection> m_connection;
 
 public:
-    explicit SqlWrapper(std::shared_ptr<PGConnection> m_connection);
-    ~SqlWrapper() = default;
+    explicit SqlWrapper() {}
+    explicit SqlWrapper(PGconn *conn);
+    ~SqlWrapper();
 
     [[nodiscard]] bool is_select(const std::string& query) const;
-    bool query(const std::string& query, const HandlerFunc& handler);
+    bool query(const std::string& query, PGresult** result) const ;
     bool exec(const std::string& query);
     [[nodiscard]] bool is_connected() const;
 };

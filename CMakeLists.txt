@@ -13,5 +13,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
 add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
 
+include_directories("${PROJECT_SOURCE_DIR}/include/database")
+enable_testing()
+
 add_subdirectory(src/wrapper)
 add_subdirectory(test)
