@@ -31,9 +31,11 @@ void Connection::doRead(const boost::system::error_code& error,
 
         if (result) {  // true; we read all data
             // big switch to choose api for request
-            switch (request_.getWish()) {
-                case wishes::schedule:  // enum wishes {}
-                    ;  // call handler
+            if (request_.getMethod() == "POST") {
+                // handler
+            }
+            if (request_.getMethod() == "GET") {
+                // handler
             }
             // need to write to response_.buffer or something like this
             async::async_write(socket_, response_.setBody(buffer_.data()),

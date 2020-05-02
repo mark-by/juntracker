@@ -12,7 +12,7 @@ class Request {
 public:
     Request();
     Request(std::string);
-    std::string getMethod();
+    std::string getMethod() { return this->method;};
     std::string getHeader(const std::string& header);
     std::string getPath();
     std::string getData(const std::string& key, std::string returnNotFound = "");
@@ -22,6 +22,7 @@ private:
     std::map<std::string, std::string> headers;
     std::string path;
     std::string body;
+
     std::map<std::string, std::string> data;
     std::map<std::string, std::string> parseRequest(const std::string& request);
     std::map<std::string, std::string> parseHeaders(const std::string& headers);

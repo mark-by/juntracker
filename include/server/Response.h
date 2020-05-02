@@ -8,7 +8,9 @@
 #include <string>
 
 enum codes {
-
+    ok = 200,
+    page_not_found = 404,
+    server_is_down = 500,
 };  // like 404 to client
 
 class Response {
