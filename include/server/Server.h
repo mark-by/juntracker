@@ -11,7 +11,7 @@
 #include "Handler.h"
 #include "Request.h"
 
-class Server {
+class Server: private boost::asio::noncopyable {
 public:
     Server(const std::string& addr, const std::string& port);  // may added another data to build server
     void startServer();
@@ -29,12 +29,13 @@ private:
      */
     // void waitStop()  <- from documentation. On studying
 
-    // Request request_;
-    // Response response_;
-    boost::asio::io_context context_;
+    Request request_;
+    Response response_;
+    boost::asio::io_context io_context_;
     boost::asio::ip::tcp::acceptor acceptor_;
 
     ConnectionManager manager_;
+    std::shared_ptr<Connection> connection_;
     Handler handler_;
 };
 
