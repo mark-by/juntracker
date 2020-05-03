@@ -6,19 +6,28 @@
 #define SERVER_HANDLER_H
 
 #include <string>
+#include "Request.h"
+#include "Response.h"
 
 // Response;
 // Request
 
 class Handler {
 public:
-    Handler(/*Request& req, Response& rep*/);
-    //Response getResponse();
-    //Response requestToCore(/*request*/);
+    Handler(Request& req, Response& rep);
+    // methods to fill response from request done by Api
+    void teacher();  // handler_.teacher();
+    void admin();    // handler_.admin();
+    void customer(); // handler_.customer();
+
+    // Response getResponse();
 
 private:
-    // Request request_;
-    // Response response_;
+    // AdminApi
+    // TeacherApi
+    // CustomerApi
+    Request request_;
+    Response response_;
 };
 
 
