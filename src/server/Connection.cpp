@@ -7,9 +7,14 @@
 namespace async = boost::asio;
 namespace net = boost::asio::ip;
 
-Connection::Connection(boost::asio::ip::tcp::socket socket,
-        ConnectionManager& manager, Handler& handler):
-        socket_(std::move(socket)), handler_(handler), buffer_() {
+enum rights {
+    admin = 0,
+    teacher = 1,
+    customer = 2
+};
+
+Connection::Connection(net::tcp::socket socket, ConnectionManager& manager, Handler& handler):
+    socket_(std::move(socket)), handler_(handler), buffer_() {
     this->manager_ = manager;
 };
 
@@ -34,10 +39,31 @@ void Connection::doRead(const boost::system::error_code& error,
             // big switch to choose api for request
             if (request_.getMethod() == "POST") {
                 // handler
+                if (request_.getRights() == rights::admin) {
+                    // do handle
+                } else {
+                    // error
+                }
             }
+
             if (request_.getMethod() == "GET") {
                 // handler
+                switch (request_.getRights()) {
+                    case rights::admin:
+                        handler_.admin();
+                        break;
+                    case rights::teacher:
+                        handler_.teacher();
+                        break;
+                    case rights::customer:
+                        handler_.customer();
+                        break;
+                    default:
+                        // error
+                        break;
+                }
             }
+
             // need to write to response_.buffer or something like this
             auto data = response_.toString();
             async::const_buffers_1 buf(data, data.size());
