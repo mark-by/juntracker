@@ -26,7 +26,7 @@ public:
     Connection& operator=(const Connection&) = delete;
     // decline "="
 
-    explicit Connection(boost::asio::ip::tcp::socket socket,
+    explicit Connection(boost::asio::io_context io_context,
                         ConnectionManager& manager, Handler& handler);
     // create socket to connect with server
     // connection manager toi manage connections

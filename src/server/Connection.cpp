@@ -13,8 +13,8 @@ enum rights {
     customer = 2
 };
 
-Connection::Connection(net::tcp::socket socket, ConnectionManager& manager, Handler& handler):
-    socket_(std::move(socket)), handler_(handler), buffer_() {
+Connection::Connection(boost::asio::io_context io_context, ConnectionManager& manager, Handler& handler):
+    socket_(io_context), handler_(handler), buffer_() {
     this->manager_ = manager;
 };
 
