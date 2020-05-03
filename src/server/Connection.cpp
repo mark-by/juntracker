@@ -5,6 +5,7 @@
 #include "Connection.h"
 
 namespace async = boost::asio;
+namespace net = boost::asio::ip;
 
 Connection::Connection(boost::asio::ip::tcp::socket socket,
         ConnectionManager& manager, Handler& handler):
@@ -38,15 +39,17 @@ void Connection::doRead(const boost::system::error_code& error,
                 // handler
             }
             // need to write to response_.buffer or something like this
-            async::async_write(socket_, response_.setBody(buffer_.data()),
+            auto data = response_.toString();
+            async::const_buffers_1 buf(data, data.size());
+            async::async_write(socket_, buf,
                     boost::bind(&Connection::doWrite, shared_from_this(),
-                            boost::asio::placeholders::error));  // think this will not work
+                            async::placeholders::error));  // think this will not work
         } else if (!result) {
             // error
             // handle error
         } else {
             socket_.async_read_some(
-                    boost::asio::buffer(buffer_),
+                    async::buffer(buffer_),
                     boost::bind(&Connection::doRead, shared_from_this(),
                             async::placeholders::error,
                             async::placeholders::bytes_transferred)
@@ -60,7 +63,7 @@ void Connection::doRead(const boost::system::error_code& error,
 void Connection::doWrite(const boost::system::error_code &e) {
     if (!e) {
         boost::system::error_code ignored_ec;
-        socket_.shutdown(async::ip::tcp::socket::shutdown_both, ignored_ec);
+        socket_.shutdown(net::tcp::socket::shutdown_both, ignored_ec);
     }
     if (e != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
