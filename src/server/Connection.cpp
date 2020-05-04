@@ -13,8 +13,8 @@ enum rights {
     customer = 2
 };
 
-Connection::Connection(boost::asio::io_context io_context, ConnectionManager& manager, Handler& handler):
-    socket_(io_context), handler_(handler), buffer_() {
+Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager, Handler& handler):
+    socket_(service), handler_(handler), buffer_() {
     this->manager_ = manager;
 };
 
@@ -63,13 +63,14 @@ void Connection::doRead(const boost::system::error_code& error,
                         break;
                 }
             }
-
             // need to write to response_.buffer or something like this
-            auto data = response_.toString();
-            async::const_buffers_1 buf(data, data.size());
-            async::async_write(socket_, buf,
+            async::async_write(socket_,
+                    async::buffer(
+                            response_.toString().data(),
+                            response_.toString().size()
+                            ),
                     boost::bind(&Connection::doWrite, shared_from_this(),
-                            async::placeholders::error));  // think this will not work
+                            async::placeholders::error));
         } else if (!result) {
             // error
             // handle error

@@ -19,7 +19,7 @@ public:
     Response(std::string request, int status, std::string data = "");
     std::string toString();
     void setBody(std::string data);
-    void setHeader(std::string key, std::value);
+    void setHeader(std::string key, std::tring value);  // working with std::map
 
 private:
     std::map<std::string, std::string> headers;

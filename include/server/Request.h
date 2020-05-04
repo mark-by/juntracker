@@ -21,7 +21,6 @@ private:
     std::string method;
     std::map<std::string, std::string> headers;
     std::string path;
-    std::string body;
 
     std::map<std::string, std::string> data;
     std::map<std::string, std::string> parseRequest(const std::string& request);

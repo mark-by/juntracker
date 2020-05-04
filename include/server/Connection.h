@@ -26,13 +26,14 @@ public:
     Connection& operator=(const Connection&) = delete;
     // decline "="
 
-    explicit Connection(boost::asio::io_context io_context,
+    explicit Connection(boost::asio::io_service& service,
                         ConnectionManager& manager, Handler& handler);
     // create socket to connect with server
     // connection manager toi manage connections
     // handler to handle requests
 
     void start();
+    boost::asio::ip::tcp::socket& socket() { return this->socket_;}  // get socket associated with connection
     void stop() { socket_.close();}
 
 private:

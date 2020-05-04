@@ -15,23 +15,15 @@ class Server: private boost::asio::noncopyable {
 public:
     Server(const std::string& addr, const std::string& port);  // may added another data to build server
     void startServer();
+    void stopServer();
 
 private:
-    void accept();  // do async accept
-    // Applications
-    /*
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    // void waitStop()  <- from documentation. On studying
+    void accept(const boost::system::error_code& error);  // do async accept
+    void stop();
 
     Request request_;
     Response response_;
-    boost::asio::io_context io_context_;
+    boost::asio::io_service service_;
     boost::asio::ip::tcp::acceptor acceptor_;
 
     ConnectionManager manager_;
