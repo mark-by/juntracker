@@ -19,16 +19,17 @@ public:
 
 private:
     void accept(const boost::system::error_code& error);  // do async accept
-    void stop();
+    void stop();  // "handler" to stop Server
 
     Request request_;
     Response response_;
+    ConnectionManager manager_;
+    Handler handler_;
+
     boost::asio::io_service service_;
     boost::asio::ip::tcp::acceptor acceptor_;
 
-    ConnectionManager manager_;
     std::shared_ptr<Connection> connection_;
-    Handler handler_;
 };
 
 
