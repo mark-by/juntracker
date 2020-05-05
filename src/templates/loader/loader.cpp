@@ -1,6 +1,7 @@
 #include <loader/loader.h>
+#include <fstream>
 
-templates::Loader::Loader(std::string filename) : filename(filename) {}
+templates::Loader::Loader(std::string filename) : filename(std::move(filename)) {}
 
 void templates::Loader::load() {
 }

@@ -16,10 +16,10 @@ namespace templates {
     private:
         void merge();
 
-        std::map<std::string, std::unique_ptr<Node>> blocks;
+        std::unordered_map<std::string, std::unique_ptr<Node>> blocks;
         std::string filename;
         std::string result;
-        templates::NodeQueue nodeList;
+        templates::NodeQueue nodeQueue;
         templates::BlockParser blockParser;
         templates::TextParser textParser;
     };
