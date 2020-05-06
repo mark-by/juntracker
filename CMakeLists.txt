@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
-project(sql_wrapper)
-
+project(juntracker)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -O0 -ggdb3 -DASIO_STANDALONE")
 
 configure_file(CMakeLists.txt.in
         googletest-download/CMakeLists.txt)
@@ -14,7 +13,14 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
 
 include_directories("${PROJECT_SOURCE_DIR}/include/database")
-enable_testing()
+include_directories("${PROJECT_SOURCE_DIR}/include/boost")
+link_directories("${PROJECT_SOURCE_DIR}/include/boost/stage/lib")
+include_directories("${PROJECT_SOURCE_DIR}/include/templates")
+include_directories("${PROJECT_SOURCE_DIR}/include/server")
 
+add_subdirectory(src/templates)
+add_subdirectory(examples)
 add_subdirectory(src/wrapper)
+
+enable_testing()
 add_subdirectory(test)
