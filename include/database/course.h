@@ -24,7 +24,7 @@ class Course {
     [[nodiscard]] Teacher get_teacher(const std::string& course_name) const;
     [[nodiscard]] int get_price(const std::string& course_name) const;
     void set_price(int price, const std::string& course_name);
-    std::vector<Student> get_student_list() const;
+    std::vector<Student> get_student_list(const std::string& course_name);
 
  private:
     int id;

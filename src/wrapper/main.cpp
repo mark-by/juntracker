@@ -2,6 +2,7 @@
 #include "sql_wrapper.h"
 #include "course.h"
 #include "teacher.h"
+#include "student.h"
 
 int main(int argc, char* argv[]) {
 
@@ -32,7 +33,7 @@ int main(int argc, char* argv[]) {
     std::cout << teacher.return_surname() << std::endl;
     auto price = course.get_price("python programming");
     std::cout << price << std::endl;
-    course.set_price(10000, "sambo");
+    auto students = course.get_student_list("sambo");
 
     // Create Data storage object
 //    using HandlerFunc = std::function<void (const ResultSet&)>;
