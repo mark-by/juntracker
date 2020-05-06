@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++0x -Wall -ggdb3 -g   CMakeFiles/test.dir/src/main.cpp.o CMakeFiles/test.dir/src/tests.cpp.o  -o test  /usr/lib/x86_64-linux-gnu/libgtest.a -lpthread 

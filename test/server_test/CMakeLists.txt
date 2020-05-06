@@ -1,6 +1,21 @@
-include_directories("${PROJECT_SOURCE_DIR}/include/boost")
-include_directories("${PROJECT_SOURCE_DIR}/include/server")
+find_package(Threads REQUIRED)
+include_directories("${PROJECT_SOURCE_DIR}/include/core")
+include_directories("${PROJECT_SOURCE_DIR}/test/include")
 
-add_executable(test test.cpp)
+add_executable(
+        run_tests
+        src/main.cpp src/test.cpp
+)
 
-# add gtest
+target_link_libraries(
+        run_tests
+        pq
+        gtest_main
+        stdc++fs
+        pthread
+)
+
+add_test(
+        NAME run_tests
+        COMMAND run_tests
+)
