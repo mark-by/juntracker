@@ -10,7 +10,8 @@ set(parser_source
         parser/block_parser.cpp
         parser/for_parser.cpp
         parser/text_parser.cpp
-        parser/var_parser.cpp)
+        parser/var_parser.cpp
+        parser/parser.cpp)
 
 set(template_source
         template/template.cpp)

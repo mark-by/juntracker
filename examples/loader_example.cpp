@@ -3,7 +3,7 @@
 #include <iterator>
 
 int main() {
-    std::string filename = "../../test/test_files/loader/loader_extends.html";
+    std::string filename = "../../test/templates_test/test_files/loader/loader_extends.html";
     templates::Loader loader;
     loader.load(filename);
     std::cout << loader.result() << std::endl;
