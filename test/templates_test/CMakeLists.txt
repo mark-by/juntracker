@@ -4,14 +4,14 @@ include_directories("${PROJECT_SOURCE_DIR}/include/templates")
 include_directories("${PROJECT_SOURCE_DIR}/include/boost")
 
 
-file(GLOB tests *.cpp)
+file(GLOB templates_tests *.cpp)
 
 add_executable(
         run_templates_tests
-        ${tests})
+        ${templates_tests})
 
 target_link_libraries(
-        run_tests
+        run_templates_tests
         templates
         gtest_main
         pthread
