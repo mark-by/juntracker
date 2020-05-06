@@ -1,4 +1,4 @@
-# juntracker
+# Core
 
 Ссылка на UML https://www.figma.com/file/rU0ysrN3E5T0DkiTUlxiW7/MindMap-JunTracker?node-id=0%3A1
 
@@ -19,3 +19,70 @@ CustomerAPI:
 TeacherAPI:
 	getPageMain(std::string): std::string - 
 	rate(std::string): int - поставить оценку ученику по предмету за опр дату.
+=======
+# SqlWrapper
+
+Обёртка над библиотекой работы с базой данных.
+=======
+# HTMLTemplate
+
+## Context example (out)
+```json
+{
+    "name": "Mark Bykhovets",
+    "obj": {
+        "value1": "1",
+        "value2": "2"
+    },
+    "array": [
+        "1",
+        "5",
+        "3",
+        "4",
+        "6"
+    ],
+    "vector_array": [
+        "65",
+        "4",
+        "3",
+        "45",
+        "6",
+        "65"
+    ],
+    "person": [
+        {
+            "name": "Josh",
+            "second_name": "Brown",
+            "age": "20"
+        },
+        {
+            "name": "Homer",
+            "second_name": "Simpson",
+            "age": "31"
+        },
+        {
+            "name": "Ragnar",
+            "second_name": "Lodbrok",
+            "age": "25"
+        }
+    ]
+}
+OUT
+2
+1 5 3 4 6 
+{
+    "name": "Josh",
+    "second_name": "Brown",
+    "age": "20"
+}
+{
+    "name": "Homer",
+    "second_name": "Simpson",
+    "age": "31"
+}
+{
+    "name": "Ragnar",
+    "second_name": "Lodbrok",
+    "age": "25"
+}
+```
