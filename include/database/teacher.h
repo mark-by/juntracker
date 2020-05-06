@@ -14,8 +14,7 @@ class Teacher : public Person {
         , name(name)
         , surname(surname)
         , salary(salary)
-        , description(description)
-        , postgres(postgres) {}
+        , description(description) {}
 
     std::string get_name(int t_id) const override;
     std::string get_surname(int t_id) const override;

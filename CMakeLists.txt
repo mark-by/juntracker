@@ -26,8 +26,10 @@ add_subdirectory(src/wrapper)
 add_subdirectory(src/core)
 add_subdirectory(src/server)
 
+add_subdirectory(examples)
+
 enable_testing()
 add_subdirectory(test/db_test)
 add_subdirectory(test/templates_test)
 add_subdirectory(test/server_test)
-add_subdirectory(test/core_test)
+#add_subdirectory(test/core_test)
