@@ -1,3 +1,7 @@
+# SqlWrapper
+
+Обёртка над библиотекой работы с базой данных.
+=======
 # HTMLTemplate
 
 Для работы необходима библиотека boost (https://dl.bintray.com/boostorg/release/1.72.0/source/). Она должна лежать в дирректории include/boost. То есть в include/boost/boost все хедеры.
