@@ -6,7 +6,7 @@
 #define CORE_MANAGERSCHEDULE_H
 
 
-class managerSchedule {
+class ManagerSchedule {
 public:
     // Needed methods
 };

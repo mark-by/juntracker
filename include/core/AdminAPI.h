@@ -9,14 +9,14 @@ class AdminAPI: public API {
 public:
     AdminAPI();
 
-    std::string getMainPage(std::string);
+    std::string getMainPage(const std::string&);
     int saveCurrentLesson(std::map<std::string, std::string>);
-    std::string findStudent(std::string);
+    std::string findStudent(const std::string&);
     int deleteStudent(std::vector<string>);
-    int createStudent(std::string);
+    int createStudent(const std::string&);
     std::string getStudentsBy(std::map<std::string, std::string>);
     std::string getPageStudents(int);
-    std::string getPaymentsByStudent(std::string);
+    std::string getPaymentsByStudent(const std::string&);
 
     //NEED TO ADD MORE
 };

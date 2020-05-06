@@ -5,7 +5,7 @@
 #ifndef CORE_MANAGERJOURNAL_H
 #define CORE_MANAGERJOURNAL_H
 
-class managerCourse {
+class ManagerCourse {
 public:
     // Needed methods
 };

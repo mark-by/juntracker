@@ -5,7 +5,7 @@
 #ifndef CORE_MANAGERSTUDENT_H
 #define CORE_MANAGERSTUDENT_H
 
-class managerStudent {
+class ManagerStudent {
 public:
     // Needed methods
 };

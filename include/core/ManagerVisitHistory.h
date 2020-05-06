@@ -6,7 +6,7 @@
 #define CORE_MANAGERVISITHISTORY_H
 
 
-class managerVisitHistory {
+class ManagerVisitHistory {
 public:
     // Needed methods
 };

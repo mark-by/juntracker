@@ -5,23 +5,23 @@
 #ifndef CORE_API_H
 #define CORE_API_H
 
-#include "managerStudent.h"
+#include "ManagerStudent.h"
 #include "managerVisitHistory"
-#include "managerPaymentHistory.h"
-#include "managerCourse.h"
-#include "managerSchedule.h"
-#include "managerJournal.h"
+#include "ManagerPaymentHistory.h"
+#include "ManagerCourse.h"
+#include "ManagerSchedule.h"
+#include "ManagerJournal.h"
 
 class API {
 public:
-    virtual std::string getMainPage(std::string) = 0;
+    virtual std::string getMainPage(const std::string&) = 0;
 
 protected:
-    managerStudent studentManager;
-    managerVisitHistory visitsManager;
-    managerPaymentHistory paymentsManager;
-    managerSchedule scheduleManager;
-    managerJournal journalManager;
+    ManagerStudent studentManager;
+    ManagerVisitHistory visitsManager;
+    ManagerPaymentHistory paymentsManager;
+    ManagerSchedule scheduleManager;
+    ManagerJournal journalManager;
 
     templates::Context shortStudentSerializer(Student);
     templates::Context studentSerializer(Student);

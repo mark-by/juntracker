@@ -6,7 +6,7 @@
 #define CORE_MANAGERCOURSE_H
 
 
-class managerCourse {
+class ManagerCourse {
 public:
     // Needed methods
 };

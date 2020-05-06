@@ -6,7 +6,7 @@
 #define CORE_MANAGERPAYMENTHISTORY_H
 
 
-class managerPaymentHistory {
+class ManagerPaymentHistory {
 public:
     // Needed methods
 };

@@ -9,7 +9,7 @@
 class TeacherAPI: public API {
 public:
     TeacherAPI();
-    std::string getMainPage(std::string);
+    std::string getMainPage(const std::string&);
 };
 
 

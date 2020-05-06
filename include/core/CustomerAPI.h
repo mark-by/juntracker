@@ -8,7 +8,7 @@
 class CustomerAPI: public API {
 public:
     CustomerAPI();
-    std::string getMainPage(std::string);
+    std::string getMainPage(const std::string&);
 };
 
 #endif // CORE_CUSTOMERAPI_H
