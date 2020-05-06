@@ -71,9 +71,6 @@ void Connection::doRead(const boost::system::error_code& error,
                             ),
                     boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
-        } else if (!result) {
-            // error
-            // handle error
         } else {
             socket_.async_read_some(
                     async::buffer(buffer_),

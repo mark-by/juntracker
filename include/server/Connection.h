@@ -29,7 +29,7 @@ public:
     explicit Connection(boost::asio::io_service& service,
                         ConnectionManager& manager, Handler& handler);
     // create socket to connect with server
-    // connection manager toi manage connections
+    // connection manager to manage connections
     // handler to handle requests
 
     void start();
