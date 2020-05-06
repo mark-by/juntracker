@@ -10,15 +10,13 @@ namespace templates {
     public:
 
         void load(const std::string &filename);
-        std::string& getResult();
+        std::string result();
 
     private:
-        void merge();
         void makeBlockTable(const std::string &text);
         void makeQueue(std::string::const_iterator _begin, std::string::const_iterator _end);
 
-        std::unordered_map<std::string, std::unique_ptr<Node>> blocks;
-        std::string result;
+        std::string _result;
         templates::NodeQueue nodeQueue;
         templates::BlockParser blockParser;
         templates::TextParser textParser;
