@@ -27,7 +27,7 @@ public:
     // decline "="
 
     explicit Connection(boost::asio::io_service& service,
-                        ConnectionManager& manager, Handler& handler);
+                        ConnectionManager& manager);
     // create socket to connect with server
     // connection manager to manage connections
     // handler to handle requests

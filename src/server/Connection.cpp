@@ -13,8 +13,8 @@ enum rights {
     customer = 2
 };
 
-Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager, Handler& handler):
-    socket_(service), handler_(handler), buffer_() {
+Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager):
+    socket_(service), handler_(request_, response_), buffer_() {
     this->manager_ = manager;
 };
 
