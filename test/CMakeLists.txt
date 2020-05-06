@@ -13,6 +13,7 @@ target_link_libraries(run_tests
         templates
         gtest_main
         pthread
+        boost_filesystem
         )
 
 add_test(NAME run_tests
