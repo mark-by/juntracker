@@ -6,18 +6,18 @@
 
 AdminAPI::AdminAPI() {}
 
-std::string AdminAPI::getMainPage(std::string) {}
+std::string AdminAPI::getMainPage(const std::string &str) {}
 
 int AdminAPI::saveCurrentLesson(std::map<std::string, std::string>) {}
 
-std::string AdminAPI::findStudent(std::string) {}
+std::string AdminAPI::findStudent(const std::string &str) {}
 
 int AdminAPI::deleteStudent(std::vector<string>) {}
 
-int AdminAPI::createStudent(std::string) {}
+int AdminAPI::createStudent(const std::string &str) {}
 
 std::string AdminAPI::getStudentsBy(std::map<std::string, std::string>) {}
 
 std::string AdminAPI::getPageStudents(int) {}
 
-std::string getPaymentsByStudent(std::string) {}
+std::string getPaymentsByStudent(const std::string &str) {}

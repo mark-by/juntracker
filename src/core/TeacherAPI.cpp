@@ -6,4 +6,4 @@
 
 TeacherAPI::TeacherAPI() {}
 
-std::string TeacherAPI::getMainPage(std::string) {}
+std::string TeacherAPI::getMainPage(const std::string &str) {}
