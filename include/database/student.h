@@ -14,8 +14,7 @@ class Student : public Person {
         , name(name)
         , surname(surname)
         , age(age)
-        , description(description)
-        , postgres(postgres) {}
+        , description(description) {}
 
     std::string get_name(int s_id) const override;
     std::string get_surname(int s_id) const override;
