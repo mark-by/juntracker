@@ -30,55 +30,47 @@ void Connection::start() {
 void Connection::doRead(const boost::system::error_code& error,
                         std::size_t bytes_transferred) {
     if (!error) {
-        boost::logic::tribool result;  // need to check all received data from client
-        // boost::tie(result, boost::tuples::ignore) =;
-
-        // need to read about property_tree
-
-        if (result) {  // true; we read all data
-            // big switch to choose api for request
-            if (request_.getMethod() == "POST") {
-                // handler
-                if (request_.getRights() == rights::admin) {
-                    // do handle
-                } else {
-                    // error
-                }
+        // big switch to choose api for request
+        if (request_.getMethod() == "POST") {
+            // handler
+            if (request_.getRights() == rights::admin) {
+                // do handle
+            } else {
+                // error
             }
-
-            if (request_.getMethod() == "GET") {
-                // handler
-                switch (request_.getRights()) {
-                    case rights::admin:
-                        handler_.admin();
-                        break;
-                    case rights::teacher:
-                        handler_.teacher();
-                        break;
-                    case rights::customer:
-                        handler_.customer();
-                        break;
-                    default:
-                        // error
-                        break;
-                }
-            }
-            // need to write to response_.buffer or something like this
-            async::async_write(socket_,
-                    async::buffer(
-                            response_.toString().data(),
-                            response_.toString().size()
-                            ),
-                    boost::bind(&Connection::doWrite, shared_from_this(),
-                            async::placeholders::error));
-        } else {
-            socket_.async_read_some(
-                    async::buffer(buffer_),
-                    boost::bind(&Connection::doRead, shared_from_this(),
-                            async::placeholders::error,
-                            async::placeholders::bytes_transferred)
-            );
         }
+
+        if (request_.getMethod() == "GET") {
+            // handler
+            switch (request_.getRights()) {
+                case rights::admin:
+                    handler_.admin();
+                    break;
+                case rights::teacher:
+                    handler_.teacher();
+                    break;
+                case rights::customer:
+                    handler_.customer();
+                    break;
+                default:
+                    // error
+                    break;
+            }
+        }
+        // need to write to response_.buffer or something like this
+        async::async_write(socket_,
+                async::buffer(
+                        response_.toString().data(),
+                        response_.toString().size()
+                        ),
+                        boost::bind(&Connection::doWrite, shared_from_this(),
+                            async::placeholders::error));
+        socket_.async_read_some(
+                async::buffer(buffer_),
+                boost::bind(&Connection::doRead, shared_from_this(),
+                        async::placeholders::error,
+                        async::placeholders::bytes_transferred)
+                        );
     } else if (error != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
     }
