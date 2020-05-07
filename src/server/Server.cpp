@@ -27,6 +27,7 @@ Server::Server(const std::string &addr, const std::string &port):
 }
 
 void Server::startServer() {
+    // need to think about threads
     service_.run();
 }
 
