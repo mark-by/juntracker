@@ -23,7 +23,7 @@ private:
 
     ConnectionManager manager_;
 
-    boost::asio::io_service service_;
+    boost::asio::io_service service_;  // main thing in boost::asio
     boost::asio::ip::tcp::acceptor acceptor_;
 
     std::shared_ptr<Connection> connection_;

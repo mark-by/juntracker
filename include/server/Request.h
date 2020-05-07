@@ -14,17 +14,18 @@ public:
     Request(std::string);
     std::string getMethod() { return this->method;};
     std::string getHeader(const std::string& header);
-    std::string getPath();
+    // header like
+    std::string getPath();  // url from request
     std::string getData(const std::string& key, std::string returnNotFound = "");
 
 private:
-    std::string method;
+    std::string method;  // GET or POST
     std::map<std::string, std::string> headers;
-    std::string path;
+    std::string path;  // url
 
-    std::map<std::string, std::string> data;
-    std::map<std::string, std::string> parseRequest(const std::string& request);
-    std::map<std::string, std::string> parseHeaders(const std::string& headers);
+    std::map<std::string, std::string> data;  // data like persons [{"name": "John" "surname": "Smith"},]
+    std::map<std::string, std::string> parseRequest(const std::string& request);  // call in constructor
+    std::map<std::string, std::string> parseHeaders(const std::string& headers);  // call in constructor
 };
 
 

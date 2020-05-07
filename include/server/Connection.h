@@ -26,8 +26,7 @@ public:
     Connection& operator=(const Connection&) = delete;
     // decline "="
 
-    explicit Connection(boost::asio::io_service& service,
-                        ConnectionManager& manager);
+    explicit Connection(boost::asio::io_service& service, ConnectionManager& manager);
     // create socket to connect with server
     // connection manager to manage connections
     // handler to handle requests
@@ -43,11 +42,11 @@ private:
     Handler handler_;
     Request request_;
 
-    std::array<char, 1024> buffer_;  // best variant
+    std::array<char, 1024> buffer_;  // best variant; std::vector not thread-safety
 
     void doRead(const boost::system::error_code& e,
-                std::size_t bytes_transferred);  // async read
-    void doWrite(const boost::system::error_code& e);  // async write
+                std::size_t bytes_transferred);  // async read from socket and handle request
+    void doWrite(const boost::system::error_code& e);  // async write to socket and send to client callback
 };
 
 #endif //SERVER_CONNECTION_H

@@ -18,8 +18,8 @@ public:
     Response();
     Response(std::string request, int status, std::string data = "");
     std::string toString();
-    void setBody(std::string data);
-    void setHeader(std::string key, std::tring value);  // working with std::map
+    void setBody(std::string data);  // body for client like html-code
+    void setHeader(std::string key, std::string value);  // working with std::map
 
 private:
     std::map<std::string, std::string> headers;
