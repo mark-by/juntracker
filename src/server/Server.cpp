@@ -34,11 +34,9 @@ Server::Server(const std::string &addr, const std::string &port):
 void Server::startServer() {
     std::vector<std::thread> threads;
 
+    // std::thread::hardware_concurrency() - number of cores
     for (unsigned int i = 0; i < std::thread::hardware_concurrency(); i++) {
-        threads.push_back(std::thread(boost::bind(
-                &async::io_service::run,
-                &service_)
-                ));
+        threads.emplace_back([service = &service_] { service->run(); });
     }
 
     for (auto& thread : threads) {
@@ -47,10 +45,7 @@ void Server::startServer() {
 }
 
 void Server::stopServer() {
-    service_.post(boost::bind(
-            &Server::stop,
-            this
-            ));
+    service_.post([this] { stop(); });
 };
 
 void Server::stop() {
