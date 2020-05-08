@@ -10,7 +10,7 @@
 
 class Request {
 public:
-    Request();
+    Request() = default;
     Request(std::string);
     std::string getMethod() { return this->method;};
     std::string getHeader(const std::string& header);

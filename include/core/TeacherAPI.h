@@ -6,6 +6,8 @@
 #define CORE_TEACHERAPI_H
 
 
+#include "API.h"
+
 class TeacherAPI: public API {
 public:
     TeacherAPI();

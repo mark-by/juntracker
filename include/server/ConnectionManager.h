@@ -6,9 +6,10 @@
 #define SERVER_CONNECTIONMANAGER_H
 
 #include <set>
+#include "boost/noncopyable.hpp"
 #include "Connection.h"
 
-class ConnectionManager {
+class ConnectionManager: private boost::noncopyable {
 public:
     ConnectionManager();  // create manager
 

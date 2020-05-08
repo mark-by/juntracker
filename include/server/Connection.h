@@ -6,16 +6,12 @@
 #define SERVER_CONNECTION_H
 
 #include <array>
-#include <memory>
 #include <iostream>
+#include <memory>
 #include "boost/asio.hpp"
 #include "boost/bind.hpp"
 #include "boost/logic/tribool.hpp"
-#include "boost/tuple/tuple.hpp"
 
-#include "Response.h"
-#include "Request.h"
-#include "ConnectionManager.h"
 #include "Handler.h"
 
 class ConnectionManager;
@@ -37,7 +33,7 @@ public:
 
 private:
     boost::asio::ip::tcp::socket socket_;
-    ConnectionManager manager_;
+    ConnectionManager& manager_;
     Response response_;
     Handler handler_;
     Request request_;

@@ -6,6 +6,7 @@
 #define SERVER_RESPONSE_H
 
 #include <string>
+#include <map>
 
 enum codes {
     ok = 200,
@@ -15,7 +16,7 @@ enum codes {
 
 class Response {
 public:
-    Response();
+    Response() = default;
     Response(std::string request, int status, std::string data = "");
     std::string toString();
     void setBody(std::string data);  // body for client like html-code

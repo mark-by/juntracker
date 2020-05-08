@@ -8,8 +8,6 @@
 #include "boost/asio.hpp"
 #include <string>
 #include "ConnectionManager.h"
-#include "Handler.h"
-#include "Request.h"
 
 class Server: private boost::asio::noncopyable {
 public:

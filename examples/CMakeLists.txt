@@ -11,4 +11,4 @@ add_executable(server server_example.cpp)
 
 target_link_libraries(node ${templates})
 target_link_libraries(loader ${templates})
-target_link_libraries(server boost_thread pthread)
+target_link_libraries(server boost_thread pthread serverlib)

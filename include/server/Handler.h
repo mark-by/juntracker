@@ -8,7 +8,7 @@
 #include <string>
 #include "Request.h"
 #include "Response.h"
-#include "../core/TeacherAPI.h"
+//#include "../core/TeacherAPI.h"
 
 
 class Handler {
@@ -23,7 +23,7 @@ public:
 
 private:
     // AdminApi
-    TeacherAPI tutor;
+    // TeacherAPI tutor;
     // CustomerApi
     Request request_;
     Response response_;

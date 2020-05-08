@@ -3,6 +3,7 @@
 //
 
 #include "Connection.h"
+#include "ConnectionManager.h"
 
 namespace async = boost::asio;
 namespace net = boost::asio::ip;
@@ -14,8 +15,7 @@ enum rights {
 };
 
 Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager):
-    socket_(service), handler_(request_, response_), buffer_() {
-    this->manager_ = manager;
+    socket_(service), manager_(manager), handler_(request_, response_), buffer_() {
 };
 
 void Connection::start() {
@@ -31,7 +31,7 @@ void Connection::doRead(const boost::system::error_code& error,
                         std::size_t bytes_transferred) {
     if (!error) {
         // big switch to choose api for request
-        if (request_.getMethod() == "POST") {
+        /*if (request_.getMethod() == "POST") {
             // handler
             if (request_.getRights() == rights::admin) {
                 // do handle
@@ -56,13 +56,16 @@ void Connection::doRead(const boost::system::error_code& error,
                     // error
                     break;
             }
-        }
+        }*/
+        std::cout << buffer_.data();
+
         // need to write to response_.buffer or something like this
         async::async_write(socket_,
-                async::buffer(
+                /*async::buffer(
                         response_.toString().data(),
                         response_.toString().size()
-                        ),
+                        ),*/
+                async::buffer("hello world!", 13),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
         socket_.async_read_some(
