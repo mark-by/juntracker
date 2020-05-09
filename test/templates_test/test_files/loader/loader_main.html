@@ -4,8 +4,20 @@
 </head>
 <body>
 <main>
+    {% for i in array %}
+        <div>Printed: {{ var }}</div>
+    {% endfor %}
+
     {% block main %}
     {% endblock %}
+
+    {% if b %}
+        <div>if b</div>
+        {{ var }}
+    {% else %}
+        <div>else if b</div>
+    {% endif %}
+    {{ var }}
 </main>
 </body>
 </html>

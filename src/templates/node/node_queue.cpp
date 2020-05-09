@@ -1,4 +1,4 @@
-#include <node/node.h>
+#include <node/node_queue.h>
 #include <algorithm>
 
 bool templates::NodeQueue::_render() {
@@ -18,6 +18,8 @@ bool templates::NodeQueue::renderText() {
     nodes.pop_front();
     return true;
 }
+
+
 
 bool templates::NodeQueue::renderBlock() {
     std::string blockName = nodes.front()->name();
