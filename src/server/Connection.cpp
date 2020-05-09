@@ -57,7 +57,9 @@ void Connection::doRead(const boost::system::error_code& error,
                     break;
             }
         }*/
-        std::cout << buffer_.data();
+        std::string request_string(buffer_.begin(), buffer_.end());
+        //std::cout << request_string.data();
+        request_.init(request_string);
 
         // need to write to response_.buffer or something like this
         async::async_write(socket_,

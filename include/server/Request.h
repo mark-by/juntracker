@@ -11,7 +11,8 @@
 class Request {
 public:
     Request() = default;
-    Request(std::string);
+    Request(std::string stringToParse);
+    bool init(const std::string& stringToParse);
     std::string getMethod() { return this->method;};
     std::string getHeader(const std::string& header);
     // header like
@@ -25,7 +26,7 @@ private:
 
     std::map<std::string, std::string> data;  // data like persons [{"name": "John" "surname": "Smith"},]
     std::map<std::string, std::string> parseRequest(const std::string& request);  // call in constructor
-    std::map<std::string, std::string> parseHeaders(const std::string& headers);  // call in constructor
+    std::map<std::string, std::string> parseHeaders(const std::string& request_headers);  // call in constructor
 };
 
 
