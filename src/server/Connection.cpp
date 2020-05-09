@@ -58,8 +58,12 @@ void Connection::doRead(const boost::system::error_code& error,
             }
         }*/
         std::string request_string(buffer_.begin(), buffer_.end());
-        //std::cout << request_string.data();
+        std::cout << request_string.data();
         request_.init(request_string);
+        if (request_.getMethod() == "GET") {
+            std::cout << "\nGET\n";
+        }
+        std::cout << request_.getPath() << '\n';
 
         // need to write to response_.buffer or something like this
         async::async_write(socket_,

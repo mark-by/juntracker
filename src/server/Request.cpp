@@ -15,7 +15,7 @@ std::string Request::getHeader(const std::string &header) {
 }
 
 std::string Request::getPath() {
-    return std::string();
+    return this->path;
 }
 
 std::string Request::getData(const std::string &key, std::string returnNotFound) {
@@ -33,12 +33,15 @@ std::map<std::string, std::string> Request::parseHeaders(const std::string &requ
 bool Request::init(const std::string &stringToParse) {
     if (stringToParse.find("GET") != std::string::npos) {
         this->method = "GET";
-        return true;
     }
     if (stringToParse.find("POST") != std::string::npos) {
         this->method = "POST";
-        return true;
     }
+
+    size_t start = stringToParse.find("/juntracker.ru");
+    size_t end  = stringToParse.find("HTTP");
+
+    this->path = stringToParse.substr(start, end - start);
 
     return false;
 }
