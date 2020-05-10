@@ -1,49 +1,52 @@
 #include <node/node_queue.h>
 #include <algorithm>
 
-bool templates::NodeQueue::_render() {
-    auto type = nodes.front()->type();
-    switch (type) {
-        case TEXTNODE:
-            return renderText();
-        case BLOCKNODE:
-            return renderBlock();
-        default:
-            return false;
+void templates::NodeQueue::render(templates::Context & context) {
+    while (!nodes.empty()) {
+        _result += nodes.front()->render(context);
+        nodes.pop_front();
     }
 }
 
-bool templates::NodeQueue::renderText() {
-    _result += nodes.front()->render(context);
-    nodes.pop_front();
-    return true;
+void templates::NodeQueue::renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks) {
+    while (!nodes.empty()) {
+        auto type = nodes.front()->type();
+        switch (type) {
+            case TEXTNODE:
+                renderText();
+                break;
+            case BLOCKNODE:
+                renderBlock(blocks);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
+void templates::NodeQueue::renderText() {
+    templates::Context context;
+    _result += nodes.front()->render(context);
+    nodes.pop_front();
+}
 
-
-bool templates::NodeQueue::renderBlock() {
+void templates::NodeQueue::renderBlock(std::unordered_map<std::string, std::shared_ptr<Node>> & blocks) {
     std::string blockName = nodes.front()->name();
     if (blocks[blockName]) {
         nodes.pop_front();
         nodes.push_front(std::move(blocks[blockName]));
         blocks.erase(blockName);
     }
+    templates::Context context;
     _result += nodes.front()->render(context);
     nodes.pop_front();
-return true;
 }
 
 std::string templates::NodeQueue::result() {
     return _result;
 }
 
-void templates::NodeQueue::render() {
-    while (!nodes.empty()) {
-        _render();
-    }
-}
-
-void templates::NodeQueue::push(std::unique_ptr<templates::Node> ptr) {
+void templates::NodeQueue::push(std::shared_ptr<templates::Node> ptr) {
     nodes.push_back(std::move(ptr));
 }
 
@@ -51,8 +54,8 @@ bool templates::NodeQueue::empty() {
     return nodes.empty();
 }
 
-std::unique_ptr<templates::Node> templates::NodeQueue::front() {
-    return std::move(nodes.front());
+std::shared_ptr<templates::Node> templates::NodeQueue::front() {
+    return nodes.front();
 }
 
 size_t templates::NodeQueue::size() {

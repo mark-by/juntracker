@@ -4,44 +4,35 @@
 #include <node/node.h>
 
 namespace templates {
-        class NodeQueue {
-            public:
-            NodeQueue() {};
+    class NodeQueue {
+    public:
+        NodeQueue() : _result("") {};
 
-            explicit NodeQueue(templates::Context &context) : context(context), _result("") {};
+        void render(templates::Context & context);
 
-            void render();
+        std::string result();
 
-            std::string result();
+        void push(std::shared_ptr<Node> ptr);
 
-            void push(std::unique_ptr<Node> ptr);
+        bool empty();
 
-            bool empty();
+        std::shared_ptr<Node> front();
 
-            std::unique_ptr<Node> front();
+        size_t size();
 
-            size_t size();
+        void pop();
 
-            void pop();
+        void renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks);
 
-            void set(const std::string &buffer);
+    private:
 
-            std::unordered_map<std::string, std::unique_ptr<Node>> blocks;
-            private:
+        void renderText();
 
-            std::tuple<std::string::const_iterator, std::unique_ptr<templates::Node>>
-            parse(std::string::const_iterator _start, std::string::const_iterator _end, int type);
+        void renderBlock(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks);
 
-            bool _render();
-
-            bool renderText();
-
-            bool renderBlock();
-
-            std::deque<std::unique_ptr<Node>> nodes;
-            Context context;
-            std::string _result;
-        };
+        std::deque<std::shared_ptr<Node>> nodes;
+        std::string _result;
+    };
 };
 
 #endif //JUNTRACKER_NODE_QUEUE_H

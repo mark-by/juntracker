@@ -75,19 +75,22 @@ namespace templates {
 
     class IfNode : public Node {
     public:
-        IfNode(std::string name, std::string content, std::string elseContent)
-        : Node(std::move(name), std::move(content)), elseContent(std::move(elseContent)) {
+        IfNode(std::string name, std::string content, std::string statement)
+        : Node(std::move(name), std::move(content)), _statement(std::move(statement)) {
             _type = IFNODE;
         };
 
         std::string render(templates::Context &context) override;
 
-        std::string getElseContent();
+        std::string statement() const;
 
-        void setElseContent(const std::string &_content);
+        std::tuple<std::string::const_iterator, std::string::const_iterator> trueBlock() const;
+
+        std::tuple<std::string::const_iterator, std::string::const_iterator> falseBlock() const;
 
     private:
-        std::string elseContent;
+        std::string _statement;
+
     };
 
 }

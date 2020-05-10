@@ -1,21 +1,16 @@
 #include <template/template.h>
 
 void templates::Template::render(templates::Context &context) {
-    nodeQueue.set(buffer);
-    nodeQueue.render();
-    _result = nodeQueue.result();
-}
-
-void templates::Template::_render(templates::Context &context) {
-
+    nodeQueue.render(context);
 }
 
 templates::Template::Template(const std::string &filename) {
     loader.load(filename);
-    buffer = loader.result();
+    std::string buffer = loader.result();
+    nodeQueue = parser.parse(buffer.cbegin(), buffer.cend());
 }
 
 std::string templates::Template::result() {
-    return _result;
+    return nodeQueue.result();
 }
 

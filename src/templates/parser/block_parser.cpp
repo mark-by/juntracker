@@ -1,8 +1,8 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::unique_ptr<templates::Node>templates::BlockParser::parse() {
-    return std::make_unique<templates::BlockNode>(_name, content());
+std::shared_ptr<templates::Node>templates::BlockParser::parse() {
+    return std::make_shared<templates::BlockNode>(_name, content());
 }
 
 std::string templates::BlockParser::getName(const std::string &text) {

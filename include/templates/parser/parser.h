@@ -10,7 +10,7 @@ namespace templates {
     public:
         NodeParser() : buffer("") {};
 
-        virtual std::unique_ptr<Node> parse() = 0;
+        virtual std::shared_ptr<Node> parse() = 0;
 
         virtual std::string::const_iterator
         set(std::string::const_iterator _begin, std::string::const_iterator _end) = 0;
@@ -23,7 +23,7 @@ namespace templates {
 
     class TextParser : public NodeParser {
     public:
-        std::unique_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
 
@@ -33,14 +33,14 @@ namespace templates {
 
     class VarParser : public NodeParser {
     public:
-        std::unique_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
     };
 
     class ForParser : public NodeParser {
     public:
-        std::unique_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
 
@@ -56,7 +56,7 @@ namespace templates {
 
     class BlockParser : public NodeParser {
     public:
-        std::unique_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
 
@@ -72,7 +72,7 @@ namespace templates {
 
     class IfParser : public NodeParser {
     public:
-        std::unique_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
 
@@ -84,8 +84,6 @@ namespace templates {
         findScope(std::string::const_iterator _begin, std::string::const_iterator _end);
 
         std::string statement;
-        std::string::const_iterator startTrueBlock;
-        std::string::const_iterator endTrueBlock;
         std::string::const_iterator startFalseBlock;
         std::string::const_iterator endFalseBlock;
     };
@@ -96,12 +94,17 @@ namespace templates {
 
         NodeQueue parse(std::string::const_iterator begin, std::string::const_iterator end);
 
+        NodeQueue parseBlocks(std::string::const_iterator begin, std::string::const_iterator end);
+
+        std::unordered_map<std::string, std::shared_ptr<templates::Node>>
+        collectBlocks(std::string::const_iterator _begin, std::string::const_iterator _end);
+
         static int tagType(const std::string &tag);
 
         static int BlockType(const std::string &text);
 
     private:
-        std::tuple<std::string::const_iterator, std::unique_ptr<templates::Node>>
+        std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
         parseNode(std::string::const_iterator _start, std::string::const_iterator _end, int type);
 
         BlockParser blockParser;

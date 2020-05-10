@@ -14,15 +14,8 @@ namespace templates {
         std::string result();
     private:
         void _render(templates::Context &context);
-        void makeQueue();
-        std::tuple<std::string::const_iterator, std::unique_ptr<Node>> parse(std::string::const_iterator start, int type);
-        std::string _result;
-        std::string buffer;
+        templates::Parser parser;
         templates::Loader loader;
-        templates::TextParser textParser;
-        templates::VarParser varParser;
-        templates::ForParser forParser;
-        templates::IfParser ifParser;
         templates::NodeQueue nodeQueue;
     };
 }

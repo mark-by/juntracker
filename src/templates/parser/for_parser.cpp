@@ -1,8 +1,8 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::unique_ptr<templates::Node>templates::ForParser::parse() {
-    return std::make_unique<templates::ForNode>(name, std::string(begin, end), iterVar);
+std::shared_ptr<templates::Node>templates::ForParser::parse() {
+    return std::make_shared<templates::ForNode>(name, std::string(begin, end), iterVar);
 }
 
 std::tuple<std::string, std::string> templates::ForParser::nameAndIterVar(const std::string &_head) {

@@ -1,8 +1,8 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::unique_ptr<templates::Node>templates::VarParser::parse() {
-    return std::make_unique<templates::VarNode>(std::string(begin, end), "");
+std::shared_ptr<templates::Node>templates::VarParser::parse() {
+    return std::make_shared<templates::VarNode>(std::string(begin, end), "");
 }
 
 std::string::const_iterator

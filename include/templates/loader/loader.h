@@ -3,7 +3,6 @@
 
 #include <node/node.h>
 #include <parser/parser.h>
-#include <map>
 
 namespace templates {
     class Loader {
@@ -13,13 +12,8 @@ namespace templates {
         std::string result();
 
     private:
-        void makeBlockTable(const std::string &text);
-        void makeQueue(std::string::const_iterator _begin, std::string::const_iterator _end);
-
         std::string _result;
-        templates::NodeQueue nodeQueue;
-        templates::BlockParser blockParser;
-        templates::TextParser textParser;
+        templates::Parser parser;
     };
 }
 

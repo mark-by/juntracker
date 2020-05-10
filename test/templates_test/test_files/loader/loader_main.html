@@ -4,19 +4,21 @@
 </head>
 <body>
 <main>
+    {% if b %}
+    <div>if b</div>
+    {{ var }}
+    {% else %}
+    <div>else if b</div>
+    {% endif %}
     {% for i in array %}
-        <div>Printed: {{ var }}</div>
+        <div>Printed: {{ var }} and {{ i }}</div>
+        {% for j in jarray %}
+            print {{ j }}
+        {% endfor %}
     {% endfor %}
 
     {% block main %}
     {% endblock %}
-
-    {% if b %}
-        <div>if b</div>
-        {{ var }}
-    {% else %}
-        <div>else if b</div>
-    {% endif %}
     {{ var }}
 </main>
 </body>

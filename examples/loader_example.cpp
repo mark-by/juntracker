@@ -1,16 +1,16 @@
 //#include <loader/loader.h>
 #include <iostream>
-#include <parser/re_tags.h>
-#include <parser/parser.h>
-#include <loader/loader.h>
+#include <template/template.h>
 
 int main() {
     std::string filename = "../../test/templates_test/test_files/loader/loader_extends.html";
-    templates::Loader loader;
-    templates::Parser parser;
-    loader.load(filename);
-    std::cout << loader.result() << std::endl;
-    std::string result = loader.result();
-    auto nodeQ = parser.parse(result.cbegin(), result.cend());
+    templates::Template templ(filename);
+    templates::Context context;
+    context.put("b", true);
+    context.put("var", 35585);
+    context.putArray("array", std::vector<int>{4,5,3,2});
+    context.putArray("jarray", std::vector<int>{55, 45, 66});
+    templ.render(context);
+    std::cout << templ.result() << std::endl;
     return 0;
 }
