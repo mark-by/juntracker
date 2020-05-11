@@ -7,17 +7,11 @@ std::shared_ptr<templates::Node> templates::IfParser::parse() {
             statement);
 }
 
-std::string templates::IfParser::getStatement(const std::string &head) {
-    std::sregex_iterator match(head.cbegin(), head.cend(), parser::tag::nameWithDots);
-    match++;
-    return match->str();
-}
-
 std::string::const_iterator
-templates::IfParser::set(std::string::const_iterator _begin, std::string::const_iterator _end) {
+templates::IfParser::set(const std::sregex_iterator &tag) {
     std::sregex_iterator none;
-    auto[start, elseMatch, stop] = findScope(_begin, _end);
-    statement = getStatement(start->str());
+    auto[start, elseMatch, stop] = findScope(tag->prefix().second, tag->suffix().second);
+    statement = start->format("$3");
     begin = start->suffix().first; // {% if isTrue %}<--
     if (elseMatch != none) {
         end = elseMatch->prefix().second; // -->{% else %}
@@ -37,7 +31,7 @@ templates::IfParser::findScope(std::string::const_iterator _begin, std::string::
     std::sregex_iterator currMatch(_begin, _end, parser::tag::anyBlock);
     std::sregex_iterator none;
     while (currMatch != none) {
-        int type = templates::Parser::BlockType(currMatch->str());
+        int type = templates::Parser::BlockType(currMatch);
         if (type == parser::if_t) {
             if_stack.push(currMatch);
         } else if (type == parser::else_t) {

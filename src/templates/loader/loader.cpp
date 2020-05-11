@@ -20,7 +20,7 @@ void templates::Loader::load(const std::string &filename) {
         return;
     }
 
-    std::string extendFileName = BlockParser::getName(match.str());
+    std::string extendFileName = match.format("$2");
     boost::filesystem::path extendPath = filePath.branch_path().append(extendFileName);
     close(fd);
     fd = open(extendPath.c_str(), O_RDONLY);

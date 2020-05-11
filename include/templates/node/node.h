@@ -9,7 +9,7 @@
 
 namespace templates {
     enum TypeNode {
-        TEXTNODE, BLOCKNODE, VARNODE, FORNODE, IFNODE
+        TEXTNODE, BLOCKNODE, VARNODE, FORNODE, IFNODE, INCLUDENODE
     };
 
     class Node {
@@ -61,6 +61,15 @@ namespace templates {
 
     private:
         std::string afterSpaces;
+    };
+
+    class IncludeNode : public Node {
+    public:
+        IncludeNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+            _type = INCLUDENODE;
+        };
+
+        std::string render(templates::Context &context) override;
     };
 
     class ForNode : public Node {

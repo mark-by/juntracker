@@ -2,41 +2,38 @@
 #include <parser/re_tags.h>
 #include <boost/algorithm/string.hpp>
 
-int templates::Parser::tagType(const std::string &tag) {
-    switch (tag[1]) {
-        case '{':
-            return parser::variable_t;
-        case '#':
-            return parser::comment_t;
-        case '%':
-            return BlockType(tag);
-        default:
-            return parser::undefined_t;
+int templates::Parser::tagType(const std::sregex_iterator &tag) {
+    if (!tag->format("$1").empty()) {
+        return BlockType(tag);
     }
+    if (!tag->format("$6").empty()) {
+        return parser::variable_t;
+    }
+    if (!tag->format("$10").empty()) {
+        return parser::comment_t;
+    }
+    return parser::undefined_t;
 }
 
-int templates::Parser::BlockType(const std::string &text) {
-    std::smatch match;
-    std::regex_search(text, match, parser::tag::name);
-    std::string matchStr = match.str();
-
-    if (matchStr == "block") {
+int templates::Parser::BlockType(const std::sregex_iterator &tag) {
+    std::string name = tag->format("$2");
+    if (name == "block") {
         return parser::block_t;
-    } else if (matchStr == "if") {
+    } else if (name == "if") {
         return parser::if_t;
-    } else if (matchStr == "for") {
+    } else if (name == "for") {
         return parser::for_t;
-    } else if (matchStr == "include") {
+    } else if (name == "include") {
         return parser::include_t;
-    } else if (matchStr == "extends") {
+    } else if (name == "extends") {
         return parser::extends_t;
-    } else if (matchStr == "endfor") {
+    } else if (name == "endfor") {
         return parser::endfor_t;
-    } else if (matchStr == "else") {
+    } else if (name == "else") {
         return parser::else_t;
-    } else if (matchStr == "endif") {
+    } else if (name == "endif") {
         return parser::endif_t;
-    } else if (matchStr == "endblock") {
+    } else if (name == "endblock") {
         return parser::endblock_t;
     } else {
         return parser::undefined_t;
@@ -54,7 +51,7 @@ templates::NodeQueue templates::Parser::parse(std::string::const_iterator begin,
             currMatch++;
             continue;
         }
-        auto[endBlock, node] = parseNode(currMatch->prefix().second, end, tagType(currMatch->str()));
+        auto[endBlock, node] = parseNode(currMatch);
         textParser.set(textStart, currMatch->prefix().second);
         if (!textParser.empty()) {
             nodes.push(textParser.parse());
@@ -70,20 +67,21 @@ templates::NodeQueue templates::Parser::parse(std::string::const_iterator begin,
 }
 
 std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
-templates::Parser::parseNode(std::string::const_iterator _start, std::string::const_iterator _end, int type) {
+templates::Parser::parseNode(const std::sregex_iterator &tag) {
     std::string::const_iterator endBlock;
+    int type = tagType(tag);
     switch (type) {
         case parser::for_t:
-            endBlock = forParser.set(_start, _end);
+            endBlock = forParser.set(tag);
             return {endBlock, forParser.parse()};
         case parser::if_t:
-            endBlock = ifParser.set(_start, _end);
+            endBlock = ifParser.set(tag);
             return {endBlock, ifParser.parse()};
         case parser::variable_t:
-            endBlock = varParser.set(_start, _end);
+            endBlock = varParser.set(tag);
             return {endBlock, varParser.parse()};
         default:
-            return {_start, nullptr};
+            return {tag->suffix().first, nullptr};
     }
 }
 
@@ -93,7 +91,7 @@ templates::Parser::collectBlocks(std::string::const_iterator _begin, std::string
     auto currStartBlock = std::sregex_iterator(_begin, _end, parser::tag::startBlock);
     std::sregex_iterator end;
     while (currStartBlock != end) {
-        blockParser.set(currStartBlock->prefix().second, _end);
+        blockParser.set(currStartBlock);
         blocks.insert({blockParser.name(), blockParser.parse()});
         currStartBlock++;
     }
@@ -107,7 +105,7 @@ templates::Parser::parseBlocks(std::string::const_iterator _begin, std::string::
     std::sregex_iterator end;
     auto startText = _begin;
     while (currStartBlock != end) {
-        auto endBlock = blockParser.set(currStartBlock->prefix().second, _end);
+        auto endBlock = blockParser.set(currStartBlock);
         textParser.set(startText, currStartBlock->prefix().second);
         nodeQueue.push(textParser.parse());
         nodeQueue.push(blockParser.parse());
