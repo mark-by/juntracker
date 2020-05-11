@@ -1,5 +1,6 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
+#include <boost/algorithm/string.hpp>
 
 int templates::Parser::tagType(const std::string &tag) {
     switch (tag[1]) {
@@ -53,9 +54,9 @@ templates::NodeQueue templates::Parser::parse(std::string::const_iterator begin,
             currMatch++;
             continue;
         }
-        auto [endBlock, node] = parseNode(currMatch->prefix().second, end, tagType(currMatch->str()));
+        auto[endBlock, node] = parseNode(currMatch->prefix().second, end, tagType(currMatch->str()));
         textParser.set(textStart, currMatch->prefix().second);
-        if (!textParser.empty()){
+        if (!textParser.empty()) {
             nodes.push(textParser.parse());
         }
         nodes.push(std::move(node));
@@ -68,9 +69,10 @@ templates::NodeQueue templates::Parser::parse(std::string::const_iterator begin,
     return nodes;
 }
 
-std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>> templates::Parser::parseNode(std::string::const_iterator _start, std::string::const_iterator _end, int type) {
+std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
+templates::Parser::parseNode(std::string::const_iterator _start, std::string::const_iterator _end, int type) {
     std::string::const_iterator endBlock;
-    switch(type) {
+    switch (type) {
         case parser::for_t:
             endBlock = forParser.set(_start, _end);
             return {endBlock, forParser.parse()};
@@ -98,7 +100,8 @@ templates::Parser::collectBlocks(std::string::const_iterator _begin, std::string
     return blocks;
 }
 
-templates::NodeQueue templates::Parser::parseBlocks(std::string::const_iterator _begin, std::string::const_iterator _end) {
+templates::NodeQueue
+templates::Parser::parseBlocks(std::string::const_iterator _begin, std::string::const_iterator _end) {
     templates::NodeQueue nodeQueue;
     auto currStartBlock = std::sregex_iterator(_begin, _end, parser::tag::startBlock);
     std::sregex_iterator end;
@@ -114,4 +117,10 @@ templates::NodeQueue templates::Parser::parseBlocks(std::string::const_iterator 
     textParser.set(startText, _end);
     nodeQueue.push(textParser.parse());
     return nodeQueue;
+}
+
+void templates::Parser::clearString(std::string &str) {
+    boost::trim(str);
+    str = std::regex_replace(std::regex_replace(str, parser::tag::beforeHtmlTagSpaces, ""),
+                             parser::tag::afterHtmlTagSpaces, "$1");
 }

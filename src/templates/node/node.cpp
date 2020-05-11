@@ -4,12 +4,12 @@
 #include <boost/algorithm/string.hpp>
 
 std::string templates::TextNode::render(templates::Context &context) {
-    boost::trim(_content);
+    templates::Parser::clearString(_content);
     return _content;
 }
 
 std::string templates::BlockNode::render(templates::Context &context) {
-    boost::trim(_content);
+    templates::Parser::clearString(_content);
     return _content;
 }
 

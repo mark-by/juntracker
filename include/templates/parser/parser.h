@@ -106,6 +106,8 @@ namespace templates {
 
         static int BlockType(const std::string &text);
 
+        static void clearString(std::string & str);
+
     private:
         std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
         parseNode(std::string::const_iterator _start, std::string::const_iterator _end, int type);

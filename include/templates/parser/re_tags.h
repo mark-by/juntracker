@@ -37,6 +37,10 @@ namespace parser {
 
         inline std::regex AfterVarSpaces(R"(\s*(?=\}\}))");
 
+        inline std::regex beforeHtmlTagSpaces(R"(\s+(?=<.*?>)|\s+(?=</.*?>))");
+
+        inline std::regex afterHtmlTagSpaces(R"((<.*?>|</.*?>)(\s+))");
+
         inline std::regex startIf("(" BLOCK_TAG_START "\\s*if\\s+[\\w.]+\\s*?" BLOCK_TAG_END ")");
 
         inline std::regex endIf("(" BLOCK_TAG_START "\\s*endif\\s*?" BLOCK_TAG_END ")");
