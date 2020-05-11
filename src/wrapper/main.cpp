@@ -2,8 +2,9 @@
 
 #include "sql_wrapper.h"
 #include "course.h"
-#include "teacher.h"
+#include "payment.h"
 #include "student.h"
+#include "teacher.h"
 #include "user.h"
 #include "visit.h"
 
@@ -35,8 +36,11 @@ int main(int argc, char* argv[]) {
     std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
     User u(postgres);
     std::cout << u.get_status(11) << std::endl;
-//    Visit v(postgres);
-//    std::cout << v.get_course_id(11) << std::endl;
+    Visit v(postgres);
+    std::cout << v.get_course_id(11) << std::endl;
+    Payment p(postgres);
+    std::cout << p.get_course_id(11) << std::endl;
+    p.add_payment(17, 4, 1, 4000, "2020-01-30");
 
 //    if (postgres.is_select(query)) {
 //        postgres.query(query/*, handler*/);

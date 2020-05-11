@@ -36,15 +36,12 @@ TEST(DataBase, InsertTable) {
 }
 
 TEST(DataBase, InsertTable_2) {
-    std::shared_ptr<PGConnection>  m_connection;
     const std::string query = "INSERT INTO student VALUES(2, 'Anna', 'Borisenko', 13);";
     bool ok = postgres.exec(query);
     EXPECT_EQ(ok, true);
 }
 
 TEST(DataBase, InsertTable_3) {
-    std::shared_ptr<PGConnection>  m_connection;
-    SqlWrapper postgres(m_connection);
     const std::string query = "INSERT INTO teacher VALUES(1, 'Olga', 'Smirnova', 12000, 'playing piano');";
     bool ok = postgres.exec(query);
     EXPECT_EQ(ok, true);
@@ -57,7 +54,7 @@ TEST(DataBase, InsertTable_4) {
 }
 
 TEST(DataBase, InsertTable_5) {
-    const std::string query = "INSERT INTO course VALUES(2, 'python programming', 12000 'Demidov', '01.02', '31.05');";
+    const std::string query = "INSERT INTO course VALUES(2, 'python programming', 12000 'Tokarev', '01.02', '31.05');";
     bool ok = postgres.exec(query);
     EXPECT_EQ(ok, true);
 }
@@ -69,7 +66,7 @@ TEST(DataBase, UpdateValues) {
 }
 
 TEST(DataBase, SelectValues) {
-    const std::string query = "SELECT FROM student, WHERE id = 3;";
+    const std::string query = "SELECT * FROM student WHERE id = 3;";
     PGresult *result = nullptr;
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
@@ -82,7 +79,7 @@ TEST(DataBase, SelectValues) {
 }
 
 TEST(DataBase, SelectValues_2) {
-    const std::string query = "SELECT name, surname FROM teacher, WHERE id = 1;";
+    const std::string query = "SELECT name, surname FROM teacher WHERE id = 1;";
     PGresult *result = nullptr;
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
@@ -95,7 +92,7 @@ TEST(DataBase, SelectValues_2) {
 }
 
 TEST(DataBase, SelectValues_3) {
-    const std::string query = "SELECT name, surname FROM student, WHERE id <= 2;";
+    const std::string query = "SELECT name, surname FROM student WHERE id <= 2;";
     PGresult *result = nullptr;
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
@@ -106,5 +103,18 @@ TEST(DataBase, SelectValues_3) {
             EXPECT_EQ(PQfname(result, col), column_names[col]);
             EXPECT_EQ(PQgetvalue(result, row, col), values[col]);
         }
+    }
+}
+
+TEST(DataBase, SelectValues4) {
+    const std::string query = "SELECT * FROM payment WHERE amount < 8000;";
+    PGresult *result = nullptr;
+    bool ok = postgres.query(query, &result);
+    EXPECT_EQ(ok, true);
+    std::vector<std::string> column_names = {"id", "name", "surname", "age", "course_id"};
+    std::vector<std::variant<std::string, int, double>> values = {3, "Anna", "Borisenko", 12, 1};
+    for (int col = 0; col < PQnfields(result); col++) {
+        EXPECT_EQ(PQfname(result, col), column_names[col]);
+        EXPECT_EQ(PQgetvalue(result, 0, col), values[col]);
     }
 }
