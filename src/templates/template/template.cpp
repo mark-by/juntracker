@@ -11,6 +11,8 @@ templates::Template::Template(const std::string &filename) {
 }
 
 std::string templates::Template::result() {
-    return nodeQueue.result();
+    std::string result =  nodeQueue.result();
+    templates::Parser::clearString(result);
+    return result;
 }
 

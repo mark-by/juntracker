@@ -8,8 +8,8 @@ int main() {
     templates::Context context;
     context.put("b", true);
     context.put("var", 35585);
-    context.putArray("array", std::vector<int>{4,5,3,2});
-    context.putArray("jarray", std::vector<int>{55, 45, 66});
+    context.putArray("array", std::vector<int>{1,2,3,4});
+    context.putArray("jarray", std::vector<int>{55, 66, 77});
     templ.render(context);
     std::cout << templ.result() << std::endl;
     return 0;
