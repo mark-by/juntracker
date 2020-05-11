@@ -36,6 +36,9 @@ namespace templates {
         std::shared_ptr<Node> parse() override;
 
         std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
+
+        std::string beforeSpaces;
+        std::string afterSpaces;
     };
 
     class ForParser : public NodeParser {

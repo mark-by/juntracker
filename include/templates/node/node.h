@@ -52,11 +52,15 @@ namespace templates {
 
     class VarNode : public Node {
     public:
-        VarNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+        VarNode(std::string name, std::string content, std::string afterSpaces)
+                : Node(std::move(name), std::move(content)), afterSpaces(std::move(afterSpaces)) {
             _type = VARNODE;
         };
 
         std::string render(templates::Context &context) override;
+
+    private:
+        std::string afterSpaces;
     };
 
     class ForNode : public Node {
@@ -76,7 +80,7 @@ namespace templates {
     class IfNode : public Node {
     public:
         IfNode(std::string name, std::string content, std::string statement)
-        : Node(std::move(name), std::move(content)), _statement(std::move(statement)) {
+                : Node(std::move(name), std::move(content)), _statement(std::move(statement)) {
             _type = IFNODE;
         };
 

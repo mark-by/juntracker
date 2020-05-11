@@ -1,17 +1,20 @@
 #include <node/node.h>
 #include <node/node_queue.h>
 #include <parser/parser.h>
+#include <boost/algorithm/string.hpp>
 
 std::string templates::TextNode::render(templates::Context &context) {
+    boost::trim(_content);
     return _content;
 }
 
 std::string templates::BlockNode::render(templates::Context &context) {
+    boost::trim(_content);
     return _content;
 }
 
 std::string templates::VarNode::render(templates::Context &context) {
-    return context.get<std::string>(_name);
+    return _content + context.get<std::string>(_name) + afterSpaces;
 }
 
 std::string templates::ForNode::render(templates::Context &context) {
