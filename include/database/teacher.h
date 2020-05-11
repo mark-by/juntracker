@@ -9,6 +9,8 @@
 
 class Teacher : public Person {
  public:
+    Teacher(SqlWrapper& postgres)
+    : postgres(postgres) {}
     explicit Teacher(int id, std::string& name, std::string& surname, int salary, std::string& description)
         : id(id)
         , name(name)
@@ -18,7 +20,7 @@ class Teacher : public Person {
 
     std::string get_name(int t_id) const override;
     std::string get_surname(int t_id) const override;
-    std::vector<std::string> get_courses() const;
+    std::string get_course(int t_id) const;
     [[nodiscard]] std::string return_surname() const { return surname; }
 
  private:

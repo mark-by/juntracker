@@ -19,23 +19,6 @@ std::shared_ptr<PGconn> PGConnection::connection() const {
     return m_connection;
 }
 
-// ResultSet is ...
-ResultSet::ResultSet(size_t rows, size_t cols,
-                     std::vector<std::pair<std::string, std::variant<std::string, int, double>>>& result)
-        : tRows(rows)
-        , tCols(cols) {}
-
-const ResultSet::Value ResultSet::get(size_t idx) const {
-    // ToDo
-    Value value{};
-    return value;
-}
-
-bool ResultSet::next() const {
-    // ToDo
-    return true;
-}
-
 // SqlWrapper is ...
 SqlWrapper::SqlWrapper(PGconn *conn)
     : conn(conn) {}
