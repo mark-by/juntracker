@@ -38,10 +38,12 @@ bool Request::init(const std::string &stringToParse) {
         this->method = "POST";
     }
 
-    size_t start = stringToParse.find("/juntracker.ru");
+    size_t start = stringToParse.find("/", 3);
     size_t end  = stringToParse.find("HTTP");
 
     this->path = stringToParse.substr(start, end - start);
+
+    parseRequest(this->path);
 
     return false;
 }

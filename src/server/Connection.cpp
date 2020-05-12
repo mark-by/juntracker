@@ -65,13 +65,27 @@ void Connection::doRead(const boost::system::error_code& error,
         }
         std::cout << request_.getPath() << '\n';
 
+        std::string data = "HTTP/1.1 200 OK\n"
+                           "Host: 127.0.0.1:5000\n"
+                           "Content-Type: text/html\n"
+                           "Content-Length: 153252\n"
+                           "Connection: close\n"
+                           "<html>\n"
+                           "<head><title>JunTracker</title></head>\n"
+                           "<body>bgcolor=\"white\">\n"
+                           "<center><h1>Hello!</h1></center>\n"
+                           "<center>This is JunTracker</center>\n"
+                           "</body>\n"
+                           "</html>";
+        std::cout << data.length();
+
         // need to write to response_.buffer or something like this
         async::async_write(socket_,
                 /*async::buffer(
                         response_.toString().data(),
                         response_.toString().size()
                         ),*/
-                async::buffer("hello world!", 13),
+                async::buffer(data, 253),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
         socket_.async_read_some(
