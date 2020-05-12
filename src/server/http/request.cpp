@@ -69,10 +69,13 @@ void Request::getDataFromPath() {
 }
 
 void Request::getDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    std::regex newLine("\r*\n\r*\n");
+    std::sregex_iterator startMatch(begin, end, newLine);
+    std::string::const_iterator start = startMatch->suffix().first;
     std::string contentType = header("Content-Type");
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
-        std::sregex_iterator parameterMatch(begin, end, parameter);
+        std::sregex_iterator parameterMatch(start, end, parameter);
         std::sregex_iterator none;
         while (parameterMatch != none) {
             _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
@@ -81,7 +84,7 @@ void Request::getDataFromBody(const std::string::const_iterator &begin, const st
     } else if (contentType == "multipart/form-data") {
 
     } else if (contentType == "text/plain") {
-        body = std::string(begin, end);
+        body = std::string(start, end);
     }
 }
 

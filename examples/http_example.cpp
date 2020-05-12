@@ -27,8 +27,8 @@ int main() {
     std::string postRequestTextStr = "POST /robots.txt HTTP/1.1\n"
                                  "Host: www.ru\n"
                                  "User-Agent: Mozilla/5.0 Gecko/20100101 Firefox/39.0\n"
-                                 "Content-Type: text/plain\n"
-                                 "\n\n"
+                                 "Content-Type: text/plain\r\n"
+                                 "\r\n\r\n"
                                  R"({ "some" : 35, "var" : 29 })";
     Request textPlainPost(postRequestTextStr);
     std::cout << "POST text/plain" << std::endl;
