@@ -6,7 +6,11 @@ set(loader_source
         loader/loader.cpp)
 
 set(parser_source
-        parser/parser.cpp)
+        parser/if_parser.cpp
+        parser/block_parser.cpp
+        parser/for_parser.cpp
+        parser/text_parser.cpp
+        parser/var_parser.cpp)
 
 set(template_source
         template/template.cpp)

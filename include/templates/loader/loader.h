@@ -8,18 +8,16 @@
 namespace templates {
     class Loader {
     public:
-        explicit Loader(std::string filename);
 
-        void load();
-        std::string& getResult();
+        void load(const std::string &filename);
+        std::string result();
 
     private:
-        void merge();
+        void makeBlockTable(const std::string &text);
+        void makeQueue(std::string::const_iterator _begin, std::string::const_iterator _end);
 
-        std::map<std::string, std::unique_ptr<Node>> blocks;
-        std::string filename;
-        std::string result;
-        templates::NodeQueue nodeList;
+        std::string _result;
+        templates::NodeQueue nodeQueue;
         templates::BlockParser blockParser;
         templates::TextParser textParser;
     };

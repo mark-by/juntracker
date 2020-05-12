@@ -6,8 +6,8 @@
 
 TEST(LoaderTest, ResultTest) {
     std::cout << "Help";
-    templates::Loader loader("../../test/test_files/loader/loader_extends.html");
-    loader.load();
+    templates::Loader loader;
+    loader.load("../../test/test_files/loader/loader_extends.html");
     std::string result = loader.getResult();
     std::ifstream resultFile("../../test/test_files/loader/loader_result.html");
     std::string shouldResult((std::istreambuf_iterator<char>(resultFile)), std::istreambuf_iterator<char>());

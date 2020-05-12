@@ -2,31 +2,32 @@
 #define TEMPLATES_PARSER_INCLUDED
 
 #include <node/node.h>
-
+#include <parser/re_tags.h>
 #include <utility>
 
 namespace templates {
     class Parser {
     public:
-        Parser() : content(""), buffer("") {};
+        Parser() : buffer("") {};
         virtual std::unique_ptr<templates::Node> parse() = 0;
-        void init(std::string _content) {
-            content = std::move(_content);
-        }
+        virtual std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) = 0;
     protected:
-        std::string content;
+        std::string::const_iterator begin;
+        std::string::const_iterator end;
         std::string buffer;
     };
 
     class TextParser: public Parser {
     public:
         std::unique_ptr<templates::Node> parse() override;
+        std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
     };
 
 
     class VarParser: public Parser {
     public:
         std::unique_ptr<templates::Node> parse() override;
+        std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
     private:
         std::string getVar();
         std::string getProperty();
@@ -35,6 +36,7 @@ namespace templates {
     class ForParser: public Parser {
     public:
         std::unique_ptr<templates::Node> parse() override;
+        std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
     private:
         std::string getIterator();
         std::string getVar();
@@ -43,15 +45,17 @@ namespace templates {
     class BlockParser: public Parser {
    public:
         std::unique_ptr<templates::Node> parse() override;
+        std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
+        std::string name();
     private:
-        std::string getName();
-        std::string getContent();
+        std::string content();
+        std::string _name;
     };
 
     class IfParser: public Parser {
     public:
-
        std::unique_ptr<templates::Node> parse() override;
+       std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
     private:
         std::string getStatement();
         std::string getBlockTrue();
