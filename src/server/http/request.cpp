@@ -7,7 +7,8 @@ Request::Request(const std::string &request) {
     std::sregex_iterator separatorMatch(request.cbegin(), request.cend(), separator);
     std::string::const_iterator endHeaders;
     if (separatorMatch->ready()) {
-        endHeaders = separatorMatch->prefix().second;
+        endHeaders = separatorMatch->suffix().first;
+        endHeaders--;
     } else {
         endHeaders = request.cend();
     }
@@ -36,10 +37,11 @@ std::string Request::path() {
 }
 
 void Request::parseHeaders(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
-    std::regex header(R"(([\w-]+):\s([^\n]+)\r*\n)");
+    std::regex header(R"(([\w-]+):\s([^\n\r\t\0]+)\r*\n)");
     std::sregex_iterator headerMatch(begin, end, header);
     std::sregex_iterator none;
     while(headerMatch != none) {
+        std::string str = headerMatch->str();
         headers.insert({headerMatch->format("$1"), headerMatch->format("$2")});
         headerMatch++;
     }
