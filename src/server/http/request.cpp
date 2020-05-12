@@ -14,10 +14,11 @@ Request::Request(const std::string &request) {
     }
     parseStartLine(request.cbegin(), endHeaders);
     parseHeaders(request.cbegin(), endHeaders);
+    parseCookies();
     if (_method == "GET") {
-        getDataFromPath();
+        parseDataFromPath();
     } else if (_method == "POST") {
-        getDataFromBody(endHeaders, request.cend());
+        parseDataFromBody(endHeaders, request.cend());
     }
 }
 
@@ -51,7 +52,7 @@ std::string Request::header(const std::string &key) {
     return headers[key];
 }
 
-void Request::getDataFromPath() {
+void Request::parseDataFromPath() {
     std::regex separator(R"(\?)");
     std::sregex_iterator separatorMatch(_path.cbegin(), _path.cend(), separator);
     if (!separatorMatch->ready()) {
@@ -68,7 +69,7 @@ void Request::getDataFromPath() {
     _path = std::string(_path.cbegin(), separatorMatch->prefix().second);
 }
 
-void Request::getDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::regex newLine("\r*\n\r*\n");
     std::sregex_iterator startMatch(begin, end, newLine);
     std::string::const_iterator start = startMatch->suffix().first;
@@ -94,4 +95,26 @@ std::string Request::data(const std::string &key) {
 
 std::string Request::data() {
     return body;
+}
+
+std::unordered_map<std::string, std::string> Request::dataTable() {
+    return _data;
+}
+
+void Request::parseCookies() {
+    std::string cookiesStr = headers["Cookie"];
+    if (cookiesStr.empty()) {
+        return;
+    }
+    std::regex parameter(R"(([^\n\r\t\0\s;]+)=([^\n\r\t\0\s;]+))");
+    std::sregex_iterator parameterMatch(cookiesStr.cbegin(), cookiesStr.cend(), parameter);
+    std::sregex_iterator none;
+    while(parameterMatch != none) {
+        cookies[parameterMatch->format("$1")] = parameterMatch->format("$2");
+        parameterMatch++;
+    }
+}
+
+std::string Request::cookie(const std::string &key) {
+    return cookies[key];
 }

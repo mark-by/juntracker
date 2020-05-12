@@ -24,14 +24,17 @@ int main() {
     Request postRequest(postRequestStr);
     std::cout << postRequest.method() << std::endl;
     std::cout << postRequest.data("field2") << std::endl;
-    std::string postRequestTextStr = "POST /robots.txt HTTP/1.1\n"
-                                 "Host: www.ru\n"
-                                 "User-Agent: Mozilla/5.0 Gecko/20100101 Firefox/39.0\n"
+    std::string postRequestTextStr = "POST /robots.txt HTTP/1.1\r\n"
+                                 "Host: www.ru\r\n"
+                                 "User-Agent: Mozilla/5.0 Gecko/20100101 Firefox/39.0\r\n"
                                  "Content-Type: text/plain\r\n"
+                                 "Cookie: session-id=qwpeoifweoiri; theme=light\r\n"
                                  "\r\n\r\n"
                                  R"({ "some" : 35, "var" : 29 })";
     Request textPlainPost(postRequestTextStr);
     std::cout << "POST text/plain" << std::endl;
     std::cout << textPlainPost.data() << std::endl;
+    std::cout << textPlainPost.cookie("session-id") << std::endl;
+    std::cout << textPlainPost.cookie("theme") << std::endl;
     return 0;
 }
