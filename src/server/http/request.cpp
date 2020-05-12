@@ -1,0 +1,92 @@
+#include <http/request.h>
+#include <regex>
+#include <iostream>
+
+Request::Request(const std::string &request) {
+    std::regex separator(R"(\r*\n\r*\n)");
+    std::sregex_iterator separatorMatch(request.cbegin(), request.cend(), separator);
+    std::string::const_iterator endHeaders;
+    if (separatorMatch->ready()) {
+        endHeaders = separatorMatch->prefix().second;
+    } else {
+        endHeaders = request.cend();
+    }
+    parseStartLine(request.cbegin(), endHeaders);
+    parseHeaders(request.cbegin(), endHeaders);
+    if (_method == "GET") {
+        getDataFromPath();
+    } else if (_method == "POST") {
+        getDataFromBody(endHeaders, request.cend());
+    }
+}
+
+void Request::parseStartLine(const std::string::const_iterator &begin, const std::string::const_iterator &end){
+    const std::regex startLine(R"((PUT|GET|POST|HEAD)\s(/[^\n\s\r\t\0]*)\sHTTP/([\d.]+)\r*\n)");
+    std::sregex_iterator match(begin, end, startLine);
+    _method = match->format("$1");
+    _path = match->format("$2");
+}
+
+std::string Request::method() {
+    return _method;
+}
+
+std::string Request::path() {
+    return _path;
+}
+
+void Request::parseHeaders(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    std::regex header(R"(([\w-]+):\s([^\n]+)\r*\n)");
+    std::sregex_iterator headerMatch(begin, end, header);
+    std::sregex_iterator none;
+    while(headerMatch != none) {
+        headers.insert({headerMatch->format("$1"), headerMatch->format("$2")});
+        headerMatch++;
+    }
+}
+
+std::string Request::header(const std::string &key) {
+    return headers[key];
+}
+
+void Request::getDataFromPath() {
+    std::regex separator(R"(\?)");
+    std::sregex_iterator separatorMatch(_path.cbegin(), _path.cend(), separator);
+    if (!separatorMatch->ready()) {
+        return;
+    }
+    std::regex parameter(R"(([\w-_]+)=([^&\n\r\t\0\s]+))");
+    std::sregex_iterator parameterMatch(separatorMatch->suffix().first, _path.cend(), parameter);
+    std::sregex_iterator none;
+    while (parameterMatch != none) {
+        std::string str = parameterMatch->str();
+        _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
+        parameterMatch++;
+    }
+    _path = std::string(_path.cbegin(), separatorMatch->prefix().second);
+}
+
+void Request::getDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    std::string contentType = header("Content-Type");
+    if (contentType == "application/x-www-form-urlencoded") {
+        std::regex parameter(R"(([^&]+)=([^&]+))");
+        std::sregex_iterator parameterMatch(begin, end, parameter);
+        std::sregex_iterator none;
+        while (parameterMatch != none) {
+            _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
+            parameterMatch++;
+        }
+    } else if (contentType == "multipart/form-data") {
+
+    } else if (contentType == "text/plain") {
+        body = std::string(begin, end);
+    }
+}
+
+std::string Request::data(const std::string &key) {
+    return _data[key];
+}
+
+std::string Request::data() {
+    return body;
+}
