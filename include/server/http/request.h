@@ -6,7 +6,7 @@
 
 class Request {
 public:
-    Request(const std::string &request);
+    explicit Request(const std::string &request);
     std::string method();
     std::string header(const std::string& key);
     std::string path();

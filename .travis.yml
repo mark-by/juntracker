@@ -4,7 +4,7 @@ sudo: true
 
 before_install:
     - sudo apt-get install cppcheck valgrind -y
-    - ./ci/install_boost
+    - ./ci/install_dependencies
 script:
     - cppcheck --inconclusive --enable=all --check-config --suppress=missingIncludeSystem -I include src
     - ./ci/configure

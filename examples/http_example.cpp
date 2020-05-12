@@ -22,7 +22,7 @@ int main() {
                              "\n\n"
                              "field1=value1&field2=value2";
     Request postRequest(postRequestStr);
-    std::cout << "POST" << std::endl;
+    std::cout << postRequest.method() << std::endl;
     std::cout << postRequest.data("field2") << std::endl;
     std::string postRequestTextStr = "POST /robots.txt HTTP/1.1\n"
                                  "Host: www.ru\n"
