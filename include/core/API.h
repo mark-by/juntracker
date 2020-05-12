@@ -27,7 +27,7 @@ protected:
     templates::Context studentSerializer(Student);
     templates::Context scheduleSerializer(Schedule);
     templates::Context visitHistorySerializer(VisitHistory);
-    templates::Context paymentHistorySerializer(PaymentHistory);
+    templates::Context paymentSerializer(Payment);
     templates::Context courseSerializer(Course);
     templates::Context journalSerializer(Journal);
 };

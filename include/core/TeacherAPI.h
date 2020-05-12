@@ -10,6 +10,7 @@ class TeacherAPI: public API {
 public:
     TeacherAPI();
     std::string getMainPage(const std::string&);
+    int rate(std::unordered_map<std::string, std::string> &);//
 };
 
 

@@ -7,10 +7,9 @@
 AdminAPI::AdminAPI() {}
 
 std::string AdminAPI::getMainPage(const std::string &str) {
-    
 }
 
-int AdminAPI::saveCurrentLesson(std::map<std::string, std::string> &group) {
+int AdminAPI::saveCurrentLesson(std::unordered_map<std::string, std::string> &group) {
     if (group.empty()) {
         return -1;
     }
@@ -24,8 +23,8 @@ int AdminAPI::saveCurrentLesson(std::map<std::string, std::string> &group) {
         if (it->first != "lesson" && it->first != "date" ) {
             std::string studentId = it->first;
             std::string status = it->second;
-
             int res = ManagerVisitHistory.addRecord(course, date, studentId, status);
+
             if (res) {
                 return studentId;
             }
@@ -61,12 +60,16 @@ int AdminAPI::deleteStudent(const std::vector<string> &str) {
     return 0;
 }
 
-int AdminAPI::createStudent(const std::string &str) { // ЧТО СОДЕРЖИТСЯ В СТРОКЕ STR ???
-    if (str.empty()) {
+int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &student) { // ЧТО СОДЕРЖИТСЯ В СТРОКЕ STR ???
+    if (student.empty()) {
         return -1;
     }
 
-    int res = ManagerStudent.addStudent(str);
+    std::string name = student["name"];
+    std::string surname = student["surname"];
+    std::string age = student["age"];
+
+    int res = ManagerStudent.addStudent(name, surname, age);
 
     if (res) {
         return 1;
@@ -98,7 +101,7 @@ int addCourse(const std::string &str) {
 }
 
 int deleteCourse(const std::string &str) {
-    if (str.size() == 0) {
+    if (str.empty()) {
         return -1;
     }
 
@@ -111,6 +114,17 @@ int deleteCourse(const std::string &str) {
     return 0;
 }
 
-std::string getPaymentsByStudent(const std::string &str) {
+std::string getPagePaymentsByStudent(const std::string &studentId) {
+    if (studentId.empty()) {
+        return -1;
+    }
 
+    std::vector<Payment> paymentHistory = ManagerPaymentHistory.getPaymentHistory(studentId);
+    templates::Context context;
+
+    context.putArray(paymentHistory, paymentSerializer);
+
+    //template.set("payments.html");
+
+    return template.render(context);
 }
