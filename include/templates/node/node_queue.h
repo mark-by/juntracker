@@ -22,13 +22,13 @@ namespace templates {
 
         void pop();
 
-        void renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks);
+        void renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded);
 
     private:
 
         void renderText();
 
-        void renderBlock(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks);
+        void renderLoadedNode(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded);
 
         std::deque<std::shared_ptr<Node>> nodes;
         std::string _result;

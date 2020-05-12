@@ -8,18 +8,13 @@ void templates::NodeQueue::render(templates::Context & context) {
     }
 }
 
-void templates::NodeQueue::renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &blocks) {
+void templates::NodeQueue::renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded) {
     while (!nodes.empty()) {
         auto type = nodes.front()->type();
-        switch (type) {
-            case TEXTNODE:
-                renderText();
-                break;
-            case BLOCKNODE:
-                renderBlock(blocks);
-                break;
-            default:
-                break;
+        if (type == TEXTNODE) {
+            renderText();
+        } else {
+            renderLoadedNode(loaded);
         }
     }
 }
@@ -30,15 +25,14 @@ void templates::NodeQueue::renderText() {
     nodes.pop_front();
 }
 
-void templates::NodeQueue::renderBlock(std::unordered_map<std::string, std::shared_ptr<Node>> & blocks) {
-    std::string blockName = nodes.front()->name();
-    if (blocks[blockName]) {
-        nodes.pop_front();
-        nodes.push_front(std::move(blocks[blockName]));
-        blocks.erase(blockName);
-    }
+void templates::NodeQueue::renderLoadedNode(std::unordered_map<std::string, std::shared_ptr<Node>> & loaded) {
+    std::string TagName = nodes.front()->name();
     templates::Context context;
-    _result += nodes.front()->render(context);
+    if (loaded[TagName]) {
+        _result += loaded[TagName]->render(context);
+    } else {
+        _result += nodes.front()->render(context);
+    }
     nodes.pop_front();
 }
 

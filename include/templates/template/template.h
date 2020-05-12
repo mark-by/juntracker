@@ -9,14 +9,12 @@
 namespace templates {
     class Template {
     public:
-        explicit Template(const std::string &filename);
-        void render(templates::Context &context);
-        std::string result();
+        explicit Template(const std::string &settingsPath = "settings") : loader(settingsPath) {};
+        std::string render(templates::Context &context);
+        void set(const std::string &filename);
     private:
-        void _render(templates::Context &context);
-        templates::Parser parser;
-        templates::Loader loader;
-        templates::NodeQueue nodeQueue;
+        Parser parser;
+        Loader loader;
     };
 }
 

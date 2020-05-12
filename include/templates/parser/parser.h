@@ -82,11 +82,13 @@ namespace templates {
         std::string::const_iterator endFalseBlock;
     };
 
-//    class IncludeParser : public NodeParser {
-//    public:
-//        std::shared_ptr<Node> parse() override;
-//        std::string::const_iterator set(std::string::const_iterator _begin, std::string::const_iterator _end) override;
-//    };
+    class IncludeParser : public NodeParser {
+    public:
+        std::shared_ptr<Node> parse() override;
+        std::string::const_iterator set(const std::sregex_iterator &tag);
+    private:
+        std::string name;
+    };
 
     class Parser {
     public:
@@ -99,11 +101,18 @@ namespace templates {
         std::unordered_map<std::string, std::shared_ptr<templates::Node>>
         collectBlocks(std::string::const_iterator _begin, std::string::const_iterator _end);
 
+        std::unordered_map<std::string, std::shared_ptr<templates::Node>>
+        collectIncludes(std::string::const_iterator _begin, std::string::const_iterator _end);
+
         static int tagType(const std::sregex_iterator &tag);
 
         static int BlockType(const std::sregex_iterator &tag);
 
         static void clearString(std::string & str);
+
+
+        std::tuple<templates::NodeQueue, std::unordered_map<std::string, std::shared_ptr<templates::Node>>>
+        parseIncludes(std::string::const_iterator _begin, std::string::const_iterator _end);
 
     private:
         std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
@@ -114,7 +123,7 @@ namespace templates {
         IfParser ifParser;
         ForParser forParser;
         VarParser varParser;
-//        IncludeParser includeParser;
+        IncludeParser includeParser;
     };
 }
 

@@ -57,3 +57,7 @@ std::tuple<std::string::const_iterator, std::string::const_iterator> templates::
 std::tuple<std::string::const_iterator, std::string::const_iterator> templates::IfNode::trueBlock() const {
     return {_name.cbegin(), _name.cend()};
 }
+
+std::string templates::IncludeNode::render(templates::Context &context) {
+    return std::string();
+}
