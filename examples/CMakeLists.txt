@@ -6,10 +6,12 @@ link_directories("${PROJECT_SOURCE_DIR}/include/boost/stage/lib")
 
 add_executable(context context_example.cpp)
 add_executable(node node_example.cpp)
-add_executable(loader loader_example.cpp)
+add_executable(template template_example.cpp)
 add_executable(server server_example.cpp)
+add_executable(http_example http_example.cpp)
 
 
 target_link_libraries(node templates)
-target_link_libraries(loader templates boost_filesystem)
 target_link_libraries(server boost_thread pthread serverlib)
+target_link_libraries(template templates boost_filesystem)
+target_link_libraries(http_example http)

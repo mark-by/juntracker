@@ -9,18 +9,14 @@
 
 namespace templates {
     enum TypeNode {
-        TEXTNODE, BLOCKNODE, VARNODE, FORNODE, IFNODE
+        TEXTNODE, BLOCKNODE, VARNODE, FORNODE, IFNODE, INCLUDENODE
     };
-
-    class NodeQueue;
 
     class Node {
     public:
         Node(std::string name, std::string content) : _content(std::move(content)), _name(std::move(name)) {}
 
         virtual std::string render(templates::Context &context) = 0;
-
-        virtual templates::NodeQueue expand() = 0;
 
         std::string content() const { return _content; }
 
@@ -43,8 +39,6 @@ namespace templates {
         };
 
         std::string render(templates::Context &context) override;
-
-        templates::NodeQueue expand() override;
     };
 
     class BlockNode : public Node {
@@ -54,84 +48,64 @@ namespace templates {
         };
 
         std::string render(templates::Context &context) override;
-
-        templates::NodeQueue expand() override;
     };
 
     class VarNode : public Node {
     public:
-        VarNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+        VarNode(std::string name, std::string content, std::string afterSpaces)
+                : Node(std::move(name), std::move(content)), afterSpaces(std::move(afterSpaces)) {
             _type = VARNODE;
         };
 
         std::string render(templates::Context &context) override;
 
-        templates::NodeQueue expand() override;
+    private:
+        std::string afterSpaces;
+    };
+
+    class IncludeNode : public Node {
+    public:
+        IncludeNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+            _type = INCLUDENODE;
+        };
+
+        std::string render(templates::Context &context) override;
     };
 
     class ForNode : public Node {
     public:
-        ForNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+        ForNode(std::string name, std::string content, std::string varName)
+                : Node(std::move(name), std::move(content)),
+                  iterVar(std::move(varName)) {
             _type = FORNODE;
         };
 
         std::string render(templates::Context &context) override;
 
-        templates::NodeQueue expand() override;
+    private:
+        std::string iterVar;
     };
 
     class IfNode : public Node {
     public:
-        IfNode(std::string name, std::string content) : Node(std::move(name), std::move(content)) {
+        IfNode(std::string name, std::string content, std::string statement)
+                : Node(std::move(name), std::move(content)), _statement(std::move(statement)) {
             _type = IFNODE;
         };
 
         std::string render(templates::Context &context) override;
 
-        templates::NodeQueue expand() override;
+        std::string statement() const;
 
-        std::string getElseContent();
+        std::tuple<std::string::const_iterator, std::string::const_iterator> trueBlock() const;
 
-        void setElseContent(const std::string & _content);
+        std::tuple<std::string::const_iterator, std::string::const_iterator> falseBlock() const;
 
     private:
-        std::string elseContent;
+        std::string _statement;
+
     };
 
-
-    class NodeQueue {
-    public:
-        NodeQueue() {};
-        explicit NodeQueue(templates::Context &context) : context(context), _result("") {};
-
-        void render();
-
-        std::string result();
-
-        void push(std::unique_ptr<Node> ptr);
-
-        bool empty();
-
-        std::unique_ptr<Node> front();
-
-        size_t size();
-
-        void pop();
-
-        std::unordered_map<std::string, std::unique_ptr<Node>> blocks;
-    private:
-
-        bool _render();
-
-        bool renderText();
-
-        bool renderBlock();
-
-
-        std::deque<std::unique_ptr<Node>> nodes;
-        templates::Context context;
-        std::string _result;
-    };
 }
 
 #endif //NODE_INCLUDED

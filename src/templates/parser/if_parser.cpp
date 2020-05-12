@@ -1,17 +1,55 @@
 #include <parser/parser.h>
+#include <parser/re_tags.h>
 
-std::unique_ptr<templates::Node>templates::IfParser::parse() {
-    return std::make_unique<templates::IfNode>("", "");
+std::shared_ptr<templates::Node> templates::IfParser::parse() {
+    return std::make_shared<templates::IfNode>(std::string(begin, end),
+            std::string(startFalseBlock, endFalseBlock),
+            statement);
 }
 
-std::string templates::IfParser::getStatement() {
-    return std::string();
+std::string::const_iterator
+templates::IfParser::set(const std::sregex_iterator &tag) {
+    std::sregex_iterator none;
+    auto[start, elseMatch, stop] = findScope(tag->prefix().second, tag->suffix().second);
+    statement = start->format("$3");
+    begin = start->suffix().first; // {% if isTrue %}<--
+    if (elseMatch != none) {
+        end = elseMatch->prefix().second; // -->{% else %}
+        startFalseBlock = elseMatch->suffix().first;  // {% else %}<--
+        endFalseBlock = stop->prefix().second; // -->{% endif %}
+    } else {
+        end = stop->prefix().second; // -->{% endif %}
+    }
+
+    return stop->suffix().first; // {% endif %}<--
 }
 
-std::string templates::IfParser::getBlockTrue() {
-    return std::string();
-}
-
-std::string templates::IfParser::getBlockFalse() {
-    return std::string();
+std::tuple<std::sregex_iterator,std::sregex_iterator, std::sregex_iterator>
+templates::IfParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) {
+    std::stack<std::sregex_iterator> if_stack;
+    std::stack<std::sregex_iterator> else_stack;
+    std::sregex_iterator currMatch(_begin, _end, parser::tag::anyBlock);
+    std::sregex_iterator none;
+    while (currMatch != none) {
+        int type = templates::Parser::BlockType(currMatch);
+        if (type == parser::if_t) {
+            if_stack.push(currMatch);
+        } else if (type == parser::else_t) {
+            else_stack.push(currMatch);
+        } else if (type == parser::endif_t) {
+            if (if_stack.size() == 1) {
+                break;
+            }
+            if_stack.pop();
+            if (!else_stack.empty()) {
+                else_stack.pop();
+            }
+        }
+        currMatch++;
+    }
+    if (!else_stack.empty()) {
+        return {if_stack.top(), else_stack.top(), currMatch};
+    } else {
+        return {if_stack.top(), none, currMatch};
+    }
 }

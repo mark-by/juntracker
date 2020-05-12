@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>{% block title %}Title undefined{% endblock %}</title>
+</head>
+<body>
+{% include logo.html %}
+<main>
+    {% if b %}
+    <div>if b</div>
+    {% else %}
+    <div>else if b</div>
+    {% endif %}
+    {% for i in array %}
+        <div>Printed:{{ var }}and{{ i }}</div>
+        {% for j in jarray %}
+            <span>print {{ j }}</span>
+        {% endfor %}
+    {% endfor %}
+
+    {% block main %}
+    {% endblock %}
+</main>
+</body>
+</html>
