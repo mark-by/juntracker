@@ -9,9 +9,10 @@ add_executable(node node_example.cpp)
 add_executable(template template_example.cpp)
 add_executable(server server_example.cpp)
 add_executable(http_example http_example.cpp)
+add_executable(render render.cpp)
 
 
 target_link_libraries(node templates)
 target_link_libraries(server boost_thread pthread serverlib)
-target_link_libraries(template templates boost_filesystem)
-target_link_libraries(http_example http)
+target_link_libraries(render templates boost_filesystem)
+target_link_libraries(http_example http boost_date_time)

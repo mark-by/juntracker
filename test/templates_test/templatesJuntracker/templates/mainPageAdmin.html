@@ -1,0 +1,72 @@
+{% extends base.html %}
+
+{% block title %}JunTracker | Окно Администратора{% endblock %}
+
+{% block main %}
+<main class="administrator-main">
+    <div class="card-wrapper schedule">
+        {% for day in scheduleDays %}
+        <div class="schedule__day">
+            <div class="schedule__day_header">
+                <div class="week-day">{{day.weekDay}}</div>
+                <div>{{day.date}}</div>
+            </div>
+            {% for lesson in day.lessons %}
+            <div class="card-wrapper lesson">
+                <div class="lesson__header">
+                    <div class="lesson__header_course">{{lesson.title}}</div>
+                    <div class="lesson__header_cab">{{lesson.cabinet}}</div>
+                    <div class="lesson__header_tutor">{{lesson.tutor}}</div>
+                </div>
+                <div class="lesson__content">
+                    {% for child in lesson.children %}
+                    <div class="lesson__content_child">{{child.name}}</div>
+                    {% endfor %}
+                </div>
+                <div class="lesson__footer">
+                    <div>{{lesson.startTime}} - {{lesson.endTime}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="card-wrapper current-window">
+        <div class="schedule__day_header">
+            <div id="current-week-day" class="week-day"></div>
+            <div id="current-time" class="current-header__time"></div>
+            <div id="current-date" class="current-header__date"></div>
+        </div>
+        <div class="title">Сейчас идет</div>
+        <div id="current-wrapper">
+
+        </div>
+        <div class="title">Далее</div>
+        <div id="next-wrapper">
+            {% for lesson in currentLessons %}
+            <div class="card-wrapper lesson">
+                <div class="lesson__header">
+                    <div class="lesson__header_course">
+                        {{lesson.title}}
+                    </div>
+                    <div class="lesson__header_cab">{{lesson.cabinet}}</div>
+                    <div class="lesson__header_tutor">{{lesson.tutor}}</div>
+                </div>
+                <form class="lesson__content">
+                    {% for child in lesson.children %}
+                    <div class="lesson__content_child">
+                        <input type="checkbox" name="child-name"/>
+                        <div class="name" data="{{child.isHere}}_{{child.id}}">{{child.name}}</div>
+                    </div>
+                    {% endfor %}
+                </form>
+                <div class="progress-wrapper">
+                    <div class="start-time">{{lesson.startTime}}</div>
+                    <div class="progress-bar"><span></span></div>
+                    <div class="end-time">{{lesson.endTime}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</main>
+{% endblock %}
