@@ -32,8 +32,6 @@ void Connection::doRead(const boost::system::error_code& error,
         Request request_(std::string(buffer_.begin(), buffer_.end()));
         std::string request_string(buffer_.begin(), buffer_.end());
         std::cout << request_string << '\n';
-        std::cout << request_.path() << '\n';
-        std::cout << request_.method() << '\n';
 
         if (request_.path() != "/juntracker.ru") {
             std::cout << "some error\n";
@@ -57,13 +55,19 @@ void Connection::doRead(const boost::system::error_code& error,
                 // errorbreak;
         }*/
 
-        std::cout << response_.str() << '\n';
+        std::cout << async::buffer(
+                response_.str().c_str(),
+                response_.str().size()
+        ).size() << '\n';
+        std::cout << response_.str().size() << "\n\n";
+
+        std::cout << "response:\n" << response_.str() << '\n';
 
         // need to write to response_.buffer or something like this
         async::async_write(socket_,
                 async::buffer(
-                        response_.str(),
-                        response_.str().size()
+                        response_.str().c_str(),
+                        response_.str().max_size()
                         ),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
