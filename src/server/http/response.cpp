@@ -42,6 +42,7 @@ std::string Response::str() {
 
 Response::Response(const std::string &html, const int &status) : statusCode(status) {
     setHeader("Content-Type", "text/html; charset=UTF-8");
+    setHeader("Content-Encoding", "br");
     body = html;
 }
 
