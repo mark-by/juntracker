@@ -57,7 +57,7 @@ TEST(DataBase, SelectValues) {
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
     std::vector<std::string> column_names = {"id", "name", "surname", "age", "course_id"};
-    std::vector<std::variant<std::string, int, double>> values = {3, "Anna", "Borisenko", 12, 1};
+    std::vector<std::string> values = {"3", "Anna", "Borisenko", "12", "1"};
     for (int col = 0; col < PQnfields(result); col++) {
         EXPECT_EQ(PQfname(result, col), column_names[col]);
         EXPECT_EQ(PQgetvalue(result, 0, col), values[col]);
@@ -70,7 +70,7 @@ TEST(DataBase, SelectValues_2) {
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
     std::vector<std::string> column_names = {"name", "surname",};
-    std::vector<std::variant<std::string, int, double>> values = {"Olga", "Smirnova"};
+    std::vector<std::string> values = {"Olga", "Smirnova"};
     for (int col = 0; col < PQnfields(result); col++) {
         EXPECT_EQ(PQfname(result, col), column_names[col]);
         EXPECT_EQ(PQgetvalue(result, 0, col), values[col]);
@@ -82,30 +82,17 @@ TEST(DataBase, SelectValues_3) {
     PGresult *result = nullptr;
     bool ok = postgres.query(query, &result);
     EXPECT_EQ(ok, true);
-    std::vector<std::vector<std::variant<std::string, int, double>>> values = {{"Matvey", "Kuzmenko"}, {"Kuzma", "Matveenko"}};
+    std::vector<std::vector<std::string>> values = {{"Matvey", "Kuzmenko"}, {"Kuzma", "Matveenko"}};
     std::vector<std::string> column_names = {"name", "surname"};
     for (int row = 0; row < PQntuples(result); row++) {
         for (int col = 0; col < PQnfields(result); col++) {
             EXPECT_EQ(PQfname(result, col), column_names[col]);
-            EXPECT_EQ(PQgetvalue(result, row, col), values[col]);
+            EXPECT_EQ(PQgetvalue(result, row, col), values[row][col]);
         }
     }
 }
 
 TEST(DataBase, SelectValues4) {
-    const std::string query = "SELECT * FROM payment WHERE amount < 8000;";
-    PGresult *result = nullptr;
-    bool ok = postgres.query(query, &result);
-    EXPECT_EQ(ok, true);
-    std::vector<std::string> column_names = {"id", "name", "surname", "age", "course_id"};
-    std::vector<std::variant<std::string, int, double>> values = {3, "Anna", "Borisenko", 12, 1};
-    for (int col = 0; col < PQnfields(result); col++) {
-        EXPECT_EQ(PQfname(result, col), column_names[col]);
-        EXPECT_EQ(PQgetvalue(result, 0, col), values[col]);
-    }
-}
-
-TEST(DataBase, SelectValues5) {
     const std::string query = "SELECT name FROM course WHERE price = 12000;";
     PGresult *result = nullptr;
     bool ok = postgres.query(query, &result);
