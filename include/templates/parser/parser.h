@@ -8,13 +8,10 @@
 namespace templates {
     class NodeParser {
     public:
-        NodeParser() : buffer("") {};
-
         virtual std::shared_ptr<Node> parse() = 0;
     protected:
         std::string::const_iterator begin;
         std::string::const_iterator end;
-        std::string buffer;
     };
 
     class TextParser : public NodeParser {
@@ -33,6 +30,7 @@ namespace templates {
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
+    private:
         std::string varName;
         std::string beforeSpaces;
         std::string afterSpaces;
@@ -61,7 +59,6 @@ namespace templates {
         std::string name();
 
     private:
-        std::string content();
 
         std::string _name;
     };

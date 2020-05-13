@@ -35,7 +35,7 @@ std::string Response::str() {
     startLineToStream(response);
     headersToStream(response);
     cookiesToStream(response);
-    response << "\r\n\r\n";
+    response << "\r\n";
     response << body;
     return response.str();
 }

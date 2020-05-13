@@ -22,7 +22,7 @@ int main() {
                              "Host: www.ru\n"
                              "User-Agent: Mozilla/5.0 Gecko/20100101 Firefox/39.0\n"
                              "Content-Type: application/x-www-form-urlencoded\n"
-                             "\n\n"
+                             "\n"
                              "field1=value1&field2=value2";
     Request postRequest(postRequestStr);
     std::cout << postRequest.method() << std::endl;
@@ -32,7 +32,7 @@ int main() {
                                  "User-Agent: Mozilla/5.0 Gecko/20100101 Firefox/39.0\r\n"
                                  "Content-Type: text/plain\r\n"
                                  "Cookie: session-id=qwpeo=fweoiri; theme=light\r\n"
-                                 "\r\n\r\n"
+                                 "\r\n"
                                  R"({ "some" : 35, "var" : 29 })";
     Request textPlainPost(postRequestTextStr);
     std::cout << "POST text/plain" << std::endl;
