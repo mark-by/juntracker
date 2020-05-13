@@ -106,7 +106,7 @@ void Request::parseCookies() {
     if (cookiesStr.empty()) {
         return;
     }
-    std::regex parameter(R"(([^\n\r\t\0\s;]+)=([^\n\r\t\0\s;]+))");
+    std::regex parameter(R"(([^\n\r\t\0\s;]+?)=([^\n\r\t\0\s;]+))");
     std::sregex_iterator parameterMatch(cookiesStr.cbegin(), cookiesStr.cend(), parameter);
     std::sregex_iterator none;
     while(parameterMatch != none) {

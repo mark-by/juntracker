@@ -1,10 +1,11 @@
 #ifndef JUNTRACKER_RESPONSE_H
 #define JUNTRACKER_RESPONSE_H
 
-#include <http/request.h>
 #include <context/context.h>
 #include <unordered_map>
 #include <vector>
+#include <http/datetime.h>
+#include <context/context.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 
@@ -37,22 +38,28 @@ namespace status {
         BadGateway = 502
     };
 
-    std::string statusToStr(int status);
 }
 
 class Response {
 public:
-    Response() = default;
-    Response(const Request &request, int status = status::OK);
-    Response(const Request &request, const std::string & body, int status = status::OK);
-    Response(const std::string & body, int status = status::OK);
+    explicit Response(const int &status = status::OK);
+    explicit Response(const std::string & html, const int &status = status::OK);
+    explicit Response(const templates::Context & jsonData, const int &status = status::OK);
 
     std::string str();
-    std::string setCookie(const std::string &key, const std::string &value);
-    std::string setHeader(const std::string &key, const std::string &value);
+    void setCookie(const std::string &key, const std::string &value, const int &daysExpires = 0);
+    void setHeader(const std::string &key, const std::string &value);
 private:
-    std::unordered_map<std::string, std::string> headers;
+    void setDate();
+    std::string statusToStr() const;
+    void startLineToStream(std::stringstream & ss);
+    void headersToStream(std::stringstream & ss);
+    void cookiesToStream(std::stringstream & ss);
+
+    DateTimeConverter ptimeConverter;
+    std::unordered_multimap<std::string, std::string> headers;
     std::unordered_map<std::string, std::string> cookies;
     std::string body;
+    int statusCode;
 };
 #endif //JUNTRACKER_RESPONSE_H

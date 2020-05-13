@@ -10,7 +10,8 @@ set(server_source ${FILES}
 
 set(http_source
         http/request.cpp
-        http/response.cpp)
+        http/response.cpp
+        http/datetime.cpp)
 
 add_library(serverlib STATIC ${server_source})
 add_library(http STATIC ${http_source})
