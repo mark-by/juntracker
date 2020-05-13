@@ -16,6 +16,7 @@ public:
     void start(std::shared_ptr<Connection> connection);
     void stop(std::shared_ptr<Connection> connection);
     void stopAll();
+    size_t connectionsNumber();
 
 private:
     std::set<std::shared_ptr<Connection>> connections_;  // managed connections

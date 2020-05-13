@@ -22,3 +22,7 @@ void ConnectionManager::stopAll() {
     }
     connections_.clear();
 }
+
+size_t ConnectionManager::connectionsNumber() {
+    return connections_.size();
+}
