@@ -3,10 +3,12 @@
 #include "sql_wrapper.h"
 #include "course.h"
 #include "payment.h"
+#include "payment_history.h"
 #include "student.h"
 #include "teacher.h"
 #include "user.h"
 #include "visit.h"
+#include "visit_history.h"
 
 int main(int argc, char* argv[]) {
 
@@ -40,7 +42,18 @@ int main(int argc, char* argv[]) {
     std::cout << v.get_course_id(11) << std::endl;
     Payment p(postgres);
     std::cout << p.get_course_id(11) << std::endl;
-    p.add_payment(17, 4, 1, 4000, "2020-01-30");
+    PaymentHistory ph(postgres);
+    auto payments = ph.get_payments_by_course(1);
+    for (const auto&  pay : payments) {
+        std::cout << pay.return_amount() << " ";
+    }
+    std::cout << std::endl;
+    VisitHistory vh(postgres);
+    auto visits = vh.get_visits_by_course(2);
+    for (const auto&  visit : visits) {
+        std::cout << visit.return_course_id() << " ";
+    }
+    std::cout << std::endl;
 
 //    if (postgres.is_select(query)) {
 //        postgres.query(query/*, handler*/);

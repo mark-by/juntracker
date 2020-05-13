@@ -10,10 +10,14 @@
 #include <variant>
 #include <vector>
 
-class PGConnection {
+class DBConnection {
+    virtual std::shared_ptr<PGconn> connection() const = 0;
+};
+
+class PGConnection : DBConnection {
 public:
     PGConnection();
-    std::shared_ptr<PGconn> connection() const;
+    std::shared_ptr<PGconn> connection() const override;
 
 private:
     std::string m_dbhost = "localhost";
@@ -36,7 +40,7 @@ public:
 
     [[nodiscard]] bool is_select(const std::string& query) const;
     bool query(const std::string& query, PGresult** result) const ;
-    bool exec(const std::string& query);
+    [[nodiscard]] bool exec(const std::string& query) const;
     [[nodiscard]] bool is_connected() const;
 };
 

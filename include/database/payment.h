@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 #include "sql_wrapper.h"
 
@@ -10,16 +11,18 @@ class Payment {
  public:
     Payment(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Payment(int id, int student_id, int course_id, std::string& payment_date)
+    explicit Payment(int id, int student_id, int course_id, int amount, std::string& payment_date)
             : id(id)
             , student_id(student_id)
             , course_id(course_id)
+            , amount(amount)
             , payment_date(payment_date) {}
     
     int get_student_id(int p_id) const;
     int get_course_id(int p_id) const;
+    int return_amount() const { return amount; }
 
-    void add_payment(int pid, int s_id, int c_id, int amount, const std::string& date);
+    int add_payment(int pid, int s_id, int c_id, int amount, const std::string& date);
 
  private:
     int id;

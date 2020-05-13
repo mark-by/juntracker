@@ -8,7 +8,10 @@
 
 class VisitHistory {
  public:
-    explicit VisitHistory();
+    VisitHistory(SqlWrapper& postgres)
+    : postgres(postgres) {}
+    explicit VisitHistory(std::vector<Visit> visits)
+    : visits(visits) {}
 
     std::vector<Visit> get_visits_by_student(int id) const;
     std::vector<Visit> get_visits_by_course(int id) const;
@@ -16,6 +19,8 @@ class VisitHistory {
 
  private: 
     std::vector<Visit> visits;
+
+    SqlWrapper postgres;
 };
 
 #endif  // _VISIT_HISTORY_H_

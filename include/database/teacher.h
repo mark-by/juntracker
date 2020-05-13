@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 #include "person.h"
 #include "sql_wrapper.h"
@@ -21,6 +23,11 @@ class Teacher : public Person {
     std::string get_name(int t_id) const override;
     std::string get_surname(int t_id) const override;
     std::string get_course(int t_id) const;
+
+    [[nodiscard]] Teacher get_teacher(int t_id) const;
+    [[nodiscard]] int add_teacher(const Teacher& teacher) const;
+    [[nodiscard]] int delete_teacher(int t_id) const;
+
     [[nodiscard]] std::string return_surname() const { return surname; }
 
  private:

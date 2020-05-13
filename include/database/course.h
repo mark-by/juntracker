@@ -4,6 +4,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 #include "teacher.h"
 #include "student.h"
@@ -23,8 +25,12 @@ class Course {
 
     [[nodiscard]] Teacher get_teacher(const std::string& course_name) const;
     [[nodiscard]] int get_price(const std::string& course_name) const;
-    void set_price(int price, const std::string& course_name);
+    int set_price(int price, const std::string& course_name);
     std::vector<Student> get_student_list(const std::string& course_name);
+
+    [[nodiscard]] Course get_course(int c_id) const;
+    [[nodiscard]] int add_course(const Course& course) const;
+    [[nodiscard]] int delete_course(int c_id) const;
 
  private:
     int id;

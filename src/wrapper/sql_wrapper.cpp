@@ -27,9 +27,8 @@ SqlWrapper::~SqlWrapper() = default;
 
 bool SqlWrapper::query(const std::string& query, PGresult** result) const {
     *result = PQexec(conn, query.c_str());
-    if (PQresultStatus(*result) != PGRES_TUPLES_OK) {
-        return false;
-    }
+    return !(PQresultStatus(*result) != PGRES_TUPLES_OK);
+
 //    for (int i = 0; i < PQnfields(result); i++) {
 //        std::cout << PQfname(result, i) << "         ";
 //    }
@@ -41,27 +40,17 @@ bool SqlWrapper::query(const std::string& query, PGresult** result) const {
 //        }
 //        std::cout << std::endl;
 //    }
-    return true;
 }
 
-bool SqlWrapper::exec(const std::string& query) {
+bool SqlWrapper::exec(const std::string& query) const {
     auto result = PQexec(conn, query.c_str());
-    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
-        return false;
-    }
-    return true;
+    return !(PQresultStatus(result) != PGRES_COMMAND_OK);
 }
 
 bool SqlWrapper::is_connected() const {
-    if (PQstatus(conn) != CONNECTION_OK) {
-        return false;
-    }
-    return true;
+    return !(PQstatus(conn) != CONNECTION_OK);
 }
 
 bool SqlWrapper::is_select(const std::string& query) const {
-    if (query.find("SELECT") != std::string::npos) {
-        return true;
-    }
-    return false;
+    return query.find("SELECT") != std::string::npos;
 }

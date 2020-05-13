@@ -17,6 +17,7 @@ class Visit {
 
     int get_student_id(int v_id) const;
     int get_course_id(int v_id) const;
+    int return_course_id() const { return course_id; }
 
  private: 
     int id;
