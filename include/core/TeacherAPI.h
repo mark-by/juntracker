@@ -5,6 +5,10 @@
 #ifndef CORE_TEACHERAPI_H
 #define CORE_TEACHERAPI_H
 
+#include <string>
+#include <unordered_map>
+#include "API.h"
+
 
 class TeacherAPI: public API {
 public:

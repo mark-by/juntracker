@@ -5,6 +5,9 @@
 #ifndef CORE_CUSTOMERAPI_H
 #define CORE_CUSTOMERAPI_H
 
+#include <string>
+#include "API.h"
+
 class CustomerAPI: public API {
 public:
     CustomerAPI();

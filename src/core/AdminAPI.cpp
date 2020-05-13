@@ -6,10 +6,11 @@
 
 AdminAPI::AdminAPI() {}
 
-std::string AdminAPI::getMainPage(const std::string &str) {
-}
+/*std::string AdminAPI::getMainPage(const std::string &str) {
 
-int AdminAPI::saveCurrentLesson(std::unordered_map<std::string, std::string> &group) {
+}*/
+
+int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &group) {
     if (group.empty()) {
         return -1;
     }
@@ -17,7 +18,7 @@ int AdminAPI::saveCurrentLesson(std::unordered_map<std::string, std::string> &gr
     std::string course = group["course"];
     std::string date = group["date"];
 
-    std::map<std::string, std::string>::iterator it = group.begin();
+    std::unordered_map<std::string, std::string>::iterator it = group.begin();
 
     for (int i = 0; it < group.end(); i++, it++) {
         if (it->first != "lesson" && it->first != "date" ) {
@@ -26,7 +27,7 @@ int AdminAPI::saveCurrentLesson(std::unordered_map<std::string, std::string> &gr
             int res = ManagerVisitHistory.addRecord(course, date, studentId, status);
 
             if (res) {
-                return studentId;
+                return std::stoi(studentId);
             }
         }
     }
@@ -42,7 +43,7 @@ std::string AdminAPI::findStudent(const std::string &str) {
     std::vector<std::string> result = ManagerStudent.fingStudentBy();*/
 }
 
-int AdminAPI::deleteStudent(const std::vector<string> &str) {
+int AdminAPI::deleteStudent(const std::vector<std::string> &str) {
     if (str.empty()) {
         return -1;
     }
@@ -60,7 +61,7 @@ int AdminAPI::deleteStudent(const std::vector<string> &str) {
     return 0;
 }
 
-int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &student) { // ЧТО СОДЕРЖИТСЯ В СТРОКЕ STR ???
+int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &student) {
     if (student.empty()) {
         return -1;
     }
@@ -78,13 +79,13 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
     return 0;
 }
 
-std::string AdminAPI::getStudentsBy(std::map<std::string, std::string>) {
+/*std::string AdminAPI::getStudentsBy(std::unordered_map<std::string, std::string>) {
 
 }
 
 std::string AdminAPI::getPageStudents(int) {
 
-}
+}*/
 
 int addCourse(const std::string &str) {
     if (str.empty()) {
@@ -114,9 +115,10 @@ int deleteCourse(const std::string &str) {
     return 0;
 }
 
+/*
 std::string getPagePaymentsByStudent(const std::string &studentId) {
     if (studentId.empty()) {
-        return -1;
+        return "NULL";
     }
 
     std::vector<Payment> paymentHistory = ManagerPaymentHistory.getPaymentHistory(studentId);
@@ -124,7 +126,7 @@ std::string getPagePaymentsByStudent(const std::string &studentId) {
 
     context.putArray(paymentHistory, paymentSerializer);
 
-    //template.set("payments.html");
+    template.set("payments.html");
 
     return template.render(context);
-}
+}*/
