@@ -2,15 +2,11 @@
 #include <parser/re_tags.h>
 
 std::shared_ptr<templates::Node>templates::BlockParser::parse() {
-    return std::make_shared<templates::BlockNode>(_name, content());
+    return std::make_shared<templates::BlockNode>(_name, std::string(begin, end));
 }
 
 std::string templates::BlockParser::name() {
     return _name;
-}
-
-std::string templates::BlockParser::content() {
-    return std::string(begin, end);
 }
 
 std::string::const_iterator templates::BlockParser::set(const std::sregex_iterator &tag) {
