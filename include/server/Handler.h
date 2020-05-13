@@ -13,11 +13,11 @@
 
 class Handler {
 public:
-    Handler(Request& req/*, Response& rep*/);
+    Handler() = default;
     // methods to fill response from request done by Api
-    void teacher();  // handler_.teacher();
-    void admin();    // handler_.admin();
-    void customer(); // handler_.customer();
+    // void teacher(const Request& request);  // handler_.teacher();
+    // Response admin(const Request& request);    // handler_.admin();
+    // Response customer(const Request& request); // handler_.customer();
 
     // Response getResponse();
 
@@ -25,8 +25,6 @@ private:
     // AdminApi
     // TeacherAPI tutor;
     // CustomerApi
-    Request request_;
-    //Response response_;
 };
 
 

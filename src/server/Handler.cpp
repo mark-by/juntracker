@@ -4,17 +4,21 @@
 
 #include "Handler.h"
 
-Handler::Handler(Request &req/*, Response &rep*/):
-    request_(std::move(req))/*, response_(std::move(rep))*/ {}
-
-void Handler::teacher() {
-
+/*void Handler::teacher(const Request& request, Response& response) {
+    if (request.method() == "POST") {
+        if (tutor.rate(request_.data())) {
+            // error
+        }
+        // 200 OK
+    } else if (request.method() == "GET") {
+        response_.ultimateString = tutor.getMainPage(request_.data());
+    }
 }
 
-void Handler::admin() {
-
+Response Handler::admin(const Request &request) {
+    return nullptr;
 }
 
-void Handler::customer() {
-
-}
+Response Handler::customer(const Request &request) {
+    return nullptr;
+}*/

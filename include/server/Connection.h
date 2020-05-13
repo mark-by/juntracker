@@ -34,9 +34,7 @@ public:
 private:
     boost::asio::ip::tcp::socket socket_;
     ConnectionManager& manager_;
-    Response response_;
     Handler handler_;
-    Request request_;
 
     std::array<char, 1024> buffer_;  // best variant; std::vector not thread-safety
 

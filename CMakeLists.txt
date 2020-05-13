@@ -19,10 +19,10 @@ link_directories("${PROJECT_SOURCE_DIR}/include/boost/stage/lib")
 #include_directories("${PROJECT_SOURCE_DIR}/include/core")
 include_directories("${PROJECT_SOURCE_DIR}/include/templates")
 include_directories("${PROJECT_SOURCE_DIR}/include/server")
-include_directories("${PROJECT_SOURCE_DIR}/include/database")
+#include_directories("${PROJECT_SOURCE_DIR}/include/database")
 
 add_subdirectory(src/templates)
-add_subdirectory(src/wrapper)
+#add_subdirectory(src/wrapper)
 #add_subdirectory(src/core)
 add_subdirectory(src/server)
 

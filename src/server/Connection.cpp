@@ -15,8 +15,7 @@ enum rights {
 };
 
 Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager):
-    socket_(service), manager_(manager), handler_(request_, response_), buffer_() {
-};
+    socket_(service), manager_(manager), handler_(), buffer_() { };
 
 void Connection::start() {
     socket_.async_read_some(
@@ -30,54 +29,30 @@ void Connection::start() {
 void Connection::doRead(const boost::system::error_code& error,
                         std::size_t bytes_transferred) {
     if (!error) {
+        Request request_(std::string(buffer_.begin(), buffer_.end()));
+        std::cout << request_.path() << '\n';
+        std::cout << request_.method() << '\n';
+
+        if (request_.path() != "/juntracker.ru") {
+            std::cout << "some error\n";
+        }
+
         // big switch to choose api for request
-        /*if (request_.getMethod() == "POST") {
-            // handler
-            if (request_.getRights() == rights::admin) {
-                // do handle
-            } else {
-                // error
-            }
-        }
+        // Response response_;
 
-        if (request_.getMethod() == "GET") {
-            // handler
-            switch (request_.getRights()) {
-                case rights::admin:
-                    handler_.admin();
-                    break;
-                case rights::teacher:
-                    handler_.teacher();
-                    break;
-                case rights::customer:
-                    handler_.customer();
-                    break;
-                default:
-                    // error
-                    break;
-            }
+        /*switch (request_.getRights()) {
+            case rights::admin:
+                handler_.admin();
+                break;
+            case rights::teacher:
+                handler_.teacher(request_, response_);
+                break;
+            case rights::customer:
+                handler_.customer();
+                break;
+            default:
+                // errorbreak;
         }*/
-        std::string request_string(buffer_.begin(), buffer_.end());
-        std::cout << request_string.data();
-        request_.init(request_string);
-        if (request_.getMethod() == "GET") {
-            std::cout << "\nGET\n";
-        }
-        std::cout << request_.getPath() << '\n';
-
-        std::string data = "HTTP/1.1 200 OK\n"
-                           "Host: 127.0.0.1:5000\n"
-                           "Content-Type: text/html\n"
-                           "Content-Length: 153252\n"
-                           "Connection: close\n"
-                           "<html>\n"
-                           "<head><title>JunTracker</title></head>\n"
-                           "<body>bgcolor=\"white\">\n"
-                           "<center><h1>Hello!</h1></center>\n"
-                           "<center>This is JunTracker</center>\n"
-                           "</body>\n"
-                           "</html>";
-        std::cout << data.length();
 
         // need to write to response_.buffer or something like this
         async::async_write(socket_,
@@ -85,15 +60,9 @@ void Connection::doRead(const boost::system::error_code& error,
                         response_.toString().data(),
                         response_.toString().size()
                         ),*/
-                async::buffer(data, 253),
+                async::buffer("shitty reply to client", 24),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
-        socket_.async_read_some(
-                async::buffer(buffer_),
-                boost::bind(&Connection::doRead, shared_from_this(),
-                        async::placeholders::error,
-                        async::placeholders::bytes_transferred)
-                        );
     } else if (error != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
     }
