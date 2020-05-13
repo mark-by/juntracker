@@ -15,7 +15,7 @@ class Handler {
 public:
     Handler() = default;
     // methods to fill response from request done by Api
-    // void teacher(const Request& request);  // handler_.teacher();
+    void teacher(const Request& request, Response& response);  // handler_.teacher();
     // Response admin(const Request& request);    // handler_.admin();
     // Response customer(const Request& request); // handler_.customer();
 

@@ -6,7 +6,8 @@ file(GLOB FILES "${PROJECT_SOURCE_DIR}/src/server/*.cpp")
 
 set(server_source ${FILES}
         http/request.cpp
-        http/response.cpp)
+        http/response.cpp
+        http/datetime.cpp)
 
 set(http_source
         http/request.cpp

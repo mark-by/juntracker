@@ -30,6 +30,8 @@ void Connection::doRead(const boost::system::error_code& error,
                         std::size_t bytes_transferred) {
     if (!error) {
         Request request_(std::string(buffer_.begin(), buffer_.end()));
+        std::string request_string(buffer_.begin(), buffer_.end());
+        std::cout << request_string << '\n';
         std::cout << request_.path() << '\n';
         std::cout << request_.method() << '\n';
 
@@ -38,7 +40,8 @@ void Connection::doRead(const boost::system::error_code& error,
         }
 
         // big switch to choose api for request
-        // Response response_;
+        std::string response_string("<html>hello World!</html>");
+        Response response_(response_string);
 
         /*switch (request_.getRights()) {
             case rights::admin:
@@ -54,13 +57,14 @@ void Connection::doRead(const boost::system::error_code& error,
                 // errorbreak;
         }*/
 
+        std::cout << response_.str() << '\n';
+
         // need to write to response_.buffer or something like this
         async::async_write(socket_,
-                /*async::buffer(
-                        response_.toString().data(),
-                        response_.toString().size()
-                        ),*/
-                async::buffer("shitty reply to client", 24),
+                async::buffer(
+                        response_.str(),
+                        response_.str().size()
+                        ),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
     } else if (error != async::error::operation_aborted) {

@@ -13,6 +13,6 @@ add_executable(render render.cpp)
 
 
 target_link_libraries(node templates)
-target_link_libraries(server boost_thread pthread serverlib)
+target_link_libraries(server boost_thread http boost_date_time pthread serverlib)
 target_link_libraries(render templates boost_filesystem)
 target_link_libraries(http_example http boost_date_time)

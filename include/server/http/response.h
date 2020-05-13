@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <vector>
 #include <http/datetime.h>
-#include <context/context.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 
