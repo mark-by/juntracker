@@ -13,7 +13,7 @@ add_executable(
 target_link_libraries(
         run_db_tests
         pq
-        sql_wrapper
+        sql_wrapper_lib
         gtest_main
         stdc++fs
         pthread
