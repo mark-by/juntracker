@@ -52,8 +52,8 @@ namespace templates {
 
     class VarNode : public Node {
     public:
-        VarNode(std::string name, std::string content, std::string afterSpaces)
-                : Node(std::move(name), std::move(content)), afterSpaces(std::move(afterSpaces)) {
+        VarNode(std::string name, std::string beforeSpaces, std::string afterSpaces)
+                : Node(std::move(name), std::move(beforeSpaces)), afterSpaces(std::move(afterSpaces)) {
             _type = VARNODE;
         };
 
@@ -88,8 +88,8 @@ namespace templates {
 
     class IfNode : public Node {
     public:
-        IfNode(std::string name, std::string content, std::string statement)
-                : Node(std::move(name), std::move(content)), _statement(std::move(statement)) {
+        IfNode(std::string trueBlock, std::string falseBlock, std::string statement)
+                : Node(std::move(trueBlock), std::move(falseBlock)), _statement(std::move(statement)) {
             _type = IFNODE;
         };
 
