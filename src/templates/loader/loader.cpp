@@ -21,7 +21,6 @@ templates::Loader::Loader(const std::string &settingsPath)  {
 
 std::string templates::Loader::fileToStr(const boost::filesystem::path & filePath) {
     int fd = open(filePath.c_str(), O_RDONLY);
-    std::cout << filePath << std::endl;
     size_t fileSize = boost::filesystem::file_size(filePath);
     std::string result((char *) mmap(nullptr, fileSize, PROT_READ,
                                    MAP_FILE | MAP_SHARED, fd, 0), fileSize);
