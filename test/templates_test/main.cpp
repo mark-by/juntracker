@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
-    auto testProjPath = boost::filesystem::current_path().parent_path().parent_path().parent_path().append(
+    auto testProjPath = boost::filesystem::current_path().parent_path().parent_path().parent_path().parent_path().append(
             "/test/templates_test/test_files/");
     boost::filesystem::path includes = "inc/";
     boost::filesystem::path templates = "templates/";

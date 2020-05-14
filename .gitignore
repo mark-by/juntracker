@@ -4,3 +4,4 @@ include/boost/*
 install_boost
 test/templates_test/templatesJuntracker/render
 test/templates_test/templatesJuntracker/.idea/*
+build/*
