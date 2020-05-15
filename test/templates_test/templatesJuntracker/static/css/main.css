@@ -9,7 +9,10 @@
 
 a {
     text-decoration: none;
+    color: unset;
 }
+
+
 
 /* width */
 ::-webkit-scrollbar {

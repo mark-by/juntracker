@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    {% block styles %}
+    {% endblock %}
     <title>{% block title %}JunTracker{% endblock %}</title>
 </head>
 <body>
 <header>
-    <div class="logo">JunTracker</div>
+    <a class="logo" href="index.html">JunTracker</a>
     <div class="header-menu">
         <div class="header-select">
             <div class="current__option">{% block currentWindow %}Окно Админиcтратора{% endblock %}</div>
@@ -26,10 +28,10 @@
     <div class="header-menu-hidden-part-wrapper" data="off">
         <div class="header-menu-hidden-part">
             {% block hiddenMenu %}
-            <a class="menu__option" href="#">База учеников</a>
-            <a class="menu__option" href="#">Расписание</a>
-            <a class="menu__option" href="#">Журнал</a>
-            <a class="menu__option" href="#">Финансы</a>
+            <a class="menu__option" href="studentsAdmin.html">База учеников</a>
+            <a class="menu__option" href="schedule.html">Расписание</a>
+            <a class="menu__option" href="diary.html">Журнал</a>
+            <a class="menu__option" href="finance.html">Финансы</a>
             {% endblock %}
         </div>
     </div>
