@@ -6,11 +6,11 @@
 #define CORE_API_H
 
 #include "ManagerStudent.h"
-#include "managerVisitHistory"
 #include "ManagerPaymentHistory.h"
 #include "ManagerCourse.h"
 #include "ManagerSchedule.h"
 #include "ManagerJournal.h"
+#include "ManagerVisitHistory.h"
 
 class API {
 public:
