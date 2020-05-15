@@ -26,30 +26,23 @@ templates::IfParser::set(const std::sregex_iterator &tag) {
 
 std::tuple<std::sregex_iterator,std::sregex_iterator, std::sregex_iterator>
 templates::IfParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) {
-    std::stack<std::sregex_iterator> if_stack;
-    std::stack<std::sregex_iterator> else_stack;
+    std::stack<std::pair<std::sregex_iterator, std::sregex_iterator>> stack;
     std::sregex_iterator currMatch(_begin, _end, parser::tag::anyBlock);
     std::sregex_iterator none;
     while (currMatch != none) {
+        std::string currMatch_str = currMatch->str();
         int type = templates::Parser::BlockType(currMatch);
         if (type == parser::if_t) {
-            if_stack.push(currMatch);
+            stack.push({currMatch, none});
         } else if (type == parser::else_t) {
-            else_stack.push(currMatch);
+            stack.top().second = currMatch;
         } else if (type == parser::endif_t) {
-            if (if_stack.size() == 1) {
+            if (stack.size() == 1) {
                 break;
             }
-            if_stack.pop();
-            if (!else_stack.empty()) {
-                else_stack.pop();
-            }
+            stack.pop();
         }
         currMatch++;
     }
-    if (!else_stack.empty()) {
-        return {if_stack.top(), else_stack.top(), currMatch};
-    } else {
-        return {if_stack.top(), none, currMatch};
-    }
+    return {stack.top().first, stack.top().second, currMatch};
 }

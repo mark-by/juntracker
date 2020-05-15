@@ -15,11 +15,14 @@ void Response::setDate() {
 }
 
 Response::Response(const templates::Context &jsonData, const int &status) : statusCode(status) {
+    setDate();
     setHeader("Content-Type", "application/json");
     body = jsonData.str();
+    setHeader("Content-Length", std::to_string(body.size()));
 }
 
 Response::Response(const int &status) : statusCode(status) {
+    setDate();
 }
 
 void Response::startLineToStream(std::stringstream & ss) {
@@ -27,10 +30,6 @@ void Response::startLineToStream(std::stringstream & ss) {
 }
 
 std::string Response::str() {
-    setDate();
-    if (!body.empty()) {
-        setHeader("Content-Length", std::to_string(body.size()));
-    }
     std::stringstream response;
     startLineToStream(response);
     headersToStream(response);
@@ -41,8 +40,10 @@ std::string Response::str() {
 }
 
 Response::Response(const std::string &html, const int &status) : statusCode(status) {
+    setDate();
     setHeader("Content-Type", "text/html; charset=UTF-8");
     body = html;
+    setHeader("Content-Length", std::to_string(body.size()));
 }
 
 void Response::headersToStream(std::stringstream & ss) {
@@ -88,4 +89,3 @@ std::string Response::statusToStr() const {
         default: return "undefined";
     }
 }
-

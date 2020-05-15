@@ -1,5 +1,5 @@
-#include <iostream>
 #include <template/template.h>
+#include <iostream>
 
 int main() {
     std::string settings_path = "../../test/templates_test/test_files/settings";

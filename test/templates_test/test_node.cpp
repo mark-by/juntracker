@@ -1,48 +1,43 @@
 #include "gtest/gtest.h"
 #include "node/node.h"
+#include <context/context.h>
 
 TEST(Node, TestTextNode) {
-    templates::TextNode textNode("", "some text");
-    EXPECT_EQ(textNode.getType(), templates::TEXTNODE);
-    EXPECT_EQ(textNode.render(templates::Context()), "some text");
-    EXPECT_TRUE(textNode.expand().empty());
+    templates::TextNode textNode("", "  \n  some text {{ text }}   \n \n \n  ");
+    EXPECT_EQ(textNode.type(), templates::TEXTNODE);
+    templates::Context context;
+    EXPECT_EQ(textNode.render(context), "some text {{ text }}");
 }
 
 TEST(Node, TestBlockNode) {
-    templates::BlockNode blockNode("menu", "some content");
-    EXPECT_EQ(blockNode.getType(), templates::BLOCKNODE);
-    EXPECT_EQ(blockNode.render(templates::Context()), "some content");
-    EXPECT_TRUE(blockNode.expand().empty());
+    templates::BlockNode blockNode("menu", " \n   some content \n  \t");
+    EXPECT_EQ(blockNode.type(), templates::BLOCKNODE);
+    EXPECT_EQ(blockNode.name(), "menu");
+    templates::Context context;
+    EXPECT_EQ(blockNode.render(context), "some content");
 }
 
 TEST(Node, TestVarNode) {
     templates::Context context;
     context.put("number", 72);
-    templates::VarNode varNode("number", "{{ number }}");
-    EXPECT_EQ("72", varNode.render(context));
-    EXPECT_TRUE(varNode.expand().empty());
+    templates::VarNode varNode("number", "  ", "");
+    EXPECT_EQ("  72", varNode.render(context));
 }
 
 TEST(Node, TestForNode) {
     templates::Context context;
     std::vector<int> numbers = {1, 2, 3, 4};
     context.putArray("array", numbers);
-    templates::ForNode forNode("number:array", "Number: {{ number }}");
-    EXPECT_EQ(forNode.render(context), "Number: 1Number: 2Number: 3Number: 4");
-    templates::NodeQueue expandedFor = forNode.expand();
-    ASSERT_EQ(expandedFor.size(), 2);
-    EXPECT_EQ(expandedFor.front()->getType(), templates::TEXTNODE);
-    expandedFor.pop();
-    EXPECT_EQ(expandedFor.front()->getType(), templates::VARNODE);
+    templates::ForNode forNode("i", "Number: {{ i }}", "array");
+    EXPECT_EQ(forNode.render(context), "Number: 1 Number: 2 Number: 3 Number: 4 ");
 }
 
 TEST(Node, TestIfNode) {
-    templates::Context context;
-    context.put("isLogged", true);
+    templates::Context trueContext;
+    trueContext.put("statement", true);
     templates::Context falseContext;
-    context.put("isLogged", false);
-    templates::IfNode ifNode("isLogged", "Hello!{% endif %}");
-    ifNode.setElseContent("You should be logged in");
-    EXPECT_EQ(ifNode.render(context), "Hello!");
-    EXPECT_EQ(ifNode.render(falseContext), "You should be logged in");
+    falseContext.put("statement", false);
+    templates::IfNode ifNode("This should render if statement is true", "This should render if statement is false", "statement");
+    EXPECT_EQ(ifNode.render(trueContext), "This should render if statement is true");
+    EXPECT_EQ(ifNode.render(falseContext), "This should render if statement is false");
 }

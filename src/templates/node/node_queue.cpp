@@ -57,6 +57,6 @@ size_t templates::NodeQueue::size() {
 }
 
 void templates::NodeQueue::pop() {
-
+    nodes.pop_front();
 }
 

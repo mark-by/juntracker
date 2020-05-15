@@ -117,20 +117,6 @@ templates::Parser::parseBlocks(std::string::const_iterator _begin, std::string::
     return nodeQueue;
 }
 
-
-std::unordered_map<std::string, std::shared_ptr<templates::Node>>
-templates::Parser::collectIncludes(std::string::const_iterator _begin, std::string::const_iterator _end) {
-    std::unordered_map<std::string, std::shared_ptr<templates::Node>> includes;
-    std::sregex_iterator currInclude(_begin, _end, parser::tag::includeTag);
-    std::sregex_iterator end;
-    while (currInclude != end) {
-        blockParser.set(currInclude);
-        includes.insert({currInclude->format("$2"), nullptr});
-        currInclude++;
-    }
-    return includes;
-}
-
 std::tuple<templates::NodeQueue, std::unordered_map<std::string, std::shared_ptr<templates::Node>>>
 templates::Parser::parseIncludes(std::string::const_iterator _begin, std::string::const_iterator _end) {
     templates::NodeQueue nodeQueue;
