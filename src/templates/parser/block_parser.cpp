@@ -1,11 +1,11 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::shared_ptr<templates::Node>templates::BlockParser::parse() {
+std::shared_ptr<templates::Node>templates::BlockParser::parse() const {
     return std::make_shared<templates::BlockNode>(_name, std::string(begin, end));
 }
 
-std::string templates::BlockParser::name() {
+std::string templates::BlockParser::name() const {
     return _name;
 }
 

@@ -1,7 +1,7 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::shared_ptr<templates::Node>templates::ForParser::parse() {
+std::shared_ptr<templates::Node>templates::ForParser::parse() const {
     return std::make_shared<templates::ForNode>(name, std::string(begin, end), iterVar);
 }
 
@@ -15,7 +15,7 @@ std::string::const_iterator templates::ForParser::set(const std::sregex_iterator
 }
 
 std::tuple<std::sregex_iterator, std::sregex_iterator>
-templates::ForParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) {
+templates::ForParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const {
     std::sregex_iterator forTag(_begin, _end, parser::tag::startForOrEndFor);
     std::sregex_iterator end;
     std::stack<std::sregex_iterator> stack;

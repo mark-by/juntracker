@@ -1,7 +1,7 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::shared_ptr<templates::Node>templates::TextParser::parse() {
+std::shared_ptr<templates::Node>templates::TextParser::parse() const {
     return std::make_shared<templates::TextNode>("", std::string(begin, end));
 }
 
@@ -11,7 +11,7 @@ std::string::const_iterator templates::TextParser::set(const std::string::const_
     return _end;
 }
 
-bool templates::TextParser::empty() {
+bool templates::TextParser::empty() const {
     return begin == end;
 }
 

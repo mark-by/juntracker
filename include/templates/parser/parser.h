@@ -8,7 +8,7 @@
 namespace templates {
     class NodeParser {
     public:
-        virtual std::shared_ptr<Node> parse() = 0;
+        virtual std::shared_ptr<Node> parse() const = 0;
     protected:
         std::string::const_iterator begin;
         std::string::const_iterator end;
@@ -16,17 +16,17 @@ namespace templates {
 
     class TextParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
 
         std::string::const_iterator set(const std::string::const_iterator &_begin, const std::string::const_iterator &_end);
 
-        bool empty();
+        bool empty() const;
     };
 
 
     class VarParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
@@ -38,12 +38,12 @@ namespace templates {
 
     class ForParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
         std::tuple<std::sregex_iterator, std::sregex_iterator>
-        findScope(std::string::const_iterator _begin, std::string::const_iterator _end);
+        findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const;
 
     private:
         std::string name;
@@ -52,11 +52,11 @@ namespace templates {
 
     class BlockParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
-        std::string name();
+        std::string name() const;
 
     private:
 
@@ -65,14 +65,14 @@ namespace templates {
 
     class IfParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
     private:
         // возвращает if else endif итераторы. else может быть пустым в случае его отсутствия
         std::tuple<std::sregex_iterator, std::sregex_iterator, std::sregex_iterator>
-        findScope(std::string::const_iterator _begin, std::string::const_iterator _end);
+        findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const;
 
         std::string statement;
         std::string::const_iterator startFalseBlock;
@@ -81,7 +81,7 @@ namespace templates {
 
     class IncludeParser : public NodeParser {
     public:
-        std::shared_ptr<Node> parse() override;
+        std::shared_ptr<Node> parse() const override;
         std::string::const_iterator set(const std::sregex_iterator &tag);
     private:
         std::string name;
@@ -97,9 +97,6 @@ namespace templates {
 
         std::unordered_map<std::string, std::shared_ptr<templates::Node>>
         collectBlocks(std::string::const_iterator _begin, std::string::const_iterator _end);
-
-        std::unordered_map<std::string, std::shared_ptr<templates::Node>>
-        collectIncludes(std::string::const_iterator _begin, std::string::const_iterator _end);
 
         static int tagType(const std::sregex_iterator &tag);
 

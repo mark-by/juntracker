@@ -1,7 +1,7 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::shared_ptr<templates::Node> templates::IfParser::parse() {
+std::shared_ptr<templates::Node> templates::IfParser::parse() const {
     return std::make_shared<templates::IfNode>(std::string(begin, end),
             std::string(startFalseBlock, endFalseBlock),
             statement);
@@ -25,7 +25,7 @@ templates::IfParser::set(const std::sregex_iterator &tag) {
 }
 
 std::tuple<std::sregex_iterator,std::sregex_iterator, std::sregex_iterator>
-templates::IfParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) {
+templates::IfParser::findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const {
     std::stack<std::pair<std::sregex_iterator, std::sregex_iterator>> stack;
     std::sregex_iterator currMatch(_begin, _end, parser::tag::anyBlock);
     std::sregex_iterator none;

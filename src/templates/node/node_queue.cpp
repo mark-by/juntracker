@@ -36,7 +36,7 @@ void templates::NodeQueue::renderLoadedNode(std::unordered_map<std::string, std:
     nodes.pop_front();
 }
 
-std::string templates::NodeQueue::result() {
+std::string templates::NodeQueue::result() const {
     return _result;
 }
 
@@ -44,15 +44,15 @@ void templates::NodeQueue::push(std::shared_ptr<templates::Node> ptr) {
     nodes.push_back(std::move(ptr));
 }
 
-bool templates::NodeQueue::empty() {
+bool templates::NodeQueue::empty() const {
     return nodes.empty();
 }
 
-std::shared_ptr<templates::Node> templates::NodeQueue::front() {
+std::shared_ptr<templates::Node> templates::NodeQueue::front() const {
     return nodes.front();
 }
 
-size_t templates::NodeQueue::size() {
+size_t templates::NodeQueue::size() const {
     return nodes.size();
 }
 

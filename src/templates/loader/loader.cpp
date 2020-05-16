@@ -1,5 +1,4 @@
 #include <loader/loader.h>
-#include <fstream>
 #include <parser/re_tags.h>
 #include <sys/mman.h>
 #include <fcntl.h>
@@ -60,7 +59,7 @@ void templates::Loader::fillIncludes(std::unordered_map<std::string, std::shared
     }
 }
 
-std::string templates::Loader::result() {
+std::string templates::Loader::result() const {
     return _result;
 }
 

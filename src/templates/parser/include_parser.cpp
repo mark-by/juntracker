@@ -2,7 +2,7 @@
 #include <parser/re_tags.h>
 
 
-std::shared_ptr<templates::Node>templates::IncludeParser::parse() {
+std::shared_ptr<templates::Node>templates::IncludeParser::parse() const {
     return std::make_shared<templates::IncludeNode>(name, "");
 }
 

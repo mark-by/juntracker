@@ -1,7 +1,7 @@
 #include <parser/parser.h>
 #include <parser/re_tags.h>
 
-std::shared_ptr<templates::Node>templates::VarParser::parse() {
+std::shared_ptr<templates::Node>templates::VarParser::parse() const {
     return std::make_shared<templates::VarNode>(varName, beforeSpaces, afterSpaces);
 }
 
