@@ -1,0 +1,59 @@
+.students-header-control {
+    display: flex;
+    height: 45px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.students-header-control > input {
+    height: 30px;
+    width: 400px;
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 3px;
+    font-size: 14px;
+}
+
+.students-header-control__group > img {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+}
+
+.student-search-wrapper {
+    display: grid;
+    grid-template-columns: 25px 30px 250px 50px 1fr 30px;
+    align-items: center;
+    justify-items: center;
+    column-gap: 5px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin: 5px 0;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.student-search-wrapper:hover {
+    background: beige;
+}
+
+.student-search-wrapper > img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+/*.student-search-wrapper > input[type=checkbox] {*/
+/*}*/
+
+.student-groups {
+    display: flex;
+}
+
+.course {
+    padding: 5px;
+    border-radius: 5px;
+    background: #efefef;
+    margin-left: 5px;
+}
