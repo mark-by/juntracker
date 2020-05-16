@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "person.h"
-#include "sql_wrapper.h"
+#include "course.h"
 
 class Teacher : public Person {
  public:
@@ -22,7 +22,8 @@ class Teacher : public Person {
 
     std::string get_name(int t_id) const override;
     std::string get_surname(int t_id) const override;
-    std::string get_course(int t_id) const;
+
+    std::vector<Course> get_courses(int t_id) const;
 
     [[nodiscard]] Teacher get_teacher(int t_id) const;
     [[nodiscard]] int add_teacher(const Teacher& teacher) const;
@@ -35,7 +36,6 @@ class Teacher : public Person {
     std::string name;
     std::string surname;
     int salary;
-//    std::vector<std::string> courses;
     std::string description;
 
     SqlWrapper postgres;

@@ -31,7 +31,3 @@ bool SqlWrapper::exec(const std::string& query) const {
 bool SqlWrapper::is_connected() const {
     return !(PQstatus(conn) != CONNECTION_OK);
 }
-
-bool SqlWrapper::is_select(const std::string& query) const {
-    return query.find("SELECT") != std::string::npos;
-}

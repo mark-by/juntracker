@@ -1,7 +1,8 @@
 #ifndef PROJECT_INCLUDE_SQL_WRAPPER_H_
 #define PROJECT_INCLUDE_SQL_WRAPPER_H_
 
-#include <postgresql/libpq-fe.h>
+//#include <postgresql/libpq-fe.h>
+#include "abstract_db.h"
 
 #include <functional>
 #include <iostream>
@@ -10,7 +11,7 @@
 #include <variant>
 #include <vector>
 
-class SqlWrapper {
+class SqlWrapper : public Database {
 private:
     PGconn *conn;
 
@@ -19,10 +20,9 @@ public:
     explicit SqlWrapper(PGconn *conn);
     ~SqlWrapper();
 
-    [[nodiscard]] bool is_select(const std::string& query) const;
-    bool query(const std::string& query, PGresult** result) const ;
-    [[nodiscard]] bool exec(const std::string& query) const;
-    [[nodiscard]] bool is_connected() const;
+    bool query(const std::string& query, PGresult** result) const override ;
+    [[nodiscard]] bool exec(const std::string& query) const override ;
+    [[nodiscard]] bool is_connected() const override ;
 };
 
 #endif  // PROJECT_INCLUDE_SQL_WRAPPER_H_

@@ -1,9 +1,11 @@
 #include <iostream>
+#include <fstream>
 
-#include "sql_wrapper.h"
 #include "course.h"
+#include "lesson.h"
 #include "payment.h"
 #include "payment_history.h"
+#include "sql_wrapper.h"
 #include "student.h"
 #include "teacher.h"
 #include "user.h"
@@ -12,12 +14,14 @@
 
 int main(int argc, char* argv[]) {
 
-    std::string query;
-
     // Create Connection
-    const char* conninfo = "host=localhost port=5432 dbname=jun_tracker user=amavrin password=root";
-    PGconn *conn = PQconnectdb(conninfo);
+    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
 
+    PGconn *conn = PQconnectdb(conninfo.c_str());
     SqlWrapper postgres(conn);
 
     // Check Connection
@@ -54,12 +58,7 @@ int main(int argc, char* argv[]) {
         std::cout << visit.return_course_id() << " ";
     }
     std::cout << std::endl;
-
-//    if (postgres.is_select(query)) {
-//        postgres.query(query/*, handler*/);
-//    } else {
-//        postgres.exec(query);
-//    }
+//    Lesson l(postgres);
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;

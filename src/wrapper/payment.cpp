@@ -1,4 +1,3 @@
-
 #include "payment.h"
 
 int Payment::get_student_id(int p_id) const {

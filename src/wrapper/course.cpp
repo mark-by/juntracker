@@ -62,8 +62,7 @@ std::vector<Student> Course::get_student_list(const std::string& course_name) {
         std::string s_name = std::string(PQgetvalue(result, i, 1));
         std::string s_surname = std::string(PQgetvalue(result, i, 2));
         int s_age = atoi(PQgetvalue(result, i, 3));
-        std::string s_description = PQgetvalue(result, i, 4);
-        auto res_student = Student(s_id, s_name, s_surname, s_age, s_description);
+        auto res_student = Student(s_id, s_name, s_surname, s_age);
         students.push_back(res_student);
     }
     PQclear(result);
