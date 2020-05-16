@@ -53,14 +53,14 @@ namespace templates {
     class VarNode : public Node {
     public:
         VarNode(std::string name, std::string beforeSpaces, std::string afterSpaces)
-                : Node(std::move(name), std::move(beforeSpaces)), afterSpaces(std::move(afterSpaces)) {
+                : Node(std::move(name), std::move(beforeSpaces)), _afterSpaces(std::move(afterSpaces)) {
             _type = VARNODE;
         };
 
         std::string render(templates::Context &context) override;
 
     private:
-        std::string afterSpaces;
+        std::string _afterSpaces;
     };
 
     class IncludeNode : public Node {
@@ -76,14 +76,14 @@ namespace templates {
     public:
         ForNode(std::string name, std::string content, std::string varName)
                 : Node(std::move(name), std::move(content)),
-                  iterVar(std::move(varName)) {
+                  _iterVar(std::move(varName)) {
             _type = FORNODE;
         };
 
         std::string render(templates::Context &context) override;
 
     private:
-        std::string iterVar;
+        std::string _iterVar;
     };
 
     class IfNode : public Node {

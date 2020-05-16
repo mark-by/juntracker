@@ -30,7 +30,7 @@ namespace templates {
 
         void renderLoadedNode(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded);
 
-        std::deque<std::shared_ptr<Node>> nodes;
+        std::deque<std::shared_ptr<Node>> _nodes;
         std::string _result;
     };
 };

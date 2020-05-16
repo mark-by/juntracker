@@ -40,12 +40,11 @@ int templates::Parser::BlockType(const std::sregex_iterator &tag) {
     }
 }
 
-templates::NodeQueue templates::Parser::parse(std::string::const_iterator begin, std::string::const_iterator end) {
+templates::NodeQueue templates::Parser::parse(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     templates::NodeQueue nodes;
     std::sregex_iterator currMatch(begin, end, parser::tag::any);
     std::sregex_iterator none;
     std::string::const_iterator textStart = begin;
-    std::string::const_iterator textEnd;
     while (currMatch != none) {
         if (currMatch->suffix().first <= textStart) {
             currMatch++;
@@ -86,11 +85,11 @@ templates::Parser::parseNode(const std::sregex_iterator &tag) {
 }
 
 std::unordered_map<std::string, std::shared_ptr<templates::Node>>
-templates::Parser::collectBlocks(std::string::const_iterator _begin, std::string::const_iterator _end) {
+templates::Parser::collectBlocks(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::unordered_map<std::string, std::shared_ptr<templates::Node>> blocks;
-    std::sregex_iterator currStartBlock(_begin, _end, parser::tag::startBlock);
-    std::sregex_iterator end;
-    while (currStartBlock != end) {
+    std::sregex_iterator currStartBlock(begin, end, parser::tag::startBlock);
+    std::sregex_iterator none;
+    while (currStartBlock != none) {
         blockParser.set(currStartBlock);
         blocks.insert({blockParser.name(), blockParser.parse()});
         currStartBlock++;
@@ -99,43 +98,43 @@ templates::Parser::collectBlocks(std::string::const_iterator _begin, std::string
 }
 
 templates::NodeQueue
-templates::Parser::parseBlocks(std::string::const_iterator _begin, std::string::const_iterator _end) {
-    templates::NodeQueue nodeQueue;
-    auto currStartBlock = std::sregex_iterator(_begin, _end, parser::tag::startBlock);
-    std::sregex_iterator end;
-    auto startText = _begin;
-    while (currStartBlock != end) {
+templates::Parser::parseBlocks(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    templates::NodeQueue nodes;
+    auto currStartBlock = std::sregex_iterator(begin, end, parser::tag::startBlock);
+    std::sregex_iterator none;
+    auto startText = begin;
+    while (currStartBlock != none) {
         auto endBlock = blockParser.set(currStartBlock);
         textParser.set(startText, currStartBlock->prefix().second);
-        nodeQueue.push(textParser.parse());
-        nodeQueue.push(blockParser.parse());
+        nodes.push(textParser.parse());
+        nodes.push(blockParser.parse());
         startText = endBlock;
         currStartBlock++;
     }
-    textParser.set(startText, _end);
-    nodeQueue.push(textParser.parse());
-    return nodeQueue;
+    textParser.set(startText, end);
+    nodes.push(textParser.parse());
+    return nodes;
 }
 
 std::tuple<templates::NodeQueue, std::unordered_map<std::string, std::shared_ptr<templates::Node>>>
-templates::Parser::parseIncludes(std::string::const_iterator _begin, std::string::const_iterator _end) {
-    templates::NodeQueue nodeQueue;
+templates::Parser::parseIncludes(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    templates::NodeQueue nodes;
     std::unordered_map<std::string, std::shared_ptr<templates::Node>> includes;
-    std::sregex_iterator currInclude(_begin, _end, parser::tag::includeTag);
-    std::sregex_iterator end;
-    auto startText = _begin;
-    while (currInclude != end) {
+    std::sregex_iterator currInclude(begin, end, parser::tag::includeTag);
+    std::sregex_iterator none;
+    auto startText = begin;
+    while (currInclude != none) {
         includes.insert({currInclude->format("$2"), nullptr});
         auto endTag = includeParser.set(currInclude);
         textParser.set(startText, currInclude->prefix().second);
-        nodeQueue.push(textParser.parse());
-        nodeQueue.push(includeParser.parse());
+        nodes.push(textParser.parse());
+        nodes.push(includeParser.parse());
         startText = endTag;
         currInclude++;
     }
-    textParser.set(startText, _end);
-    nodeQueue.push(textParser.parse());
-    return {nodeQueue, includes};
+    textParser.set(startText, end);
+    nodes.push(textParser.parse());
+    return {nodes, includes};
 }
 
 void templates::Parser::clearString(std::string &str) {

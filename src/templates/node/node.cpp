@@ -3,7 +3,6 @@
 #include <parser/parser.h>
 #include <boost/algorithm/string.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/exception/exception.hpp>
 
 std::string templates::TextNode::render(templates::Context &context) {
     templates::Parser::clearString(_content);
@@ -16,13 +15,13 @@ std::string templates::BlockNode::render(templates::Context &context) {
 }
 
 std::string templates::VarNode::render(templates::Context &context) {
-    return _content + context.get<std::string>(_name) + afterSpaces;
+    return _content + context.get<std::string>(_name) + _afterSpaces;
 }
 
 std::string templates::ForNode::render(templates::Context &context) {
     templates::Parser parser;
     std::string result;
-    auto array = context.getObjects(iterVar); // iterVar - переменная, по которой итерируемся
+    auto array = context.getObjects(_iterVar); // iterVar - переменная, по которой итерируемся
     auto nodeQueue = parser.parse(_content.cbegin(), _content.cend());
     for (auto & element : array) {
         auto currentQueue = nodeQueue;

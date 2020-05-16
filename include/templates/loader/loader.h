@@ -21,8 +21,8 @@ namespace templates {
 
         static std::string extendFileName(const std::string &file_str) ;
 
-        boost::filesystem::path templatesPath;
-        boost::filesystem::path includesPath;
+        boost::filesystem::path _templatesPath;
+        boost::filesystem::path _includesPath;
         std::string _result;
         templates::Parser parser;
     };

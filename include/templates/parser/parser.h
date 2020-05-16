@@ -10,15 +10,15 @@ namespace templates {
     public:
         virtual std::shared_ptr<Node> parse() const = 0;
     protected:
-        std::string::const_iterator begin;
-        std::string::const_iterator end;
+        std::string::const_iterator _begin;
+        std::string::const_iterator _end;
     };
 
     class TextParser : public NodeParser {
     public:
         std::shared_ptr<Node> parse() const override;
 
-        std::string::const_iterator set(const std::string::const_iterator &_begin, const std::string::const_iterator &_end);
+        std::string::const_iterator set(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 
         bool empty() const;
     };
@@ -31,9 +31,9 @@ namespace templates {
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
     private:
-        std::string varName;
-        std::string beforeSpaces;
-        std::string afterSpaces;
+        std::string _varName;
+        std::string _beforeSpaces;
+        std::string _afterSpaces;
     };
 
     class ForParser : public NodeParser {
@@ -42,12 +42,12 @@ namespace templates {
 
         std::string::const_iterator set(const std::sregex_iterator &tag);
 
-        std::tuple<std::sregex_iterator, std::sregex_iterator>
-        findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const;
+        static std::tuple<std::sregex_iterator, std::sregex_iterator>
+        findScope(const std::string::const_iterator &begin, const std::string::const_iterator &end) ;
 
     private:
-        std::string name;
-        std::string iterVar;
+        std::string _name;
+        std::string _iterVar;
     };
 
     class BlockParser : public NodeParser {
@@ -71,12 +71,12 @@ namespace templates {
 
     private:
         // возвращает if else endif итераторы. else может быть пустым в случае его отсутствия
-        std::tuple<std::sregex_iterator, std::sregex_iterator, std::sregex_iterator>
-        findScope(std::string::const_iterator _begin, std::string::const_iterator _end) const;
+        static std::tuple<std::sregex_iterator, std::sregex_iterator, std::sregex_iterator>
+        findScope(const std::string::const_iterator &begin, const std::string::const_iterator &end) ;
 
-        std::string statement;
-        std::string::const_iterator startFalseBlock;
-        std::string::const_iterator endFalseBlock;
+        std::string _statement;
+        std::string::const_iterator _startFalseBlock;
+        std::string::const_iterator _endFalseBlock;
     };
 
     class IncludeParser : public NodeParser {
@@ -84,19 +84,19 @@ namespace templates {
         std::shared_ptr<Node> parse() const override;
         std::string::const_iterator set(const std::sregex_iterator &tag);
     private:
-        std::string name;
+        std::string _name;
     };
 
     class Parser {
     public:
         Parser() = default;
 
-        NodeQueue parse(std::string::const_iterator begin, std::string::const_iterator end);
+        NodeQueue parse(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 
-        NodeQueue parseBlocks(std::string::const_iterator begin, std::string::const_iterator end);
+        NodeQueue parseBlocks(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 
         std::unordered_map<std::string, std::shared_ptr<templates::Node>>
-        collectBlocks(std::string::const_iterator _begin, std::string::const_iterator _end);
+        collectBlocks(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 
         static int tagType(const std::sregex_iterator &tag);
 
@@ -106,7 +106,7 @@ namespace templates {
 
 
         std::tuple<templates::NodeQueue, std::unordered_map<std::string, std::shared_ptr<templates::Node>>>
-        parseIncludes(std::string::const_iterator _begin, std::string::const_iterator _end);
+        parseIncludes(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 
     private:
         std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>

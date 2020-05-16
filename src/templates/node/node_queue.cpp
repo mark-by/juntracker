@@ -2,15 +2,15 @@
 #include <algorithm>
 
 void templates::NodeQueue::render(templates::Context & context) {
-    while (!nodes.empty()) {
-        _result += nodes.front()->render(context);
-        nodes.pop_front();
+    while (!_nodes.empty()) {
+        _result += _nodes.front()->render(context);
+        _nodes.pop_front();
     }
 }
 
 void templates::NodeQueue::renderLoaded(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded) {
-    while (!nodes.empty()) {
-        auto type = nodes.front()->type();
+    while (!_nodes.empty()) {
+        auto type = _nodes.front()->type();
         if (type == TEXTNODE) {
             renderText();
         } else {
@@ -21,19 +21,19 @@ void templates::NodeQueue::renderLoaded(std::unordered_map<std::string, std::sha
 
 void templates::NodeQueue::renderText() {
     templates::Context context;
-    _result += nodes.front()->render(context);
-    nodes.pop_front();
+    _result += _nodes.front()->render(context);
+    _nodes.pop_front();
 }
 
 void templates::NodeQueue::renderLoadedNode(std::unordered_map<std::string, std::shared_ptr<Node>> & loaded) {
-    std::string TagName = nodes.front()->name();
+    std::string TagName = _nodes.front()->name();
     templates::Context context;
     if (loaded[TagName]) {
         _result += loaded[TagName]->render(context);
     } else {
-        _result += nodes.front()->render(context);
+        _result += _nodes.front()->render(context);
     }
-    nodes.pop_front();
+    _nodes.pop_front();
 }
 
 std::string templates::NodeQueue::result() const {
@@ -41,22 +41,22 @@ std::string templates::NodeQueue::result() const {
 }
 
 void templates::NodeQueue::push(std::shared_ptr<templates::Node> ptr) {
-    nodes.push_back(std::move(ptr));
+    _nodes.push_back(std::move(ptr));
 }
 
 bool templates::NodeQueue::empty() const {
-    return nodes.empty();
+    return _nodes.empty();
 }
 
 std::shared_ptr<templates::Node> templates::NodeQueue::front() const {
-    return nodes.front();
+    return _nodes.front();
 }
 
 size_t templates::NodeQueue::size() const {
-    return nodes.size();
+    return _nodes.size();
 }
 
 void templates::NodeQueue::pop() {
-    nodes.pop_front();
+    _nodes.pop_front();
 }
 
