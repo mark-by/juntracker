@@ -22,26 +22,6 @@ std::string Teacher::get_surname(int t_id) const {
     return t_surname;
 }
 
-//std::vector<Course> Teacher::get_courses(int t_id) const {
-//    std::string query = "SELECT * FROM course WHERE id='" + std::to_string(t_id) + "';";
-//    PGresult *result = nullptr;
-//    if (!postgres.query(query, &result)) {
-//        throw std::exception();
-//    }
-//
-//    std::vector<Course> courses(0);
-//    for (int i = 0; i < PQntuples(result); i++) {
-//        int c_id = atoi(PQgetvalue(result, i, 0));
-//        std::string c_name = std::string(PQgetvalue(result, i, 1));
-//        int c_price = atoi(PQgetvalue(result, i, 2));
-//        std::string c_start_date = std::string(PQgetvalue(result, i, 3));
-//        std::string c_end_date = std::string(PQgetvalue(result, i, 4));
-//        auto res_course = Course(c_id, c_name, c_price,c_start_date, c_end_date);
-//        courses.push_back(res_course);
-//    }
-//    return courses;
-//}
-
 Teacher Teacher::get_teacher(int t_id) const {
     std::string query = "SELECT * FROM teacher WHERE id=" + std::to_string(t_id) + ";";
     PGresult *result = nullptr;

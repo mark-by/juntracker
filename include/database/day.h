@@ -10,17 +10,17 @@ class Day {
  public:
     Day(SqlWrapper& postgres)
         : postgres(postgres) {}
-    explicit Day(int id, std::string& week_day, std::string& date, std::vector<Lesson>& lessons)
+    explicit Day(int id, std::string& week_day, std::string& date, int lesson_id)
         : id(id)
         , week_day(week_day)
         , date(date)
-        , lessons(lessons) {}
+        , lesson_id(lesson_id) {}
 
  private:
     int id;
     std::string week_day;
     std::string date;
-    std::vector<Lesson> lessons;
+    int lesson_id;
 
     SqlWrapper postgres;
 };

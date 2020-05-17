@@ -9,14 +9,15 @@
 
 class Lesson {
 public:
-//    Lesson(SqlWrapper& postgres)
-//        : postgres(postgres) {}
+    Lesson(SqlWrapper& postgres)
+        : postgres(postgres) {}
 
-    explicit Lesson(int id, int cabinet, Teacher tutor, std::vector<Student>& students,
+    explicit Lesson(int id, std::string& title, int cabinet, int teacher_id, std::vector<Student>& students,
             std::pair<int, int>& start_time, std::pair<int, int>& end_time)
             : id(id)
+            , title(title)
             , cabinet(cabinet)
-            , tutor(tutor)
+            , teacher_id(teacher_id)
             , students(students)
             , start_time(start_time)
             , end_time(end_time) {}
@@ -24,8 +25,9 @@ public:
 
  private:
     int id;
+    std::string title;
     int cabinet;
-    Teacher tutor;
+    int teacher_id;
     std::vector<Student> students;
     std::pair<int, int> start_time;
     std::pair<int, int> end_time;
