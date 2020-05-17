@@ -112,12 +112,12 @@ namespace templates {
         std::tuple<std::string::const_iterator, std::shared_ptr<templates::Node>>
         parseNode(const std::sregex_iterator &tag);
 
-        BlockParser blockParser;
-        TextParser textParser;
-        IfParser ifParser;
-        ForParser forParser;
-        VarParser varParser;
-        IncludeParser includeParser;
+        BlockParser _blockParser;
+        TextParser _textParser;
+        IfParser _ifParser;
+        ForParser _forParser;
+        VarParser _varParser;
+        IncludeParser _includeParser;
     };
 }
 

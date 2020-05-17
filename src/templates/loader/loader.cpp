@@ -36,12 +36,12 @@ void templates::Loader::load(const std::string &filename) {
     } else {
         boost::filesystem::path extendPath = mainPath.branch_path().append(exFileName);
         std::string exFile = fileToStr(extendPath);
-        auto blocks = parser.collectBlocks(mainFile.cbegin(), mainFile.cend());
-        auto textBlockQueue = parser.parseBlocks(exFile.cbegin(), exFile.cend());
+        auto blocks = _parser.collectBlocks(mainFile.cbegin(), mainFile.cend());
+        auto textBlockQueue = _parser.parseBlocks(exFile.cbegin(), exFile.cend());
         textBlockQueue.renderLoaded(blocks);
         _result = textBlockQueue.result();
     }
-    auto [textIncludeQueue, includes] = parser.parseIncludes(_result.cbegin(), _result.cend());
+    auto [textIncludeQueue, includes] = _parser.parseIncludes(_result.cbegin(), _result.cend());
     if (!includes.empty()) {
         fillIncludes(includes);
         textIncludeQueue.renderLoaded(includes);

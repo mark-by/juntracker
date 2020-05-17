@@ -24,7 +24,7 @@ namespace templates {
         boost::filesystem::path _templatesPath;
         boost::filesystem::path _includesPath;
         std::string _result;
-        templates::Parser parser;
+        templates::Parser _parser;
     };
 }
 
