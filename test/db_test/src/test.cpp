@@ -6,7 +6,7 @@
 
 #include <string>
 
-const char* conninfo = "host=localhost port=5432 dbname=jun_tracker user=amavrin password=root";
+const char* conninfo = "host=localhost port=5432 dbname=test_tracker user=amavrin password=root";
 PGconn *conn = PQconnectdb(conninfo);
 SqlWrapper postgres(conn);
 
@@ -126,13 +126,6 @@ TEST(DataBase, CourseTest2) {
     EXPECT_EQ(deletion, 0);
 }
 
-TEST(DataBase, TeacherTest) {
-    const int t_id = 2;
-    Teacher teacher(postgres);
-    std::string c_name = teacher.get_course(t_id);
-    EXPECT_EQ(c_name, "python programming");
-}
-
 TEST(DataBase, TeacherTest2) {
     int t_id = 2;
     Teacher teacher(postgres);
@@ -161,7 +154,7 @@ TEST(DataBase, StudentTest2) {
     std::string s_surname = "Voronin";
     int s_age = 14;
     std::string s_description = "sambo";
-    Student student_add(s_id, s_name, s_surname, s_age, s_description);
+    Student student_add(s_id, s_name, s_surname, s_age);
     int insertion = student.add_student(student_add);
     EXPECT_EQ(insertion, 0);
     int deletion = student.delete_student(s_id);
