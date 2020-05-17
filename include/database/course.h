@@ -1,5 +1,5 @@
-#ifndef _COURSE_H_
-#define _COURSE_H_
+#ifndef INCLUDE_DATABASE_COURSE_H_
+#define INCLUDE_DATABASE_COURSE_H_
 
 #include <string>
 #include <utility>
@@ -9,8 +9,6 @@
 
 #include "teacher.h"
 #include "student.h"
-
-#include "sql_wrapper.h"
 
 class Course {
  public:
@@ -26,7 +24,8 @@ class Course {
     [[nodiscard]] Teacher get_teacher(const std::string& course_name) const;
     [[nodiscard]] int get_price(const std::string& course_name) const;
     int set_price(int price, const std::string& course_name);
-    std::vector<Student> get_student_list(const std::string& course_name);
+    [[nodiscard]] std::vector<Student> get_student_list(const std::string& course_name) const;
+    [[nodiscard]] std::vector<Course> get_courses_by_teacher(int t_id);
 
     [[nodiscard]] Course get_course(int c_id) const;
     [[nodiscard]] int add_course(const Course& course) const;
@@ -42,4 +41,4 @@ class Course {
     SqlWrapper postgres;
 };
 
-#endif  // _COURSE_H_
+#endif  // INCLUDE_DATABASE_COURSE_H_

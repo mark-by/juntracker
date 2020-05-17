@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "lesson.h"
-#include "sql_wrapper.h"
 
 class Day {
  public:

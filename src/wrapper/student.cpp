@@ -34,7 +34,7 @@ int Student::get_age(int s_id) const {
 }
 
 std::string Student::get_course(int s_id) const {
-    std::string query = "SELECT course_id FROM student WHERE id='" + std::to_string(s_id) + "';";
+    std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();

@@ -36,8 +36,8 @@ int main(int argc, char* argv[]) {
     auto price = course.get_price("python programming");
     std::cout << price << std::endl;
     auto students = course.get_student_list("sambo");
-    Teacher t(postgres);
-    std::cout << t.get_course(1)<< std::endl;
+//    Teacher t(postgres);
+//    std::cout << course.get_courses_by_teacher(1)<< std::endl;
     Student s(postgres);
     std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
     User u(postgres);

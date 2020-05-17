@@ -1,5 +1,5 @@
-#ifndef _STUDENT_H_
-#define _STUDENT_H_
+#ifndef INCLUDE_DATABASE_STUDENT_H_
+#define INCLUDE_DATABASE_STUDENT_H_
 
 #include <string>
 #include <vector>
@@ -7,7 +7,6 @@
 #include <sstream>
 
 #include "person.h"
-#include "course.h"
 
 class Student : public Person {
  public:
@@ -39,4 +38,4 @@ class Student : public Person {
     SqlWrapper postgres;
 };
 
-#endif  // STUDENT_H_
+#endif  // INCLUDE_DATABASE_STUDENT_H_
