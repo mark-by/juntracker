@@ -2,6 +2,7 @@
 
 std::string User::get_status(int u_id) const {
     std::string query = "SELECT status FROM users WHERE id='" + std::to_string(u_id) + "';";
+    std::cout << query << "\n";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();

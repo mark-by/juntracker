@@ -43,9 +43,9 @@ int main(int argc, char* argv[]) {
     User u(postgres);
     std::cout << u.get_status(11) << std::endl;
     Visit v(postgres);
-    std::cout << v.get_course_id(11) << std::endl;
+    std::cout << v.get_course_id(7) << std::endl;
     Payment p(postgres);
-    std::cout << p.get_course_id(11) << std::endl;
+    std::cout << p.get_course_id(8) << std::endl;
     PaymentHistory ph(postgres);
     auto payments = ph.get_payments_by_course(1);
     for (const auto&  pay : payments) {
@@ -58,11 +58,19 @@ int main(int argc, char* argv[]) {
         std::cout << visit.return_course_id() << " ";
     }
     std::cout << std::endl;
-//    Lesson l(postgres);
+    Lesson l(postgres);
+    l.get_students(5);
     Schedule sh(postgres);
     sh.get_schedule_by_student(1);
     sh.get_schedule_by_course(3);
     sh.get_schedule_by_teacher(4);
+    Day d(postgres);
+    std::cout << d.get_weekday("2020-02-06") << std::endl;
+    std::string l_weekday = "thirsday";
+    std::string l_start = "17:30";
+    std::string l_end = "19:00";
+    Lesson ins_lesson = Lesson(10, 3, 5, 2, l_weekday, l_start, l_end, 4);
+
     std::cout << "*** It compiles ***" << std::endl;
     return 0;
 }

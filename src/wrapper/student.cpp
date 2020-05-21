@@ -63,8 +63,8 @@ Student Student::get_student(int s_id) const {
 
 int Student::add_student(const Student& student) const {
     std::ostringstream s;
-    s << "INSERT INTO student VALUES (" << std::to_string(student.id) << ", "
-      << student.name << ", " << student.surname << ", "
+    s << "INSERT INTO student VALUES (" << std::to_string(student.id) << ", '"
+      << student.name << "', '" << student.surname << "', "
       << std::to_string(student.age) << ");";
 
     std::string query = s.str();
