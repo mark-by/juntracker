@@ -1,10 +1,6 @@
 #ifndef _PAYMENT_H_
 #define _PAYMENT_H_
 
-#include <string>
-#include <iostream>
-#include <sstream>
-
 #include "sql_wrapper.h"
 
 class Payment {

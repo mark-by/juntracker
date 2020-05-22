@@ -1,7 +1,6 @@
 #ifndef PROJECT_INCLUDE_SQL_WRAPPER_H_
 #define PROJECT_INCLUDE_SQL_WRAPPER_H_
 
-//#include <postgresql/libpq-fe.h>
 #include "abstract_db.h"
 
 #include <functional>
@@ -10,6 +9,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <sstream>
 
 class SqlWrapper : public Database {
 private:

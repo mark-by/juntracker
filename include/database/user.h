@@ -17,6 +17,9 @@ class User {
             , status(status) {}
 
     std::string get_status(int u_id) const;
+    User get_user(int u_id) const;
+    int add_user(const User& user) const;
+    int delete_user(int u_id) const;
 
  private: 
     int id;
