@@ -36,13 +36,12 @@ void Connection::doRead(const boost::system::error_code& error,
         }
 
         // big switch to choose api for request
-        std::string response_string("<html>hello World!</html>");
-        Response response_(response_string);
+        std::string response_string(handler_.customer(request_));
 
         async::async_write(socket_,
                 async::buffer(
-                        response_.str().c_str(),
-                        response_.str().max_size()
+                        response_string,
+                        response_string.max_size()
                         ),
                         boost::bind(&Connection::doWrite, shared_from_this(),
                             async::placeholders::error));
