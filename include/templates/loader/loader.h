@@ -12,19 +12,19 @@ namespace templates {
         explicit Loader(const std::string &settingsPath = "settings");
 
         void load(const std::string &filename);
-        std::string result();
+        std::string result() const;
 
     private:
         void fillIncludes(std::unordered_map<std::string, std::shared_ptr<templates::Node>> & includes);
 
-        std::string fileToStr(const boost::filesystem::path & filePath);
+        static std::string fileToStr(const boost::filesystem::path & filePath) ;
 
-        std::string extendFileName(const std::string &file_str);
+        static std::string extendFileName(const std::string &file_str) ;
 
-        boost::filesystem::path templatesPath;
-        boost::filesystem::path includesPath;
+        boost::filesystem::path _templatesPath;
+        boost::filesystem::path _includesPath;
         std::string _result;
-        templates::Parser parser;
+        templates::Parser _parser;
     };
 }
 

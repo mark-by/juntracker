@@ -1,5 +1,4 @@
 #include <loader/loader.h>
-#include <fstream>
 #include <parser/re_tags.h>
 #include <sys/mman.h>
 #include <fcntl.h>
@@ -12,10 +11,10 @@ templates::Loader::Loader(const std::string &settingsPath)  {
         auto settingsJSON = fileToStr(path);
         templates::Context settings(settingsJSON);
         boost::filesystem::path projectPath = settings.get<std::string>("PROJECT_PATH");
-        templatesPath = projectPath;
-        includesPath = projectPath;
-        templatesPath.append(settings.get<std::string>("TEMPLATES_PATH"));
-        includesPath.append(settings.get<std::string>("INCLUDES_PATH"));
+        _templatesPath = projectPath;
+        _includesPath = projectPath;
+        _templatesPath.append(settings.get<std::string>("TEMPLATES_PATH"));
+        _includesPath.append(settings.get<std::string>("INCLUDES_PATH"));
     } catch (const boost::filesystem::filesystem_error& error) {}
 }
 
@@ -29,7 +28,7 @@ std::string templates::Loader::fileToStr(const boost::filesystem::path & filePat
 }
 
 void templates::Loader::load(const std::string &filename) {
-    boost::filesystem::path mainPath = templatesPath.append(filename);
+    boost::filesystem::path mainPath = _templatesPath.append(filename);
     std::string mainFile = fileToStr(mainPath);
     std::string exFileName = extendFileName(mainFile);
     if (exFileName.empty()) {
@@ -37,12 +36,12 @@ void templates::Loader::load(const std::string &filename) {
     } else {
         boost::filesystem::path extendPath = mainPath.branch_path().append(exFileName);
         std::string exFile = fileToStr(extendPath);
-        auto blocks = parser.collectBlocks(mainFile.cbegin(), mainFile.cend());
-        auto textBlockQueue = parser.parseBlocks(exFile.cbegin(), exFile.cend());
+        auto blocks = _parser.collectBlocks(mainFile.cbegin(), mainFile.cend());
+        auto textBlockQueue = _parser.parseBlocks(exFile.cbegin(), exFile.cend());
         textBlockQueue.renderLoaded(blocks);
         _result = textBlockQueue.result();
     }
-    auto [textIncludeQueue, includes] = parser.parseIncludes(_result.cbegin(), _result.cend());
+    auto [textIncludeQueue, includes] = _parser.parseIncludes(_result.cbegin(), _result.cend());
     if (!includes.empty()) {
         fillIncludes(includes);
         textIncludeQueue.renderLoaded(includes);
@@ -54,13 +53,13 @@ void templates::Loader::load(const std::string &filename) {
 void templates::Loader::fillIncludes(std::unordered_map<std::string, std::shared_ptr<templates::Node>> & includes) {
     templates::TextParser textParser;
     for (auto & pair : includes) {
-        auto includeStr = fileToStr(includesPath.append(pair.first));
+        auto includeStr = fileToStr(_includesPath.append(pair.first));
         textParser.set(includeStr.cbegin(), includeStr.cend());
         pair.second = textParser.parse();
     }
 }
 
-std::string templates::Loader::result() {
+std::string templates::Loader::result() const {
     return _result;
 }
 

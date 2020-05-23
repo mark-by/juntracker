@@ -2,6 +2,13 @@
 
 {% block title %}JunTracker | Окно Администратора{% endblock %}
 
+{% block hiddenMenu %}
+<a class="menu__option" href="studentsAdmin.html">База учеников</a>
+<a class="menu__option" href="scheduleAdmin.html">Расписание</a>
+<a class="menu__option" href="diaryAdmin.html">Журнал</a>
+<a class="menu__option" href="financeAdmin.html">Финансы</a>
+{% endblock %}
+
 {% block main %}
 <main class="administrator-main">
     <div class="card-wrapper schedule">
@@ -55,7 +62,7 @@
                 <form class="lesson__content">
                     {% for child in lesson.children %}
                     <div class="lesson__content_child">
-                        <input type="checkbox" name="child-name"/>
+                        <input type="checkbox" name="child-name" {% if child.isHere %}checked{%endif%}/>
                         <div class="name" data="{{child.isHere}}_{{child.id}}">{{child.name}}</div>
                     </div>
                     {% endfor %}

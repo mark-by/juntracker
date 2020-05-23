@@ -10,15 +10,15 @@ namespace templates {
 
         void render(templates::Context & context);
 
-        std::string result();
+        std::string result() const;
 
         void push(std::shared_ptr<Node> ptr);
 
-        bool empty();
+        bool empty() const;
 
-        std::shared_ptr<Node> front();
+        std::shared_ptr<Node> front() const;
 
-        size_t size();
+        size_t size() const;
 
         void pop();
 
@@ -30,7 +30,7 @@ namespace templates {
 
         void renderLoadedNode(std::unordered_map<std::string, std::shared_ptr<Node>> &loaded);
 
-        std::deque<std::shared_ptr<Node>> nodes;
+        std::deque<std::shared_ptr<Node>> _nodes;
         std::string _result;
     };
 };
