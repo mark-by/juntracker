@@ -1,17 +1,29 @@
 #include <iostream>
-#include "sql_wrapper.h"
+#include <fstream>
+
 #include "course.h"
-#include "teacher.h"
+#include "day.h"
+#include "lesson.h"
+#include "payment.h"
+#include "payment_history.h"
+#include "sql_wrapper.h"
+#include "schedule.h"
 #include "student.h"
+#include "teacher.h"
+#include "user.h"
+#include "visit.h"
+#include "visit_history.h"
 
 int main(int argc, char* argv[]) {
 
-    std::string query;
-
     // Create Connection
-    const char* conninfo = "host=localhost port=5432 dbname=jun_tracker user=amavrin password=root";
-    PGconn *conn = PQconnectdb(conninfo);
+    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
 
+    PGconn *conn = PQconnectdb(conninfo.c_str());
     SqlWrapper postgres(conn);
 
     // Check Connection
@@ -20,31 +32,45 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-//    query = "INSERT INTO teacher VALUES(1, 'Olga', 'Smirnova', 12000, 'playing piano');";
-//    postgres.exec(query);
-
-//    pg_result* result = nullptr;
-//    query = "SELECT teacher_id FROM course WHERE name='sambo';";
-//    if (!postgres.query(query, result)) {
-//        return 1;
-//    }
     Course course(postgres);
-    auto teacher = course.get_teacher("python programming");
+    Teacher teacher = course.get_teacher("python programming");
     std::cout << teacher.return_surname() << std::endl;
     auto price = course.get_price("python programming");
     std::cout << price << std::endl;
     auto students = course.get_student_list("sambo");
+    Student s(postgres);
+    std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
+    User u(postgres);
+    std::cout << u.get_status(11) << std::endl;
+    Visit v(postgres);
+    std::cout << v.get_course_id(7) << std::endl;
+    Payment p(postgres);
+    std::cout << p.get_course_id(8) << std::endl;
+    PaymentHistory ph(postgres);
+    auto payments = ph.get_payments_by_course(1);
+    for (const auto&  pay : payments) {
+        std::cout << pay.return_amount() << " ";
+    }
+    std::cout << std::endl;
+    VisitHistory vh(postgres);
+    auto visits = vh.get_visits_by_course(2);
+    for (const auto&  visit : visits) {
+        std::cout << visit.return_course_id() << " ";
+    }
+    std::cout << std::endl;
+    Lesson l(postgres);
+    l.get_students(5);
+    Schedule sh(postgres);
+    sh.get_schedule_by_student(1);
+    sh.get_schedule_by_course(3);
+    sh.get_schedule_by_teacher(4);
+    Day d(postgres);
+    std::cout << d.get_weekday("2020-02-06") << std::endl;
+    std::string l_weekday = "thirsday";
+    std::string l_start = "17:30";
+    std::string l_end = "19:00";
+    Lesson ins_lesson = Lesson(10, 3, 5, 2, l_weekday, l_start, l_end, 4);
 
-    // Create Data storage object
-//    using HandlerFunc = std::function<void (const ResultSet&)>;
-//    const HandlerFunc handler;
-
-//    if (postgres.is_select(query)) {
-//        postgres.query(query/*, handler*/);
-//    } else {
-//        postgres.exec(query);
-//    }
-
-    std::cout << "It compiles" << std::endl;
+    std::cout << "*** It compiles ***" << std::endl;
     return 0;
 }

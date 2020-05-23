@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "sql_wrapper.h"
+
 class Person {
  public:
     virtual std::string get_name(int id) const = 0;

@@ -1,26 +1,30 @@
-#ifndef _STUDENT_H_
-#define _STUDENT_H_
+#ifndef INCLUDE_DATABASE_STUDENT_H_
+#define INCLUDE_DATABASE_STUDENT_H_
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "person.h"
-#include "sql_wrapper.h"
 
 class Student : public Person {
  public:
-    explicit Student(int id, std::string& name, std::string& surname, int age, std::string& description)
+    Student(SqlWrapper& postgres)
+    : postgres(postgres) {}
+    explicit Student(int id, std::string& name, std::string& surname, int age)
         : id(id)
         , name(name)
         , surname(surname)
-        , age(age)
-        , description(description) {}
+        , age(age) {}
 
-    std::string get_name(int s_id) const override;
-    std::string get_surname(int s_id) const override;
+    [[nodiscard]] std::string get_name(int s_id) const override;
+    [[nodiscard]] std::string get_surname(int s_id) const override;
+    [[nodiscard]] int get_age(int s_id) const;
+    [[nodiscard]] std::string get_course(int s_id) const;
 
-    std::vector<std::string> get_courses() const;
-    void add_course(std::string course);
+    [[nodiscard]] Student get_student(int s_id) const;
+    [[nodiscard]] int add_student(const Student& student) const;
+    [[nodiscard]] int delete_student(int s_id) const;
 
     [[nodiscard]] std::string return_surname() const { return surname; }
 
@@ -29,10 +33,8 @@ class Student : public Person {
     std::string name;
     std::string surname;
     int age;
-//    std::vector<std::string> courses;
-    std::string description;
 
     SqlWrapper postgres;
 };
 
-#endif  // STUDENT_H_
+#endif  // INCLUDE_DATABASE_STUDENT_H_
