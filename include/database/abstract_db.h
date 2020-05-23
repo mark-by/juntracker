@@ -2,12 +2,12 @@
 #define ABSTRACT_DB_H_
 
 #include <string>
+#include <postgresql/libpq-fe.h>
 
 class Database {
-    virtual bool is_select(const std::string& query) const = 0;
-    virtual bool query(const std::string& query, const HandlerFunc& handler) = 0;
-    virtual bool exec(const std::string& query) = 0;
-    virtual bool is_connected() const = 0;
+    virtual bool query(const std::string& query, PGresult** result) const = 0;
+    [[nodiscard]] virtual bool exec(const std::string& query) const = 0;
+    [[nodiscard]] virtual bool is_connected() const = 0;
 };
 
 #endif  // ABSTRACT_DB_H_
