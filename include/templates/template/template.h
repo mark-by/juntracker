@@ -2,20 +2,19 @@
 #define TEMPLATES_TEMPLATE_H
 #include <context/context.h>
 #include <parser/parser.h>
+#include <loader/loader.h>
 #include <node/node.h>
+#include <tuple>
 
 namespace templates {
     class Template {
     public:
-        explicit Template(std::string filename) : filename(filename) {}
-        std::string render(templates::Context context);
+        explicit Template(const std::string &settingsPath = "settings") : _loader(settingsPath) {};
+        std::string render(templates::Context &context);
+        void set(const std::string &filename);
     private:
-        std::string filename;
-        templates::TextParser textParser;
-        templates::VarParser varParser;
-        templates::ForParser forParser;
-        templates::IfParser ifParser;
-        templates::NodeQueue nodeList;
+        Parser _parser;
+        Loader _loader;
     };
 }
 

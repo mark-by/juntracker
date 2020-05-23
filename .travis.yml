@@ -4,10 +4,11 @@ sudo: true
 
 before_install:
     - sudo apt-get install cppcheck valgrind -y
-    - ./ci/install_boost
+    - ./ci/install_dependencies
 script:
     - cppcheck --inconclusive --enable=all --check-config --suppress=missingIncludeSystem -I include src
     - ./ci/configure
     - cd build
     - make test
-    - valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-resolution=med  --track-origins=yes --child-silent-after-fork=yes ./test/run_tests
+    - cd test/templates_test/
+    - valgrind -v --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-resolution=med  --track-origins=yes --child-silent-after-fork=yes ./run_templates_tests

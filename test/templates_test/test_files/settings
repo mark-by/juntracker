@@ -1,0 +1,5 @@
+{
+  "PROJECT_PATH" : "/home/travis/build/test/templates_test/test_files/",
+  "INCLUDES_PATH" : "inc/",
+  "TEMPLATES_PATH" : "templates/"
+}
