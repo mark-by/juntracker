@@ -40,10 +40,8 @@ int main(int argc, char* argv[]) {
     auto students = course.get_student_list("sambo");
     Student s(postgres);
     std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
-    User u(postgres);
-    std::cout << u.get_status(11) << std::endl;
     Visit v(postgres);
-    std::cout << v.get_course_id(7) << std::endl;
+    std::cout << v.get_lesson_id(7) << std::endl;
     Payment p(postgres);
     std::cout << p.get_course_id(8) << std::endl;
     PaymentHistory ph(postgres);
@@ -53,9 +51,9 @@ int main(int argc, char* argv[]) {
     }
     std::cout << std::endl;
     VisitHistory vh(postgres);
-    auto visits = vh.get_visits_by_course(2);
+    auto visits = vh.get_visits_by_lesson(2);
     for (const auto&  visit : visits) {
-        std::cout << visit.course_id() << " ";
+        std::cout << visit.student_id() << " ";
     }
     std::cout << std::endl;
     Lesson l(postgres);

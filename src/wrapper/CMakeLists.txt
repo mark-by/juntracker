@@ -8,6 +8,7 @@ set(db_source
         payment.cpp
         payment_history.cpp
         schedule.cpp
+        session.cpp
         sql_wrapper.cpp
         student.cpp
         teacher.cpp

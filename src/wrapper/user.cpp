@@ -1,13 +1,22 @@
 #include "user.h"
 
-std::string User::get_status(int u_id) const {
-    std::string query = "SELECT status FROM users WHERE id='" + std::to_string(u_id) + "';";
+User User::check_or_create(std::string& u_login, std::string& u_password, std::string& u_email) {
+    std::string query = "SELECT id, password, email FROM users WHERE login='" + u_login + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
-    std::string u_status = PQgetvalue(result, 0, 0);
-    return u_status;
+    int res_id = atoi(PQgetvalue(result, 0, 0));
+    std::string res_password = PQgetvalue(result, 0, 1);
+    std::string res_email = PQgetvalue(result, 0, 2);
+    if (res_password == u_password && res_email == u_email ) {
+        return User(res_id, res_email, u_login, res_password);
+    }
+    if (!postgres.query("SELECT COUNT (*) FROM users;", &result)) {
+        throw std::exception();
+    }
+    int next_id = atoi(PQgetvalue(result, 0, 0)) + 1;
+    return User(next_id, res_email, u_login, res_password);
 }
 
 User User::get_user(int u_id) const {
@@ -18,16 +27,15 @@ User User::get_user(int u_id) const {
     }
     std::string u_email = std::string(PQgetvalue(result, 0, 1));
     std::string u_login = std::string(PQgetvalue(result, 0, 2));
-    std::string u_status = std::string(PQgetvalue(result, 0, 3));
-    std::string u_password = std::string(PQgetvalue(result, 0, 4));
-    auto res_user = User(u_id, u_email, u_login, u_status, u_password);
+    std::string u_password = std::string(PQgetvalue(result, 0, 3));
+    auto res_user = User(u_id, u_email, u_login, u_password);
     return res_user;
 }
 
 int User::add_user(const User& user) const {
     std::ostringstream s;
     s << "INSERT INTO users VALUES (" << std::to_string(user.id()) << ", '" << user.email()
-    << "', '" << user.login() << "', '" << user.status() << "', '" << user.password() << "');";
+    << "', '" << user.login() << "', '" << user.password() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
