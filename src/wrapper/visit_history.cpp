@@ -20,7 +20,6 @@ std::vector<Visit> VisitHistory::get_visits_by_student(int s_id) const {
 
 std::vector<Visit> VisitHistory::get_visits_by_lesson(int c_id) const {
     std::string query = "SELECT * FROM visit WHERE lesson_id='" + std::to_string(c_id) + "' and was_in_class=true;";
-    std::cout << query <<std::endl;
         PGresult *result = nullptr;
         if (!postgres.query(query, &result)) {
             throw std::exception();

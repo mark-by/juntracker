@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
+#include <ctime>
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 #include "sql_wrapper.h"
 #include "lesson.h"
@@ -18,7 +21,8 @@ class User {
         , _password(_password) {}
 
     User check_or_create(std::string& u_login, std::string& u_password, std::string& u_email);
-    std::vector<Lesson> get_currentlessons();
+    std::vector<Lesson> get_current_lessons() const;
+    std::vector<Lesson> get_lessons_by_weekday(std::string l_weekday) const;
 
 
     User get_user(int u_id) const;

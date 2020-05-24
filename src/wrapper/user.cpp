@@ -19,6 +19,50 @@ User User::check_or_create(std::string& u_login, std::string& u_password, std::s
     return User(next_id, res_email, u_login, res_password);
 }
 
+std::vector<Lesson> User::get_current_lessons() const {
+    boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
+    std::string curr_weekday = std::string(d.day_of_week().as_short_string());
+    std::string query = "SELECT * FROM lesson WHERE weekday='" + curr_weekday + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::vector<Lesson> res_lesson;
+    for (int i = 0; i < PQntuples(result); i++) {
+        int l_id = atoi(PQgetvalue(result, i, 0));
+        int l_course_id = atoi(PQgetvalue(result, i, 1));
+        int l_cabinet = atoi(PQgetvalue(result, i, 2));
+        int l_teacher_id = atoi(PQgetvalue(result, i, 3));
+        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
+        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
+        int l_day_id = atoi(PQgetvalue(result, i, 7));
+        auto curr_lesson = Lesson(l_id, l_course_id, l_cabinet, l_teacher_id, curr_weekday, l_start_time, l_end_time, l_day_id);
+        res_lesson.push_back(curr_lesson);
+    }
+    return res_lesson;
+}
+
+std::vector<Lesson> User::get_lessons_by_weekday(std::string l_weekday) const {
+    std::string query = "SELECT * FROM lesson WHERE weekday='" + curr_weekday + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::vector<Lesson> res_lesson;
+    for (int i = 0; i < PQntuples(result); i++) {
+        int l_id = atoi(PQgetvalue(result, i, 0));
+        int l_course_id = atoi(PQgetvalue(result, i, 1));
+        int l_cabinet = atoi(PQgetvalue(result, i, 2));
+        int l_teacher_id = atoi(PQgetvalue(result, i, 3));
+        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
+        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
+        int l_day_id = atoi(PQgetvalue(result, i, 7));
+        auto curr_lesson = Lesson(l_id, l_course_id, l_cabinet, l_teacher_id, l_weekday, l_start_time, l_end_time, l_day_id);
+        res_lesson.push_back(curr_lesson);
+    }
+    return res_lesson;
+}
+
 User User::get_user(int u_id) const {
     std::string query = "SELECT * FROM users WHERE id=" + std::to_string(u_id) + ";";
     PGresult *result = nullptr;

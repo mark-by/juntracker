@@ -6,8 +6,9 @@
 #include "lesson.h"
 #include "payment.h"
 #include "payment_history.h"
-#include "sql_wrapper.h"
 #include "schedule.h"
+#include "session.h"
+#include "sql_wrapper.h"
 #include "student.h"
 #include "teacher.h"
 #include "user.h"
@@ -40,6 +41,8 @@ int main(int argc, char* argv[]) {
     auto students = course.get_student_list("sambo");
     Student s(postgres);
     std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
+    User u(postgres);
+    u.get_current_lessons();
     Visit v(postgres);
     std::cout << v.get_lesson_id(7) << std::endl;
     Payment p(postgres);
