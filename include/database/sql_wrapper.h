@@ -20,9 +20,9 @@ public:
     explicit SqlWrapper(PGconn *conn);
     ~SqlWrapper();
 
-    bool query(const std::string& query, PGresult** result) const override ;
-    [[nodiscard]] bool exec(const std::string& query) const override ;
-    [[nodiscard]] bool is_connected() const override ;
+    bool query(const std::string& query, PGresult** result) const override;
+    [[nodiscard]] bool exec(const std::string& query) const override;
+    [[nodiscard]] bool is_connected() const override;
 };
 
 #endif  // PROJECT_INCLUDE_SQL_WRAPPER_H_

@@ -11,11 +11,11 @@ class Student : public Person {
  public:
     Student(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Student(int id, std::string& name, std::string& surname, int age)
-        : id(id)
-        , name(name)
-        , surname(surname)
-        , age(age) {}
+    explicit Student(int _id, std::string& _name, std::string& _surname, int _age)
+        : _id(_id)
+        , _name(_name)
+        , _surname(_surname)
+        , _age(_age) {}
 
     [[nodiscard]] std::string get_name(int s_id) const override;
     [[nodiscard]] std::string get_surname(int s_id) const override;
@@ -26,13 +26,16 @@ class Student : public Person {
     [[nodiscard]] int add_student(const Student& student) const;
     [[nodiscard]] int delete_student(int s_id) const;
 
-    [[nodiscard]] std::string return_surname() const { return surname; }
+    [[nodiscard]] int id() const override { return _id; }
+    [[nodiscard]] std::string name() const override { return _name; }
+    [[nodiscard]] std::string surname() const override { return _surname; }
+    [[nodiscard]] int age() const { return _age; }
 
  private:
-    int id;
-    std::string name;
-    std::string surname;
-    int age;
+    int _id;
+    std::string _name;
+    std::string _surname;
+    int _age;
 
     SqlWrapper postgres;
 };

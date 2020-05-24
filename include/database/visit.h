@@ -10,25 +10,29 @@ class Visit {
  public:
     Visit(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Visit(int id, int student_id, int course_id, int lesson_id)
-            : id(id)
-            , student_id(student_id)
-            , course_id(course_id)
-            , lesson_id(lesson_id) {}
+    explicit Visit(int _id, int _student_id, int _course_id, int _lesson_id)
+            : _id(_id)
+            , _student_id(_student_id)
+            , _course_id(_course_id)
+            , _lesson_id(_lesson_id) {}
 
     int get_student_id(int v_id) const;
     int get_course_id(int v_id) const;
-    int return_course_id() const { return course_id; }
 
     Visit get_visit(int v_id) const;
     int add_visit(const Visit& visit) const;
     int delete_visit(int v_id) const;
 
+    [[nodiscard]] int id() const { return _id; }
+    [[nodiscard]] int student_id() const { return _student_id; }
+    [[nodiscard]] int course_id() const { return _course_id; }
+    [[nodiscard]] int lesson_id() const { return _lesson_id; }
+
  private: 
-    int id;
-    int student_id;
-    int course_id;
-    int lesson_id;
+    int _id;
+    int _student_id;
+    int _course_id;
+    int _lesson_id;
 
     SqlWrapper postgres;
 };

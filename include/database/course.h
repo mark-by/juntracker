@@ -14,12 +14,12 @@ class Course {
  public:
     Course(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Course(int id, std::string& name, int price, std::string& start_date, std::string& end_date)
-        : id(id)
-        , name(name)
-        , price(price)
-        , start_date(start_date)
-        , end_date(end_date) {}
+    explicit Course(int _id, std::string& _name, int _price, std::string& _start_date, std::string& _end_date)
+        : _id(_id)
+        , _name(_name)
+        , _price(_price)
+        , _start_date(_start_date)
+        , _end_date(_end_date) {}
 
     [[nodiscard]] Teacher get_teacher(const std::string& course_name) const;
     [[nodiscard]] int get_price(const std::string& course_name) const;
@@ -31,12 +31,18 @@ class Course {
     [[nodiscard]] int add_course(const Course& course) const;
     [[nodiscard]] int delete_course(int c_id) const;
 
+    [[nodiscard]] int id() const { return  _id; }
+    [[nodiscard]] std::string name() const { return  _name; }
+    [[nodiscard]] int price() const { return  _price; }
+    [[nodiscard]] std::string start_date() const { return  _start_date; }
+    [[nodiscard]] std::string end_date() const { return  _end_date; }
+
  private:
-    int id;
-    std::string name;
-    int price;
-    std::string start_date;
-    std::string end_date;
+    int _id;
+    std::string _name;
+    int _price;
+    std::string _start_date;
+    std::string _end_date;
 
     SqlWrapper postgres;
 };

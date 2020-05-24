@@ -38,9 +38,9 @@ Teacher Teacher::get_teacher(int t_id) const {
 
 int Teacher::add_teacher(const Teacher& teacher) const {
     std::ostringstream s;
-    s << "INSERT INTO teacher VALUES (" << std::to_string(teacher.id) << ", '"
-      << teacher.name << "', '" << teacher.surname << "', "
-      << std::to_string(teacher.salary) << ", '" << teacher.description << "');";
+    s << "INSERT INTO teacher VALUES (" << std::to_string(teacher.id()) << ", '"
+      << teacher.name() << "', '" << teacher.surname() << "', "
+      << std::to_string(teacher.salary()) << ", '" << teacher.description() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

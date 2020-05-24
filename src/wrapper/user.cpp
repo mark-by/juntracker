@@ -19,14 +19,15 @@ User User::get_user(int u_id) const {
     std::string u_email = std::string(PQgetvalue(result, 0, 1));
     std::string u_login = std::string(PQgetvalue(result, 0, 2));
     std::string u_status = std::string(PQgetvalue(result, 0, 3));
-    auto res_user = User(u_id, u_email, u_login, u_status);
+    std::string u_password = std::string(PQgetvalue(result, 0, 4));
+    auto res_user = User(u_id, u_email, u_login, u_status, u_password);
     return res_user;
 }
 
 int User::add_user(const User& user) const {
     std::ostringstream s;
-    s << "INSERT INTO users VALUES (" << std::to_string(user.id) << ", '"
-      << user.email << "', '" << user.login << "', '" << user.status << "');";
+    s << "INSERT INTO users VALUES (" << std::to_string(user.id()) << ", '" << user.email()
+    << "', '" << user.login() << "', '" << user.status() << "', '" << user.password() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

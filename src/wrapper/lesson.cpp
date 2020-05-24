@@ -77,11 +77,11 @@ Lesson Lesson::get_lesson(int l_id) const {
 
 int Lesson::add_lesson(const Lesson& lesson) const {
     std::ostringstream s;
-    s << "INSERT INTO lesson VALUES (" << std::to_string(lesson.id) << ", "
-      << std::to_string(lesson.course_id) << ", " << std::to_string(lesson.cabinet) << ", "
-      << std::to_string(lesson.teacher_id) << ", '" << lesson.weekday << "', '"
-      << lesson.start_time << "', '" << lesson.end_time << "', "
-      << std::to_string(lesson.day_id) << ");";
+    s << "INSERT INTO lesson VALUES (" << std::to_string(lesson.id()) << ", "
+      << std::to_string(lesson.course_id()) << ", " << std::to_string(lesson.cabinet()) << ", "
+      << std::to_string(lesson.teacher_id()) << ", '" << lesson.weekday() << "', '"
+      << lesson.start_time() << "', '" << lesson.end_time() << "', "
+      << std::to_string(lesson.day_id()) << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

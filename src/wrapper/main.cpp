@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 
     Course course(postgres);
     Teacher teacher = course.get_teacher("python programming");
-    std::cout << teacher.return_surname() << std::endl;
+    std::cout << teacher.surname() << std::endl;
     auto price = course.get_price("python programming");
     std::cout << price << std::endl;
     auto students = course.get_student_list("sambo");
@@ -49,13 +49,13 @@ int main(int argc, char* argv[]) {
     PaymentHistory ph(postgres);
     auto payments = ph.get_payments_by_course(1);
     for (const auto&  pay : payments) {
-        std::cout << pay.return_amount() << " ";
+        std::cout << pay.amount() << " ";
     }
     std::cout << std::endl;
     VisitHistory vh(postgres);
     auto visits = vh.get_visits_by_course(2);
     for (const auto&  visit : visits) {
-        std::cout << visit.return_course_id() << " ";
+        std::cout << visit.course_id() << " ";
     }
     std::cout << std::endl;
     Lesson l(postgres);

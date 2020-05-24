@@ -49,7 +49,7 @@ std::string Student::get_course(int s_id) const {
 }
 
 Student Student::get_student(int s_id) const {
-    std::string query = "SELECT * FROM student WHERE id=" + std::to_string(id) + ";";
+    std::string query = "SELECT * FROM student WHERE id=" + std::to_string(s_id) + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -63,9 +63,9 @@ Student Student::get_student(int s_id) const {
 
 int Student::add_student(const Student& student) const {
     std::ostringstream s;
-    s << "INSERT INTO student VALUES (" << std::to_string(student.id) << ", '"
-      << student.name << "', '" << student.surname << "', "
-      << std::to_string(student.age) << ");";
+    s << "INSERT INTO student VALUES (" << std::to_string(student.id()) << ", '"
+      << student.name() << "', '" << student.surname() << "', "
+      << std::to_string(student.age()) << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

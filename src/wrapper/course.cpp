@@ -105,9 +105,9 @@ Course Course::get_course(int c_id) const {
 
 int Course::add_course(const Course& course) const {
     std::ostringstream s;
-    s << "INSERT INTO course VALUES (" << std::to_string(course.id) << ", '"
-      << course.name << "', " << std::to_string(course.price) << ", '"
-      << course.start_date << "', '" << course.end_date << "');";
+    s << "INSERT INTO course VALUES (" << std::to_string(course.id()) << ", '"
+      << course.name() << "', " << std::to_string(course.price()) << ", '"
+      << course.start_date() << "', '" << course.end_date() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
