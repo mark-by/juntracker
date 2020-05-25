@@ -41,3 +41,4 @@ int Day::delete_day(int d_id) const {
     }
     return 0;
 }
+

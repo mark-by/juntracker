@@ -1,24 +1,22 @@
-//
-// Created by timofei on 14.04.2020.
-//
-
 #include "../../include/core/AdminAPI.h"
+#include <day.h>
+#include <context/context.h>
 
-AdminAPI::AdminAPI() {}
+std::string AdminAPI::getMainPage(const std::string &str) {
+    templates::Context context;
 
-/*std::string AdminAPI::getMainPage(const std::string &str) {
 
-}*/
+}
 
 int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &group) {
     if (group.empty()) {
         return -1;
     }
 
-    std::string course = group["course"];
-    std::string date = group["date"];
+    std::string course = group.at("course");
+    std::string date = group.at("date");
 
-    std::unordered_map<std::string, std::string>::iterator it = group.begin();
+    auto it = group.begin();
 
     for (int i = 0; it < group.end(); i++, it++) {
         if (it->first != "lesson" && it->first != "date" ) {
@@ -79,13 +77,27 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
     return 0;
 }
 
-/*std::string AdminAPI::getStudentsBy(std::unordered_map<std::string, std::string>) {
-
+std::string AdminAPI::getStudentsBy(std::unordered_map<std::string, std::string>) {
+    return std::string();
 }
 
 std::string AdminAPI::getPageStudents(int) {
 
-}*/
+}
+
+int AdminAPI::addCourse(const std::string &) {
+    return 0;
+}
+
+int AdminAPI::deleteCourse(const std::string &) {
+    return 0;
+}
+
+std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
+    return std::string();
+}
+
+*/
 
 int addCourse(const std::string &str) {
     if (str.empty()) {
