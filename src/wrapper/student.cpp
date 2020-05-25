@@ -33,21 +33,6 @@ int Student::get_age(int s_id) const {
     return s_age;
 }
 
-std::string Student::get_course(int s_id) const {
-    std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string c_id = PQgetvalue(result, 0, 0);
-    query = "SELECT name FROM course WHERE id=" + c_id + ";";
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string c_name = PQgetvalue(result, 0, 0);
-    return c_name;
-}
-
 Student Student::get_student(int s_id) const {
     std::string query = "SELECT * FROM student WHERE id=" + std::to_string(s_id) + ";";
     PGresult *result = nullptr;

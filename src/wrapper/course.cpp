@@ -69,6 +69,29 @@ std::vector<Student> Course::get_student_list(const std::string& course_name) co
     return students;
 }
 
+std::vector<Course> Course::get_courses_by_student(int s_id) {
+    std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::vector<Course> res_courses;
+    for (int i = 0; i < PQntuples(result); i++) {
+        int c_id = atoi(PQgetvalue(result, i, 0));
+        query = "SELECT * FROM course WHERE id=" + std::to_string(c_id) + ";";
+        if (!postgres.query(query, &result)) {
+            throw std::exception();
+        }
+        std::string c_name = std::string(PQgetvalue(result, 0, 1));
+        int c_price = atoi(PQgetvalue(result, 0, 2));
+        std::string c_start_date = PQgetvalue(result, 0, 3);
+        std::string c_end_date = PQgetvalue(result, 0, 4);
+        auto res_course = Course(c_id, c_name, c_price, c_start_date, c_end_date);
+        res_courses.push_back(res_course);
+    }
+    return res_courses;
+}
+
 std::vector<Course> Course::get_courses_by_teacher(int t_id) {
     std::string query = "SELECT * FROM course WHERE id='" + std::to_string(t_id) + "';";
     PGresult *result = nullptr;

@@ -43,7 +43,7 @@ std::vector<Lesson> User::get_current_lessons() const {
 }
 
 std::vector<Lesson> User::get_lessons_by_weekday(std::string l_weekday) const {
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + curr_weekday + "';";
+    std::string query = "SELECT * FROM lesson WHERE weekday='" + l_weekday + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();

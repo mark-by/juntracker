@@ -48,14 +48,49 @@ Teacher Lesson::get_teacher(int l_id) const {
     return res_teacher;
 }
 
-std::string Lesson::get_weekday(std::string d_date) const {
-    std::string query = "SELECT weekday FROM day WHERE date='" + d_date + "';";
+std::string Lesson::get_title(int l_id) const {
+    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(l_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int c_id = atoi(PQgetvalue(result, 0, 0));
+    query = "SELECT name FROM course WHERE id=" + std::to_string(c_id) + ";";
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::string c_name = std::string(PQgetvalue(result, 0, 1));
+    return c_name;
+}
+
+std::string Lesson::get_weekday(int l_id) const {
+    std::string query = "SELECT weekday FROM lesson WHERE id='" + std::to_string(l_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::string res_weekday = PQgetvalue(result, 0, 0);
     return res_weekday;
+}
+
+std::string Lesson::get_start(int l_id) const {
+    std::string query = "SELECT start_time FROM lesson WHERE id='" + std::to_string(l_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::string res_start = PQgetvalue(result, 0, 0);
+    return res_start;
+}
+
+std::string Lesson::get_end(int l_id) const {
+    std::string query = "SELECT end_time FROM lesson WHERE id='" + std::to_string(l_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::string res_end = PQgetvalue(result, 0, 0);
+    return res_end;
 }
 
 Lesson Lesson::get_lesson(int l_id) const {

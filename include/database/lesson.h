@@ -24,10 +24,13 @@ public:
             , _day_id(_day_id) {}
 
     std::vector<Student> get_students(int l_id) const;
-    Teacher get_teacher(int l_id) const;
-    std::string get_weekday(std::string d_date) const;
+    [[nodiscard]] Teacher get_teacher(int l_id) const;
+    [[nodiscard]] std::string get_title(int l_id) const;
+    [[nodiscard]] std::string get_weekday(int l_id) const;
+    [[nodiscard]] std::string get_start(int l_id) const;
+    [[nodiscard]] std::string get_end(int l_id) const;
 
-    Lesson get_lesson(int d_id) const;
+    Lesson get_lesson(int l_id) const;
     int add_lesson(const Lesson& day) const;
     int delete_lesson(int d_id) const;
 

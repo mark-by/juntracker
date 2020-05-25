@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     std::cout << price << std::endl;
     auto students = course.get_student_list("sambo");
     Student s(postgres);
-    std::cout << s.get_surname(8) << " " << s.get_course(8)<< std::endl;
+    std::cout << s.get_surname(8) << std::endl;
     User u(postgres);
     u.get_current_lessons();
     Visit v(postgres);
@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl;
     Lesson l(postgres);
     l.get_students(5);
+    std::cout << l.get_weekday(3) << " " << l.get_start(3) << " " << l.get_end(3) << std::endl;
     Schedule sh(postgres);
     sh.get_schedule_by_student(1);
     sh.get_schedule_by_course(3);

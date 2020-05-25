@@ -20,7 +20,6 @@ class Student : public Person {
     [[nodiscard]] std::string get_name(int s_id) const override;
     [[nodiscard]] std::string get_surname(int s_id) const override;
     [[nodiscard]] int get_age(int s_id) const;
-    [[nodiscard]] std::string get_course(int s_id) const;
 
     [[nodiscard]] Student get_student(int s_id) const;
     [[nodiscard]] int add_student(const Student& student) const;
