@@ -36,7 +36,7 @@ void Connection::doRead(const boost::system::error_code& error,
         }
 
         // big switch to choose api for request
-        std::string response_string(handler_.customer(request_));
+        std::string response_string(handler_.admin(request_));
 
         async::async_write(socket_,
                 async::buffer(
