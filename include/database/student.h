@@ -1,25 +1,25 @@
 #ifndef INCLUDE_DATABASE_STUDENT_H_
 #define INCLUDE_DATABASE_STUDENT_H_
 
-#include <string>
-#include <vector>
-#include <iostream>
-
 #include "person.h"
+class Student;
+#include "course.h"
 
 class Student : public Person {
  public:
     Student(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Student(int _id, std::string& _name, std::string& _surname, int _age)
+    explicit Student(int _id, std::string& _name, std::string& _surname, int _age, SqlWrapper postgres)
         : _id(_id)
         , _name(_name)
         , _surname(_surname)
-        , _age(_age) {}
+        , _age(_age)
+        , postgres(postgres){}
 
     [[nodiscard]] std::string get_name(int s_id) const override;
     [[nodiscard]] std::string get_surname(int s_id) const override;
     [[nodiscard]] int get_age(int s_id) const;
+    std::vector<Course> get_courses() const;
 
     [[nodiscard]] Student get_student(int s_id) const;
     [[nodiscard]] int add_student(const Student& student) const;

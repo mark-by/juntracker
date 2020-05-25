@@ -3,11 +3,9 @@
 
 #include "abstract_db.h"
 
-#include <functional>
 #include <iostream>
 #include <memory>
 #include <string>
-#include <variant>
 #include <vector>
 #include <sstream>
 
@@ -18,7 +16,7 @@ private:
 public:
     explicit SqlWrapper() {}
     explicit SqlWrapper(PGconn *conn);
-    ~SqlWrapper();
+    ~SqlWrapper() = default;
 
     bool query(const std::string& query, PGresult** result) const override;
     [[nodiscard]] bool exec(const std::string& query) const override;

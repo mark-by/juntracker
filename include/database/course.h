@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 
+class Course;
 #include "teacher.h"
 #include "student.h"
 
@@ -25,9 +26,6 @@ class Course {
     [[nodiscard]] int get_price(const std::string& course_name) const;
     int set_price(int price, const std::string& course_name);
     [[nodiscard]] std::vector<Student> get_student_list(const std::string& course_name) const;
-    [[nodiscard]] std::vector<Course> get_courses_by_student(int s_id);
-    [[nodiscard]] std::vector<Course> get_courses_by_teacher(int t_id);
-
 
     [[nodiscard]] Course get_course(int c_id) const;
     [[nodiscard]] int add_course(const Course& course) const;

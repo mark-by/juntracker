@@ -20,7 +20,7 @@ std::vector<Student> Lesson::get_students(int l_id) const {
         std::string s_name = std::string(PQgetvalue(result, 0, 1));
         std::string s_surname = std::string(PQgetvalue(result, 0, 2));
         int s_age = atoi(PQgetvalue(result, 0, 3));
-        Student curr_student(s_id, s_name, s_surname, s_age);
+        Student curr_student(s_id, s_name, s_surname, s_age, postgres);
         res_students.push_back(curr_student);
     }
 
@@ -43,7 +43,7 @@ Teacher Lesson::get_teacher(int l_id) const {
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int t_salary = atoi(PQgetvalue(result, 0, 3));
     std::string t_description = std::string(PQgetvalue(result, 0, 4));
-    Teacher res_teacher(t_id, t_name, t_surname, t_salary, t_description);
+    Teacher res_teacher(t_id, t_name, t_surname, t_salary, t_description, postgres);
 
     return res_teacher;
 }
