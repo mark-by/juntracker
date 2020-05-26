@@ -24,7 +24,7 @@ std::vector<Course> Student::get_courses() const {
     return res_courses;
 }
 
-Visit Student::get_visit(int lesson_id, std::string& time) {
+Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime & date) {
     Visit res_visit(postgres);
     return res_visit;
 }

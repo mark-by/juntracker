@@ -60,7 +60,7 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
 std::string AdminAPI::getMainPage(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
-    context.put("username", user.username);
+    context.put("username", user.login());
     std::vector<WeekDay> days;
     DateTime dateTime;
     for (int weekday = 0; weekday < 7; weekday++) {
@@ -105,7 +105,7 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
 
     std::string name = student.at("name");
     std::string surname = student.at("surname");
-    std::string age = student.at("age");
+    int age = std::stoi(student.at("age"));
 
     Student::save(name, surname, age);
 
@@ -129,8 +129,8 @@ templates::Context StudentDBSerializer(const Student &student) {
 std::string AdminAPI::getPageStudents(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
-    context.put("username", user.username);
-    context.put("students", user.get_students, StudentDBSerializer);
+    context.put("username", user.login());
+    context.put("students", user.get_students(), StudentDBSerializer);
     _render.set("studentsAdmin.html");
     return _render.render(context);
 }
