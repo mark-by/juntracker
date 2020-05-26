@@ -18,43 +18,43 @@ std::string Handler::teacher(Request request, const User& user) {
     return response.str();
 }
 
-std::string Handler::admin(Request request, const User& user) {
+std::string Handler::adminHandler(Request request, const User& user) {
     if (request.method() == "GET") {
         if (request.path() == "/") {
-            // Response response(admin.getMainPage(user.get_id()))
+            // Response response(adminHandler.getMainPage(user.get_id()))
         }
 
         if (!request.data("id").empty()) {
             if (request.path() == "/student") {
-                // Response response(admin.getPageStudents(std::stoi(request._data("id"))));
+                Response response(adminHandler.getPageStudents(std::stoi(request._data("id"))));
             }
             if (request.path() == "/get_page_students") {
-                // Response response(admin.getPageStudents(boost::lexical_cast<int>(request._data("id"))));
+                // Response response(adminHandler.getPageStudents(boost::lexical_cast<int>(request._data("id"))));
             }
             if (request.path() == "/getPaymentByStudent") {
-                // Response response(admin.getPaymentByStudent(std::stoi(request._data("id"))));
+                // Response response(adminHandler.getPaymentByStudent(std::stoi(request._data("id"))));
             }
         }
 
         if (request.path() == "/student") {
-            // Response response(admin.findStudent(request._data("name")));
+            // Response response(adminHandler.findStudent(request._data("name")));
         }
 
         if (request.path() == "/get_students_by") {
-            // Response response(admin.getStudentsBy(request.dataTable));
+            // Response response(adminHandler.getStudentsBy(request.dataTable));
         }
 
     } else {
         if (request.path() == "/save_current_lesson") {
-            // Response response(admin.SaveCurrentLesson(request.dataTable));
+            // Response response(adminHandler.SaveCurrentLesson(request.dataTable));
         }
 
         if (request.path() == "delete_student") {
-            // Response response(admin.deleteStudent(std::stoi(request._data("id"))));
+            // Response response(adminHandler.deleteStudent(std::stoi(request._data("id"))));
         }
 
         if (request.path() == "create_student") {
-            // Response response(admin.deleteStudent(request.dataTable));
+            // Response response(adminHandler.deleteStudent(request.dataTable));
         }
     }
 }

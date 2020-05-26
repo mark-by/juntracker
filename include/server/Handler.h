@@ -9,21 +9,21 @@
 #include "http/request.h"
 #include "http/response.h"
 #include "../database/user.h"
-/*#include "../core/TeacherAPI.h"
-#include "../core/CustomerAPI.h"
-#include "../core/AdminAPI.h"*/
+//#include "../core/TeacherAPI.h"
+//#include "../core/CustomerAPI.h"
+#include "../core/AdminAPI.h"
 
 class Handler {
 public:
     Handler() = default;
     // methods to fill response from request done by Api
     std::string teacher(Request request, const User& user);  // handler_.teacher();
-    std::string admin(Request request, const User& user);  // handler_.admin();
+    std::string adminHandler(Request request, const User& user);  // handler_.adminHandler();
     std::string customer(Request request, const User& user); // handler_.customer();
 
-private:/*
+private:
     AdminAPI admin;
-    TeacherAPI tutor;
+    /*TeacherAPI tutor;
     CustomerAPI customer;*/
 };
 

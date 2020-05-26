@@ -38,7 +38,8 @@ void Connection::doRead(const boost::system::error_code& error,
 
         // big switch to choose api for request
         // Session session();
-        std::string response_string(handler_.admin(request_, /*Session::get_user(request_.cookie("session_id"))*/));
+        std::string response_string(
+                handler_.adminHandler(request_, /*Session::get_user(request_.cookie("session_id"))*/));
 
         async::async_write(socket_,
                 async::buffer(

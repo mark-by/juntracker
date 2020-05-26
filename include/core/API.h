@@ -6,20 +6,8 @@
 #define CORE_API_H
 
 #include <string>
-
-<<<<<<< HEAD
-#include "ManagerStudent.h"
-#include "ManagerVisitHistory.h"
-#include "ManagerPaymentHistory.h"
-#include "ManagerCourse.h"
-#include "ManagerSchedule.h"
-#include "ManagerJournal.h"
-#include "ManagerVisitHistory.h"
-=======
 #include <../database/student.h>
 #include <../database/lesson.h>
->>>>>>> origin/api_help
-
 #include "../templates/context/context.h"
 
 class API {
