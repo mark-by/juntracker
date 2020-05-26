@@ -17,9 +17,9 @@ class Handler {
 public:
     Handler() = default;
     // methods to fill response from request done by Api
-    std::string teacher(Request request, const User& user);  // handler_.teacher();
+    std::string teacherHandler(Request request, const User& user);  // handler_.teacher();
     std::string adminHandler(Request request, const User& user);  // handler_.adminHandler();
-    std::string customer(Request request, const User& user); // handler_.customer();
+    std::string customerHandler(Request request, const User& user); // handler_.customer();
 
 private:
     AdminAPI admin;

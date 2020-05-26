@@ -37,7 +37,7 @@ void Connection::doRead(const boost::system::error_code& error,
                                     async::placeholders::error));
         }
 
-        // Session session();
+        // Session session(request.cookie("session_id"));
         std::string response_string(
                 handler_.adminHandler(request_, /*Session::get_user(request_.cookie("session_id"))*/));
 
