@@ -25,7 +25,7 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
             std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
             std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
             std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-            auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+            auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
             res_lessons.push_back(cur_lesson);
         }
     }
@@ -45,7 +45,7 @@ std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
         std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
         std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
         std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-        auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+        auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
         res_lessons.push_back(cur_lesson);
     }
     return res_lessons;
@@ -76,7 +76,7 @@ std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
             std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
             std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
             std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-            auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+            auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
             res_lessons.push_back(cur_lesson);
         }
     }

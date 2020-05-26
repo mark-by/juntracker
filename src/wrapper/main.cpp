@@ -48,8 +48,8 @@ int main(int argc, char* argv[]) {
 //    std::cout << s.get_surname(8) << std::endl;
     User u(postgres);
     u.get_current_lessons();
-    Visit v(postgres);
-    std::cout << v.get_lesson_id(7) << std::endl;
+//    Visit v(postgres);
+//    std::cout << v.get_lesson_id(7) << std::endl;
 //    Payment p(postgres);
 //    std::cout << p.get_course_id(8) << std::endl;
     PaymentHistory ph(postgres);
@@ -58,12 +58,12 @@ int main(int argc, char* argv[]) {
         std::cout << pay.amount() << " ";
     }
     std::cout << std::endl;
-    VisitHistory vh(postgres);
-    auto visits = vh.get_visits_by_lesson(2);
-    for (const auto&  visit : visits) {
-        std::cout << visit.student_id() << " ";
-    }
-    std::cout << std::endl;
+//    VisitHistory vh(postgres);
+//    auto visits = vh.get_visits_by_lesson(2);
+//    for (const auto&  visit : visits) {
+//        std::cout << visit.student_id() << " ";
+//    }
+//    std::cout << std::endl;
     Lesson l(postgres);
 //    l.get_students(5);
 //    std::cout << l.get_weekday(3) << " " << l.get_start(3) << " " << l.get_end(3) << std::endl;
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     std::string l_weekday = "thirsday";
     std::string l_start = "17:30";
     std::string l_end = "19:00";
-    Lesson ins_lesson = Lesson(10,  5,  l_weekday, l_start, l_end);
+//    Lesson ins_lesson = Lesson(10,  5,  l_weekday, l_start, l_end);
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;
