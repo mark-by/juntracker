@@ -55,6 +55,7 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
     context.put("weekDay", weekday.weekday);
     context.put("date", weekday.date);
     context.putArray("lessons", weekday.lessons, LessonSerializer);
+    return context;
 }
 
 std::string AdminAPI::getMainPage(int userId) {
@@ -91,6 +92,7 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
 }
 
 std::string AdminAPI::findStudent(const std::string &str) {
+    return std::string();
 }
 
 int AdminAPI::deleteStudent(int student_id) {
@@ -139,10 +141,12 @@ int AdminAPI::addCourse(const std::unordered_map<std::string, std::string> &data
     auto name = data.at("title");
     int price = std::stoi(data.at("price"));
     Course::save(name, price);
+    return 0;
 }
 
 int AdminAPI::deleteCourse(int courseId) {
     Course::remove(courseId);
+    return 0;
 }
 
 std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {

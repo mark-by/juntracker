@@ -98,6 +98,6 @@ Response &Response::operator=(Response &&other) {
     return *this;
 }
 
-void Response::setSatus(const int &status) {
+void Response::setStatus(const int &status) {
     statusCode = status;
 }
