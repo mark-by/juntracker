@@ -38,7 +38,7 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     return res_lesson;
 }
 
-std::vector<Student> User::get_student() const {
+std::vector<Student> User::get_students() const {
     std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
