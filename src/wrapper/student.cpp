@@ -51,7 +51,7 @@ std::vector<Course> Student::get_courses() const {
         int c_price = atoi(PQgetvalue(result, 0, 2));
         std::string c_start_date = PQgetvalue(result, 0, 3);
         std::string c_end_date = PQgetvalue(result, 0, 4);
-        auto res_course = Course(c_id, c_name, c_price, c_start_date, c_end_date);
+        auto res_course = Course(c_id, c_name, c_price, postgres);
         res_courses.push_back(res_course);
     }
     return res_courses;
