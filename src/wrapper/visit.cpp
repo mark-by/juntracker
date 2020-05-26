@@ -11,8 +11,8 @@ int Visit::get_student_id(int v_id) const {
     return s_id;
 }
 
-int Visit::get_course_id(int v_id) const {
-    std::string query = "SELECT course_id FROM visit WHERE id='" + std::to_string(v_id) + "';";
+int Visit::get_lesson_id(int v_id) const {
+    std::string query = "SELECT lesson_id FROM visit WHERE id='" + std::to_string(v_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -37,9 +37,9 @@ Visit Visit::get_visit(int v_id) const {
 
 int Visit::add_visit(const Visit& visit) const {
     std::ostringstream s;
-    s << "INSERT INTO visit VALUES (" << std::to_string(visit.id) << ", "
-      << std::to_string(visit.student_id) << ", " << std::to_string(visit.course_id) << ", "
-      << std::to_string(visit.lesson_id)  << ");";
+    s << "INSERT INTO visit VALUES (" << std::to_string(visit.id()) << ", "
+      << std::to_string(visit.student_id()) << ", " << std::to_string(visit.lesson_id()) << ", "
+      << std::to_string(visit.was_in_class())  << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

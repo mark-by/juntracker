@@ -4,8 +4,6 @@
 SqlWrapper::SqlWrapper(PGconn *conn)
     : conn(conn) {}
 
-SqlWrapper::~SqlWrapper() = default;
-
 bool SqlWrapper::query(const std::string& query, PGresult** result) const {
     *result = PQexec(conn, query.c_str());
     return !(PQresultStatus(*result) != PGRES_TUPLES_OK);
