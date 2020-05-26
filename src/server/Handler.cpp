@@ -6,13 +6,13 @@
 #include "../database/user.h"
 
 
-std::string Handler::customer(Request request) {
+std::string Handler::customer(Request request, const User& user) {
     Response response("<html><h1>Hello world!(From Customer)</h1></html>");
     // Response response(customer.get(std::stoi(request._data("id"))));
     return response.str();
 }
 
-std::string Handler::teacher(Request request) {
+std::string Handler::teacher(Request request, const User& user) {
     Response response("<html><h1>Hello world! (From Teacher)</h1></html>");
     // Response response(tutor.get(boost::lexical_cast<int>(request._data("id"))));
     return response.str();
