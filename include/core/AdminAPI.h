@@ -50,7 +50,7 @@ private:
 
     static templates::Context LessonSerializer(const Lesson &lesson);
 
-    templates::Context DaySerializer(const WeekDay &weekday);
+    static templates::Context DaySerializer(const WeekDay &weekday);
 
     templates::Template _render;
 };
