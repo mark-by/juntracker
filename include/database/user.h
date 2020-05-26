@@ -16,6 +16,7 @@ class User {
             , login(login)
             , status(status) {}
 
+    int get_id() { return this->id;};
     std::string get_status(int u_id) const;
     User get_user(int u_id) const;
     int add_user(const User& user) const;

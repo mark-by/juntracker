@@ -2,8 +2,9 @@
 // Created by gg on 15.04.2020.
 //
 
-#include "Connection.h"
+#include"Connection.h"
 #include "ConnectionManager.h"
+// #include "../database/session.h"
 
 namespace async = boost::asio;
 namespace net = boost::asio::ip;
@@ -36,7 +37,8 @@ void Connection::doRead(const boost::system::error_code& error,
         }
 
         // big switch to choose api for request
-        std::string response_string(handler_.admin(request_));
+        // Session session();
+        std::string response_string(handler_.admin(request_, /*Session::get_user(request_.cookie("session_id"))*/));
 
         async::async_write(socket_,
                 async::buffer(

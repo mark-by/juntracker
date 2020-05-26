@@ -7,8 +7,9 @@
 
 #include <string>
 #include "http/request.h"
-#include "http/response.h"/*
-#include "../core/TeacherAPI.h"
+#include "http/response.h"
+#include "../database/user.h"
+/*#include "../core/TeacherAPI.h"
 #include "../core/CustomerAPI.h"
 #include "../core/AdminAPI.h"*/
 
@@ -17,7 +18,7 @@ public:
     Handler() = default;
     // methods to fill response from request done by Api
     std::string teacher(Request request);  // handler_.teacher();
-    std::string admin(Request request);    // handler_.admin();
+    std::string admin(Request request, const User& user);  // handler_.admin();
     std::string customer(Request request); // handler_.customer();
 
 private:/*

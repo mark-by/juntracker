@@ -3,6 +3,7 @@
 //
 
 #include "Handler.h"
+#include "../database/user.h"
 
 
 std::string Handler::customer(Request request) {
@@ -17,7 +18,10 @@ std::string Handler::teacher(Request request) {
     return response.str();
 }
 
-std::string Handler::admin(Request request) {
+std::string Handler::admin(Request request, const User& user) {
+    if (request.path() == "/") {
+        // Response response(admin.getMainPage(user.get_id()))
+    }
     Response response("<html><h1>Hello world! (From Admin)</h1></html>");
     std::cout << request.path() << '\n';
     if (!request.data("id").empty()) {
