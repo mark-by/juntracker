@@ -44,6 +44,7 @@ public:
     explicit Response(const int &status = status::OK);
     explicit Response(const std::string & html, const int &status = status::OK);
     explicit Response(const templates::Context & jsonData, const int &status = status::OK);
+    Response& operator=(Response&& other);
 
     std::string str();
     void setCookie(const std::string &key, const std::string &value, const int &daysExpires = 0);

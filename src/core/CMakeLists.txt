@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/database")
 include_directories("${PROJECT_SOURCE_DIR}/include/templates")
 
 set(api_source
+        UserAPI.cpp
         AdminAPI.cpp
         TeacherAPI.cpp
         CustomerAPI.cpp)

@@ -89,3 +89,11 @@ std::string Response::statusToStr() const {
         default: return "undefined";
     }
 }
+
+Response &Response::operator=(Response &&other) {
+    headers = other.headers;
+    cookies = other.cookies;
+    body = other.body;
+    statusCode = other.statusCode;
+    return *this;
+}
