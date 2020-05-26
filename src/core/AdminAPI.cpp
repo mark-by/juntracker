@@ -64,7 +64,7 @@ std::string AdminAPI::getMainPage(int userId) {
     std::vector<WeekDay> days;
     DateTime dateTime;
     for (int weekday = 0; weekday < 7; weekday++) {
-        days.emplace_back(dateTime.weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
+        days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
                           user.get_lessons_by_weekday(weekday));
     }
     context.putArray("scheduleDays", days, DaySerializer);
