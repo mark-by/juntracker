@@ -2,8 +2,8 @@
 
 std::vector<Lesson> User::get_current_lessons() const {
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
-    std::string curr_weekday = std::string(d.day_of_week().as_short_string());
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + curr_weekday + "';";
+    int curr_weekday = d.day_of_week().as_number();
+    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -20,8 +20,8 @@ std::vector<Lesson> User::get_current_lessons() const {
     return res_lesson;
 }
 
-std::vector<Lesson> User::get_lessons_by_weekday(std::string l_weekday) const {
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + l_weekday + "';";
+std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
+    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -36,6 +36,22 @@ std::vector<Lesson> User::get_lessons_by_weekday(std::string l_weekday) const {
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;
+}
+
+Student User::get_student() const {
+    std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int student_id = atoi(PQgetvalue(result, 0, 0));
+
+    std::string s_name = std::string(PQgetvalue(result, 0, 1));
+    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
+    int s_age = atoi(PQgetvalue(result, 0, 3));
+    Student res_student(student_id, s_name, s_surname, s_age, postgres);
+
+    return res_student;
 }
 
 User User::get_user(int user_id) {
