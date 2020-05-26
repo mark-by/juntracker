@@ -24,7 +24,8 @@ std::vector<Course> Student::get_courses() const {
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
-    std::string query = "SELECT * FROM visit WHERE lesson_id='" + std::to_string(lesson_id) + "';";
+    std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
+            + " and visit_date=" + date.zone_as_posix_string() + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
