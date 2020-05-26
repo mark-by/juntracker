@@ -32,15 +32,35 @@ Teacher Teacher::get_teacher(int t_id) const {
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int t_salary = atoi(PQgetvalue(result, 0, 3));
     std::string t_description = PQgetvalue(result, 0, 4);
-    auto res_teacher = Teacher(t_id, t_name, t_surname, t_salary, t_description);
+    auto res_teacher = Teacher(t_id, t_name, t_surname, t_salary, t_description, postgres);
     return res_teacher;
+}
+
+std::vector<Course> Teacher::get_courses() const {
+    std::string query = "SELECT * FROM course WHERE teacher_id='" + std::to_string(this->_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+
+    std::vector<Course> courses;
+    for (int i = 0; i < PQntuples(result); i++) {
+        int c_id = atoi(PQgetvalue(result, i, 0));
+        std::string c_name = std::string(PQgetvalue(result, i, 1));
+        int c_price = atoi(PQgetvalue(result, i, 2));
+        std::string c_start_date = std::string(PQgetvalue(result, i, 3));
+        std::string c_end_date = std::string(PQgetvalue(result, i, 4));
+        auto res_course = Course(c_id, c_name, c_price,c_start_date, c_end_date);
+        courses.push_back(res_course);
+    }
+    return courses;
 }
 
 int Teacher::add_teacher(const Teacher& teacher) const {
     std::ostringstream s;
-    s << "INSERT INTO teacher VALUES (" << std::to_string(teacher.id) << ", '"
-      << teacher.name << "', '" << teacher.surname << "', "
-      << std::to_string(teacher.salary) << ", '" << teacher.description << "');";
+    s << "INSERT INTO teacher VALUES (" << std::to_string(teacher.id()) << ", '"
+      << teacher.name() << "', '" << teacher.surname() << "', "
+      << std::to_string(teacher.salary()) << ", '" << teacher.description() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

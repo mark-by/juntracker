@@ -24,8 +24,8 @@ Day Day::get_day(int d_id) const {
 
 int Day::add_day(const Day& day) const {
     std::ostringstream s;
-    s << "INSERT INTO day VALUES (" << std::to_string(day.id) << ", '"
-      << day.weekday << "', '" << day.date << "');";
+    s << "INSERT INTO day VALUES (" << std::to_string(day.id()) << ", '"
+      << day.weekday() << "', '" << day.date() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
@@ -41,3 +41,4 @@ int Day::delete_day(int d_id) const {
     }
     return 0;
 }
+

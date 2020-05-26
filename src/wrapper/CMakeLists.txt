@@ -8,6 +8,7 @@ set(db_source
         payment.cpp
         payment_history.cpp
         schedule.cpp
+        session.cpp
         sql_wrapper.cpp
         student.cpp
         teacher.cpp
@@ -21,4 +22,4 @@ add_library(
         ${db_source}
         )
 
-target_link_libraries(sql_wrapper pq)
+target_link_libraries(sql_wrapper pq boost_date_time)

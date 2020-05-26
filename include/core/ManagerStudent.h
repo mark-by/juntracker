@@ -5,9 +5,12 @@
 #ifndef CORE_MANAGERSTUDENT_H
 #define CORE_MANAGERSTUDENT_H
 
+#include <string>
+
 class ManagerStudent {
 public:
-    // Needed methods
+    int addStudent(const std::string& name, const std::string& surname, const std::string& age);
+    int deleteStudent(const std::string&);
 };
 
 #endif //CORE_MANAGERSTUDENT_H

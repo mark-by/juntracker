@@ -3,6 +3,7 @@
 //
 
 #include "../../include/core/API.h"
+#include "../../include/templates/context/context.h"
 
 API::API() {}
 

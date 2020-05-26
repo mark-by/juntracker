@@ -70,19 +70,20 @@ class Lesson extends Component {
       })
    }
 
-   initCheckBoxesForChild(child) {
-       let input = child.querySelector('input')
-       let child_id = child.querySelector('.name').getAttribute('data');
-       input.getAttribute('checked') ?
-           input.setAttribute('value','1_' + child_id) :
-           input.setAttribute('value','0_' + child_id);
-       input.onclick = (event) => {
-           if (input.getAttribute('checked')) {
-               input.removeAttribute('checked');
-               input.setAttribute('value','0_' + child_id)
+   initCheckBoxesForChild(child){
+       let input_checkbox = child.querySelector('input[type=checkbox]');
+       let input = child.querySelector('input[type=hidden]');
+       const isHere = input_checkbox.getAttribute('data');
+       input.setAttribute('value',isHere);
+       input_checkbox.onclick = (event) => {
+           if (input.getAttribute('value') === '1') {
+               input_checkbox.removeAttribute('checked');
+               input_checkbox.setAttribute('data', '0');
+               input.setAttribute('value','0');
            } else {
-               input.setAttribute('checked', '1')
-               input.setAttribute('value', '1_' + child_id)
+               input_checkbox.setAttribute('checked', '1');
+               input_checkbox.setAttribute('data', '1');
+               input.setAttribute('value', '1');
            }
        }
    }

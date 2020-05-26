@@ -22,19 +22,6 @@ int Payment::get_course_id(int p_id) const {
     return c_id;
 }
 
-int Payment::add_payment(int p_id, int s_id, int c_id, int p_amount, const std::string& date) {
-    std::ostringstream s;
-    s << "INSERT INTO payment VALUES (" << std::to_string(p_id) << ", "
-    << std::to_string(s_id) << ", " << std::to_string(c_id) << ", "
-    << std::to_string(p_amount) << ");";
-
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-       return -1;
-    }
-    return 0;
-}
-
 Payment Payment::get_payment(int p_id) const {
     std::string query = "SELECT * FROM payment WHERE id=" + std::to_string(p_id) + ";";
     PGresult *result = nullptr;
@@ -51,9 +38,9 @@ Payment Payment::get_payment(int p_id) const {
 
 int Payment::add_payment(const Payment& payment) const {
     std::ostringstream s;
-    s << "INSERT INTO payment VALUES (" << std::to_string(payment.id) << ", "
-      << std::to_string(payment.student_id) << ", " << std::to_string(payment.course_id) << ", "
-      << std::to_string(payment.amount) << ", '" << payment.payment_date << "');";
+    s << "INSERT INTO payment VALUES (" << std::to_string(payment.id()) << ", "
+      << std::to_string(payment.student_id()) << ", " << std::to_string(payment.course_id()) << ", "
+      << std::to_string(payment.amount()) << ", '" << payment.payment_date() << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

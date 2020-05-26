@@ -23,3 +23,31 @@ boost::posix_time::ptime DateTimeConverter::convert(const std::string &timeStr) 
     stream.str("");
     return ptime;
 }
+
+std::string DateTime::weekdayToStr(int weekday) {
+    switch(weekday) {
+        case 0:
+            return "Понедельник";
+        case 1:
+            return "Вторик";
+        case 2:
+            return "Среда";
+        case 3:
+            return "Четверг";
+        case 4:
+            return "Пятница";
+        case 5:
+            return "Суббота";
+        case 6:
+            return "Воскресенье";
+        default:
+            return "";
+    }
+}
+
+std::string DateTime::dateByWeekday(int weekday) {
+    auto currentDayOfWeek = now.date().day_of_week();
+    auto day = now + (boost::gregorian::days(weekday - currentDayOfWeek.as_number()));
+    DateTimeConverter converter("%d:%m:%y");
+    return converter.convert(day);
+}
