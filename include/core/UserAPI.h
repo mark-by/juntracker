@@ -7,6 +7,8 @@ class UserAPI {
 public:
     UserAPI() = default;
 
+    std::string loginPage();
+    std::string registerPage();
     std::string signUp(const std::unordered_map<std::string, std::string> &data);
     std::string signIn(const std::string& username, const std::string& password);
 };
