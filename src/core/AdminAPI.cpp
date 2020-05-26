@@ -91,11 +91,6 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
 }
 
 std::string AdminAPI::findStudent(const std::string &str) {
-    /*if (str.size() == 0) {
-        return
-    }
-
-    std::vector<std::string> result = ManagerStudent.fingStudentBy();*/
 }
 
 int AdminAPI::deleteStudent(int student_id) {
@@ -125,7 +120,7 @@ templates::Context StudentDBSerializer(const Student &student) {
     context.put("age", student.age());
     std::vector<std::string> courses;
     for (auto &course : student.get_courses()) {
-        courses.push_back(course.title());
+        courses.push_back(course.name());
     }
     context.putArray("courses", courses);
     return context;
@@ -146,58 +141,10 @@ int AdminAPI::addCourse(const std::unordered_map<std::string, std::string> &data
     Course::save(name, price);
 }
 
-int AdminAPI::deleteCourse(const std::string &) {
-    return 0;
+int AdminAPI::deleteCourse(int courseId) {
+    Course::remove(courseId);
 }
 
 std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
     return std::string();
 }
-
-
-
-*/
-
-int addCourse(const std::string &str) {
-    if (str.empty()) {
-        return -1;
-    }
-
-    int res = ManagerCourse.addCourse(str);
-
-    if (res) {
-        return 1;
-    }
-
-    return 0;
-}
-
-int deleteCourse(const std::string &str) {
-    if (str.empty()) {
-        return -1;
-    }
-
-    int res = ManagerCourse.deleteCourse(str);
-
-    if (res) {
-        return 1;
-    }
-
-    return 0;
-}
-
-/*
-std::string getPagePaymentsByStudent(const std::string &studentId) {
-    if (studentId.empty()) {
-        return "NULL";
-    }
-
-    std::vector<Payment> paymentHistory = ManagerPaymentHistory.getPaymentHistory(studentId);
-    templates::Context context;
-
-    context.putArray(paymentHistory, paymentSerializer);
-
-    template.set("payments.html");
-
-    return template.render(context);
-}*/

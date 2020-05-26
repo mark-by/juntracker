@@ -27,8 +27,8 @@ std::vector<Student> Lesson::get_students() const {
     return res_students;
 }
 
-Teacher Lesson::get_teacher(int l_id) const {
-    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(l_id) + "';";
+Teacher Lesson::get_teacher() const {
+    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -48,8 +48,8 @@ Teacher Lesson::get_teacher(int l_id) const {
     return res_teacher;
 }
 
-std::string Lesson::get_title(int l_id) const {
-    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(l_id) + "';";
+std::string Lesson::get_title() const {
+    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();

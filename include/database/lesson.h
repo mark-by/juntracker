@@ -17,8 +17,8 @@ public:
             , _end_time(_end_time) {}
 
     std::vector<Student> get_students() const;
-    [[nodiscard]] Teacher get_teacher(int l_id) const;
-    [[nodiscard]] std::string get_title(int l_id) const;
+    [[nodiscard]] Teacher get_teacher() const;
+    [[nodiscard]] std::string get_title() const;
 
     static Lesson get_lesson(int lesson_id);
     static int save(int cabinet, const std::string& weekaday, const std::string& start, const std::string& end);
