@@ -29,3 +29,13 @@ bool SqlWrapper::exec(const std::string& query) const {
 bool SqlWrapper::is_connected() const {
     return !(PQstatus(conn) != CONNECTION_OK);
 }
+
+int SqlWrapper::count_rows(std::string& table_name) const {
+    std::string command = "SELECT COUNT(*) FROM " + table_name + ";";
+    PGresult *result = nullptr;
+    if (!query(command, &result)) {
+        throw std::exception();
+    }
+    int rows = atoi(PQgetvalue(result, 0, 0));
+    return rows;
+}

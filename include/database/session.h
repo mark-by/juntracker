@@ -1,34 +1,31 @@
-#ifndef _COOKIE_H
-#define _COOKIE_H
+#ifndef DATABASE_SESSION_H
+#define DATABASE_SESSION_H
 
 #include "user.h"
-#include "sql_wrapper.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 class Session {
  public:
     Session(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Session(int _id, std::string& _cookie, int uid)
+    explicit Session(int _id, std::string& _cookie, SqlWrapper postgres)
             : _id(_id)
-            , _cookie(_cookie)
-            , _uid(uid) {}
+            , _cookie(_cookie) {}
 
-    User get_user(const std::string& s_cookie);
+    static User get_user(const std::string& s_cookie);
 
-    Session get_session(int s_id) const;
-    int add_session(const Session& session) const;
-    int delete_session(int s_id) const;
+    static Session create_session(const std::string& username, const std::string& password);
+    static int remove(int user_id);
+    static int remove(const std::string cookie);
 
-    [[nodiscard]] int id() const { return _id; }
-    [[nodiscard]] std::string cookie() const { return _cookie; }
-    [[nodiscard]] int uid() const { return _uid; }
+    int id() const { return _id; }
+    std::string cookie() const { return _cookie; }
 
  private:
     int _id;
     std::string _cookie;
-    int _uid;
 
     SqlWrapper postgres;
 };
 
-#endif  // _COOKIE_H
+#endif  // DATABASE_SESSION_H

@@ -2,36 +2,31 @@
 #define _PAYMENT_H_
 
 #include "sql_wrapper.h"
+#include "course.h"
 
 class Payment {
  public:
     Payment(SqlWrapper& postgres)
     : postgres(postgres) {}
-    explicit Payment(int _id, int _student_id, int _course_id, int _amount, std::string& _payment_date)
+    explicit Payment(int _id, int _amount, std::string& _payment_date, SqlWrapper postgres)
             : _id(_id)
-            , _student_id(_student_id)
-            , _course_id(_course_id)
             , _amount(_amount)
             , _payment_date(_payment_date) {}
     
-    int get_student_id(int p_id) const;
-    int get_course_id(int p_id) const;
+    Student get_student() const;
+    Course get_course() const;
 
 
-    Payment get_payment(int p_id) const;
-    int add_payment(const Payment& payment) const;
-    int delete_payment(int p_id) const;
+    static Payment get_payment(int payment_id);
+    static int save(int student_id, int course_id, int amount);
+    static int remove(int payment_id);
 
     [[nodiscard]] int id() const { return _id; }
-    [[nodiscard]] int student_id() const { return _student_id; }
-    [[nodiscard]] int course_id() const { return _course_id; }
     [[nodiscard]] int amount() const { return _amount; }
     [[nodiscard]] std::string payment_date() const { return _payment_date; }
 
  private:
     int _id;
-    int _student_id;
-    int _course_id;
     int _amount;
     std::string _payment_date;
 

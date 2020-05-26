@@ -42,7 +42,7 @@ templates::Context LessonSerializer(const Lesson & lesson) {
 templates::Context CurrentLessonSerializer(const Lesson & lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
-    context.put("id", lesson.id())
+    context.put("id", lesson.id());
     context.put("cabinet", lesson.cabinet());
     context.put("tutor", lesson.get_teacher().name());
     std::vector<StudentOnLesson> students;
@@ -127,10 +127,6 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
     return 0;
 }
 
-std::string AdminAPI::getStudentsBy(std::unordered_map<std::string, std::string>) {
-    return std::string();
-}
-
 templates::Context StudentDBSerializer(const Student & student) {
     templates::Context context;
     context.put("name", student.name() + " " + student.surname());
@@ -154,8 +150,10 @@ std::string AdminAPI::getPageStudents(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::addCourse(const std::string &) {
-    return 0;
+int AdminAPI::addCourse(const std::unordered_map<std::string, std::string> &data) {
+    auto name = data.at("title");
+    int price = std::stoi(data.at("price"));
+    Course::save(name, price);
 }
 
 int AdminAPI::deleteCourse(const std::string &) {

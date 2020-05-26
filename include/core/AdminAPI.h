@@ -15,7 +15,6 @@ public:
     std::string findStudent(const std::string&);
     int deleteStudent(const std::vector<std::string>&);
     int createStudent(const std::unordered_map<std::string, std::string>&);
-    std::string getStudentsBy(std::unordered_map<std::string, std::string>);
     std::string getPageStudents(int);
 
     int addCourse(const std::string&);
