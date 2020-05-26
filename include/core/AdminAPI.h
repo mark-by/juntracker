@@ -14,6 +14,12 @@ class AdminAPI : public API {
         StudentOnLesson(const Student &student, const Lesson &lesson) : student(student), lesson(lesson) {}
     };
 
+    struct WeekDay {
+        std::string weekday;
+        std::string date;
+        std::vector<Lesson> lessons;
+    };
+
 public:
     AdminAPI() = default;
 
@@ -38,7 +44,13 @@ public:
 private:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
 
-    templates::Context StudentSerializer(const StudentOnLesson &student);
+    static templates::Context StudentSerializer(const StudentOnLesson &student);
+
+    static templates::Context ShortStudentSerializer(const Student &student);
+
+    static templates::Context LessonSerializer(const Lesson &lesson);
+
+    static templates::Context DaySerializer(const WeekDay &weekday);
 
     templates::Template _render;
 };

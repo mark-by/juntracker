@@ -12,11 +12,7 @@
 
 class API {
 
-    struct WeekDay {
-        std::string weekday;
-        std::string date;
-        std::vector<Lesson> lessons;
-    };
+
 public:
     virtual std::string getMainPage(int user_id) = 0;
 protected:
