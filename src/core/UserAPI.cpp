@@ -7,3 +7,15 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
 
     return std::string();
 }
+
+std::string UserAPI::registerPage() {
+    return std::string();
+}
+
+std::string UserAPI::loginPage() {
+    return std::string();
+}
+
+std::string UserAPI::signIn(const std::string &username, const std::string &password) {
+    return std::string();
+}

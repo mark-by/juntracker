@@ -132,7 +132,7 @@ std::string AdminAPI::getPageStudents(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
     context.put("username", user.login());
-    context.put("students", user.get_students(), StudentDBSerializer);
+    context.putArray("students", user.get_students(), StudentDBSerializer);
     _render.set("studentsAdmin.html");
     return _render.render(context);
 }
