@@ -30,13 +30,10 @@ std::vector<Lesson> User::get_current_lessons() const {
     std::vector<Lesson> res_lesson;
     for (int i = 0; i < PQntuples(result); i++) {
         int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_course_id = atoi(PQgetvalue(result, i, 1));
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        int l_teacher_id = atoi(PQgetvalue(result, i, 3));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        int l_day_id = atoi(PQgetvalue(result, i, 7));
-        auto curr_lesson = Lesson(l_id, l_course_id, l_cabinet, l_teacher_id, curr_weekday, l_start_time, l_end_time, l_day_id);
+        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;
@@ -51,13 +48,10 @@ std::vector<Lesson> User::get_lessons_by_weekday(std::string l_weekday) const {
     std::vector<Lesson> res_lesson;
     for (int i = 0; i < PQntuples(result); i++) {
         int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_course_id = atoi(PQgetvalue(result, i, 1));
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        int l_teacher_id = atoi(PQgetvalue(result, i, 3));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        int l_day_id = atoi(PQgetvalue(result, i, 7));
-        auto curr_lesson = Lesson(l_id, l_course_id, l_cabinet, l_teacher_id, l_weekday, l_start_time, l_end_time, l_day_id);
+        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;

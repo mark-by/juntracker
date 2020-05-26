@@ -7,9 +7,6 @@
 
 class Person {
  public:
-    [[nodiscard]] virtual std::string get_name(int id) const = 0;
-    [[nodiscard]] virtual std::string get_surname(int id) const = 0;
-
     [[nodiscard]] virtual int id() const = 0;
     [[nodiscard]] virtual std::string name() const = 0;
     [[nodiscard]] virtual std::string surname() const = 0;

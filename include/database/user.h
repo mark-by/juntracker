@@ -1,11 +1,5 @@
-#ifndef _USER_H_
-#define _USER_H_
-
-#include <string>
-#include <vector>
-#include <chrono>
-#include <ctime>
-#include <boost/date_time/gregorian/gregorian.hpp>
+#ifndef DATABASE_USER_H_
+#define DATABASE_USER_H_
 
 #include "sql_wrapper.h"
 #include "lesson.h"
@@ -42,4 +36,4 @@ class User {
     SqlWrapper postgres;
 };
 
-#endif  // _USER_H_
+#endif  // DATABASE_USER_H_

@@ -7,6 +7,7 @@
 
 #include <string>
 
+<<<<<<< HEAD
 #include "ManagerStudent.h"
 #include "ManagerVisitHistory.h"
 #include "ManagerPaymentHistory.h"
@@ -14,22 +15,26 @@
 #include "ManagerSchedule.h"
 #include "ManagerJournal.h"
 #include "ManagerVisitHistory.h"
+=======
+#include <../database/student.h>
+#include <../database/lesson.h>
+>>>>>>> origin/api_help
 
 #include "../templates/context/context.h"
 
 class API {
+
+    struct WeekDay {
+        std::string weekday;
+        std::string date;
+        std::vector<Lesson> lessons;
+    };
 public:
-    virtual std::string getMainPage(const std::string&) = 0;
+    virtual std::string getMainPage(int user_id) = 0;
 protected:
-    ManagerStudent studentManager;
-    ManagerVisitHistory visitsManager;
-    ManagerPaymentHistory paymentsManager;
-    ManagerSchedule scheduleManager;
-    ManagerJournal journalManager;
 
     templates::Context shortStudentSerializer(Student&);
     templates::Context studentSerializer(Student&);
-    templates::Context scheduleSerializer(Schedule&);
     templates::Context visitHistorySerializer(VisitHistory&);
     templates::Context paymentSerializer(Payment&);
     templates::Context courseSerializer(Course&);

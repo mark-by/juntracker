@@ -1,7 +1,7 @@
 #include "lesson.h"
 
-std::vector<Student> Lesson::get_students(int l_id) const {
-    std::string query = "SELECT student_id FROM visit WHERE lesson_id='" + std::to_string(l_id) + "';";
+std::vector<Student> Lesson::get_students() const {
+    std::string query = "SELECT student_id FROM visit WHERE lesson_id='" + std::to_string(id()) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -63,60 +63,43 @@ std::string Lesson::get_title(int l_id) const {
     return c_name;
 }
 
-std::string Lesson::get_weekday(int l_id) const {
-    std::string query = "SELECT weekday FROM lesson WHERE id='" + std::to_string(l_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string res_weekday = PQgetvalue(result, 0, 0);
-    return res_weekday;
-}
+Lesson Lesson::get_lesson(int lesson_id) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
 
-std::string Lesson::get_start(int l_id) const {
-    std::string query = "SELECT start_time FROM lesson WHERE id='" + std::to_string(l_id) + "';";
+    std::string query = "SELECT * FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
-    std::string res_start = PQgetvalue(result, 0, 0);
-    return res_start;
-}
-
-std::string Lesson::get_end(int l_id) const {
-    std::string query = "SELECT end_time FROM lesson WHERE id='" + std::to_string(l_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string res_end = PQgetvalue(result, 0, 0);
-    return res_end;
-}
-
-Lesson Lesson::get_lesson(int l_id) const {
-    std::string query = "SELECT * FROM lesson WHERE id=" + std::to_string(l_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    int l_course_id = atoi(PQgetvalue(result, 0, 1));
     int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-    int l_teacher_id = atoi(PQgetvalue(result, 0, 3));
     std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
     std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
     std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-    int l_day_id = atoi(PQgetvalue(result, 0, 7));
-    auto res_lesson = Lesson(l_id, l_course_id, l_cabinet, l_teacher_id, l_weekday, l_start_time, l_end_time, l_day_id);
+    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
     return res_lesson;
 }
 
-int Lesson::add_lesson(const Lesson& lesson) const {
+int Lesson::save(int cabinet, const std::string& weekday, const std::string& start, const std::string& end) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
     std::ostringstream s;
-    s << "INSERT INTO lesson VALUES (" << std::to_string(lesson.id()) << ", "
-      << std::to_string(lesson.course_id()) << ", " << std::to_string(lesson.cabinet()) << ", "
-      << std::to_string(lesson.teacher_id()) << ", '" << lesson.weekday() << "', '"
-      << lesson.start_time() << "', '" << lesson.end_time() << "', "
-      << std::to_string(lesson.day_id()) << ");";
+    std::string table_name = "lesson";
+    int count_rows = postgres.count_rows(table_name);
+    s << "INSERT INTO lesson VALUES (" << std::to_string(count_rows + 1) << ", "
+      << std::to_string(cabinet) << ", '" << weekday << "', '"
+      << start << "', '" << end << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
@@ -125,8 +108,16 @@ int Lesson::add_lesson(const Lesson& lesson) const {
     return 0;
 }
 
-int Lesson::delete_lesson(int l_id) const {
-    std::string query = "DELETE * FROM lesson WHERE id=" + std::to_string(l_id) + ";";
+int Lesson::remove(int lesson_id) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
+    std::string query = "DELETE FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     if (!postgres.exec(query)) {
         return -1;
     }

@@ -1,27 +1,5 @@
 #include "student.h"
 
-std::string Student::get_name(int s_id) const {
-    std::string query = "SELECT name FROM student WHERE id='" + std::to_string(s_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string t_name = PQgetvalue(result, 0, 0);
-    PQclear(result);
-    return t_name;
-}
-
-std::string Student::get_surname(int s_id) const {
-    std::string query = "SELECT surname FROM student WHERE id='" + std::to_string(s_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string s_surname = PQgetvalue(result, 0, 0);
-    PQclear(result);
-    return s_surname;
-}
-
 int Student::get_age(int s_id) const {
     std::string query = "SELECT age FROM student WHERE id='" + std::to_string(s_id) + "';";
     PGresult *result = nullptr;
@@ -51,7 +29,7 @@ std::vector<Course> Student::get_courses() const {
         int c_price = atoi(PQgetvalue(result, 0, 2));
         std::string c_start_date = PQgetvalue(result, 0, 3);
         std::string c_end_date = PQgetvalue(result, 0, 4);
-        auto res_course = Course(c_id, c_name, c_price, c_start_date, c_end_date);
+        auto res_course = Course(c_id, c_name, c_price, postgres);
         res_courses.push_back(res_course);
     }
     return res_courses;

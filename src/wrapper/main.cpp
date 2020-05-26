@@ -2,7 +2,6 @@
 #include <fstream>
 
 #include "course.h"
-#include "day.h"
 #include "lesson.h"
 #include "payment.h"
 #include "payment_history.h"
@@ -18,7 +17,7 @@
 int main(int argc, char* argv[]) {
 
     // Create Connection
-    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
     while (getline(fin, conninfo)) {}
@@ -34,27 +33,25 @@ int main(int argc, char* argv[]) {
     }
 
     Course course(postgres);
-    Teacher teacher = course.get_teacher("python programming");
-    std::cout << teacher.surname() << std::endl;
-    std::cout << teacher.name() << std::endl;
-    teacher.get_courses();
+//    Teacher teacher = course.get_teacher("python programming");
+//    std::cout << teacher.surname() << std::endl;
+//    std::cout << teacher.name() << std::endl;
+//    teacher.get_courses();
 //    std::string stud_name = "Egor";
 //    std::string stud_surname = "Zvonarev";
 //    Student stud = Student(9, stud_name, stud_surname, 12);
 //    stud.get_courses();
-    Teacher t(postgres);
-    std::cout << t.get_name(1) << std::endl;
-    auto price = course.get_price("python programming");
-    std::cout << price << std::endl;
-    auto students = course.get_student_list("sambo");
-    Student s(postgres);
-    std::cout << s.get_surname(8) << std::endl;
+//    Teacher t(postgres);
+//    std::cout << t.get_name(1) << std::endl;
+//    auto students = course.get_students();
+//    Student s(postgres);
+//    std::cout << s.get_surname(8) << std::endl;
     User u(postgres);
     u.get_current_lessons();
     Visit v(postgres);
     std::cout << v.get_lesson_id(7) << std::endl;
-    Payment p(postgres);
-    std::cout << p.get_course_id(8) << std::endl;
+//    Payment p(postgres);
+//    std::cout << p.get_course_id(8) << std::endl;
     PaymentHistory ph(postgres);
     auto payments = ph.get_payments_by_course(1);
     for (const auto&  pay : payments) {
@@ -68,18 +65,16 @@ int main(int argc, char* argv[]) {
     }
     std::cout << std::endl;
     Lesson l(postgres);
-    l.get_students(5);
-    std::cout << l.get_weekday(3) << " " << l.get_start(3) << " " << l.get_end(3) << std::endl;
+//    l.get_students(5);
+//    std::cout << l.get_weekday(3) << " " << l.get_start(3) << " " << l.get_end(3) << std::endl;
     Schedule sh(postgres);
     sh.get_schedule_by_student(1);
     sh.get_schedule_by_course(3);
     sh.get_schedule_by_teacher(4);
-    Day d(postgres);
-    std::cout << d.get_weekday("2020-02-06") << std::endl;
     std::string l_weekday = "thirsday";
     std::string l_start = "17:30";
     std::string l_end = "19:00";
-    Lesson ins_lesson = Lesson(10, 3, 5, 2, l_weekday, l_start, l_end, 4);
+    Lesson ins_lesson = Lesson(10,  5,  l_weekday, l_start, l_end);
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;

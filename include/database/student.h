@@ -16,8 +16,6 @@ class Student : public Person {
         , _age(_age)
         , postgres(postgres){}
 
-    [[nodiscard]] std::string get_name(int s_id) const override;
-    [[nodiscard]] std::string get_surname(int s_id) const override;
     [[nodiscard]] int get_age(int s_id) const;
     std::vector<Course> get_courses() const;
 
