@@ -17,4 +17,14 @@ private:
 
 };
 
+class DateTime {
+public:
+    DateTime() : now(boost::posix_time::second_clock::universal_time()) {}
+    static std::string weekdayToStr(int weekday);
+    std::string dateByWeekday(int weekday);
+private:
+    boost::posix_time::ptime now;
+
+};
+
 #endif //JUNTRACKER_DATETIME_H

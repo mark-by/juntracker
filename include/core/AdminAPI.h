@@ -10,7 +10,7 @@ class AdminAPI: public API {
 public:
     AdminAPI() = default;
 
-    std::string getMainPage(const std::string&);
+    std::string getMainPage(int userId);
     int saveCurrentLesson(const std::unordered_map<std::string, std::string> &);
     std::string findStudent(const std::string&);
     int deleteStudent(const std::vector<std::string>&);

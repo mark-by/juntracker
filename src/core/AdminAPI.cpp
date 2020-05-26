@@ -1,11 +1,75 @@
 #include "../../include/core/AdminAPI.h"
 #include <day.h>
 #include <context/context.h>
+#include <user.h>
+#include <lesson.h>
+#include <visit.h>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <http/datetime.h>
 
-std::string AdminAPI::getMainPage(const std::string &str) {
+templates::Context StudentSerializer(const Student & student) {
+    auto now = boost::posix_time::second_clock();
     templates::Context context;
+    context.put("name", student.get_name() + " " + student.get_surname());
+    context.put("id", student.id());
+    context.put("isHere", student.get_visit(boost::posix_time::second_clock::universal_time()).was_is_class());
+    return context;
+}
 
+templates::Context ShortStudentSerializer(const Student & student) {
+   templates::Context context;
+   context.put("name", student.get_name() + " " + student.get_surname());
+   return context;
+}
 
+templates::Context LessonSerializer(const Lesson & lesson) {
+    templates::Context context;
+    context.put("title", lesson.get_title());
+    context.put("cabinet", lesson.cabinet());
+    context.put("tutor", lesson.get_teacher().name());
+    context.putArray("children", lesson.get_students(), ShortStudentSerializer);
+    context.put("startTime", lesson.get_start_time());
+    context.put("endTime", lesson.get_end_time());
+}
+
+templates::Context CurrentLessonSerializer(const Lesson & lesson) {
+    templates::Context context;
+    context.put("title", lesson.get_title());
+    context.put("cabinet", lesson.cabinet());
+    context.put("tutor", lesson.get_teacher().name());
+    context.putArray("children", lesson.get_students(), StudentSerializer);
+    context.put("startTime", lesson.get_start_time());
+    context.put("endTime", lesson.get_end_time());
+}
+
+struct WeekDay {
+    std::string weekday;
+    std::string date;
+    std::vector<Lesson> lessons;
+};
+
+templates::Context DaySerializer(const WeekDay & weekday) {
+    templates::Context context;
+    context.put("weekDay", weekday.weekday);
+    context.put("date", weekday.date);
+    context.putArray("lessons", weekday.lessons, LessonSerializer);
+}
+
+std::string AdminAPI::getMainPage(int userId) {
+    templates::Context context;
+    auto user = User::get_user(userId);
+    context.put("username", user.username);
+    std::vector<WeekDay> days;
+    DateTime dateTime;
+    for (int weekday = 0; weekday < 7; weekday++) {
+        days.emplace_back(dateTime.weekdayToStr(weekday), dateTime.dateByWeekday(weekday), user.get_lessons_by_weekday(weekday));
+    }
+    context.putArray("scheduleDays", days, DaySerializer);
+    auto currentLessons = user.get_current_lessons();
+    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
+
+    _render.set("mainPageAdmin.html");
+    return _render.render(context);
 }
 
 int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &group) {
