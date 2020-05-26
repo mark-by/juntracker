@@ -27,7 +27,7 @@ void Connection::doRead(const boost::system::error_code& error,
         Request request_(std::string(buffer_.begin(), buffer_.end()));
 
         if (request_.header("Host") != "juntracker.ru") {
-            Response bad_response(403);
+            Response bad_response(status::BadRequest);
             async::async_write(socket_,
                     async::buffer(
                             bad_response.str(),
