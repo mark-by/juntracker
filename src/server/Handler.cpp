@@ -5,19 +5,19 @@
 #include "Handler.h"
 
 
-std::string Handler::customerHandler(Request request, const User& user) {
+std::string Handler::customerHandler(Request request, const User &user) {
     Response response("<html><h1>Hello world!(From Customer)</h1></html>");
     // Response response(customer.get(std::stoi(request._data("id"))));
     return response.str();
 }
 
-std::string Handler::teacherHandler(Request request, const User& user) {
+std::string Handler::teacherHandler(Request request, const User &user) {
     Response response("<html><h1>Hello world! (From Teacher)</h1></html>");
     // Response response(tutor.get(boost::lexical_cast<int>(request._data("id"))));
     return response.str();
 }
 
-std::string Handler::adminHandler(Request request, const User& user) {
+std::string Handler::adminHandler(Request request, const User &user) {
     if (request.method() == "GET") {
         if (request.path() == "/") {
             std::cout << "/\n";
@@ -25,18 +25,10 @@ std::string Handler::adminHandler(Request request, const User& user) {
             return response.str();
         }
 
-        if (!request.data("id").empty()) {
-            std::cout << "id\n";
-            if (request.path() == "/student") {
-                std::cout << "/student\n";
-                Response response(admin.getPageStudents(std::stoi(request.data("id"))));
-                return response.str();
-            }
-            if (request.path() == "/get_page_students") {
-                std::cout << "/get_page_students\n";
-                Response response(admin.getPageStudents(std::stoi(request.data("id"))));
-                return response.str();
-            }
+        if (request.path() == "/students") {
+            std::cout << "/student\n";
+            Response response(admin.getPageStudents(user.id()));
+            return response.str();
         }
 
         if (request.path() == "/student") {
