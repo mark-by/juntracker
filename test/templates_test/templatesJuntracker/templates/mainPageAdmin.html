@@ -60,10 +60,12 @@
                     <div class="lesson__header_tutor">{{lesson.tutor}}</div>
                 </div>
                 <form class="lesson__content">
+                    <input type="hidden" name="lesson_id" value="{{lesson.id}}"/>
                     {% for child in lesson.children %}
                     <div class="lesson__content_child">
-                        <input type="checkbox" name="child-name" {% if child.isHere %}checked{%endif%}/>
-                        <div class="name" data="{{child.isHere}}_{{child.id}}">{{child.name}}</div>
+                        <input type="checkbox" name="check" data="{%if child.isHere %}1{%else%}0{%endif%}" {% if child.isHere %}checked{%endif%}/>
+                        <input type="hidden" name="{{child.id}}" value="{{child.isHere}}"/>
+                        <div class="name">{{child.name}}</div>
                     </div>
                     {% endfor %}
                 </form>
