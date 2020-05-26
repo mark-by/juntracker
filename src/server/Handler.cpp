@@ -82,3 +82,19 @@ std::shared_ptr<User> Handler::authorizationHandler(Request request) {
         return nullptr;
     }
 }
+
+Response Handler::loginHandler(Request request) {
+    if (request.path() == "/login") {
+        if (request.method() == "GET") {
+
+        } else {
+
+        }
+    } else {
+        if (request.method() == "GET") {
+
+        } else {
+
+        }
+    }
+}

@@ -28,23 +28,27 @@ void Connection::doRead(const boost::system::error_code& error,
 
         Response response_;
 
-        if (request_.header("Host") != "juntracker.ru") {
-            response_.setStatus(status::BadRequest);
-        }
-
-        // Session::get_user(request_.cookie("session_id"));
-
-        if (!handler_.authorizationHandler(request_)) {
-            response_.setStatus(status::MovedPermanently);
-            response_.setHeader("Location", "/login");
+        if (request_.path() == "/login" || request_.path() == "/register") {
+            response_ = Response("<html><h1>Hello world!</h1></html>");
         } else {
-            // improve later
-            response_ = handler_.adminHandler(
-                    request_,
-                    Session::get_user(
-                            request_.cookie("session_id")
-                    )
-            );
+            if (request_.header("Host") != "juntracker.ru") {
+                response_.setStatus(status::BadRequest);
+            }
+
+            // Session::get_user(request_.cookie("session_id"));
+
+            if (!handler_.authorizationHandler(request_)) {
+                response_.setStatus(status::MovedPermanently);
+                response_.setHeader("Location", "/login");
+            } else {
+                // improve later
+                response_ = handler_.adminHandler(
+                        request_,
+                        Session::get_user(
+                                request_.cookie("session_id")
+                        )
+                );
+            }
         }
 
         async::async_write(socket_,

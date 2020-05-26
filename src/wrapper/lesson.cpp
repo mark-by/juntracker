@@ -28,11 +28,7 @@ std::vector<Student> Lesson::get_students() const {
 }
 
 Teacher Lesson::get_teacher() const {
-<<<<<<< HEAD
     std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(_id) + "';";
-=======
-    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(this->_id) + "';";
->>>>>>> sqlWrapper
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
