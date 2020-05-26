@@ -22,7 +22,7 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
         for (int j = 0; j < PQntuples(result); j++) {
             int l_id = atoi(PQgetvalue(result, 0, 0));
             int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-            std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
+            int l_weekday = atoi(PQgetvalue(result, 0, 4));
             std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
             std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
             auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
@@ -42,7 +42,7 @@ std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
     for (int j = 0; j < PQntuples(result); j++) {
         int l_id = atoi(PQgetvalue(result, 0, 0));
         int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-        std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
+        int l_weekday = atoi(PQgetvalue(result, 0, 4));
         std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
         std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
         auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
@@ -73,7 +73,7 @@ std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
         for (int j = 0; j < PQntuples(result); j++) {
             int l_id = atoi(PQgetvalue(result, 0, 0));
             int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-            std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
+            int l_weekday = atoi(PQgetvalue(result, 0, 4));
             std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
             std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
             auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);

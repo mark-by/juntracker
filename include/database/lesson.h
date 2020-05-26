@@ -8,7 +8,7 @@ public:
     Lesson(SqlWrapper& postgres)
         : postgres(postgres) {}
 
-    explicit Lesson(int _id, int _cabinet, std::string& _weekday,
+    explicit Lesson(int _id, int _cabinet, int _weekday,
             std::string& _start_time, std::string& _end_time, SqlWrapper postgres)
             : _id(_id)
             , _cabinet(_cabinet)
@@ -18,8 +18,8 @@ public:
             , postgres(postgres) {}
 
     std::vector<Student> get_students() const;
-    Teacher get_teacher(int l_id) const;
-    std::string get_title(int l_id) const;
+    Teacher get_teacher() const;
+    std::string get_title() const;
 
     static Lesson get_lesson(int lesson_id);
     static int save(int cabinet, const std::string& weekaday, const std::string& start, const std::string& end);
@@ -27,14 +27,14 @@ public:
 
     int id() const { return _id; }
     int cabinet() const { return _cabinet; }
-    std::string weekday() const { return _weekday; }
+    int weekday() const { return _weekday; }
     std::string start_time() const { return _start_time; }
     std::string end_time() const { return _end_time; }
 
  private:
     int _id;
     int _cabinet;
-    std::string _weekday;
+    int _weekday;
     std::string _start_time;
     std::string _end_time;
 

@@ -2,7 +2,6 @@
 
 std::vector<Course> Student::get_courses() const {
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(this->_id) + "';";
-    std::cout << query << std::endl;
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -25,7 +24,14 @@ std::vector<Course> Student::get_courses() const {
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
-    Visit res_visit(postgres);
+    std::string query = "SELECT * FROM visit WHERE lesson_id='" + std::to_string(lesson_id) + "';";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int visit_id = atoi(PQgetvalue(result, 0, 0));
+    int v_was_in_class = atoi(PQgetvalue(result, 0, 1));
+    Visit res_visit(visit_id, v_was_in_class, postgres);
     return res_visit;
 }
 
