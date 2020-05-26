@@ -38,20 +38,24 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     return res_lesson;
 }
 
-Student User::get_student() const {
+std::vector<Student> User::get_student() const {
     std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
-    int student_id = atoi(PQgetvalue(result, 0, 0));
+    std::vector<Student> res_students;
+    for (int i = 0; i < PQntuples(result); i++) {
 
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int s_age = atoi(PQgetvalue(result, 0, 3));
-    Student res_student(student_id, s_name, s_surname, s_age, postgres);
+        int student_id = atoi(PQgetvalue(result, i, 0));
 
-    return res_student;
+        std::string s_name = std::string(PQgetvalue(result, i, 1));
+        std::string s_surname = std::string(PQgetvalue(result, i, 2));
+        int s_age = atoi(PQgetvalue(result, i, 3));
+        res_students.emplace_back(student_id, s_name, s_surname, s_age, postgres);
+    }
+
+    return res_students;
 }
 
 User User::get_user(int user_id) {
@@ -75,7 +79,7 @@ User User::get_user(int user_id) {
     return res_user;
 }
 
-int User::save(const std::string& username, const std::string& password, const std::string& email) {
+int User::save(const std::string &username, const std::string &password, const std::string &email) {
     std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
@@ -88,7 +92,7 @@ int User::save(const std::string& username, const std::string& password, const s
     std::string table_name = "users";
     int count_rows = postgres.count_rows(table_name);
     s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
-    << "', '" << username << "', '" << password << "');";
+      << "', '" << username << "', '" << password << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {

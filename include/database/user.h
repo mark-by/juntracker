@@ -16,7 +16,7 @@ class User {
 
     std::vector<Lesson> get_current_lessons() const;
     std::vector<Lesson> get_lessons_by_weekday(int l_weekday) const;
-    Student get_student() const;
+    std::vector<Student> get_student() const;
 
     static User get_user(int user_id);
     static int save(const std::string& username, const std::string& password, const std::string& email);
