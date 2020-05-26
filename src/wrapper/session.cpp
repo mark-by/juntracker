@@ -1,6 +1,14 @@
 #include "session.h"
 
 User Session::get_user(const std::string& s_cookie) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
     std::string query = "SELECT * FROM users WHERE cookie=" + s_cookie + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -15,32 +23,56 @@ User Session::get_user(const std::string& s_cookie) {
     return res_user;
 }
 
-Session Session::get_session(int s_id) const {
-    std::string query = "SELECT * FROM session WHERE id=" + std::to_string(s_id) + ";";
+Session Session::create_session(const std::string& username, const std::string& password) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+    std::string query = "SELECT password FROM users WHERE login='" + username + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
-    std::string s_cookie = std::string(PQgetvalue(result, 0, 1));
-    int s_uid = atoi(PQgetvalue(result, 0, 2));
-    auto res_session = Session(s_id, s_cookie, s_uid);
-    return res_session;
+    std::string res_password = PQgetvalue(result, 0, 0);
+    if (res_password != password) {
+        throw std::exception();
+    }
+    std::string table_name = "session";
+    auto curr_time = boost::posix_time::second_clock::local_time();
+    std::string new_cookie = std::string(curr_time.zone_as_posix_string());
+    int count_rows = postgres.count_rows(table_name);
+    return Session(count_rows + 1, new_cookie, postgres);
 }
 
-int Session::add_session(const Session& session) const {
-    std::ostringstream s;
-    s << "INSERT INTO session VALUES (" << std::to_string(session.id()) << ", '"
-    << session.cookie() << "', " << std::to_string(session.uid()) << ");";
+int Session::remove(int user_id) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
 
-    std::string query = s.str();
+    std::string query = "DELETE FROM session WHERE user_id=" + std::to_string(user_id) + ";";
     if (!postgres.exec(query)) {
         return -1;
     }
     return 0;
 }
 
-int Session::delete_session(int s_id) const {
-    std::string query = "DELETE * FROM session WHERE id=" + std::to_string(s_id) + ";";
+int Session::remove(const std::string cookie) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
+    std::string query = "DELETE FROM session WHERE cookie=" + cookie + ";";
     if (!postgres.exec(query)) {
         return -1;
     }

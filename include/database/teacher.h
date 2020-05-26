@@ -17,8 +17,6 @@ class Teacher : public Person {
         , _description(_description)
         , postgres(postgres) {}
 
-    std::string get_name(int t_id) const override;
-    std::string get_surname(int t_id) const override;
     std::vector<Course> get_courses() const;
 
     [[nodiscard]] Teacher get_teacher(int t_id) const;

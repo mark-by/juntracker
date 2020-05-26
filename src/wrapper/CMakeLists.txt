@@ -2,7 +2,6 @@ include_directories("${PROJECT_SOURCE_DIR}/include/database")
 
 set(db_source
         course.cpp
-        day.cpp
         lesson.cpp
         main.cpp
         payment.cpp

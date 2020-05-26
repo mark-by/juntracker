@@ -67,7 +67,7 @@ std::vector<Student> Course::get_students() const {
 }
 
 Course Course::get_course(int course_id) {
-    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
     while (getline(fin, conninfo)) {}
@@ -87,7 +87,7 @@ Course Course::get_course(int course_id) {
 }
 
 int Course::save(const std::string& name, int price) {
-    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
     while (getline(fin, conninfo)) {}
@@ -110,7 +110,7 @@ int Course::save(const std::string& name, int price) {
 }
 
 int Course::remove(int course_id) {
-    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
     while (getline(fin, conninfo)) {}

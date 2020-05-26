@@ -2,6 +2,8 @@
 #define PROJECT_INCLUDE_SQL_WRAPPER_H_
 
 #include "abstract_db.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 #include <iostream>
 #include <fstream>
