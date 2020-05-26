@@ -32,13 +32,13 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
     return context;
 }
 
-templates::Context ShortStudentSerializer(const Student &student) {
+templates::Context AdminAPI::ShortStudentSerializer(const Student &student) {
     templates::Context context;
     context.put("name", student.name() + " " + student.surname());
     return context;
 }
 
-templates::Context LessonSerializer(const Lesson &lesson) {
+templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
     context.put("cabinet", lesson.cabinet());
@@ -50,8 +50,7 @@ templates::Context LessonSerializer(const Lesson &lesson) {
     return context;
 }
 
-
-templates::Context DaySerializer(const WeekDay &weekday) {
+templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
     templates::Context context;
     context.put("weekDay", weekday.weekday);
     context.put("date", weekday.date);
