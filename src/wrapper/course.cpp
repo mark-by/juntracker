@@ -16,15 +16,14 @@ Teacher Course::get_teacher() const {
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int salary = atoi(PQgetvalue(result, 0, 3));
-    std::string description = PQgetvalue(result, 0, 4);
-    auto res_teacher = Teacher(teacher_id, t_name, t_surname, salary, description, postgres);
+    auto res_teacher = Teacher(teacher_id, t_name, t_surname, salary, postgres);
     PQclear(result);
 
     return res_teacher;
 }
 
 int Course::set_price(int price, int course_id) {
-    std::string filepath = "/home/andrey/juntracker/config/config.txt";
+    std::string filepath = "config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
     while (getline(fin, conninfo)) {}

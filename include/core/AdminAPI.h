@@ -18,6 +18,9 @@ class AdminAPI : public API {
         std::string weekday;
         std::string date;
         std::vector<Lesson> lessons;
+
+        WeekDay(const std::string &weekday, const std::string &date, const std::vector<Lesson> lessons) :
+                weekday(weekday), date(date), lessons(lessons) {}
     };
 
 public:
@@ -25,13 +28,13 @@ public:
 
     std::string getMainPage(int userId) override;
 
-    static int saveCurrentLesson(const std::unordered_map<std::string, std::string> & data);
+    static int saveCurrentLesson(const std::unordered_map<std::string, std::string> &data);
 
     std::string findStudent(const std::string &);
 
     int deleteStudent(int student_id);
 
-    int createStudent(const std::unordered_map<std::string, std::string> & data);
+    int createStudent(const std::unordered_map<std::string, std::string> &data);
 
     std::string getPageStudents(int);
 

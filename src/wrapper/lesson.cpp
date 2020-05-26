@@ -28,7 +28,11 @@ std::vector<Student> Lesson::get_students() const {
 }
 
 Teacher Lesson::get_teacher() const {
+<<<<<<< HEAD
     std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(_id) + "';";
+=======
+    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(this->_id) + "';";
+>>>>>>> sqlWrapper
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -42,8 +46,7 @@ Teacher Lesson::get_teacher() const {
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int t_salary = atoi(PQgetvalue(result, 0, 3));
-    std::string t_description = std::string(PQgetvalue(result, 0, 4));
-    Teacher res_teacher(t_id, t_name, t_surname, t_salary, t_description, postgres);
+    Teacher res_teacher(t_id, t_name, t_surname, t_salary,postgres);
 
     return res_teacher;
 }
@@ -78,10 +81,10 @@ Lesson Lesson::get_lesson(int lesson_id) {
         throw std::exception();
     }
     int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-    std::string l_weekday = std::string(PQgetvalue(result, 0, 4));
+    int l_weekday = atoi(PQgetvalue(result, 0, 4));
     std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
     std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
     return res_lesson;
 }
 

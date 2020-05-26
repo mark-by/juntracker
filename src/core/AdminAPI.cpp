@@ -28,7 +28,7 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
     context.put("name", student.student.name() + " " + student.student.surname());
     context.put("id", student.student.id());
     context.put("isHere", student.student.get_visit(student.lesson.id(),
-                                                    boost::posix_time::second_clock::universal_time()).was_is_class());
+                                                    boost::posix_time::second_clock::universal_time()).was_in_class());
     return context;
 }
 
@@ -60,11 +60,11 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
 std::string AdminAPI::getMainPage(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
-    context.put("username", user.username);
+    context.put("username", user.login());
     std::vector<WeekDay> days;
     DateTime dateTime;
     for (int weekday = 0; weekday < 7; weekday++) {
-        days.emplace_back(dateTime.weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
+        days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
                           user.get_lessons_by_weekday(weekday));
     }
     context.putArray("scheduleDays", days, DaySerializer);
@@ -83,7 +83,7 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
 
     for (auto &pair : data) {
         if (pair.first != "check" || pair.first != "lesson_id") {
-            Visit::save(pair.first, lesson_id, pair.first == "1");
+            Visit::save(std::stoi(pair.first), lesson_id, pair.first == "1");
         }
     }
 
@@ -105,7 +105,7 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
 
     std::string name = student.at("name");
     std::string surname = student.at("surname");
-    std::string age = student.at("age");
+    int age = std::stoi(student.at("age"));
 
     Student::save(name, surname, age);
 
@@ -129,8 +129,8 @@ templates::Context StudentDBSerializer(const Student &student) {
 std::string AdminAPI::getPageStudents(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
-    context.put("username", user.username);
-    context.put("students", user.get_students, StudentDBSerializer);
+    context.put("username", user.login());
+    context.put("students", user.get_students(), StudentDBSerializer);
     _render.set("studentsAdmin.html");
     return _render.render(context);
 }
