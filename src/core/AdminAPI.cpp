@@ -7,18 +7,23 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <http/datetime.h>
 
-templates::Context StudentSerializer(const Student & student) {
+struct StudentOnLesson {
+    Student student;
+    Lesson lesson;
+};
+
+templates::Context StudentSerializer(const StudentOnLesson& student) {
     auto now = boost::posix_time::second_clock();
     templates::Context context;
-    context.put("name", student.get_name() + " " + student.get_surname());
-    context.put("id", student.id());
-    context.put("isHere", student.get_visit(boost::posix_time::second_clock::universal_time()).was_is_class());
+    context.put("name", student.student.name() + " " + student.student.surname());
+    context.put("id", student.student.id());
+    context.put("isHere", student.student.get_visit(student.lesson.id(), boost::posix_time::second_clock::universal_time()).was_is_class());
     return context;
 }
 
 templates::Context ShortStudentSerializer(const Student & student) {
    templates::Context context;
-   context.put("name", student.get_name() + " " + student.get_surname());
+   context.put("name", student.name() + " " + student.surname());
    return context;
 }
 
@@ -26,20 +31,28 @@ templates::Context LessonSerializer(const Lesson & lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
     context.put("cabinet", lesson.cabinet());
+    context.put("id", lesson.id());
     context.put("tutor", lesson.get_teacher().name());
     context.putArray("children", lesson.get_students(), ShortStudentSerializer);
-    context.put("startTime", lesson.get_start_time());
-    context.put("endTime", lesson.get_end_time());
+    context.put("startTime", lesson.start_time());
+    context.put("endTime", lesson.end_time());
+    return context;
 }
 
 templates::Context CurrentLessonSerializer(const Lesson & lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
+    context.put("id", lesson.id())
     context.put("cabinet", lesson.cabinet());
     context.put("tutor", lesson.get_teacher().name());
-    context.putArray("children", lesson.get_students(), StudentSerializer);
-    context.put("startTime", lesson.get_start_time());
-    context.put("endTime", lesson.get_end_time());
+    std::vector<StudentOnLesson> students;
+    for (auto &student : lesson.get_students()) {
+        students.emplace_back(student, lesson);
+    }
+    context.putArray("children", students, StudentSerializer);
+    context.put("startTime", lesson.start_time());
+    context.put("endTime", lesson.end_time());
+    return context;
 }
 
 struct WeekDay {
@@ -72,25 +85,15 @@ std::string AdminAPI::getMainPage(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &group) {
-    if (group.empty()) {
+int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &data) {
+    if (data.empty()) {
         return -1;
     }
+    int lesson_id = std::stoi(data.at("lesson_id"));
 
-    std::string course = group.at("course");
-    std::string date = group.at("date");
-
-    auto it = group.begin();
-
-    for (int i = 0; it < group.end(); i++, it++) {
-        if (it->first != "lesson" && it->first != "date" ) {
-            std::string studentId = it->first;
-            std::string status = it->second;
-            int res = ManagerVisitHistory.addRecord(course, date, studentId, status);
-
-            if (res) {
-                return std::stoi(studentId);
-            }
+    for (auto & pair : data) {
+        if (pair.first != "check" || pair.first != "lesson_id") {
+            Visit::save(pair.first, lesson_id, pair.first == "1");
         }
     }
 
@@ -105,21 +108,8 @@ std::string AdminAPI::findStudent(const std::string &str) {
     std::vector<std::string> result = ManagerStudent.fingStudentBy();*/
 }
 
-int AdminAPI::deleteStudent(const std::vector<std::string> &str) {
-    if (str.empty()) {
-        return -1;
-    }
-
-    std::vector<std::string>::iterator it = str.begin();
-
-    while (it != str.end()) {
-        int res = str.deleteStudent(it);
-        if (res) {
-            return (it);
-        }
-        it++;
-    }
-
+int AdminAPI::deleteStudent(int student_id) {
+    Student::remove(student_id);
     return 0;
 }
 
@@ -128,15 +118,11 @@ int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &
         return -1;
     }
 
-    std::string name = student["name"];
-    std::string surname = student["surname"];
-    std::string age = student["age"];
+    std::string name = student.at("name");
+    std::string surname = student.at("surname");
+    std::string age = student.at("age");
 
-    int res = ManagerStudent.addStudent(name, surname, age);
-
-    if (res) {
-        return 1;
-    }
+    Student::save(name, surname, age);
 
     return 0;
 }
@@ -145,8 +131,27 @@ std::string AdminAPI::getStudentsBy(std::unordered_map<std::string, std::string>
     return std::string();
 }
 
-std::string AdminAPI::getPageStudents(int) {
+templates::Context StudentDBSerializer(const Student & student) {
+    templates::Context context;
+    context.put("name", student.name() + " " + student.surname());
+    context.put("avatar", "");
+    context.put("id", student.id());
+    context.put("age", student.age());
+    std::vector<std::string> courses;
+    for (auto & course : student.get_courses()){
+        courses.push_back(course.title());
+    }
+    context.putArray("courses", courses);
+    return context;
+}
 
+std::string AdminAPI::getPageStudents(int userId) {
+    templates::Context context;
+    auto user = User::get_user(userId);
+    context.put("username", user.username);
+    context.put("students", user.get_students, StudentDBSerializer);
+    _render.set("studentsAdmin.html");
+    return _render.render(context);
 }
 
 int AdminAPI::addCourse(const std::string &) {
