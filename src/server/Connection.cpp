@@ -9,12 +9,6 @@
 namespace async = boost::asio;
 namespace net = boost::asio::ip;
 
-enum rights {
-    admin = 0,
-    teacher = 1,
-    customer = 2
-};
-
 Connection::Connection(boost::asio::io_service& service, ConnectionManager& manager):
     socket_(service), manager_(manager), handler_(), buffer_() { };
 
@@ -33,10 +27,16 @@ void Connection::doRead(const boost::system::error_code& error,
         Request request_(std::string(buffer_.begin(), buffer_.end()));
 
         if (request_.header("Host") != "juntracker.ru") {
-            //std::cout << "\nsome error\n";
+            Response bad_response(403);
+            async::async_write(socket_,
+                    async::buffer(
+                            bad_response.str(),
+                            bad_response.str().max_size()
+                            ),
+                            boost::bind(&Connection::doWrite, shared_from_this(),
+                                    async::placeholders::error));
         }
 
-        // big switch to choose api for request
         // Session session();
         std::string response_string(
                 handler_.adminHandler(request_, /*Session::get_user(request_.cookie("session_id"))*/));
