@@ -5,6 +5,7 @@
 class Student;
 #include "course.h"
 #include "visit.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 class Student : public Person {
  public:
@@ -19,7 +20,7 @@ class Student : public Person {
         , postgres(postgres){}
 
     std::vector<Course> get_courses() const;
-    Visit get_visit(int lesson_id, std::string& time);
+    Visit get_visit(int lesson_id, const boost::posix_time::ptime & date);
 
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string& surname, int age);
