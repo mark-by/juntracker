@@ -2,7 +2,6 @@
 #define DATABASE_SESSION_H
 
 #include "user.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 class Session {
  public:

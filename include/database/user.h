@@ -1,5 +1,5 @@
-#ifndef DATABASE_USER_H_
-#define DATABASE_USER_H_
+#ifndef INCLUDE_DATABASE_USER_H_
+#define INCLUDE_DATABASE_USER_H_
 
 #include "sql_wrapper.h"
 #include "lesson.h"
@@ -14,19 +14,17 @@ class User {
         , _login(_login)
         , _password(_password) {}
 
-    User check_or_create(std::string& u_login, std::string& u_password, std::string& u_email);
     std::vector<Lesson> get_current_lessons() const;
     std::vector<Lesson> get_lessons_by_weekday(std::string l_weekday) const;
 
+    static User get_user(int user_id);
+    static int save(const std::string& username, const std::string& password, const std::string& email);
+    static int remove(int user_id);
 
-    User get_user(int u_id) const;
-    int add_user(const User& user) const;
-    int delete_user(int u_id) const;
-
-    [[nodiscard]] int id() const { return _id; }
-    [[nodiscard]] std::string email() const { return _email; }
-    [[nodiscard]] std::string login() const { return _login; }
-    [[nodiscard]] std::string password() const { return _password; }
+    int id() const { return _id; }
+    std::string email() const { return _email; }
+    std::string login() const { return _login; }
+    std::string password() const { return _password; }
 
  private: 
     int _id;
@@ -37,4 +35,4 @@ class User {
     SqlWrapper postgres;
 };
 
-#endif  // DATABASE_USER_H_
+#endif  // INCLUDE_DATABASE_USER_H_

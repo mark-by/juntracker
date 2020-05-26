@@ -1,19 +1,5 @@
 #include "teacher.h"
 
-Teacher Teacher::get_teacher(int t_id) const {
-    std::string query = "SELECT * FROM teacher WHERE id=" + std::to_string(t_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string t_name = std::string(PQgetvalue(result, 0, 1));
-    std::string t_surname = std::string(PQgetvalue(result, 0, 2));
-    int t_salary = atoi(PQgetvalue(result, 0, 3));
-    std::string t_description = PQgetvalue(result, 0, 4);
-    auto res_teacher = Teacher(t_id, t_name, t_surname, t_salary, t_description, postgres);
-    return res_teacher;
-}
-
 std::vector<Course> Teacher::get_courses() const {
     std::string query = "SELECT * FROM course WHERE teacher_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
@@ -34,11 +20,42 @@ std::vector<Course> Teacher::get_courses() const {
     return courses;
 }
 
-int Teacher::add_teacher(const Teacher& teacher) const {
+Teacher Teacher::get_teacher(int teacher_id) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
+    std::string query = "SELECT * FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::string t_name = std::string(PQgetvalue(result, 0, 1));
+    std::string t_surname = std::string(PQgetvalue(result, 0, 2));
+    int t_salary = atoi(PQgetvalue(result, 0, 3));
+    auto res_teacher = Teacher(teacher_id, t_name, t_surname, t_salary, postgres);
+    return res_teacher;
+}
+
+int Teacher::save(const std::string& name, const std::string& surname, int salary) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
     std::ostringstream s;
-    s << "INSERT INTO teacher VALUES (" << std::to_string(teacher.id()) << ", '"
-      << teacher.name() << "', '" << teacher.surname() << "', "
-      << std::to_string(teacher.salary()) << ", '" << teacher.description() << "');";
+    std::string table_name = "teacher";
+    int count_rows = postgres.count_rows(table_name);
+
+    s << "INSERT INTO teacher VALUES (" << std::to_string(count_rows + 1) << ", '"
+      << name << "', '" << surname << "', " << std::to_string(salary) << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
@@ -47,8 +64,16 @@ int Teacher::add_teacher(const Teacher& teacher) const {
     return 0;
 }
 
-int Teacher::delete_teacher(int t_id) const {
-    std::string query = "DELETE * FROM teacher WHERE id=" + std::to_string(t_id) + ";";
+int Teacher::remove(int teacher_id) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
+    std::string query = "DELETE FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
     if (!postgres.exec(query)) {
         return -1;
     }

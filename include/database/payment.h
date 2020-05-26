@@ -1,5 +1,5 @@
-#ifndef _PAYMENT_H_
-#define _PAYMENT_H_
+#ifndef INCLUDE_DATABASE_PAYMENT_H_
+#define INCLUDE_DATABASE_PAYMENT_H_
 
 #include "sql_wrapper.h"
 #include "course.h"
@@ -21,9 +21,9 @@ class Payment {
     static int save(int student_id, int course_id, int amount);
     static int remove(int payment_id);
 
-    [[nodiscard]] int id() const { return _id; }
-    [[nodiscard]] int amount() const { return _amount; }
-    [[nodiscard]] std::string payment_date() const { return _payment_date; }
+    int id() const { return _id; }
+    int amount() const { return _amount; }
+    std::string payment_date() const { return _payment_date; }
 
  private:
     int _id;
@@ -33,4 +33,4 @@ class Payment {
     SqlWrapper postgres;
 };
 
-#endif  // _PAYMENT_H_
+#endif  // INCLUDE_DATABASE_PAYMENT_H_

@@ -4,6 +4,7 @@
 #include "person.h"
 class Student;
 #include "course.h"
+#include "visit.h"
 
 class Student : public Person {
  public:
@@ -14,25 +15,28 @@ class Student : public Person {
         , _name(_name)
         , _surname(_surname)
         , _age(_age)
+        , _description("")
         , postgres(postgres){}
 
-    [[nodiscard]] int get_age(int s_id) const;
     std::vector<Course> get_courses() const;
+    Visit get_visit(int lesson_id, std::string& time);
 
-    [[nodiscard]] Student get_student(int s_id) const;
-    [[nodiscard]] int add_student(const Student& student) const;
-    [[nodiscard]] int delete_student(int s_id) const;
+    static Student get_student(int student_id);
+    static int save(const std::string name, const std::string& surname, int age);
+    static int remove(int student_id);
 
-    [[nodiscard]] int id() const override { return _id; }
-    [[nodiscard]] std::string name() const override { return _name; }
-    [[nodiscard]] std::string surname() const override { return _surname; }
-    [[nodiscard]] int age() const { return _age; }
+    int id() const override { return _id; }
+    std::string name() const override { return _name; }
+    std::string surname() const override { return _surname; }
+    int age() const { return _age; }
+    std::string description() const { return _description; }
 
  private:
     int _id;
     std::string _name;
     std::string _surname;
     int _age;
+    std::string _description;
 
     SqlWrapper postgres;
 };
