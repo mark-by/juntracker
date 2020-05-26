@@ -23,7 +23,6 @@ templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
 }
 
 templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
-    auto now = boost::posix_time::second_clock();
     templates::Context context;
     context.put("name", student.student.name() + " " + student.student.surname());
     context.put("id", student.student.id());

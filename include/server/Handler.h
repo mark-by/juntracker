@@ -17,9 +17,12 @@ class Handler {
 public:
     Handler() = default;
     // methods to fill response from request done by Api
-    std::string teacherHandler(Request request, const User& user);  // handler_.teacher();
-    std::string adminHandler(Request request, const User& user);  // handler_.adminHandler();
-    std::string customerHandler(Request request, const User& user); // handler_.customer();
+    Response teacherHandler(Request request, const User& user);  // handler_.teacher();
+    Response adminHandler(Request request, const User& user);    // handler_.adminHandler();
+    Response customerHandler(Request request, const User& user); // handler_.customer();
+
+
+    std::shared_ptr<User> authorizationHandler(Request request);  // check login or not
 
 private:
     AdminAPI admin;

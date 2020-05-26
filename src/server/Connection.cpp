@@ -4,7 +4,7 @@
 
 #include"Connection.h"
 #include "ConnectionManager.h"
-// #include "../database/session.h"
+#include "../database/session.h"
 
 namespace async = boost::asio;
 namespace net = boost::asio::ip;
@@ -26,28 +26,31 @@ void Connection::doRead(const boost::system::error_code& error,
     if (!error) {
         Request request_(std::string(buffer_.begin(), buffer_.end()));
 
+        Response response_;
+
         if (request_.header("Host") != "juntracker.ru") {
-            Response bad_response(status::BadRequest);
-            async::async_write(socket_,
-                    async::buffer(
-                            bad_response.str(),
-                            bad_response.str().max_size()
-                            ),
-                            boost::bind(&Connection::doWrite, shared_from_this(),
-                                    async::placeholders::error));
+            response_.setStatus(status::BadRequest);
         }
 
-        // Session session(request.cookie("session_id"));
-        std::string response_string(
-                handler_.adminHandler(request_, /*Session::get_user(request_.cookie("session_id"))*/));
+        // Session::get_user(request_.cookie("session_id"));
+
+        if (!handler_.authorizationHandler(request_)) {
+            response_.setStatus(status::MovedPermanently);
+            response_.setHeader("Location", "/login");
+        } else {
+            // improve later
+            response_ = handler_.adminHandler(
+                    request_,
+                    Session::get_user(
+                            request_.cookie("session_id")
+                    )
+            );
+        }
 
         async::async_write(socket_,
-                async::buffer(
-                        response_string,
-                        response_string.max_size()
-                        ),
-                        boost::bind(&Connection::doWrite, shared_from_this(),
-                            async::placeholders::error));
+                async::buffer(response_.str(), response_.str().max_size()),
+                boost::bind(&Connection::doWrite, shared_from_this(),
+                        async::placeholders::error));
     } else if (error != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
     }

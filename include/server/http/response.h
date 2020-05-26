@@ -45,11 +45,12 @@ public:
     explicit Response(const std::string & html, const int &status = status::OK);
     explicit Response(const templates::Context & jsonData, const int &status = status::OK);
     Response& operator=(Response&& other);
+    Response(const Response& other);
 
     std::string str();
     void setCookie(const std::string &key, const std::string &value, const int &daysExpires = 0);
     void setHeader(const std::string &key, const std::string &value);
-    void setSatus(const int &status);
+    void setStatus(const int &status);
 private:
     void setDate();
     std::string statusToStr() const;

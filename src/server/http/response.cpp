@@ -98,6 +98,13 @@ Response &Response::operator=(Response &&other) {
     return *this;
 }
 
-void Response::setSatus(const int &status) {
+void Response::setStatus(const int &status) {
     statusCode = status;
+}
+
+Response::Response(const Response &other) {
+    headers = other.headers;
+    cookies = other.cookies;
+    body = other.body;
+    statusCode = other.statusCode;
 }
