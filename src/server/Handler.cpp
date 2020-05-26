@@ -19,27 +19,42 @@ std::string Handler::teacher(Request request, const User& user) {
 }
 
 std::string Handler::admin(Request request, const User& user) {
-    if (request.path() == "/") {
-        // Response response(admin.getMainPage(user.get_id()))
-    }
-    Response response("<html><h1>Hello world! (From Admin)</h1></html>");
-    std::cout << request.path() << '\n';
-    if (!request.data("id").empty()) {
+    if (request.method() == "GET") {
+        if (request.path() == "/") {
+            // Response response(admin.getMainPage(user.get_id()))
+        }
+
+        if (!request.data("id").empty()) {
+            if (request.path() == "/student") {
+                // Response response(admin.getPageStudents(std::stoi(request._data("id"))));
+            }
+            if (request.path() == "/get_page_students") {
+                // Response response(admin.getPageStudents(boost::lexical_cast<int>(request._data("id"))));
+            }
+            if (request.path() == "/getPaymentByStudent") {
+                // Response response(admin.getPaymentByStudent(std::stoi(request._data("id"))));
+            }
+        }
+
         if (request.path() == "/student") {
-            // Response response(admin.getPageStudents(std::stoi(request._data("id"))));
+            // Response response(admin.findStudent(request._data("name")));
         }
-        if (request.path() == "/getPageStudents") {
-            // Response response(admin.getPageStudents(boost::lexical_cast<int>(request._data("id"))));
+
+        if (request.path() == "/get_students_by") {
+            // Response response(admin.getStudentsBy(request.dataTable));
         }
-        if (request.path() == "/getPaymentByStudent") {
-            // Response response(admin.getPaymentByStudent(std::stoi(request._data("id"))));
+
+    } else {
+        if (request.path() == "/save_current_lesson") {
+            // Response response(admin.SaveCurrentLesson(request.dataTable));
+        }
+
+        if (request.path() == "delete_student") {
+            // Response response(admin.deleteStudent(std::stoi(request._data("id"))));
+        }
+
+        if (request.path() == "create_student") {
+            // Response response(admin.deleteStudent(request.dataTable));
         }
     }
-    if (request.path() == "student") {
-        // Response response(admin.findStudent(request._data("name")));
-    }
-    if (request.path() == "getStudentsBy") {
-        // Response response(admin.getStudentsBy(request.dataTable));
-    }
-    return response.str();
 }
