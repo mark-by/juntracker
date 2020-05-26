@@ -50,7 +50,7 @@ public:
     std::string str();
     void setCookie(const std::string &key, const std::string &value, const int &daysExpires = 0);
     void setHeader(const std::string &key, const std::string &value);
-    void setSatus(const int &status):
+    void setSatus(const int &status);
 private:
     void setDate();
     std::string statusToStr() const;
