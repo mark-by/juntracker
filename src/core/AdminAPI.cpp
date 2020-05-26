@@ -28,7 +28,7 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
     context.put("name", student.student.name() + " " + student.student.surname());
     context.put("id", student.student.id());
     context.put("isHere", student.student.get_visit(student.lesson.id(),
-                                                    boost::posix_time::second_clock::universal_time()).was_is_class());
+                                                    boost::posix_time::second_clock::universal_time()).was_in_class());
     return context;
 }
 
@@ -83,7 +83,7 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
 
     for (auto &pair : data) {
         if (pair.first != "check" || pair.first != "lesson_id") {
-            Visit::save(pair.first, lesson_id, pair.first == "1");
+            Visit::save(std::stoi(pair.first), lesson_id, pair.first == "1");
         }
     }
 
