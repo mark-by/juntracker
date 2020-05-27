@@ -15,7 +15,8 @@ target_link_libraries(
         templates
         gtest_main
         pthread
-)
+        boost_filesystem
+        )
 
 add_test(NAME run_templates_tests
         COMMAND run_templates_tests)

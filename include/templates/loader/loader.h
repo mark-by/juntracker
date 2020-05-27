@@ -3,25 +3,28 @@
 
 #include <node/node.h>
 #include <parser/parser.h>
-#include <map>
+#include <unordered_map>
+#include <boost/filesystem.hpp>
 
 namespace templates {
     class Loader {
     public:
-        explicit Loader(std::string filename);
+        explicit Loader(const std::string &settingsPath = "settings");
 
-        void load();
-        std::string& getResult();
+        void load(const std::string &filename);
+        std::string result() const;
 
     private:
-        void merge();
+        void fillIncludes(std::unordered_map<std::string, std::shared_ptr<templates::Node>> & includes);
 
-        std::map<std::string, std::unique_ptr<Node>> blocks;
-        std::string filename;
-        std::string result;
-        templates::NodeQueue nodeList;
-        templates::BlockParser blockParser;
-        templates::TextParser textParser;
+        static std::string fileToStr(const boost::filesystem::path & filePath) ;
+
+        static std::string extendFileName(const std::string &file_str) ;
+
+        boost::filesystem::path _templatesPath;
+        boost::filesystem::path _includesPath;
+        std::string _result;
+        templates::Parser _parser;
     };
 }
 

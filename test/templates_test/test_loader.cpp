@@ -5,11 +5,11 @@
 #include <streambuf>
 
 TEST(LoaderTest, ResultTest) {
-    std::cout << "Help";
-    templates::Loader loader("../../test/test_files/loader/loader_extends.html");
-    loader.load();
-    std::string result = loader.getResult();
-    std::ifstream resultFile("../../test/test_files/loader/loader_result.html");
+    templates::Loader loader;
+    loader.load("template.html");
+    std::string result = loader.result();
+    std::ifstream resultFile("../../../test/templates_test/test_files/templates/loader_result.html");
     std::string shouldResult((std::istreambuf_iterator<char>(resultFile)), std::istreambuf_iterator<char>());
+    resultFile.close();
     EXPECT_TRUE(result == shouldResult);
 }

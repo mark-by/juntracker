@@ -2,3 +2,7 @@ cmake-build-debug/*
 include/boost/*
 .idea/*
 install_boost
+test/templates_test/templatesJuntracker/render
+test/templates_test/templatesJuntracker/.idea/*
+test/templates_test/templatesJuntracker/*
+build/*

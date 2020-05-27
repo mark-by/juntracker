@@ -30,10 +30,12 @@ namespace templates {
         void put(const std::string &name, const T &value);
 
         template<class T>
-        T get(const std::string &name);
+        T get(const std::string &name) const;
+
+        void set(const std::string & name, const Context & _root);
 
         template<class T>
-        std::vector <T> getArray(boost::property_tree::ptree::key_type const &key);
+        std::vector <T> getArray(boost::property_tree::ptree::key_type const &key) const;
 
         inline std::vector<Context> getObjects(boost::property_tree::ptree::key_type const &key);
 
