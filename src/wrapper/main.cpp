@@ -13,15 +13,24 @@
 #include "user.h"
 #include "visit.h"
 #include "visit_history.h"
+#include <boost/filesystem.hpp>
+#include <sstream>
 
 int main(int argc, char* argv[]) {
 
     // Create Connection
-    std::string filepath = "config.txt";
+    std::string filepath = "/config.txt";
     std::ifstream fin(filepath);
     std::string conninfo;
-    while (getline(fin, conninfo)) {}
+    char ch;
+    while (fin.get(ch)) {
+        std::cout << ch;
+        conninfo.push_back(ch);
+    }
     fin.close();
+
+    std::cout << boost::filesystem::current_path() << std::endl;
+    std::cout <<  conninfo << std::endl;
 
     PGconn *conn = PQconnectdb(conninfo.c_str());
     SqlWrapper postgres(conn);

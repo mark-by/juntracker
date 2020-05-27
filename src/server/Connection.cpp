@@ -28,6 +28,7 @@ void Connection::doRead(const boost::system::error_code& error,
 
         Response response_;
 
+        std::cout << std::string(buffer_.begin(), buffer_.end()) << std::endl;
         if (request_.path() == "/login" || request_.path() == "/register") {
             response_ = handler_.loginHandler(request_);
         } else {
