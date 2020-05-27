@@ -10,7 +10,9 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
 }
 
 std::string UserAPI::registerPage() {
-    return std::string();
+    templates::Context context;
+    _render.set("register.html");
+    return _render.render(context);
 }
 
 std::string UserAPI::loginPage() {
@@ -20,7 +22,5 @@ std::string UserAPI::loginPage() {
 }
 
 std::string UserAPI::signIn(const std::string &username, const std::string &password) {
-    templates::Context context;
-    _render.set("register.html");
-    return _render.render(context);
+    return std::string();
 }
