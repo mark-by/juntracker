@@ -117,3 +117,25 @@ int User::remove(int user_id) {
     return 0;
 }
 
+User User::get_user(const std::string &username) {
+    std::string filepath = "config.txt";
+    std::ifstream fin(filepath);
+    std::string conninfo;
+    while (getline(fin, conninfo)) {}
+    fin.close();
+    PGconn *conn = PQconnectdb(conninfo.c_str());
+    SqlWrapper postgres(conn);
+
+    std::string query = "SELECT * FROM users WHERE login=" + username + ";";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    std::string u_email = std::string(PQgetvalue(result, 0, 1));
+    int user_id = std::stoi(PQgetvalue(result, 0, 0));
+    std::string u_password = std::string(PQgetvalue(result, 0, 3));
+    std::string login = username;
+    auto res_user = User(user_id, u_email, login, u_password);
+    return res_user;
+}
+
