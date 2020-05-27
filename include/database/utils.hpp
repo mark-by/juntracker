@@ -3,7 +3,7 @@
 #include <string>
 #include <sql_wrapper.h>
 
-std::string get_config(const std::string & filename = "config.txt") {
+inline std::string get_config(const std::string & filename = "config.txt") {
     std::ifstream fin(filename);
     std::string conninfo;
     char ch;
@@ -14,7 +14,7 @@ std::string get_config(const std::string & filename = "config.txt") {
     return conninfo;
 }
 
-SqlWrapper connect(const std::string &config_filename = "config.txt") {
+inline SqlWrapper connect(const std::string &config_filename = "config.txt") {
     PGconn *conn = PQconnectdb(get_config(config_filename).c_str());
     return SqlWrapper(conn);
 }
