@@ -12,6 +12,7 @@
 //#include "../core/TeacherAPI.h"
 //#include "../core/CustomerAPI.h"
 #include "../core/AdminAPI.h"
+#include "../core/UserAPI.h"
 
 class Handler {
 public:
@@ -26,6 +27,7 @@ public:
 
 private:
     AdminAPI admin;
+    UserAPI user;
     /*TeacherAPI tutor;
     CustomerAPI customer;*/
 };

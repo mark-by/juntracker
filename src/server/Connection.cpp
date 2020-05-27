@@ -29,7 +29,7 @@ void Connection::doRead(const boost::system::error_code& error,
         Response response_;
 
         if (request_.path() == "/login" || request_.path() == "/register") {
-            response_ = Response("<html><h1>Hello world!</h1></html>");
+            response_ = handler_.loginHandler(request_);
         } else {
             if (request_.header("Host") != "juntracker.ru") {
                 response_.setStatus(status::BadRequest);

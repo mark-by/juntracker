@@ -84,17 +84,29 @@ std::shared_ptr<User> Handler::authorizationHandler(Request request) {
 }
 
 Response Handler::loginHandler(Request request) {
+    std::string session_id;
+
     if (request.path() == "/login") {
         if (request.method() == "GET") {
-
+            return Response(user.loginPage());
         } else {
-
+            session_id = user.signIn(request.data("username"), request.data("password"));
         }
     } else {
         if (request.method() == "GET") {
-
+            return Response(user.registerPage());
         } else {
-
+            session_id = user.signUp(request.dataTable());
         }
+    }
+
+    if (session_id.empty()) {
+        return Response(status::Forbidden);
+    } else {
+        Response tmp;
+        tmp.setCookie("session_id", session_id, 10);  // 10 days living cookie
+        tmp.setHeader("Location", "/");
+        tmp.setStatus(status::MovedPermanently);
+        return tmp;
     }
 }

@@ -9,11 +9,11 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
 }
 
 std::string UserAPI::registerPage() {
-    return std::string();
+    return "Register";
 }
 
 std::string UserAPI::loginPage() {
-    return std::string();
+    return "Login";
 }
 
 std::string UserAPI::signIn(const std::string &username, const std::string &password) {
