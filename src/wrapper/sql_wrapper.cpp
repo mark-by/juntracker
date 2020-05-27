@@ -25,7 +25,14 @@ bool SqlWrapper::query(const std::string& query, PGresult** result) const {
 bool SqlWrapper::exec(const std::string& query) const {
     char * cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
-    std::strcat(cstr, "');");
+    auto it = query.rbegin();
+    it++;
+    if (*it == ')') {
+        it++;
+        if (*it == '\'') {
+            std::strcat(cstr, "');");
+        }
+    }
     auto result = PQexec(conn, cstr);
     delete cstr;
     if (PQresultStatus(result) != PGRES_COMMAND_OK) {

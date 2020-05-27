@@ -20,7 +20,7 @@ class Student : public Person {
         , postgres(postgres){}
 
     std::vector<Course> get_courses() const;
-//    Visit get_visit(int lesson_id, const boost::posix_time::ptime & date) const;
+    Visit get_visit(int lesson_id, const boost::posix_time::ptime & date) const;
 
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string& surname, int age);

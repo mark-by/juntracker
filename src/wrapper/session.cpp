@@ -27,16 +27,17 @@ Session Session::create_session(const std::string& username, const std::string& 
     }
     char *res_password = PQgetvalue(result, 0, 0);
     if (strcmp(res_password, password.c_str())) {
+        std::cout << "NOPASS" << std::endl;
         throw std::exception();
     }
 
-    query = "SELECT user_id FROM users WHERE login='" + username + "';";
+    query = "SELECT id FROM users WHERE login='" + username + "';";
     if (!postgres.query(query, &result)) {
+        std::cout << "BEFORE" << std::endl;
         throw std::exception();
     }
     int user_id = atoi(PQgetvalue(result, 0, 0));
 
-    std::string new_cookie = username;
     std::ostringstream s;
     std::string table_name = "session";
     std::string new_cookie = username;
@@ -47,6 +48,7 @@ Session Session::create_session(const std::string& username, const std::string& 
 
     query = s.str();
     if (!postgres.exec(query)) {
+        std::cout << "AFTER" << std::endl;
         throw std::exception();
     }
     return Session(count_rows + 1, new_cookie, postgres);

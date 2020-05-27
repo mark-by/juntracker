@@ -24,23 +24,23 @@ std::vector<Course> Student::get_courses() const {
     return res_courses;
 }
 
-//Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
-//    const std::string format = "%a, %d %b %Y %H:%M:%S";
-//    DateTimeConverter converter(format);
-//
-//    std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
-//            + " and visit_date=" + date.zone_as_posix_string() + ";";
-//    PGresult *result = nullptr;
-//    if (!postgres.query(query, &result)) {
-//        throw std::exception();
-//    }
-//    int visit_id = atoi(PQgetvalue(result, 0, 0));
-//    int v_was_in_class = atoi(PQgetvalue(result, 0, 1));
-//    std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
-//    boost::posix_time::ptime v_date = converter.convert(str_v_date);
-//    Visit res_visit(visit_id, v_was_in_class, v_date, postgres);
-//    return res_visit;
-//}
+Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
+    const std::string format = "%y-%m-%d";
+    DateTimeConverter converter(format);
+
+    std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
+            + " and visit_date=" + converter.convert(boost::posix_time::second_clock::universal_time()) + ";";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int visit_id = atoi(PQgetvalue(result, 0, 0));
+    int v_was_in_class = atoi(PQgetvalue(result, 0, 1));
+    std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
+    boost::posix_time::ptime v_date = converter.convert(str_v_date);
+    Visit res_visit(visit_id, v_was_in_class, v_date, postgres);
+    return res_visit;
+}
 
 Student Student::get_student(int student_id) {
     auto postgres = connect();
