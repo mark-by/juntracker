@@ -1,4 +1,5 @@
 #include "sql_wrapper.h"
+#include <iostream>
 
 // SqlWrapper is ...
 SqlWrapper::SqlWrapper(PGconn *conn)
@@ -22,8 +23,17 @@ bool SqlWrapper::query(const std::string& query, PGresult** result) const {
 }
 
 bool SqlWrapper::exec(const std::string& query) const {
-    auto result = PQexec(conn, query.c_str());
-    return !(PQresultStatus(result) != PGRES_COMMAND_OK);
+    char * cstr = new char[query.length() + 1];
+    std::strcpy(cstr, query.c_str());
+    std::strcat(cstr, "');");
+    auto result = PQexec(conn, cstr);
+    delete cstr;
+    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+        std::cout << "ERROR:" << PQerrorMessage(conn) << std::endl;
+        std::cout << "STATUS:" << PQresultStatus(result) << std::endl;
+        return false;
+    }
+    return true;
 }
 
 bool SqlWrapper::is_connected() const {

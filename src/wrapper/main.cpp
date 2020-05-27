@@ -23,6 +23,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    User::save("someUser", "qwer", "qwerty");
+
     std::cout << "*** It compiles ***" << std::endl;
     return 0;
 }

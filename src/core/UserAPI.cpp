@@ -25,6 +25,7 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
         return "";
     }
     try {
+        std::cout << "username: " << username << " password: " << password << std::endl;
         return Session::create_session(username, password).cookie();
     } catch(...) {
         std::cout << "create session fail" << std::endl;

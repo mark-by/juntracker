@@ -86,12 +86,12 @@ int User::save(const std::string &username, const std::string &password, const s
     std::ostringstream s;
     std::string table_name = "users";
     int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
-      << "', '" << username << "', '" << password << "');";
+    s << "INSERT INTO users VALUES (" << count_rows + 1 << ", '"
+        << email << "', '" << username << "', '" << password << "');";
 
-    std::string query = s.str();
-    std::cout << query << std::endl;
-    if (!postgres.exec(query)) {
+    std::cout << "SSTR " << s.str() << std::endl;
+    std::cout << "CSTR " << s.str().c_str() << std::endl;
+    if (!postgres.exec(s.str())) {
         std::cout << "return -1" << std::endl;
         return -1;
     }

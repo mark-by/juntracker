@@ -94,10 +94,12 @@ Response Handler::loginHandler(Request request) {
         }
     } else {
         if (request.method() == "GET") {
+            std::cout << "registerPage" << std::endl;
             return Response(user.registerPage());
         } else {
             std::cout << "signUP" << std::endl;
             session_id = user.signUp(request.dataTable());
+            std::cout << "HERE SHOULD BE SESSION ID" << std::endl;
             std::cout << session_id << std::endl;
         }
     }
