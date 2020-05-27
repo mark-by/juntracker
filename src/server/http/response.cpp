@@ -107,4 +107,5 @@ Response::Response(const Response &other) {
     cookies = other.cookies;
     body = other.body;
     statusCode = other.statusCode;
+
 }
