@@ -5,7 +5,11 @@
 inline std::string templates::Context::str() const {
     // Представление context в json в строковом виде
     std::ostringstream oss;
-    boost::property_tree::write_json(oss, root);
+    try {
+        boost::property_tree::write_json(oss, root);
+    } catch (...) {
+        oss << root.get<std::string>("");
+    }
     return oss.str();
 }
 
@@ -24,13 +28,13 @@ void templates::Context::put(const std::string &name, const T &value) {
 }
 
 template<class T>
-T templates::Context::get(const std::string &name) {
+T templates::Context::get(const std::string &name) const {
     // Метод позволяет взять переменную по ключу
     return root.get<T>(name);
 }
 
 template<class T>
-std::vector<T> templates::Context::getArray(boost::property_tree::ptree::key_type const &key) {
+std::vector<T> templates::Context::getArray(boost::property_tree::ptree::key_type const &key) const {
     // Метод позволяет получить массив в качестве вектора
     std::vector<T> temp;
     for (auto& item : root.get_child(key))
@@ -67,6 +71,11 @@ inline std::vector<templates::Context> templates::Context::getObjects(boost::pro
     for (auto& item : root.get_child(key))
         temp.push_back(Context(item.second));
     return temp;
+}
+
+inline void templates::Context::set(const std::string &name, const templates::Context &_root) {
+    root.erase(name);
+    root.add_child(name, _root.root.get_child(""));
 }
 
 #endif

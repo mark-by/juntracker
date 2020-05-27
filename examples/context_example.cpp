@@ -50,13 +50,13 @@ int main() {
 
     std::cout << context.get<int>("obj.value2") << std::endl;
 
-    std::vector<int> numbers = context.getArray<int>("array");
-    for (auto i : numbers) std::cout << i << " ";
+    auto numbers = context.getObjects("array");
+    for (auto &i : numbers)
+        std::cout << i.get<std::string>("") << " ";
     std::cout << std::endl;
 
     std::vector<templates::Context> persons_context = context.getObjects("person");
-    for (auto i : persons_context) std::cout << i.str();
-
+    for (auto & i : persons_context) std::cout << i.str();
     return 0;
 }
 

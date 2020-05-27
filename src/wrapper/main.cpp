@@ -13,28 +13,10 @@
 #include "user.h"
 #include "visit.h"
 #include "visit_history.h"
+#include "utils.hpp"
 
 int main(int argc, char* argv[]) {
 
-    // Create Connection
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
-
-    // Check Connection
-    if (!postgres.is_connected()) {
-        std::cout << "Connection to database failed: " << PQerrorMessage(conn) << std::endl;
-        return 1;
-    }
-
-    auto visit = Visit::get_visit(4);
-    std::cout << visit.id() << " " << visit.was_in_class() << std::endl;
-//    auto student = Student::get_student(2);
-//    auto v = student.get_visit()
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;

@@ -1,0 +1,38 @@
+{
+  "username": "Homer Simpson",
+  "students": [
+    {"name": "Игорь Касаваров",
+    "avatar": "",
+      "id": 45,
+      "age": 12,
+      "courses": [
+        "Программирование Python",
+        "Робототехника"
+      ]
+    },
+    {"name": "Вася Касаваров",
+      "avatar": "media/avatar.jpg",
+      "id": 35,
+      "age": 11,
+      "courses": [
+        "Программирование Python"
+      ]
+    },
+    {"name": "Мася Касаваров",
+      "avatar": "media/avatar.jpg",
+      "id" : 23,
+      "age": 10,
+      "courses": [
+        "Робототехника"
+      ]
+    },
+    {"name": "Some Касаваров",
+      "avatar": "",
+      "id" : 14,
+      "age": 14,
+      "courses": [
+        "Программирование Python"
+      ]
+    }
+  ]
+}

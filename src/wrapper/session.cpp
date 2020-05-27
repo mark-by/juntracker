@@ -1,13 +1,8 @@
 #include "session.h"
+#include <utils.hpp>
 
 User Session::get_user(const std::string& s_cookie) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM users WHERE cookie=" + s_cookie + ";";
     PGresult *result = nullptr;
@@ -24,13 +19,7 @@ User Session::get_user(const std::string& s_cookie) {
 }
 
 Session Session::create_session(const std::string& username, const std::string& password) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
     std::string query = "SELECT password FROM users WHERE login='" + username + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -49,13 +38,7 @@ Session Session::create_session(const std::string& username, const std::string& 
 }
 
 int Session::remove(int user_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM session WHERE user_id=" + std::to_string(user_id) + ";";
     if (!postgres.exec(query)) {
@@ -65,13 +48,7 @@ int Session::remove(int user_id) {
 }
 
 int Session::remove(const std::string cookie) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM session WHERE cookie=" + cookie + ";";
     if (!postgres.exec(query)) {

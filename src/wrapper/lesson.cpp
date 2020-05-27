@@ -1,4 +1,5 @@
 #include "lesson.h"
+#include "utils.hpp"
 
 std::vector<Student> Lesson::get_students() const {
     std::string query = "SELECT student_id FROM visit WHERE lesson_id='" + std::to_string(id()) + "';";
@@ -28,7 +29,7 @@ std::vector<Student> Lesson::get_students() const {
 }
 
 Teacher Lesson::get_teacher() const {
-    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(this->_id) + "';";
+    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -48,7 +49,7 @@ Teacher Lesson::get_teacher() const {
 }
 
 std::string Lesson::get_title() const {
-    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(this->_id) + "';";
+    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -63,13 +64,7 @@ std::string Lesson::get_title() const {
 }
 
 Lesson Lesson::get_lesson(int lesson_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     PGresult *result = nullptr;
@@ -85,13 +80,7 @@ Lesson Lesson::get_lesson(int lesson_id) {
 }
 
 int Lesson::save(int cabinet, const std::string& weekday, const std::string& start, const std::string& end) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::ostringstream s;
     std::string table_name = "lesson";
@@ -108,13 +97,7 @@ int Lesson::save(int cabinet, const std::string& weekday, const std::string& sta
 }
 
 int Lesson::remove(int lesson_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     if (!postgres.exec(query)) {

@@ -6,4 +6,6 @@
 
 CustomerAPI::CustomerAPI() {}
 
-std::string CustomerAPI::getMainPage(const std::string &str) {}
+std::string CustomerAPI::getMainPage(const std::string &str) {
+
+}

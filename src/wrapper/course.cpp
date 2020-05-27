@@ -1,4 +1,5 @@
 #include "course.h"
+#include <utils.hpp>
 
 Teacher Course::get_teacher() const {
     std::string query = "SELECT teacher_id FROM course WHERE name='" + name() + "';";
@@ -23,13 +24,7 @@ Teacher Course::get_teacher() const {
 }
 
 int Course::set_price(int price, int course_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "UPDATE course SET price=" + std::to_string(price)  + " WHERE id='" + std::to_string(course_id) + "';";
     if (!postgres.exec(query)) {
@@ -66,13 +61,7 @@ std::vector<Student> Course::get_students() const {
 }
 
 Course Course::get_course(int course_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM course WHERE id=" + std::to_string(course_id) + ";";
     PGresult *result = nullptr;
@@ -86,13 +75,7 @@ Course Course::get_course(int course_id) {
 }
 
 int Course::save(const std::string& name, int price) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::ostringstream s;
     std::string table_name = "course";
@@ -109,13 +92,7 @@ int Course::save(const std::string& name, int price) {
 }
 
 int Course::remove(int course_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM course WHERE id=" + std::to_string(course_id) + ";";
     std::cout << query << std::endl;
