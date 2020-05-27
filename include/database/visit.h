@@ -26,7 +26,7 @@ class Visit {
     int id() const { return _id; }
     bool was_in_class() const { return _was_in_class; }
 
- private: 
+ private:
     int _id;
     bool _was_in_class;
 

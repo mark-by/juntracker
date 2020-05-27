@@ -41,8 +41,9 @@ Session Session::create_session(const std::string& username, const std::string& 
         throw std::exception();
     }
     std::string table_name = "session";
-    auto curr_time = boost::posix_time::second_clock::local_time();
-    std::string new_cookie = std::string(curr_time.zone_as_posix_string());
+//    auto curr_time = boost::posix_time::second_clock::local_time();
+//    std::string new_cookie = std::string(curr_time.);
+    std::string new_cookie = username;
     int count_rows = postgres.count_rows(table_name);
     return Session(count_rows + 1, new_cookie, postgres);
 }
