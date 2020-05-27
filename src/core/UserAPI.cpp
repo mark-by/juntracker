@@ -1,12 +1,26 @@
 #include <UserAPI.h>
 #include <user.h>
 #include <context/context.h>
+#include <session.h>
 
 
 std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &data) {
-    User::save(data.at("username"), data.at("password"), data.at("email"));
-
-    return std::string();
+    std::string username;
+    std::string password;
+    std::string email;
+    try {
+        username = data.at("username");
+        password = data.at("password");
+        email = data.at("email");
+    } catch (...) {
+        return "";
+    }
+    if (!User::save(username, password, email)) {
+        return "";
+    }
+    auto user = User::get_user(username);
+    auto session = Session::create_session(username, password);
+    return session.cookie();
 }
 
 std::string UserAPI::registerPage() {
@@ -22,5 +36,6 @@ std::string UserAPI::loginPage() {
 }
 
 std::string UserAPI::signIn(const std::string &username, const std::string &password) {
-    return std::string();
+    auto session = Session::create_session(username, password);
+    return session.cookie();
 }
