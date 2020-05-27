@@ -91,9 +91,9 @@ std::string Response::statusToStr() const {
 }
 
 Response &Response::operator=(Response &&other) {
-    headers = other.headers;
-    cookies = other.cookies;
-    body = other.body;
+    headers = std::move(other.headers);
+    cookies = std::move(other.cookies);
+    body = std::move(other.body);
     statusCode = other.statusCode;
     return *this;
 }
