@@ -1,4 +1,5 @@
 #include "user.h"
+#include <utils.hpp>
 
 std::vector<Lesson> User::get_current_lessons() const {
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
@@ -59,13 +60,7 @@ std::vector<Student> User::get_students() const {
 }
 
 User User::get_user(int user_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM users WHERE id=" + std::to_string(user_id) + ";";
     PGresult *result = nullptr;
@@ -80,13 +75,7 @@ User User::get_user(int user_id) {
 }
 
 int User::save(const std::string &username, const std::string &password, const std::string &email) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::ostringstream s;
     std::string table_name = "users";
@@ -102,13 +91,7 @@ int User::save(const std::string &username, const std::string &password, const s
 }
 
 int User::remove(int user_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM users WHERE id=" + std::to_string(user_id) + ";";
     if (!postgres.exec(query)) {
@@ -118,13 +101,7 @@ int User::remove(int user_id) {
 }
 
 User User::get_user(const std::string &username) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM users WHERE login=" + username + ";";
     PGresult *result = nullptr;

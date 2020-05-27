@@ -39,3 +39,7 @@ int SqlWrapper::count_rows(std::string& table_name) const {
     int rows = atoi(PQgetvalue(result, 0, 0));
     return rows;
 }
+
+PGconn *SqlWrapper::getConn() {
+    return conn;
+}

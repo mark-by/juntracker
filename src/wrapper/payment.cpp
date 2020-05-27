@@ -1,4 +1,5 @@
 #include "payment.h"
+#include "utils.hpp"
 
 Student Payment::get_student() const {
     std::string query = "SELECT student_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
@@ -36,13 +37,7 @@ Course Payment::get_course() const {
 }
 
 Payment Payment::get_payment(int payment_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM payment WHERE id=" + std::to_string(payment_id) + ";";
     PGresult *result = nullptr;
@@ -57,13 +52,7 @@ Payment Payment::get_payment(int payment_id) {
 }
 
 int Payment::save(int student_id, int course_id, int amount) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();;
 
     std::ostringstream s;
     std::string table_name = "payment";
@@ -80,13 +69,7 @@ int Payment::save(int student_id, int course_id, int amount) {
 }
 
 int Payment::remove(int payment_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM payment WHERE id=" + std::to_string(payment_id) + ";";
     if (!postgres.exec(query)) {

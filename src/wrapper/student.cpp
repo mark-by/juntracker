@@ -1,4 +1,5 @@
 #include "student.h"
+#include <utils.hpp>
 
 std::vector<Course> Student::get_courses() const {
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(this->_id) + "';";
@@ -37,13 +38,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
 }
 
 Student Student::get_student(int student_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
     PGresult *result = nullptr;
@@ -58,13 +53,7 @@ Student Student::get_student(int student_id) {
 }
 
 int Student::save(const std::string name, const std::string& surname, int age) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::ostringstream s;
     std::string table_name = "student";
@@ -81,13 +70,7 @@ int Student::save(const std::string name, const std::string& surname, int age) {
 }
 
 int Student::remove(int student_id) {
-    std::string filepath = "config.txt";
-    std::ifstream fin(filepath);
-    std::string conninfo;
-    while (getline(fin, conninfo)) {}
-    fin.close();
-    PGconn *conn = PQconnectdb(conninfo.c_str());
-    SqlWrapper postgres(conn);
+    auto postgres = connect();
 
     std::string query = "DELETE FROM student WHERE id=" + std::to_string(student_id) + ";";
     if (!postgres.exec(query)) {
