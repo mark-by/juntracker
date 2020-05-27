@@ -80,10 +80,12 @@ int User::save(const std::string &username, const std::string &password, const s
     std::ostringstream s;
     std::string table_name = "users";
     int count_rows = postgres.count_rows(table_name);
+    std::cout << count_rows + 1 << std::endl;
     s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
       << "', '" << username << "', '" << password << "');";
 
     std::string query = s.str();
+    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
         return -1;
     }

@@ -29,11 +29,25 @@ Session Session::create_session(const std::string& username, const std::string& 
     if (res_password != password) {
         throw std::exception();
     }
-    std::string table_name = "session";
-//    auto curr_time = boost::posix_time::second_clock::local_time();
-//    std::string new_cookie = std::string(curr_time.);
+
+    query = "SELECT user_id FROM users WHERE login='" + username + "';";
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int user_id = atoi(PQgetvalue(result, 0, 0));
+
     std::string new_cookie = username;
+    std::ostringstream s;
+    std::string table_name = "session";
     int count_rows = postgres.count_rows(table_name);
+
+    s << "INSERT INTO sesion VALUES (" << std::to_string(count_rows + 1) << ", '"
+      << new_cookie << "', " << std::to_string(user_id)  << ");";
+
+    query = s.str();
+    if (!postgres.exec(query)) {
+        throw std::exception();
+    }
     return Session(count_rows + 1, new_cookie, postgres);
 }
 
