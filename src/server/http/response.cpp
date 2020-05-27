@@ -90,7 +90,7 @@ std::string Response::statusToStr() const {
     }
 }
 
-Response &Response::operator=(Response &&other) {
+Response &Response::operator=(const Response &other) {
     headers = other.headers;
     cookies = other.cookies;
     body = other.body;

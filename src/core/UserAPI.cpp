@@ -1,5 +1,6 @@
 #include <UserAPI.h>
 #include <user.h>
+#include <context/context.h>
 
 
 std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &data) {
@@ -13,9 +14,13 @@ std::string UserAPI::registerPage() {
 }
 
 std::string UserAPI::loginPage() {
-    return "Login";
+    templates::Context context;
+    _render.set("login.html");
+    return _render.render(context);
 }
 
 std::string UserAPI::signIn(const std::string &username, const std::string &password) {
-    return std::string();
+    templates::Context context;
+    _render.set("register.html");
+    return _render.render(context);
 }
