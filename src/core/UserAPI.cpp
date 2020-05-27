@@ -19,11 +19,11 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
     try {
         std::cout << username << " " << password << " " << email << std::endl;
         User::save(username, password, email);
+        std::cout << "saved" << std::endl;
     } catch (...) {
         std::cout << "user save fail" << std::endl;
         return "";
     }
-    auto user = User::get_user(username);
     try {
         return Session::create_session(username, password).cookie();
     } catch(...) {

@@ -38,17 +38,14 @@ void Connection::doRead(const boost::system::error_code& error,
 
             // Session::get_user(request_.cookie("session_id"));
 
-            if (!handler_.authorizationHandler(request_)) {
+            auto user_ptr = handler_.authorizationHandler(request_);
+            if (!user_ptr) {
                 response_.setStatus(status::MovedPermanently);
                 response_.setHeader("Location", "/login");
             } else {
                 // improve later
-                response_ = handler_.adminHandler(
-                        request_,
-                        Session::get_user(
-                                request_.cookie("session_id")
-                        )
-                );
+                std::cout << "User returned" << std::endl;
+                response_ = handler_.adminHandler(request_, *user_ptr);
             }
         }
 

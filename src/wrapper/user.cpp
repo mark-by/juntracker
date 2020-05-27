@@ -77,6 +77,12 @@ User User::get_user(int user_id) {
 int User::save(const std::string &username, const std::string &password, const std::string &email) {
     auto postgres = connect();
 
+    if(!postgres.is_connected()) {
+        std::cout << "conn fail: " << PQerrorMessage(postgres.getConn()) << std::endl;
+        return 1;
+    }
+    std::cout << "DATABASE CONECTED" << std::endl;
+
     std::ostringstream s;
     std::string table_name = "users";
     int count_rows = postgres.count_rows(table_name);
@@ -84,7 +90,9 @@ int User::save(const std::string &username, const std::string &password, const s
       << "', '" << username << "', '" << password << "');";
 
     std::string query = s.str();
+    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
+        std::cout << "return -1" << std::endl;
         return -1;
     }
     return 0;

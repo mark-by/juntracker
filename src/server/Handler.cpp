@@ -96,13 +96,16 @@ Response Handler::loginHandler(Request request) {
         if (request.method() == "GET") {
             return Response(user.registerPage());
         } else {
+            std::cout << "signUP" << std::endl;
             session_id = user.signUp(request.dataTable());
+            std::cout << session_id << std::endl;
         }
     }
 
     if (session_id.empty()) {
         return Response(status::Forbidden);
     } else {
+        std::cout << session_id << std::endl;
         Response tmp;
         tmp.setCookie("session_id", session_id, 10);  // 10 days living cookie
         tmp.setHeader("Location", "/");
