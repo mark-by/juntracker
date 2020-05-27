@@ -29,9 +29,26 @@ Session Session::create_session(const std::string& username, const std::string& 
     if (strcmp(res_password, password.c_str())) {
         throw std::exception();
     }
+
+    query = "SELECT user_id FROM users WHERE login='" + username + "';";
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int user_id = atoi(PQgetvalue(result, 0, 0));
+
+    std::string new_cookie = username;
+    std::ostringstream s;
     std::string table_name = "session";
     std::string new_cookie = username;
     int count_rows = postgres.count_rows(table_name);
+
+    s << "INSERT INTO session VALUES (" << count_rows + 1 << ", '"
+      << new_cookie << "', " << user_id << ");";
+
+    query = s.str();
+    if (!postgres.exec(query)) {
+        throw std::exception();
+    }
     return Session(count_rows + 1, new_cookie, postgres);
 }
 

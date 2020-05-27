@@ -16,14 +16,15 @@
 
 int main(int argc, char* argv[]) {
     auto postgres = connect();
-
-    // Check Connection
+   // Check Connection
     if (!postgres.is_connected()) {
         std::cout << "Connection to database failed: " << PQerrorMessage(postgres.getConn()) << std::endl;
         return 1;
     }
 
-    User::save("someUser", "qwer", "qwerty");
+//    auto visit = Visit::get_visit(4);
+//    std::cout << visit.id() << " " << visit.was_in_class() << std::endl;
+//    auto student = Student::get_student(2);
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;
