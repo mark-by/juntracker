@@ -92,7 +92,8 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
         std::string json_str = std::string(start, end);
         boost::trim(json_str);
         std::cout << json_str << std::endl;
-        templates::Context json(json_str + '\0');
+        json_str[json_str.size()] = 0;
+        templates::Context json(json_str);
         std::cout << "HERE NOW" << std::endl;
         _data = json.toMap();
     }
