@@ -5,17 +5,13 @@
 
 class Lesson {
 public:
-    Lesson(SqlWrapper& postgres)
-        : postgres(postgres) {}
-
     explicit Lesson(int _id, int _cabinet, int _weekday,
-            std::string& _start_time, std::string& _end_time, SqlWrapper postgres)
+            std::string& _start_time, std::string& _end_time)
             : _id(_id)
             , _cabinet(_cabinet)
             , _weekday(_weekday)
             , _start_time(_start_time)
-            , _end_time(_end_time)
-            , postgres(postgres) {}
+            , _end_time(_end_time) {}
 
     std::vector<Student> get_students() const;
     Teacher get_teacher() const;
@@ -37,8 +33,6 @@ public:
     int _weekday;
     std::string _start_time;
     std::string _end_time;
-
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_LESSON_H

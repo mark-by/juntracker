@@ -2,6 +2,7 @@
 #include <utils.hpp>
 
 std::vector<Course> Student::get_courses() const {
+    auto postgres = connect();
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -18,7 +19,7 @@ std::vector<Course> Student::get_courses() const {
         int c_price = atoi(PQgetvalue(result, 0, 2));
         std::string c_start_date = PQgetvalue(result, 0, 3);
         std::string c_end_date = PQgetvalue(result, 0, 4);
-        auto res_course = Course(c_id, c_name, c_price, postgres);
+        auto res_course = Course(c_id, c_name, c_price);
         res_courses.push_back(res_course);
     }
     return res_courses;
@@ -42,7 +43,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     bool v_was_in_class = strcmp(PQgetvalue(result, 0, 3), "t") == 0;
     std::string str_v_date = std::string(PQgetvalue(result, 0, 4));
     boost::posix_time::ptime v_date = converter.convert(str_v_date);
-    Visit res_visit(visit_id, v_was_in_class, v_date, postgres);
+    Visit res_visit(visit_id, v_was_in_class, v_date);
     return res_visit;
 }
 
@@ -57,7 +58,7 @@ Student Student::get_student(int student_id) {
     std::string s_name = std::string(PQgetvalue(result, 0, 1));
     std::string s_surname = std::string(PQgetvalue(result, 0, 2));
     int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age, postgres);
+    auto res_student = Student(student_id, s_name, s_surname, s_age);
     return res_student;
 }
 

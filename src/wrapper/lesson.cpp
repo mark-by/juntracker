@@ -2,10 +2,10 @@
 #include "utils.hpp"
 
 std::vector<Student> Lesson::get_students() const {
-    auto _postgres = connect();
+    SqlWrapper postgres;
     std::string query = "SELECT student_id FROM students_for_lesson WHERE lesson_id=" + std::to_string(id()) + ";";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<int> student_ids;
@@ -16,58 +16,62 @@ std::vector<Student> Lesson::get_students() const {
     std::vector<Student> res_students;
     for (auto s_id : student_ids) {
         query = "SELECT * FROM student WHERE id='" + std::to_string(s_id) + "';";
-        if (!_postgres.query(query, &result)) {
+        if (!postgres.query(query, &result)) {
             throw std::exception();
         }
         std::string s_name = std::string(PQgetvalue(result, 0, 1));
         std::string s_surname = std::string(PQgetvalue(result, 0, 2));
         int s_age = atoi(PQgetvalue(result, 0, 3));
-        Student curr_student(s_id, s_name, s_surname, s_age, postgres);
+        Student curr_student(s_id, s_name, s_surname, s_age);
         res_students.push_back(curr_student);
     }
 
+    postgres.disconnect();
     return res_students;
 }
 
 Teacher Lesson::get_teacher() const {
-    auto _postgres = connect();
+    SqlWrapper postgres;
     std::string query = "SELECT teacher_id FROM lesson WHERE id=" + std::to_string(_id) + ";";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     int t_id = atoi(PQgetvalue(result, 0, 0));
 
     query = "SELECT * FROM teacher WHERE id='" + std::to_string(t_id) + "';";
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int t_salary = atoi(PQgetvalue(result, 0, 3));
-    Teacher res_teacher(t_id, t_name, t_surname, t_salary,postgres);
+    Teacher res_teacher(t_id, t_name, t_surname, t_salary);
 
+    postgres.disconnect();
     return res_teacher;
 }
 
 std::string Lesson::get_title() const {
-    auto _postgres = connect();
+
+    SqlWrapper postgres;
     std::string query = "SELECT course_id FROM lesson WHERE id=" + std::to_string(_id) + ";";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     int c_id = atoi(PQgetvalue(result, 0, 0));
     query = "SELECT name FROM course WHERE id=" + std::to_string(c_id) + ";";
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::string c_name = std::string(PQgetvalue(result, 0, 0));
+    postgres.disconnect();
     return c_name;
 }
 
 Lesson Lesson::get_lesson(int lesson_id) {
-    auto postgres = connect();
+    SqlWrapper postgres;
 
     std::string query = "SELECT * FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     PGresult *result = nullptr;
@@ -78,12 +82,13 @@ Lesson Lesson::get_lesson(int lesson_id) {
     int l_weekday = atoi(PQgetvalue(result, 0, 4));
     std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
     std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
+    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+    postgres.disconnect();
     return res_lesson;
 }
 
 int Lesson::save(int cabinet, const std::string& weekday, const std::string& start, const std::string& end) {
-    auto postgres = connect();
+    SqlWrapper postgres;
 
     std::ostringstream s;
     std::string table_name = "lesson";
@@ -96,16 +101,18 @@ int Lesson::save(int cabinet, const std::string& weekday, const std::string& sta
     if (!postgres.exec(query)) {
         return -1;
     }
+    postgres.disconnect();
     return 0;
 }
 
 int Lesson::remove(int lesson_id) {
-    auto postgres = connect();
+    SqlWrapper postgres;
 
     std::string query = "DELETE FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
     if (!postgres.exec(query)) {
         return -1;
     }
+    postgres.disconnect();
     return 0;
 }
 

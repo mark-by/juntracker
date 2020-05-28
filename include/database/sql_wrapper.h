@@ -15,14 +15,10 @@
 
 class SqlWrapper : public Database {
 public:
-    SqlWrapper() : conn(nullptr) {}
+    SqlWrapper() : conn(PQconnectdb(get_config("config.txt").c_str())) {}
     ~SqlWrapper() = default;
 
     PGconn *getConn();
-
-    void connect() {
-        conn = PQconnectdb(get_config("config.txt").c_str());
-    }
 
     void disconnect() {
         close(PQsocket(conn));

@@ -9,15 +9,12 @@ class Student;
 
 class Student : public Person {
  public:
-    Student(SqlWrapper& postgres)
-    : postgres(postgres) {}
-    explicit Student(int _id, std::string& _name, std::string& _surname, int _age, SqlWrapper postgres)
+    explicit Student(int _id, std::string& _name, std::string& _surname, int _age)
         : _id(_id)
         , _name(_name)
         , _surname(_surname)
         , _age(_age)
-        , _description("")
-        , postgres(postgres){}
+        , _description("") {}
 
     std::vector<Course> get_courses() const;
     Visit get_visit(int lesson_id, const boost::posix_time::ptime & date) const;
@@ -38,8 +35,6 @@ class Student : public Person {
     std::string _surname;
     int _age;
     std::string _description;
-
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_STUDENT_H_

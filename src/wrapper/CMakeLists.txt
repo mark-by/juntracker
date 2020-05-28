@@ -21,4 +21,4 @@ add_library(
         ${db_source}
         )
 
-target_link_libraries(sql_wrapper pq boost_date_time boost_filesystem)
+target_link_libraries(sql_wrapper pq boost_date_time boost_filesystem http)

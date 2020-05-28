@@ -7,15 +7,12 @@ class Teacher;
 
 class Teacher : public Person {
  public:
-    Teacher(SqlWrapper& postgres)
-    : postgres(postgres) {}
-    explicit Teacher(int _id, std::string& _name, std::string& _surname, int _salary, SqlWrapper postgres)
+    explicit Teacher(int _id, std::string& _name, std::string& _surname, int _salary)
         : _id(_id)
         , _name(_name)
         , _surname(_surname)
         , _salary(_salary)
-        , _description("")
-        , postgres(postgres) {}
+        , _description("") {}
 
     std::vector<Course> get_courses() const;
 
@@ -35,8 +32,6 @@ class Teacher : public Person {
     std::string _surname;
     int _salary;
     std::string _description;
-
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_TEACHER_H_

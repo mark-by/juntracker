@@ -9,8 +9,6 @@
 
 class PaymentHistory {
  public:
-    PaymentHistory(SqlWrapper& postgres)
-        : postgres(postgres) {}
     explicit PaymentHistory(std::vector<Payment> payments)
         : payments(payments) {}
 
@@ -20,8 +18,6 @@ class PaymentHistory {
 
  private:
     std::vector<Payment> payments;
-
-    SqlWrapper postgres;
 };
 
 #endif  // _PAYMENT_HISTORY_H_

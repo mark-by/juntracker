@@ -6,8 +6,6 @@
 
 class Payment {
  public:
-    Payment(SqlWrapper& postgres)
-    : postgres(postgres) {}
     explicit Payment(int _id, int _amount, std::string& _payment_date, SqlWrapper postgres)
             : _id(_id)
             , _amount(_amount)
@@ -29,8 +27,6 @@ class Payment {
     int _id;
     int _amount;
     std::string _payment_date;
-
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_PAYMENT_H_

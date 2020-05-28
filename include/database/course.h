@@ -31,8 +31,6 @@ class Course {
     int _id;
     std::string _name;
     int _price;
-
-    SqlWrapper db;
 };
 
 #endif  // INCLUDE_DATABASE_COURSE_H_

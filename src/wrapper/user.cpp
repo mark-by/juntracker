@@ -2,12 +2,12 @@
 #include <utils.hpp>
 
 std::vector<Lesson> User::get_current_lessons() const {
-    auto _postgres = connect();
+    auto postgres = connect();
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -16,17 +16,17 @@ std::vector<Lesson> User::get_current_lessons() const {
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time, postgres);
+        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;
 }
 
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
-    auto _postgres = connect();
+    auto postgres = connect();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -35,17 +35,17 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
+        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;
 }
 
 std::vector<Student> User::get_students() const {
-    auto _postgres = connect();
+    auto postgres = connect();
     std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Student> res_students;
@@ -56,7 +56,7 @@ std::vector<Student> User::get_students() const {
         std::string s_name = std::string(PQgetvalue(result, i, 1));
         std::string s_surname = std::string(PQgetvalue(result, i, 2));
         int s_age = atoi(PQgetvalue(result, i, 3));
-        res_students.emplace_back(student_id, s_name, s_surname, s_age, postgres);
+        res_students.emplace_back(student_id, s_name, s_surname, s_age);
     }
 
     return res_students;
