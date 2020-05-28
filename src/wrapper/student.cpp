@@ -26,7 +26,7 @@ std::vector<Course> Student::get_courses() const {
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
     auto _postgres = connect();
-    const std::string format = "%d-%m-%Y";
+    const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);
 
     std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
