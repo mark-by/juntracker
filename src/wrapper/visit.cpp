@@ -78,6 +78,7 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
         postgres.disconnect();
         return -1;
     }
+    std::cout << "PQ: " << PQgetvalue(result, 0, 0) << std::endl;
     if (PQgetvalue(result, 0, 0)) {
         s.str("");
         s << "update visit set was_in_class='" << was_in_class_ch << "' where student_id=" << student_id <<
