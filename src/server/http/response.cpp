@@ -100,6 +100,7 @@ Response &Response::operator=(Response &&other) {
 
 void Response::setStatus(const int &status) {
     statusCode = status;
+    headers.insert({"Status", std::to_string(status)});
 }
 
 Response::Response(const Response &other) {

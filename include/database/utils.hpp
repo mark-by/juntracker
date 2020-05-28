@@ -14,6 +14,7 @@ inline std::string get_config(const std::string & filename = "config.txt") {
     return conninfo;
 }
 
+
 inline SqlWrapper connect(const std::string &config_filename = "config.txt") {
     PGconn *conn = PQconnectdb(get_config(config_filename).c_str());
     return SqlWrapper(conn);
