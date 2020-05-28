@@ -13,13 +13,12 @@
 #include <sstream>
 
 class SqlWrapper : public Database {
-private:
-    PGconn *conn;
-
 public:
     explicit SqlWrapper() {}
     explicit SqlWrapper(PGconn *conn);
-    ~SqlWrapper() = default;
+    ~SqlWrapper() {
+        PQfinish(conn);
+    };
 
     PGconn *getConn();
 
@@ -27,6 +26,9 @@ public:
     [[nodiscard]] bool exec(const std::string& query) const override;
     [[nodiscard]] bool is_connected() const override;
     int count_rows(std::string& table_name) const;
+
+private:
+    PGconn *conn;
 };
 
 #endif  // PROJECT_INCLUDE_SQL_WRAPPER_H_
