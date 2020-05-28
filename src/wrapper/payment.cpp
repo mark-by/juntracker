@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 Student Payment::get_student() const {
+    auto postgres = connect();
     std::string query = "SELECT student_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -20,6 +21,7 @@ Student Payment::get_student() const {
 }
 
 Course Payment::get_course() const {
+    auto postgres = connect();
     std::string query = "SELECT course_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {

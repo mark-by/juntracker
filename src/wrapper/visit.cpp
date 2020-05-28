@@ -2,6 +2,7 @@
 #include <utils.hpp>
 
 Student Visit::get_student() const {
+    auto postgres = connect();
     std::string query = "SELECT student_id FROM visit WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -20,6 +21,7 @@ Student Visit::get_student() const {
 }
 
 Lesson Visit::get_lesson() const {
+    auto postgres = connect();
     std::string query = "SELECT lesson_id FROM visit WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -38,22 +40,22 @@ Lesson Visit::get_lesson() const {
     return res_lesson;
 }
 
-//Visit Visit::get_visit(int visit_id) {
-//    auto postgres = connect();
-//    const std::string format = "%a, %d %b %Y %H:%M:%S";
-//    DateTimeConverter converter(format);
-//
-//    std::string query = "SELECT * FROM visit WHERE id=" + std::to_string(visit_id) + ";";
-//    PGresult *result = nullptr;
-//    if (!postgres.query(query, &result)) {
-//        throw std::exception();
-//    }
-//    int v_was_in_class = atoi(PQgetvalue(result, 0, 1));
-//    std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
-//    boost::posix_time::ptime v_date = converter.convert(str_v_date);
-//    auto res_visit = Visit(visit_id, v_was_in_class, v_date, postgres);
-//    return res_visit;
-//}
+Visit Visit::get_visit(int visit_id) {
+    auto postgres = connect();
+    const std::string format = "%a, %d %b %Y %H:%M:%S";
+    DateTimeConverter converter(format);
+
+    std::string query = "SELECT * FROM visit WHERE id=" + std::to_string(visit_id) + ";";
+    PGresult *result = nullptr;
+    if (!postgres.query(query, &result)) {
+        throw std::exception();
+    }
+    int v_was_in_class = atoi(PQgetvalue(result, 0, 1));
+    std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
+    boost::posix_time::ptime v_date = converter.convert(str_v_date);
+    auto res_visit = Visit(visit_id, v_was_in_class, v_date);
+    return res_visit;
+}
 
 int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     auto postgres = connect();

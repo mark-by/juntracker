@@ -43,7 +43,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     bool v_was_in_class = strcmp(PQgetvalue(result, 0, 3), "t") == 0;
     std::string str_v_date = std::string(PQgetvalue(result, 0, 4));
     boost::posix_time::ptime v_date = converter.convert(str_v_date);
-    Visit res_visit(visit_id, v_was_in_class, v_date, postgres);
+    Visit res_visit(visit_id, v_was_in_class, v_date);
     return res_visit;
 }
 
