@@ -95,7 +95,6 @@ int Course::remove(int course_id) {
     auto postgres = connect();
 
     std::string query = "DELETE FROM course WHERE id=" + std::to_string(course_id) + ";";
-    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
         return -1;
     }

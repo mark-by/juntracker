@@ -17,18 +17,13 @@ std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &
         return "";
     }
     try {
-        std::cout << username << " " << password << " " << email << std::endl;
         User::save(username, password, email);
-        std::cout << "saved" << std::endl;
     } catch (...) {
-        std::cout << "user save fail" << std::endl;
         return "";
     }
     try {
-        std::cout << "username: " << username << " password: " << password << std::endl;
         return Session::create_session(username, password).cookie();
     } catch(...) {
-        std::cout << "create session fail" << std::endl;
         return "";
     }
 }
@@ -46,11 +41,9 @@ std::string UserAPI::loginPage() {
 }
 
 std::string UserAPI::signIn(const std::string &username, const std::string &password) {
-    std::cout << username << " " << password << std::endl;
     try {
         return Session::create_session(username, password).cookie();
     } catch(...) {
-        std::cout << "create_session fail" << std::endl;
         return "";
     }
 }

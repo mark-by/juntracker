@@ -2,13 +2,11 @@
 #include <utils.hpp>
 
 User Session::get_user(const std::string& s_cookie) {
-    std::cout << "COOKIE: " << s_cookie << std::endl;
     auto postgres = connect();
 
     std::string query = "SELECT * FROM session WHERE cookie='" + s_cookie + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
-        std::cout << "NOT FOUND SESSION" << std::endl;
         throw std::exception();
     }
 
@@ -16,7 +14,6 @@ User Session::get_user(const std::string& s_cookie) {
     query = "SELECT * FROM users WHERE id=" + std::to_string(s_uid) + ";";
 
     if (!postgres.query(query, &result)) {
-        std::cout << "NOT FOUND USER" << std::endl;
         throw std::exception();
     }
     std::string u_email = std::string(PQgetvalue(result, 0, 1));
@@ -34,13 +31,11 @@ Session Session::create_session(const std::string& username, const std::string& 
     }
     char *res_password = PQgetvalue(result, 0, 0);
     if (strcmp(res_password, password.c_str())) {
-        std::cout << "NOPASS" << std::endl;
         throw std::exception();
     }
 
     query = "SELECT id FROM users WHERE login='" + username + "';";
     if (!postgres.query(query, &result)) {
-        std::cout << "BEFORE" << std::endl;
         throw std::exception();
     }
     int user_id = atoi(PQgetvalue(result, 0, 0));
@@ -55,7 +50,6 @@ Session Session::create_session(const std::string& username, const std::string& 
 
     query = s.str();
     if (!postgres.exec(query)) {
-        std::cout << "AFTER" << std::endl;
         throw std::exception();
     }
     return Session(count_rows + 1, new_cookie, postgres);
