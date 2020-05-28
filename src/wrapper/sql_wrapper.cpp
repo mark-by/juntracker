@@ -8,22 +8,14 @@ SqlWrapper::SqlWrapper(PGconn *conn)
 bool SqlWrapper::query(const std::string& query, PGresult** result) const {
     char * cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
-//    auto it = query.rbegin();
- //   it++;
-//    if (*it == ')') {
-//        it++;
- //       if (*it == '\'') {
- //           std::strcat(cstr, "');");
- //       }
- //   }
-    std::cout << "CSTR " << cstr << std::endl;
     *result = PQexec(conn, cstr);
-    delete cstr;
     if (PQresultStatus(*result) != PGRES_TUPLES_OK) {
+        std::cout << "CSTR " << cstr << std::endl;
         std::cout << "ERROR:" << PQerrorMessage(conn) << std::endl;
         std::cout << "STATUS:" << PQresultStatus(*result) << std::endl;
         return false;
     }
+    delete[] cstr;
     return true;
 }
 
@@ -51,12 +43,13 @@ bool SqlWrapper::exec(const std::string& query) const {
         }
     }
     auto result = PQexec(conn, cstr);
-    delete cstr;
     if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+        std::cout << "CSTR " << cstr << std::endl;
         std::cout << "ERROR:" << PQerrorMessage(conn) << std::endl;
         std::cout << "STATUS:" << PQresultStatus(result) << std::endl;
         return false;
     }
+    delete[] cstr;
     return true;
 }
 
