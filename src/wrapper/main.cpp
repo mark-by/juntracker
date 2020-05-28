@@ -15,7 +15,7 @@
 #include "utils.hpp"
 
 int main(int argc, char* argv[]) {
-    auto postgres = connect();
+    SqlWrapper postgres;
    // Check Connection
     if (!postgres.is_connected()) {
         std::cout << "Connection to database failed: " << PQerrorMessage(postgres.getConn()) << std::endl;
@@ -26,5 +26,6 @@ int main(int argc, char* argv[]) {
     std::cout << lesson.start_time() << " " << lesson.end_time() << std::endl;
 
     std::cout << "*** It compiles ***" << std::endl;
+    postgres.disconnect();
     return 0;
 }

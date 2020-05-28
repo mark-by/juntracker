@@ -10,7 +10,7 @@ class Course {
     explicit Course(int _id, std::string& _name, int _price)
         : _id(_id)
         , _name(_name)
-        , _price(_price) {}
+        , _price(_price){}
     explicit Course(std::string& _name, int _price)
         : _name(_name)
         , _price(_price) {}

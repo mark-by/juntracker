@@ -63,12 +63,29 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     DateTimeConverter converter(format);
     std::ostringstream s;
     std::string table_name = "visit";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO visit VALUES (" << std::to_string(count_rows + 1) << ", "
-      << student_id << ", " << lesson_id << ", '"
-      << (was_in_class ? 't' : 'f')  << "', '" << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "');";
+    auto today = converter.convert(boost::posix_time::second_clock::universal_time(), "");
+    PGresult *result = nullptr;
+    char was_in_class_ch = (was_in_class ? 't' : 'f');
+    s << "select count(*) from visit where student_id=" << student_id << " and lesson_id=" << lesson_id <<
+    " and visit_date='" << today << "';";
+    if (!postgres.query(s.str(), &result)) {
+        std::cout << "FAIL SELECT" << std::endl;
+        return -1;
+    }
+    if (PQgetvalue(result, 0, 0)) {
+        s.str("");
+        s << "update visit set was_in_class='" << was_in_class_ch << "' where student_id=" << student_id <<
+        " and lesson_id=" << lesson_id << " and visit_date='" << today << "';";
+    } else {
+        s.str("");
+        int count_rows = postgres.count_rows(table_name);
+        s << "INSERT INTO visit VALUES (" << std::to_string(count_rows + 1) << ", "
+          << student_id << ", " << lesson_id << ", '"
+          <<  was_in_class_ch << "', '" << today << "');";
+    }
 
     std::string query = s.str();
+    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
         std::cout << "FAIL SAVE" << std::endl;
         return -1;
