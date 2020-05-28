@@ -32,10 +32,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    User::save("Misha", "ddhdhhjsdjsjdu", "misha@mail.ru");
+//    User::save("Misha", "ddhdhhjsdjsjdu", "misha@mail.ru");
 //    auto visit = Visit::get_visit(4);
 //    std::cout << visit.id() << " " << visit.was_in_class() << std::endl;
 //    auto student = Student::get_student(2);
+    auto lesson = Lesson::get_lesson(4);
+    std::cout << lesson.start_time() << " " << lesson.end_time() << std::endl;
 
     std::cout << "*** It compiles ***" << std::endl;
     return 0;

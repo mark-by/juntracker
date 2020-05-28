@@ -4,7 +4,7 @@
 User Session::get_user(const std::string& s_cookie) {
     auto postgres = connect();
 
-    std::string query = "SELECT * FROM users WHERE cookie=" + s_cookie + ";";
+    std::string query = "SELECT * FROM users WHERE cookie='" + s_cookie + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
@@ -30,7 +30,7 @@ Session Session::create_session(const std::string& username, const std::string& 
         throw std::exception();
     }
 
-    query = "SELECT user_id FROM users WHERE login='" + username + "';";
+    query = "SELECT id FROM users WHERE login='" + username + "';";
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
@@ -41,7 +41,7 @@ Session Session::create_session(const std::string& username, const std::string& 
     std::string table_name = "session";
     int count_rows = postgres.count_rows(table_name);
 
-    s << "INSERT INTO sesion VALUES (" << std::to_string(count_rows + 1) << ", '"
+    s << "INSERT INTO session VALUES (" << std::to_string(count_rows + 1) << ", '"
       << new_cookie << "', " << std::to_string(user_id)  << ");";
 
     query = s.str();

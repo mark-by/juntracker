@@ -49,7 +49,7 @@ Teacher Lesson::get_teacher() const {
 }
 
 std::string Lesson::get_title() const {
-    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(_id) + "';";
+    std::string query = "SELECT course_id FROM lesson WHERE id=" + std::to_string(_id) + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
         throw std::exception();
