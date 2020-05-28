@@ -1,6 +1,7 @@
 #ifndef CONTEXT_IMPL_INCLUDED
 #define CONTEXT_IMPL_INCLUDED
 #include <context/context.h>
+#include <iostream>
 
 inline std::string templates::Context::str() const {
     // Представление context в json в строковом виде
@@ -76,6 +77,15 @@ inline std::vector<templates::Context> templates::Context::getObjects(boost::pro
 inline void templates::Context::set(const std::string &name, const templates::Context &_root) {
     root.erase(name);
     root.add_child(name, _root.root.get_child(""));
+}
+
+inline std::unordered_map<std::string, std::string> templates::Context::toMap() {
+    std::unordered_map<std::string, std::string> map;
+    auto end = root.end();
+    for (auto it = root.begin(); it != end; it++) {
+        map[it->first] = it->second.get_value<std::string>();
+    }
+    return map;
 }
 
 #endif

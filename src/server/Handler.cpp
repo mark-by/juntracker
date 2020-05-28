@@ -36,7 +36,7 @@ Response Handler::adminHandler(Request request, const User &user) {
         }
 
     } else {
-        if (request.path() == "/save_current_lesson") {
+        if (request.path() == "/api/save_current_lesson") {
             Response response(adminApi.saveCurrentLesson(request.dataTable()));
             return response;
         }

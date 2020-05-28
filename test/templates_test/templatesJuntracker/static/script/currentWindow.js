@@ -133,9 +133,35 @@ class CurrentLesson extends Lesson {
         this.state = {
             element : element,
             progressBar: element.querySelector('.progress-bar>span'),
+            form: element.querySelector('.lesson__content'),
             startTime: null,
             endTime: null,
         }
+        this.state.form.onsubmit = event => {
+            event.preventDefault();
+            this.save();
+        }
+    }
+
+    save() {
+        const formData = new FormData(this.state.form);
+        let params = new URLSearchParams();
+        formData.forEach((value, key) => {
+            params.append(key, value);
+        });
+        fetch('api/save_current_lesson', {
+            method: 'POST',
+            body: params.toString(),
+            headers: {
+                "Content-Type" : "application/x-www-form-urlencoded",
+            }
+        }).then(response => {
+            if (response.ok) {
+                this.state.element = "";
+            } else {
+                alert("Не удалось сохранить текущий урок");
+            }
+        })
     }
 
     getProgress() {
@@ -148,10 +174,6 @@ class CurrentLesson extends Lesson {
         const diff = (endTime[0] - startTime[0]) * 60 + (endTime[1] - startTime[1]);
         const now = new Date();
         return ((now.getHours() * 60 + now.getMinutes() - startTime[0] * 60 - startTime[1]) / diff) * 100;
-    }
-
-    save() {
-        console.log("saved");
     }
 
     render() {

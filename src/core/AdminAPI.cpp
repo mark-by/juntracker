@@ -16,12 +16,9 @@ templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     for (auto &student : lesson.get_students()) {
         students.emplace_back(student, lesson);
     }
-    std::cout << "STUDENTSERIALIZER" << std::endl;
     context.putArray("children", students, StudentSerializer);
-    std::cout << "DONE STUDENTSERIALIZER" << std::endl;
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
-    std::cout << "CURRENT LESSONS DONE" << std::endl;
     return context;
 }
 
@@ -82,28 +79,29 @@ std::string AdminAPI::getMainPage(int userId) {
     try {
         currentLessons = user.get_current_lessons();
     } catch(...) {}
-    std::cout << "CURRENT LESSONS" << std::endl;
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
-    std::cout << "CURRENT LESSONS DONE" << std::endl;
 
     _render.set("mainPageAdmin.html");
-    std::cout << "WORK ADMINAPI DONE" << std::endl;
     return _render.render(context);
 }
 
 int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &data) {
     if (data.empty()) {
-        return -1;
+        return 400;
     }
     int lesson_id = std::stoi(data.at("lesson_id"));
 
+    std::cout << "saveCurrLesson" << std::endl;
     for (auto &pair : data) {
-        if (pair.first != "check" || pair.first != "lesson_id") {
-            Visit::save(std::stoi(pair.first), lesson_id, pair.first == "1");
+        std::cout << pair.first << pair.second << std::endl;
+        if (pair.first != "check" && pair.first != "lesson_id") {
+            std::cout << "ID: " << " " <<  pair.first << std::endl;
+            std::cout << "WAS: " << " " <<  pair.second << std::endl;
+            Visit::save(std::stoi(pair.first), lesson_id, pair.second == "1");
         }
     }
 
-    return 0;
+    return 200;
 }
 
 std::string AdminAPI::findStudent(const std::string &str) {
