@@ -1,6 +1,7 @@
 #ifndef CONTEXT_IMPL_INCLUDED
 #define CONTEXT_IMPL_INCLUDED
 #include <context/context.h>
+#include <iostream>
 
 inline std::string templates::Context::str() const {
     // Представление context в json в строковом виде
@@ -15,7 +16,8 @@ inline std::string templates::Context::str() const {
 
 inline templates::Context::Context(const std::string &json) {
     std::stringstream ss;
-    ss << json;
+    ss << json << '\0';
+    std::cout << ss.str() << std::endl;
     boost::property_tree::read_json(ss, root);
 }
 
