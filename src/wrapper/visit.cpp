@@ -57,13 +57,14 @@ Lesson Visit::get_lesson() const {
 
 int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     auto postgres = connect();
-
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
     std::ostringstream s;
     std::string table_name = "visit";
     int count_rows = postgres.count_rows(table_name);
     s << "INSERT INTO visit VALUES (" << std::to_string(count_rows + 1) << ", "
       << student_id << ", " << lesson_id << ", '"
-      << (was_in_class ? 't' : 'f')  << "');";
+      << (was_in_class ? 't' : 'f')  << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "');";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
