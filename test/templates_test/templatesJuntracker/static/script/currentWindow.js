@@ -156,7 +156,7 @@ class CurrentLesson extends Lesson {
                 "Content-Type" : "application/x-www-form-urlencoded",
             }
         }).then(response => {
-            if (!response.ok) {
+            if (response.ok) {
                 this.state.element = "";
             } else {
                 alert("Не удалось сохранить текущий урок");
