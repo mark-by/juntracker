@@ -118,6 +118,7 @@ Response Handler::loginHandler(Request request) {
         if (request.method() == "GET") {
             return Response(userApi.loginPage());
         } else {
+            std::cout << "loginHandler signIn" << std::endl;
             session_id = userApi.signIn(request.data("username"), request.data("password"));
         }
     } else {

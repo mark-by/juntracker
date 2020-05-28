@@ -27,6 +27,8 @@ User Session::get_user(const std::string& s_cookie) {
 }
 
 Session Session::create_session(const std::string& username, const std::string& password) {
+    std::cout << "USER: " << username << std::endl;
+    std::cout << "PASSWORD: " << password << std::endl;
     SqlWrapper postgres;
     std::string query = "SELECT password FROM users WHERE login='" + username + "';";
     PGresult *result = nullptr;

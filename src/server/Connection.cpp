@@ -33,6 +33,7 @@ void Connection::doRead(const boost::system::error_code& error,
             response_.setStatus(status::BadRequest);
         } else {
             if (request_.path() == "/login" || request_.path() == "/register" || request_.path() == "/logout") {
+                std::cout << "Connection handler" << std::endl;
                 response_ = handler_.loginHandler(request_);
             } else {
                 auto user_ptr = handler_.authorizationHandler(request_);
