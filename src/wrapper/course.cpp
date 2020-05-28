@@ -18,7 +18,7 @@ Teacher Course::get_teacher() const {
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int salary = atoi(PQgetvalue(result, 0, 3));
-    auto res_teacher = Teacher(teacher_id, t_name, t_surname, salary, postgres);
+    auto res_teacher = Teacher(teacher_id, t_name, t_surname, salary);
     PQclear(result);
 
     return res_teacher;

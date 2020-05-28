@@ -45,7 +45,7 @@ Teacher Lesson::get_teacher() const {
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int t_salary = atoi(PQgetvalue(result, 0, 3));
-    Teacher res_teacher(t_id, t_name, t_surname, t_salary,postgres);
+    Teacher res_teacher(t_id, t_name, t_surname, t_salary);
 
     return res_teacher;
 }
