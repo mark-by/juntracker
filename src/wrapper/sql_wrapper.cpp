@@ -1,6 +1,5 @@
 #include "sql_wrapper.h"
 #include <iostream>
-#include <utils.hpp>
 
 // SqlWrapper is ...
 SqlWrapper::SqlWrapper(PGconn *conn)
