@@ -2,20 +2,27 @@
 #include <utils.hpp>
 
 User Session::get_user(const std::string& s_cookie) {
+    std::cout << "COOKIE: " << s_cookie << std::endl;
     auto postgres = connect();
 
-    std::string query = "SELECT * FROM users WHERE cookie='" + s_cookie + "';";
+    std::string query = "SELECT * FROM session WHERE cookie='" + s_cookie + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        std::cout << "NOT FOUND SESSION" << std::endl;
         throw std::exception();
     }
 
-    int s_uid = atoi(PQgetvalue(result, 0, 0));
+    int s_uid = atoi(PQgetvalue(result, 0, 2));
+    query = "SELECT * FROM users WHERE id=" + std::to_string(s_uid) + ";";
+
+    if (!postgres.query(query, &result)) {
+        std::cout << "NOT FOUND USER" << std::endl;
+        throw std::exception();
+    }
     std::string u_email = std::string(PQgetvalue(result, 0, 1));
     std::string u_login = std::string(PQgetvalue(result, 0, 2));
     std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    auto res_user = User(s_uid, u_email, u_login, u_password);
-    return res_user;
+    return User(s_uid, u_email, u_login, u_password);
 }
 
 Session Session::create_session(const std::string& username, const std::string& password) {
@@ -25,27 +32,30 @@ Session Session::create_session(const std::string& username, const std::string& 
     if (!postgres.query(query, &result)) {
         throw std::exception();
     }
-    std::string res_password = PQgetvalue(result, 0, 0);
-    if (res_password != password) {
+    char *res_password = PQgetvalue(result, 0, 0);
+    if (strcmp(res_password, password.c_str())) {
+        std::cout << "NOPASS" << std::endl;
         throw std::exception();
     }
 
     query = "SELECT id FROM users WHERE login='" + username + "';";
     if (!postgres.query(query, &result)) {
+        std::cout << "BEFORE" << std::endl;
         throw std::exception();
     }
     int user_id = atoi(PQgetvalue(result, 0, 0));
 
-    std::string new_cookie = username;
     std::ostringstream s;
     std::string table_name = "session";
+    std::string new_cookie = username;
     int count_rows = postgres.count_rows(table_name);
 
-    s << "INSERT INTO session VALUES (" << std::to_string(count_rows + 1) << ", '"
-      << new_cookie << "', " << std::to_string(user_id)  << ");";
+    s << "INSERT INTO session VALUES (" << count_rows + 1 << ", '"
+      << new_cookie << "', " << user_id << ");";
 
     query = s.str();
     if (!postgres.exec(query)) {
+        std::cout << "AFTER" << std::endl;
         throw std::exception();
     }
     return Session(count_rows + 1, new_cookie, postgres);

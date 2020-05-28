@@ -6,28 +6,30 @@
 #define SERVER_HANDLER_H
 
 #include <string>
-#include "Request.h"
-#include "Response.h"
-
-// Response;
-// Request
+#include "http/request.h"
+#include "http/response.h"
+#include "../database/user.h"
+//#include "../core/TeacherAPI.h"
+//#include "../core/CustomerAPI.h"
+#include "../core/AdminAPI.h"
+#include "../core/UserAPI.h"
 
 class Handler {
 public:
-    Handler(Request& req, Response& rep);
+    Handler() = default;
     // methods to fill response from request done by Api
-    void teacher();  // handler_.teacher();
-    void admin();    // handler_.admin();
-    void customer(); // handler_.customer();
+    Response teacherHandler(Request request, const User& user);  // handler_.teacher();
+    Response adminHandler(Request request, const User& user);    // handler_.adminHandler();
+    Response customerHandler(Request request, const User& user); // handler_.customer();
+    Response loginHandler(Request request);                      // handle login page
 
-    // Response getResponse();
+    std::shared_ptr<User> authorizationHandler(Request request); // check login or not
 
 private:
-    // AdminApi
-    // TeacherApi
-    // CustomerApi
-    Request request_;
-    Response response_;
+    AdminAPI adminApi;
+    UserAPI userApi;
+    /*TeacherAPI tutor;
+    CustomerAPI customer;*/
 };
 
 

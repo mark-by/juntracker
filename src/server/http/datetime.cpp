@@ -6,13 +6,12 @@ DateTimeConverter::DateTimeConverter(const std::string &format) {
     stream.imbue(std::locale(std::locale::classic(), facet));
 }
 
-DateTimeConverter::~DateTimeConverter() {
-    delete facet;
-}
-
 std::string DateTimeConverter::convert(const boost::posix_time::ptime &ptime, const std::string &zone) {
     stream.str("");
-    stream << ptime << " " << zone;
+    stream << ptime;
+    if (!zone.empty()) {
+        stream << " " << zone;
+    }
     return stream.str();
 }
 

@@ -1,0 +1,18 @@
+{% extends baseAuth.html %}
+
+{% block form %}
+<form method="POST">
+    <label>
+        <div>Username</div>
+        <input name="username" type="text"/>
+    </label>
+    <label>
+        <div>Password</div>
+        <input name="password" type="password"/>
+    </label>
+        <input type="submit" value="Войти"/>
+</form>
+
+<p>Нет аккаунта?</p>
+<a href="/register">Зарегистрироваться</a>
+{% endblock %}

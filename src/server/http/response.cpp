@@ -90,7 +90,7 @@ std::string Response::statusToStr() const {
     }
 }
 
-Response &Response::operator=(const Response &other) {
+Response &Response::operator=(Response &&other) {
     headers = other.headers;
     cookies = other.cookies;
     body = other.body;
@@ -100,4 +100,12 @@ Response &Response::operator=(const Response &other) {
 
 void Response::setStatus(const int &status) {
     statusCode = status;
+}
+
+Response::Response(const Response &other) {
+    headers = other.headers;
+    cookies = other.cookies;
+    body = other.body;
+    statusCode = other.statusCode;
+
 }

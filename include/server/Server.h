@@ -8,8 +8,6 @@
 #include "boost/asio.hpp"
 #include <string>
 #include "ConnectionManager.h"
-#include "Handler.h"
-#include "Request.h"
 
 class Server: private boost::asio::noncopyable {
 public:
@@ -21,12 +19,9 @@ private:
     void accept(const boost::system::error_code& error);  // do async accept
     void stop();  // "handler" to stop Server
 
-    Request request_;
-    Response response_;
     ConnectionManager manager_;
-    Handler handler_;
 
-    boost::asio::io_service service_;
+    boost::asio::io_service service_;  // main thing in boost::asio
     boost::asio::ip::tcp::acceptor acceptor_;
 
     std::shared_ptr<Connection> connection_;

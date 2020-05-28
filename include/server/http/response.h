@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <vector>
 #include <http/datetime.h>
-#include <context/context.h>
 
 #define HTTP_VERSION "HTTP/1.1"
 
@@ -45,7 +44,8 @@ public:
     explicit Response(const int &status = status::OK);
     explicit Response(const std::string & html, const int &status = status::OK);
     explicit Response(const templates::Context & jsonData, const int &status = status::OK);
-    Response& operator=(const Response& other);
+    Response& operator=(Response&& other);
+    Response(const Response& other);
 
     std::string str();
     void setCookie(const std::string &key, const std::string &value, const int &daysExpires = 0);

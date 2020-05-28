@@ -24,7 +24,7 @@ int TeacherAPI::rate(std::unordered_map<std::string, std::string> &group) {
         if (it->first != "lesson" && it->first != "date" ) {
             std::string studentId = it->first;
             std::string mark = it->second;
-            int res = ManagerVisitHistory.addRecord(course, date, studentId, mark);
+            int res = 0;
 
             if (res) {
                 return std::stoi(studentId);

@@ -10,6 +10,8 @@
 #include "API.h"
 
 
+#include "API.h"
+
 class TeacherAPI: public API {
 public:
     TeacherAPI();

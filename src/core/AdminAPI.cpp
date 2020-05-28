@@ -23,7 +23,6 @@ templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
 }
 
 templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
-    auto now = boost::posix_time::second_clock();
     templates::Context context;
     context.put("name", student.student.name() + " " + student.student.surname());
     context.put("id", student.student.id());
@@ -40,6 +39,7 @@ templates::Context AdminAPI::ShortStudentSerializer(const Student &student) {
 
 templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
+    std::cout << "LESSON SERIALIZER" << std::endl;
     context.put("title", lesson.get_title());
     context.put("cabinet", lesson.cabinet());
     context.put("id", lesson.id());
@@ -60,17 +60,29 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
 
 std::string AdminAPI::getMainPage(int userId) {
     templates::Context context;
+    std::cout << "Admin::UID: " << userId << std::endl;
     auto user = User::get_user(userId);
+    std::cout << "AdminAPI::USER FOUNDED" << std::endl;
     context.put("username", user.login());
     std::vector<WeekDay> days;
     DateTime dateTime;
+    std::cout << "ADMIN::BEFORE WEKDAYS" << std::endl;
     for (int weekday = 0; weekday < 7; weekday++) {
-        days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
+        try {
+            days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
                           user.get_lessons_by_weekday(weekday));
+        } catch(...) {}
     }
+    std::cout << "ADMIN::AFTER WEKDAYS" << std::endl;
     context.putArray("scheduleDays", days, DaySerializer);
-    auto currentLessons = user.get_current_lessons();
+    std::cout << "ADMIN::GET CURRENT LESSONS" << std::endl;
+    std::vector<Lesson> currentLessons;
+    try {
+        currentLessons = user.get_current_lessons();
+    } catch(...) {}
+    std::cout << "ADMIN::AFTER GET CURRENT LESSONS" << std::endl;
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
+    std::cout << context.str() << std::endl;
 
     _render.set("mainPageAdmin.html");
     return _render.render(context);

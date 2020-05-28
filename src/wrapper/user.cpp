@@ -2,11 +2,14 @@
 #include <utils.hpp>
 
 std::vector<Lesson> User::get_current_lessons() const {
+    auto _postgres = connect();
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
+        std::cout << query << std::endl;
+        std::cout << "CURRENT LESSONS NOT FOUND" << std::endl;
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -18,13 +21,17 @@ std::vector<Lesson> User::get_current_lessons() const {
         auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time, postgres);
         res_lesson.push_back(curr_lesson);
     }
+    std::cout << "COUNT ELSSONS: " << res_lesson.size() << std::endl;
     return res_lesson;
 }
 
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
+    auto _postgres = connect();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
+        std::cout << query << std::endl;
+        std::cout << "LESSONS BY WEEKDAY " << l_weekday << "NOT FOUND" << std::endl;
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -36,13 +43,15 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
         auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
         res_lesson.push_back(curr_lesson);
     }
+    std::cout << "COUNT ELSSONS FOR "<< l_weekday<< " WEEKDAY: " << res_lesson.size() << std::endl;
     return res_lesson;
 }
 
 std::vector<Student> User::get_students() const {
+    auto _postgres = connect();
     std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Student> res_students;
@@ -76,6 +85,12 @@ User User::get_user(int user_id) {
 
 int User::save(const std::string &username, const std::string &password, const std::string &email) {
     auto postgres = connect();
+
+    if(!postgres.is_connected()) {
+        std::cout << "conn fail: " << PQerrorMessage(postgres.getConn()) << std::endl;
+        return 1;
+    }
+    std::cout << "DATABASE CONECTED" << std::endl;
 
     std::ostringstream s;
     std::string table_name = "users";
