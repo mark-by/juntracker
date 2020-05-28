@@ -72,6 +72,7 @@ int Student::save(const std::string name, const std::string& surname, int age) {
       << std::to_string(age) << ");";
 
     std::string query = s.str();
+    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
         return -1;
     }
