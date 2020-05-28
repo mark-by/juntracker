@@ -26,8 +26,8 @@ public:
     std::shared_ptr<User> authorizationHandler(Request request); // check login or not
 
 private:
-    AdminAPI admin;
-    UserAPI user;
+    AdminAPI adminApi;
+    UserAPI userApi;
     /*TeacherAPI tutor;
     CustomerAPI customer;*/
 };

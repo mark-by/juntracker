@@ -2,9 +2,10 @@
 #include "utils.hpp"
 
 std::vector<Student> Lesson::get_students() const {
-    std::string query = "SELECT student_id FROM visit WHERE lesson_id='" + std::to_string(id()) + "';";
+    auto _postgres = connect();
+    std::string query = "SELECT student_id FROM students_for_lesson WHERE lesson_id=" + std::to_string(id()) + ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<int> student_ids;
@@ -15,7 +16,7 @@ std::vector<Student> Lesson::get_students() const {
     std::vector<Student> res_students;
     for (auto s_id : student_ids) {
         query = "SELECT * FROM student WHERE id='" + std::to_string(s_id) + "';";
-        if (!postgres.query(query, &result)) {
+        if (!_postgres.query(query, &result)) {
             throw std::exception();
         }
         std::string s_name = std::string(PQgetvalue(result, 0, 1));
@@ -29,15 +30,16 @@ std::vector<Student> Lesson::get_students() const {
 }
 
 Teacher Lesson::get_teacher() const {
-    std::string query = "SELECT teacher_id FROM visit WHERE lesson_id='" + std::to_string(_id) + "';";
+    auto _postgres = connect();
+    std::string query = "SELECT teacher_id FROM lesson WHERE id=" + std::to_string(_id) + ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     int t_id = atoi(PQgetvalue(result, 0, 0));
 
     query = "SELECT * FROM teacher WHERE id='" + std::to_string(t_id) + "';";
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
@@ -49,17 +51,18 @@ Teacher Lesson::get_teacher() const {
 }
 
 std::string Lesson::get_title() const {
-    std::string query = "SELECT course_id FROM lesson WHERE id='" + std::to_string(_id) + "';";
+    auto _postgres = connect();
+    std::string query = "SELECT course_id FROM lesson WHERE id=" + std::to_string(_id) + ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     int c_id = atoi(PQgetvalue(result, 0, 0));
     query = "SELECT name FROM course WHERE id=" + std::to_string(c_id) + ";";
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
-    std::string c_name = std::string(PQgetvalue(result, 0, 1));
+    std::string c_name = std::string(PQgetvalue(result, 0, 0));
     return c_name;
 }
 

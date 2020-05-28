@@ -6,8 +6,26 @@ SqlWrapper::SqlWrapper(PGconn *conn)
     : conn(conn) {}
 
 bool SqlWrapper::query(const std::string& query, PGresult** result) const {
-    *result = PQexec(conn, query.c_str());
-    return !(PQresultStatus(*result) != PGRES_TUPLES_OK);
+    char * cstr = new char[query.length() + 1];
+    std::strcpy(cstr, query.c_str());
+//    auto it = query.rbegin();
+ //   it++;
+//    if (*it == ')') {
+//        it++;
+ //       if (*it == '\'') {
+ //           std::strcat(cstr, "');");
+ //       }
+ //   }
+    std::cout << "CSTR " << cstr << std::endl;
+    *result = PQexec(conn, cstr);
+    delete cstr;
+    if (PQresultStatus(*result) != PGRES_TUPLES_OK) {
+        std::cout << "ERROR:" << PQerrorMessage(conn) << std::endl;
+        std::cout << "STATUS:" << PQresultStatus(*result) << std::endl;
+        return false;
+    }
+    return true;
+}
 
 //    for (int i = 0; i < PQnfields(result); i++) {
 //        std::cout << PQfname(result, i) << "         ";
@@ -20,7 +38,6 @@ bool SqlWrapper::query(const std::string& query, PGresult** result) const {
 //        }
 //        std::cout << std::endl;
 //    }
-}
 
 bool SqlWrapper::exec(const std::string& query) const {
     char * cstr = new char[query.length() + 1];
