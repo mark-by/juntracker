@@ -47,6 +47,6 @@ std::string DateTime::weekdayToStr(int weekday) {
 std::string DateTime::dateByWeekday(int weekday) {
     auto currentDayOfWeek = now.date().day_of_week();
     auto day = now + (boost::gregorian::days(weekday - currentDayOfWeek.as_number()));
-    DateTimeConverter converter("%d:%m:%y");
-    return converter.convert(day);
+    DateTimeConverter converter("%d.%m.%y");
+    return converter.convert(day, "");
 }
