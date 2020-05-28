@@ -70,12 +70,12 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
         std::cout << "FAIL SELECT" << std::endl;
         return -1;
     }
-    if (PQntuples(result) >= 1) {
-        s.clear();
+    if (PQgetvalue(result, 0, 0)) {
+        s.str("");
         s << "update visit set was_in_class='" << was_in_class_ch << "' where student_id=" << student_id <<
         " and lesson_id=" << lesson_id << " and visit_date='" << today << "';";
     } else {
-        s.clear();
+        s.str("");
         int count_rows = postgres.count_rows(table_name);
         s << "INSERT INTO visit VALUES (" << std::to_string(count_rows + 1) << ", "
           << student_id << ", " << lesson_id << ", '"
