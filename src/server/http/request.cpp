@@ -74,6 +74,7 @@ void Request::parseDataFromPath() {
 void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::string::const_iterator start = begin;
     start++;
+    std::cout << "body: " << std::string(begin, end) << std::endl;
     std::string contentType = header("Content-Type");
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
