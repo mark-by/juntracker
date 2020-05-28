@@ -40,11 +40,9 @@ void Connection::doRead(const boost::system::error_code& error,
 
             auto user_ptr = handler_.authorizationHandler(request_);
             if (!user_ptr) {
-                std::cout << "NOT USER" << std::endl;
                 response_.setStatus(status::MovedPermanently);
                 response_.setHeader("Location", "/login");
             } else {
-                std::cout << "User returned" << std::endl;
                 response_ = handler_.adminHandler(request_, *user_ptr);
             }
         }
