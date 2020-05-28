@@ -1,3 +1,4 @@
+git pull
 cd build
 cmake --build . --target server -- -j 4
 cd ..
