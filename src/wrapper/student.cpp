@@ -33,18 +33,15 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
             + " and visit_date='" + converter.convert(boost::posix_time::second_clock::universal_time(), "") + "';";
     PGresult *result = nullptr;
-    std::cout << "HERE 1" << std::endl;
     if (!_postgres.query(query, &result)) {
-        std::cout << "HERE 2" << std::endl;
         throw std::exception();
     }
-    std::cout << "HERE 3" << std::endl;
+    if (!PQntuples(result)) {
+        throw std::runtime_error("visit not found");
+    }
     int visit_id = atoi(PQgetvalue(result, 0, 0));
-    std::cout << "HERE 4" << std::endl;
     bool v_was_in_class = strcmp(PQgetvalue(result, 0, 3), "t") == 0;
-    std::cout << "HERE 5" << std::endl;
     std::string str_v_date = std::string(PQgetvalue(result, 0, 4));
-    std::cout << "HERE 6" << std::endl;
     boost::posix_time::ptime v_date = converter.convert(str_v_date);
     Visit res_visit(visit_id, v_was_in_class, v_date, postgres);
     return res_visit;
