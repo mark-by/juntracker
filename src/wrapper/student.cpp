@@ -30,7 +30,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     DateTimeConverter converter(format);
 
     std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
-            + " and visit_date=" + converter.convert(boost::posix_time::second_clock::universal_time(), "") + ";";
+            + " and visit_date='" + converter.convert(boost::posix_time::second_clock::universal_time(), "") + "';";
     PGresult *result = nullptr;
     if (!_postgres.query(query, &result)) {
         throw std::exception();
