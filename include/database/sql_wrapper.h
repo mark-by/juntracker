@@ -11,16 +11,22 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <utils.hpp>
 
 class SqlWrapper : public Database {
 public:
-    explicit SqlWrapper() {}
-    explicit SqlWrapper(PGconn *conn);
-    ~SqlWrapper() {
-        PQfinish(conn);
-    };
+    SqlWrapper() : conn(nullptr) {}
+    ~SqlWrapper() = default;
 
     PGconn *getConn();
+
+    void connect() {
+        conn = PQconnectdb(get_config("config.txt").c_str());
+    }
+
+    void disconnect() {
+        close(PQsocket(conn));
+    }
 
     bool query(const std::string& query, PGresult** result) const override;
     [[nodiscard]] bool exec(const std::string& query) const override;
