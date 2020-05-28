@@ -62,8 +62,8 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     std::string table_name = "visit";
     int count_rows = postgres.count_rows(table_name);
     s << "INSERT INTO visit VALUES (" << std::to_string(count_rows + 1) << ", "
-      << std::to_string(student_id) << ", " << std::to_string(lesson_id) << ", "
-      << std::to_string(was_in_class)  << ");";
+      << student_id << ", " << lesson_id << ", "
+      << (was_in_class ? 't' : 'f')  << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
