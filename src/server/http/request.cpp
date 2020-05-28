@@ -89,8 +89,9 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     } else if (contentType == "application/json") {
         std::cout << "HERE" << std::endl;
         std::string json_str = std::string(start, end);
-        templates::Context json(json_str);
-        std::cout << "HERE NOW" << std::endl;
+        std::cout << json_str << std::endl;
+//        templates::Context json(json_str);
+//        std::cout << "HERE NOW" << std::endl;
 //        _data = json.toMap();
     }
 }
