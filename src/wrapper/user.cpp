@@ -2,12 +2,12 @@
 #include <utils.hpp>
 
 std::vector<Lesson> User::get_current_lessons() const {
-    auto _postgres = connect();
+    auto postgres = connect();
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -23,10 +23,10 @@ std::vector<Lesson> User::get_current_lessons() const {
 }
 
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
-    auto _postgres = connect();
+    auto postgres = connect();
     std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Lesson> res_lesson;
@@ -42,10 +42,10 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
 }
 
 std::vector<Student> User::get_students() const {
-    auto _postgres = connect();
+    auto postgres = connect();
     std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
-    if (!_postgres.query(query, &result)) {
+    if (!postgres.query(query, &result)) {
         throw std::exception();
     }
     std::vector<Student> res_students;

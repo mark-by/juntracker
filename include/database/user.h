@@ -6,8 +6,6 @@
 
 class User {
  public:
-    User(SqlWrapper& postgres)
-        : postgres(postgres) {}
     explicit User(int _id, std::string& _email, std::string& _login,  std::string& _password)
         : _id(_id)
         , _email(_email)
@@ -34,7 +32,6 @@ class User {
     std::string _login;
     std::string _password;
 
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_USER_H_
