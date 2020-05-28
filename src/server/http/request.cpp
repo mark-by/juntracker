@@ -2,6 +2,7 @@
 #include <regex>
 #include <iostream>
 #include <context/context.h>
+#include <boost/algorithm/string.hpp>
 
 Request::Request(const std::string &request) {
     std::regex separator(R"(\r*\n\r*\n)");
@@ -89,6 +90,7 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     } else if (contentType == "application/json") {
         std::cout << "HERE" << std::endl;
         std::string json_str = std::string(start, end);
+        boost::trim(json_str);
         std::cout << json_str << std::endl;
         templates::Context json(json_str);
         std::cout << "HERE NOW" << std::endl;
