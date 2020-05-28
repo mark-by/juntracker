@@ -37,7 +37,8 @@ void Connection::doRead(const boost::system::error_code& error,
             } else {
                 auto user_ptr = handler_.authorizationHandler(request_);
                 if (!user_ptr) {
-                    response_ = handler_.customerHandler(request_);
+                    response_.setHeader("Location", "/login");
+                    response_.setStatus(status::Found);
                 } else {
                     response_ = handler_.adminHandler(request_, *user_ptr);
                 }

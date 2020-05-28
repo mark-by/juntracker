@@ -109,7 +109,7 @@ Response Handler::loginHandler(Request request) {
         Response response;
         response.setCookie("session_id", "",-1000);
         Session::remove(Session::get_user(request.cookie("session_id")).id());
-        response.setHeader("Location", "/");
+        response.setHeader("Location", "/login");
         response.setStatus(status::Found);
         return response;
     }
