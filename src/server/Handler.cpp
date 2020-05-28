@@ -35,12 +35,6 @@ Response Handler::teacherHandler(Request request, const User &user) {
         if (request.path() == "/teacher/rating") {
             response = Response(teacherApi.getRatingPage(user.id()));
         }
-
-        if (request.path() == "/logout") {
-            response.setCookie("session_id", , -1000);
-            response.setHeader("Location", "/");
-            response.setStatus(status::MovedPermanently);
-        }
     } else {
         if (request.path() == "/teacher/save_current_lesson") {
             response = Response(teacherApi.saveCurrentLesson(request.dataTable()));
@@ -71,12 +65,6 @@ Response Handler::adminHandler(Request request, const User &user) {
 
         if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
-        }
-
-        if (request.path() == "/logout") {
-            response.setCookie("session_id", , -1000);
-            response.setHeader("Location", "/");
-            response.setStatus(status::MovedPermanently);
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
@@ -117,6 +105,15 @@ std::shared_ptr<User> Handler::authorizationHandler(Request request) {
 Response Handler::loginHandler(Request request) {
     std::string session_id;
 
+    if (request.path() == "/logout") {
+        Response response;
+        response.setCookie("session_id", "",-1000);
+        Session::remove(Session::get_user(request.cookie("session_id")).id());
+        response.setHeader("Location", "/");
+        response.setStatus(status::Found);
+        return response;
+    }
+
     if (request.path() == "/login") {
         if (request.method() == "GET") {
             return Response(userApi.loginPage());
@@ -137,7 +134,7 @@ Response Handler::loginHandler(Request request) {
         Response tmp;
         tmp.setCookie("session_id", session_id, 10);  // 10 days living cookie
         tmp.setHeader("Location", "/");
-        tmp.setStatus(status::MovedPermanently);
+        tmp.setStatus(status::Found);
         return tmp;
     }
 }
