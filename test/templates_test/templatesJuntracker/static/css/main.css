@@ -108,7 +108,7 @@ input[type=checkbox] {
 }
 
 
-.header-menu-hidden-part-wrapper {
+.hidden-menu {
     display: none;
     position: fixed;
     left: 0;
@@ -118,22 +118,35 @@ input[type=checkbox] {
     z-index: 1600;
 }
 
-.header-menu-hidden-part {
+.header-hidden-menu {
+
+}
+
+.hidden-part {
     position: absolute;
     display: flex;
-    left: 50%;
-    transform: translate(-50%);
-    top: 50px;
     flex-direction: column;
     align-items: center;
     background: black;
-    width: 250px;
     padding-bottom: 5px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }
 
-.header-menu-hidden-part a {
+.header-menu-h {
+    left: 50%;
+    transform: translate(-50%);
+    top: 50px;
+    width: 250px;
+}
+
+.user-menu {
+    right: 0;
+    top: 50px;
+    width: 250px;
+}
+
+.hidden-part a {
     color: white;
 }
 

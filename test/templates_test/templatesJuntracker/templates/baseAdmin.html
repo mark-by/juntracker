@@ -10,8 +10,8 @@
 </head>
 <body>
 <header>
-    <a class="logo" href="index.html">JunTracker</a>
-    <div class="header-menu">
+    <a class="logo" href="/">JunTracker</a>
+    <div class="header-menu menu">
         <div class="header-select">
             <div class="current__option">{% block currentWindow %}Окно Админиcтратора{% endblock %}</div>
             <a class="control-button">
@@ -19,20 +19,25 @@
             </a>
         </div>
     </div>
-    <div class="header-user-wrapper">
+    <div class="header-user-wrapper menu">
         <div class="username">{{username}}</div>
         <div class="avatar-wrapper">
             <img class="header__avatar" src="static/images/avatar.svg">
         </div>
     </div>
-    <div class="header-menu-hidden-part-wrapper" data="off">
-        <div class="header-menu-hidden-part">
+    <div class="hidden-menu" data="off">
+        <div class="header-menu-h hidden-part">
             {% block hiddenMenu %}
-            <a class="menu__option" href="studentsAdmin.html">База учеников</a>
-            <a class="menu__option" href="schedule.html">Расписание</a>
-            <a class="menu__option" href="diary.html">Журнал</a>
-            <a class="menu__option" href="finance.html">Финансы</a>
+            <a class="menu__option" href="/students">База учеников</a>
+            <a class="menu__option" href="/schedule">Расписание</a>
+            <a class="menu__option" href="/diary">Журнал</a>
+            <a class="menu__option" href="/finance">Финансы</a>
             {% endblock %}
+        </div>
+    </div>
+    <div class="hidden-menu" data="off">
+        <div class="user-menu hidden-part">
+            <a class="menu__option" href="/logout">Выйти</a>
         </div>
     </div>
 </header>

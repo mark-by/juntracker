@@ -162,6 +162,7 @@ class CurrentLesson extends Lesson {
                 alert("Не удалось сохранить текущий урок");
             }
         })
+        this.state.element.remove();
     }
 
     getProgress() {
