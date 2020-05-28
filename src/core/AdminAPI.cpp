@@ -74,9 +74,12 @@ std::string AdminAPI::getMainPage(int userId) {
     try {
         currentLessons = user.get_current_lessons();
     } catch(...) {}
+    std::cout << "CURRENT LESSONS" << std::endl;
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
+    std::cout << "CURRENT LESSONS DONE" << std::endl;
 
     _render.set("mainPageAdmin.html");
+    std::cout << "WORK ADMINAPI DONE" << std::endl;
     return _render.render(context);
 }
 
