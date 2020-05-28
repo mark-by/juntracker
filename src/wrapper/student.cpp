@@ -25,13 +25,14 @@ std::vector<Course> Student::get_courses() const {
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
+    auto _postgres = connect();
     const std::string format = "%y-%m-%d";
     DateTimeConverter converter(format);
 
     std::string query = "SELECT * FROM visit WHERE lesson_id=" + std::to_string(lesson_id)
-            + " and visit_date=" + converter.convert(boost::posix_time::second_clock::universal_time()) + ";";
+            + " and visit_date=" + converter.convert(boost::posix_time::second_clock::universal_time(), "") + ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
+    if (!_postgres.query(query, &result)) {
         throw std::exception();
     }
     int visit_id = atoi(PQgetvalue(result, 0, 0));
