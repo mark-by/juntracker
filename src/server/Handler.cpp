@@ -35,6 +35,12 @@ Response Handler::teacherHandler(Request request, const User &user) {
         if (request.path() == "/teacher/rating") {
             response = Response(teacherApi.getRatingPage(user.id()));
         }
+
+        if (request.path() == "/logout") {
+            response.setCookie("session_id", , -1000);
+            response.setHeader("Location", "/");
+            response.setStatus(status::MovedPermanently);
+        }
     } else {
         if (request.path() == "/teacher/save_current_lesson") {
             response = Response(teacherApi.saveCurrentLesson(request.dataTable()));
@@ -65,6 +71,12 @@ Response Handler::adminHandler(Request request, const User &user) {
 
         if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
+        }
+
+        if (request.path() == "/logout") {
+            response.setCookie("session_id", , -1000);
+            response.setHeader("Location", "/");
+            response.setStatus(status::MovedPermanently);
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
