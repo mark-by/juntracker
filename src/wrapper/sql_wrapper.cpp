@@ -58,7 +58,6 @@ bool SqlWrapper::is_connected() const {
 }
 
 int SqlWrapper::count_rows(std::string& table_name) const {
-    auto _postgres = conntect();
     std::string command = "SELECT COUNT(*) FROM " + table_name + ";";
     PGresult *result = nullptr;
     if (!query(command, &result)) {
