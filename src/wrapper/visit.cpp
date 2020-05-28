@@ -67,6 +67,7 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
       << (was_in_class ? 't' : 'f')  << "', '" << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "');";
 
     std::string query = s.str();
+    std::cout << query << std::endl;
     if (!postgres.exec(query)) {
         std::cout << "FAIL SAVE" << std::endl;
         return -1;
