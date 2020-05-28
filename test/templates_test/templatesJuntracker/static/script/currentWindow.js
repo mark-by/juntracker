@@ -217,14 +217,14 @@ class CurrentList extends List {
     }
 
     update() {
-        // for (let i = 0; i < this.state.objects.length; i++) {
-            // if (this.state.objects[i].isEnded()) {
-            //     this.state.objects[i].save();
-            //     this.state.objects[i].state.element.remove();
-            //     let removed = this.state.objects.splice(i,1);
-            //     delete removed[0];
-            // }
-        // }
+        for (let i = 0; i < this.state.objects.length; i++) {
+            if (this.state.objects[i].isEnded()) {
+                this.state.objects[i].save();
+                this.state.objects[i].state.element.remove();
+                let removed = this.state.objects.splice(i,1);
+                delete removed[0];
+            }
+        }
     }
 }
 
