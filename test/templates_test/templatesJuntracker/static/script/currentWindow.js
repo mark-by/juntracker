@@ -137,10 +137,10 @@ class CurrentLesson extends Lesson {
             startTime: null,
             endTime: null,
         }
-        this.state.form.onsubmit(event => {
+        this.state.form.onsubmit = event => {
             event.preventDefault();
             this.save();
-        })
+        }
     }
 
     save() {
