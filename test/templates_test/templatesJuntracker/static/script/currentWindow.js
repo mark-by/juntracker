@@ -149,7 +149,7 @@ class CurrentLesson extends Lesson {
             method: 'POST',
             body: formData,
             headers: {
-                "Content-Type" : "application/x-www-form-urlencoded",
+                "Content-Type" : "text/plain",
             }
         }).then(response => {
             if (!response.ok) {
