@@ -1,10 +1,11 @@
 #include "schedule.h"
 
 std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
-    auto postgres = connect();
+    SqlWrapper postgres;
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
 
@@ -18,6 +19,7 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
     for (auto c_id : s_courses) {
         query = "SELECT * FROM lesson WHERE course_id='" + std::to_string(c_id) + "';";
         if (!postgres.query(query, &result)) {
+            postgres.disconnect();
             throw std::exception();
         }
         for (int j = 0; j < PQntuples(result); j++) {
@@ -30,14 +32,16 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
             res_lessons.push_back(cur_lesson);
         }
     }
+    postgres.disconnect();
     return res_lessons;
 }
 
 std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
-    auto postgres = connect();
+    SqlWrapper postgres;
     std::string query = "SELECT * FROM lesson WHERE course_id='" + std::to_string(c_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
     std::vector<Lesson> res_lessons;
@@ -50,14 +54,16 @@ std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
         auto cur_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
         res_lessons.push_back(cur_lesson);
     }
+    postgres.disconnect();
     return res_lessons;
 }
 
 std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
-    auto postgres = connect();
+    SqlWrapper postgres;
     std::string query = "SELECT id FROM course WHERE teacher_id='" + std::to_string(t_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
 
@@ -71,6 +77,7 @@ std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
     for (auto t_id : t_courses) {
         query = "SELECT * FROM lesson WHERE course_id='" + std::to_string(t_id) + "';";
         if (!postgres.query(query, &result)) {
+            postgres.disconnect();
             throw std::exception();
         }
         for (int j = 0; j < PQntuples(result); j++) {
@@ -83,5 +90,6 @@ std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
             res_lessons.push_back(cur_lesson);
         }
     }
+    postgres.disconnect();
     return res_lessons;
 }

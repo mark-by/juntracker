@@ -1,10 +1,6 @@
 #include "sql_wrapper.h"
 #include <iostream>
 
-// SqlWrapper is ...
-SqlWrapper::SqlWrapper(PGconn *conn)
-    : conn(conn) {}
-
 bool SqlWrapper::query(const std::string& query, PGresult** result) const {
     char * cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());

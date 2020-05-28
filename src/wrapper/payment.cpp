@@ -6,19 +6,20 @@ Student Payment::get_student() const {
     std::string query = "SELECT student_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
     int student_id = atoi(PQgetvalue(result, 0, 0));
     query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
     std::string s_name = std::string(PQgetvalue(result, 0, 1));
     std::string s_surname = std::string(PQgetvalue(result, 0, 2));
     int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age);
     postgres.disconnect();
-    return res_student;
+    return Student(student_id, s_name, s_surname, s_age);
 }
 
 Course Payment::get_course() const {
@@ -37,9 +38,8 @@ Course Payment::get_course() const {
     }
     std::string name = std::string(PQgetvalue(result, 0, 1));
     int price = atoi(PQgetvalue(result, 0, 2));
-    auto res_course = Course(course_id, name, price);
     postgres.disconnect();
-    return res_course;
+    return Course(course_id, name, price);
 }
 
 Payment Payment::get_payment(int payment_id) {
@@ -54,9 +54,8 @@ Payment Payment::get_payment(int payment_id) {
 
     int p_amount = atoi(PQgetvalue(result, 0, 3));
     std::string p_date = std::string(PQgetvalue(result, 0, 4));
-    auto res_payment = Payment(payment_id, p_amount, p_date, postgres);
     postgres.disconnect();
-    return res_payment;
+    return Payment(payment_id, p_amount, p_date, postgres);
 }
 
 int Payment::save(int student_id, int course_id, int amount) {

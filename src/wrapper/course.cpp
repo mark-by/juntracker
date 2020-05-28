@@ -11,7 +11,6 @@ Teacher Course::get_teacher() const {
     }
 
     int teacher_id = atoi(PQgetvalue(result, 0, 0));
-    PQclear(result);
     query = "SELECT * FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
     if (!postgres.query(query, &result)) {
         postgres.disconnect();
@@ -20,11 +19,8 @@ Teacher Course::get_teacher() const {
     std::string t_name = std::string(PQgetvalue(result, 0, 1));
     std::string t_surname = std::string(PQgetvalue(result, 0, 2));
     int salary = atoi(PQgetvalue(result, 0, 3));
-    auto res_teacher = Teacher(teacher_id, t_name, t_surname, salary);
-    PQclear(result);
-
     postgres.disconnect();
-    return res_teacher;
+    return Teacher(teacher_id, t_name, t_surname, salary);
 }
 
 int Course::set_price(int price, int course_id) {
@@ -48,7 +44,6 @@ std::vector<Student> Course::get_students() const {
         throw std::exception();
     }
     int course_id = atoi(PQgetvalue(result, 0, 0));
-    PQclear(result);
 
     query = "SELECT * FROM payment WHERE course_id=" + std::to_string(course_id) + ";";
     if (!postgres.query(query, &result)) {
@@ -64,7 +59,6 @@ std::vector<Student> Course::get_students() const {
         auto res_student = Student(s_id, s_name, s_surname, s_age);
         students.push_back(res_student);
     }
-    PQclear(result);
     postgres.disconnect();
     return students;
 }
@@ -75,13 +69,13 @@ Course Course::get_course(int course_id) {
     std::string query = "SELECT * FROM course WHERE id=" + std::to_string(course_id) + ";";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
+        postgres.disconnect();
         throw std::exception();
     }
     std::string name = std::string(PQgetvalue(result, 0, 1));
     int price = atoi(PQgetvalue(result, 0, 2));
-    auto res_course = Course(course_id, name, price);
     postgres.disconnect();
-    return res_course;
+    return Course(course_id, name, price);
 }
 
 int Course::save(const std::string& name, int price) {
