@@ -21,8 +21,9 @@ User Session::get_user(const std::string& s_cookie) {
     std::string u_email = std::string(PQgetvalue(result, 0, 1));
     std::string u_login = std::string(PQgetvalue(result, 0, 2));
     std::string u_password = std::string(PQgetvalue(result, 0, 3));
+    int u_permission = atoi(PQgetvalue(result, 0, 4));
     postgres.disconnect();
-    return User(s_uid, u_email, u_login, u_password);
+    return User(s_uid, u_email, u_login, u_password, u_permission);
 }
 
 Session Session::create_session(const std::string& username, const std::string& password) {
