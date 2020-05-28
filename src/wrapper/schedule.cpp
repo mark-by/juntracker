@@ -1,6 +1,7 @@
 #include "schedule.h"
 
 std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
+    auto postgres = connect();
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -33,6 +34,7 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
 }
 
 std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
+    auto postgres = connect();
     std::string query = "SELECT * FROM lesson WHERE course_id='" + std::to_string(c_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -52,6 +54,7 @@ std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
 }
 
 std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
+    auto postgres = connect();
     std::string query = "SELECT id FROM course WHERE teacher_id='" + std::to_string(t_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {

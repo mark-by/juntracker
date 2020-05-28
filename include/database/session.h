@@ -5,9 +5,7 @@
 
 class Session {
  public:
-    Session(SqlWrapper& postgres)
-    : postgres(postgres) {}
-    explicit Session(int _id, std::string& _cookie, SqlWrapper postgres)
+    explicit Session(int _id, std::string& _cookie)
             : _id(_id)
             , _cookie(_cookie) {}
 
@@ -23,8 +21,6 @@ class Session {
  private:
     int _id;
     std::string _cookie;
-
-    SqlWrapper postgres;
 };
 
 #endif  // DATABASE_SESSION_H

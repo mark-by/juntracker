@@ -54,7 +54,7 @@ std::vector<Student> Course::get_students() const {
         std::string s_name = std::string(PQgetvalue(result, i, 1));
         std::string s_surname = std::string(PQgetvalue(result, i, 2));
         int s_age = atoi(PQgetvalue(result, i, 3));
-        auto res_student = Student(s_id, s_name, s_surname, s_age, postgres);
+        auto res_student = Student(s_id, s_name, s_surname, s_age);
         students.push_back(res_student);
     }
     PQclear(result);

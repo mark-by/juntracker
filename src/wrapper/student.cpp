@@ -2,6 +2,7 @@
 #include <utils.hpp>
 
 std::vector<Course> Student::get_courses() const {
+    auto postgres = connect();
     std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -58,7 +59,7 @@ Student Student::get_student(int student_id) {
     std::string s_name = std::string(PQgetvalue(result, 0, 1));
     std::string s_surname = std::string(PQgetvalue(result, 0, 2));
     int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age, postgres);
+    auto res_student = Student(student_id, s_name, s_surname, s_age);
     return res_student;
 }
 

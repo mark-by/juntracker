@@ -52,7 +52,7 @@ Session Session::create_session(const std::string& username, const std::string& 
     if (!postgres.exec(query)) {
         throw std::exception();
     }
-    return Session(count_rows + 1, new_cookie, postgres);
+    return Session(count_rows + 1, new_cookie);
 }
 
 int Session::remove(int user_id) {

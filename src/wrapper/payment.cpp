@@ -16,7 +16,7 @@ Student Payment::get_student() const {
     std::string s_name = std::string(PQgetvalue(result, 0, 1));
     std::string s_surname = std::string(PQgetvalue(result, 0, 2));
     int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age, postgres);
+    auto res_student = Student(student_id, s_name, s_surname, s_age);
     return res_student;
 }
 

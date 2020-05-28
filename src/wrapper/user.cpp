@@ -56,7 +56,7 @@ std::vector<Student> User::get_students() const {
         std::string s_name = std::string(PQgetvalue(result, i, 1));
         std::string s_surname = std::string(PQgetvalue(result, i, 2));
         int s_age = atoi(PQgetvalue(result, i, 3));
-        res_students.emplace_back(student_id, s_name, s_surname, s_age, postgres);
+        res_students.emplace_back(student_id, s_name, s_surname, s_age);
     }
 
     return res_students;

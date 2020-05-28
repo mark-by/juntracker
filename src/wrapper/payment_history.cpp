@@ -1,6 +1,7 @@
 #include "payment_history.h"
 
 std::vector<Payment> PaymentHistory::get_payments_by_student(int s_id) const {
+    auto postgres = connect();
     std::string query = "SELECT * FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
@@ -19,6 +20,7 @@ std::vector<Payment> PaymentHistory::get_payments_by_student(int s_id) const {
 }
 
 std::vector<Payment> PaymentHistory::get_payments_by_course(int c_id) const {
+    auto postgres = connect();
     std::string query = "SELECT * FROM payment WHERE course_id='" + std::to_string(c_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {

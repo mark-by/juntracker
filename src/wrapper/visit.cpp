@@ -16,7 +16,7 @@ Student Visit::get_student() const {
     std::string s_name = std::string(PQgetvalue(result, 0, 1));
     std::string s_surname = std::string(PQgetvalue(result, 0, 2));
     int age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, age, postgres);
+    auto res_student = Student(student_id, s_name, s_surname, age);
     return res_student;
 }
 
