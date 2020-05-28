@@ -27,8 +27,9 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
     context.put("name", student.student.name() + " " + student.student.surname());
     context.put("id", student.student.id());
     try {
-        context.put("isHere", student.student.get_visit(student.lesson.id(),
-                                                        boost::posix_time::second_clock::universal_time()).was_in_class());
+        bool was = student.student.get_visit(student.lesson.id(),boost::posix_time::second_clock::universal_time()).was_in_class();
+        std::cout << "ID NAME: " << student.student.name() << " " << "WAS IN CLASS: " <<  was << std::endl;
+        context.put("isHere", was);
     } catch(...) {
         context.put("isHere", false);
     }
