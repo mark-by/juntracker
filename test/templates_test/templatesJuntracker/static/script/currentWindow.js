@@ -148,6 +148,9 @@ class CurrentLesson extends Lesson {
         fetch('api/save_current_lesson', {
             method: 'POST',
             body: formData,
+            headers: {
+                "Content-Type" : "application/x-www-form-urlencoded",
+            }
         }).then(response => {
             if (!response.ok) {
                 this.state.element = "";
