@@ -92,8 +92,10 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
     int lesson_id = std::stoi(data.at("lesson_id"));
 
     for (auto &pair : data) {
-        if (pair.first != "check" || pair.first != "lesson_id") {
-            Visit::save(std::stoi(pair.first), lesson_id, pair.first == "1");
+        if (pair.first != "check" && pair.first != "lesson_id") {
+            std::cout << "ID: " << pair.first;
+            std::cout << "WAS: " << pair.second;
+            Visit::save(std::stoi(pair.first), lesson_id, pair.second == "1");
         }
     }
 

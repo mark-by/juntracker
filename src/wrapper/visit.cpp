@@ -67,6 +67,7 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
+        std::cout << "FAIL SAVE" << std::endl;
         return -1;
     }
     return 0;
