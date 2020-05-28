@@ -16,7 +16,7 @@ std::vector<Lesson> User::get_current_lessons() const {
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time, postgres);
+        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;
@@ -35,7 +35,7 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
         int l_cabinet = atoi(PQgetvalue(result, i, 2));
         std::string l_start_time = std::string(PQgetvalue(result, i, 5));
         std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
+        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
         res_lesson.push_back(curr_lesson);
     }
     return res_lesson;

@@ -34,7 +34,7 @@ Lesson Visit::get_lesson() const {
     int l_weekday = atoi(PQgetvalue(result, 0, 4));
     std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
     std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time, postgres);
+    auto res_lesson = Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
     return res_lesson;
 }
 
