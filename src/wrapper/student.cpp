@@ -45,7 +45,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
         throw std::runtime_error("visit not found");
     }
     int visit_id = atoi(PQgetvalue(result, 0, 0));
-    bool v_was_in_class = strcmp(PQgetvalue(result, 0, 3), "t") == 0;
+    bool v_was_in_class = *PQgetvalue(result, 0, 3) == 't';
     std::string str_v_date = std::string(PQgetvalue(result, 0, 4));
     boost::posix_time::ptime v_date = converter.convert(str_v_date);
     Visit res_visit(visit_id, v_was_in_class, v_date);
