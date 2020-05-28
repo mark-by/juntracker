@@ -145,15 +145,15 @@ class CurrentLesson extends Lesson {
 
     save() {
         const formData = new FormData(this.state.form);
-        let json ={};
+        let params = new URLSearchParams();
         formData.forEach((value, key) => {
-            json[key] = value;
+            params.append(key, value);
         });
         fetch('api/save_current_lesson', {
             method: 'POST',
-            body: JSON.stringify(json),
+            body: params.toString(),
             headers: {
-                "Content-Type" : "application/json",
+                "Content-Type" : "application/x-www-form-urlencoded",
             }
         }).then(response => {
             if (!response.ok) {
