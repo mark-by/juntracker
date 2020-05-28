@@ -7,13 +7,10 @@ class Course;
 
 class Course {
  public:
-    Course(SqlWrapper& postgres)
-    : postgres(postgres) {}
-    explicit Course(int _id, std::string& _name, int _price, SqlWrapper postgres)
+    explicit Course(int _id, std::string& _name, int _price)
         : _id(_id)
         , _name(_name)
-        , _price(_price)
-        , postgres(postgres) {}
+        , _price(_price) {}
     explicit Course(std::string& _name, int _price)
         : _name(_name)
         , _price(_price) {}
@@ -34,8 +31,6 @@ class Course {
     int _id;
     std::string _name;
     int _price;
-
-    SqlWrapper postgres;
 };
 
 #endif  // INCLUDE_DATABASE_COURSE_H_

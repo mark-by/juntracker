@@ -5,8 +5,6 @@
 
 class Schedule {
 public:
-    Schedule(SqlWrapper& postgres)
-        : postgres(postgres) {}
     explicit Schedule(std::vector<Lesson> lessons)
         : lessons(lessons) {}
 

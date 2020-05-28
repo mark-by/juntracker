@@ -32,7 +32,7 @@ Course Payment::get_course() const {
     }
     std::string name = std::string(PQgetvalue(result, 0, 1));
     int price = atoi(PQgetvalue(result, 0, 2));
-    auto res_course = Course(course_id, name, price, postgres);
+    auto res_course = Course(course_id, name, price);
     return res_course;
 }
 

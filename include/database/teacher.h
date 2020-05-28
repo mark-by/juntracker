@@ -7,8 +7,6 @@ class Teacher;
 
 class Teacher : public Person {
  public:
-    Teacher(SqlWrapper& postgres)
-    : postgres(postgres) {}
     explicit Teacher(int _id, std::string& _name, std::string& _surname, int _salary, SqlWrapper postgres)
         : _id(_id)
         , _name(_name)
