@@ -16,12 +16,9 @@ templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     for (auto &student : lesson.get_students()) {
         students.emplace_back(student, lesson);
     }
-    std::cout << "STUDENTSERIALIZER" << std::endl;
     context.putArray("children", students, StudentSerializer);
-    std::cout << "DONE STUDENTSERIALIZER" << std::endl;
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
-    std::cout << "CURRENT LESSONS DONE" << std::endl;
     return context;
 }
 
@@ -82,12 +79,9 @@ std::string AdminAPI::getMainPage(int userId) {
     try {
         currentLessons = user.get_current_lessons();
     } catch(...) {}
-    std::cout << "CURRENT LESSONS" << std::endl;
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
-    std::cout << "CURRENT LESSONS DONE" << std::endl;
 
     _render.set("mainPageAdmin.html");
-    std::cout << "WORK ADMINAPI DONE" << std::endl;
     return _render.render(context);
 }
 
