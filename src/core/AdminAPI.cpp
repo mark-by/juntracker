@@ -87,7 +87,7 @@ std::string AdminAPI::getMainPage(int userId) {
 
 int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &data) {
     if (data.empty()) {
-        return -1;
+        return 400;
     }
     int lesson_id = std::stoi(data.at("lesson_id"));
 
@@ -97,7 +97,7 @@ int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::strin
         }
     }
 
-    return 0;
+    return 200;
 }
 
 std::string AdminAPI::findStudent(const std::string &str) {

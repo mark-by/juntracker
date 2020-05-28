@@ -1,6 +1,7 @@
 #include <http/request.h>
 #include <regex>
 #include <iostream>
+#include <context/context.h>
 
 Request::Request(const std::string &request) {
     std::regex separator(R"(\r*\n\r*\n)");
@@ -85,6 +86,9 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
 
     } else if (contentType == "text/plain") {
         body = std::string(start, end);
+    } else if (contentType == "application/json") {
+        templates::Context json(std::string(start, end));
+        _data = json.toMap();
     }
 }
 

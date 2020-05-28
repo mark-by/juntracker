@@ -78,4 +78,13 @@ inline void templates::Context::set(const std::string &name, const templates::Co
     root.add_child(name, _root.root.get_child(""));
 }
 
+inline std::unordered_map<std::string, std::string> templates::Context::toMap() {
+    std::unordered_map<std::string, std::string> map;
+    auto end = root.end();
+    for (auto it = root.begin(); it != end; it++) {
+        map[it->first] = it->second.get_value<std::string>();
+    }
+    return map;
+}
+
 #endif
