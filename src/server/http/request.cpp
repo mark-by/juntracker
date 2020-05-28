@@ -89,6 +89,7 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
         body = std::string(start, end);
     } else if (contentType == "application/json") {
         std::cout << "HERE" << std::endl;
+        start++;
         std::string json_str = std::string(start, end);
         boost::trim(json_str);
         std::cout << json_str << std::endl;

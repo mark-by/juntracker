@@ -16,8 +16,7 @@ inline std::string templates::Context::str() const {
 
 inline templates::Context::Context(const std::string &json) {
     std::stringstream ss;
-    ss << json << '\0';
-    std::cout << ss.str() << std::endl;
+    ss << json;
     boost::property_tree::read_json(ss, root);
 }
 
