@@ -8,9 +8,9 @@
 #include <string>
 #include "http/request.h"
 #include "http/response.h"
-#include "../database/user.h"
-//#include "../core/TeacherAPI.h"
-//#include "../core/CustomerAPI.h"
+#include "../database/user.h"/*
+#include "../core/TeacherAPI.h"
+#include "../core/CustomerAPI.h"*/
 #include "../core/AdminAPI.h"
 #include "../core/UserAPI.h"
 
@@ -20,7 +20,7 @@ public:
     // methods to fill response from request done by Api
     Response teacherHandler(Request request, const User& user);  // handler_.teacher();
     Response adminHandler(Request request, const User& user);    // handler_.adminHandler();
-    Response customerHandler(Request request, const User& user); // handler_.customer();
+    Response customerHandler(Request request);                   // handler_.customer();
     Response loginHandler(Request request);                      // handle login page
 
     std::shared_ptr<User> authorizationHandler(Request request); // check login or not
@@ -28,9 +28,9 @@ public:
 private:
     AdminAPI adminApi;
     UserAPI userApi;
-    /*TeacherAPI tutor;
-    CustomerAPI customer;*/
+    //TeacherAPI teacherApi;
+    //CustomerAPI customerApi;
 };
 
 
-#endif //SERVER_HANDLER_H
+#endif  // SERVER_HANDLER_H

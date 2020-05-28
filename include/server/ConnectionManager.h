@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif //SERVER_CONNECTIONMANAGER_H
+#endif  // SERVER_CONNECTIONMANAGER_H

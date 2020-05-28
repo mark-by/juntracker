@@ -30,4 +30,4 @@ private:
     void parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 };
 
-#endif //JUNTRACKER_REQUEST_H
+#endif  // JUNTRACKER_REQUEST_H

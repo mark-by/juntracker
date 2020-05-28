@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif //SERVER_SERVER_H
+#endif  // SERVER_SERVER_H

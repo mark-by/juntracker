@@ -43,4 +43,4 @@ private:
     void doWrite(const boost::system::error_code& e);  // async write to socket and send to client callback
 };
 
-#endif //SERVER_CONNECTION_H
+#endif  // SERVER_CONNECTION_H

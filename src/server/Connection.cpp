@@ -29,21 +29,18 @@ void Connection::doRead(const boost::system::error_code& error,
 
         Response response_;
 
-        if (request_.path() == "/login" || request_.path() == "/register") {
-            response_ = handler_.loginHandler(request_);
+        if (request_.header("Host") != "juntracker.ru") {
+            response_.setStatus(status::BadRequest);
         } else {
-            if (request_.header("Host") != "juntracker.ru") {
-                response_.setStatus(status::BadRequest);
-            }
-
-            // Session::get_user(request_.cookie("session_id"));
-
-            auto user_ptr = handler_.authorizationHandler(request_);
-            if (!user_ptr) {
-                response_.setStatus(status::MovedPermanently);
-                response_.setHeader("Location", "/login");
+            if (request_.path() == "/login" || request_.path() == "/register") {
+                response_ = handler_.loginHandler(request_);
             } else {
-                response_ = handler_.adminHandler(request_, *user_ptr);
+                auto user_ptr = handler_.authorizationHandler(request_);
+                if (!user_ptr) {
+                    response_ = handler_.customerHandler(request_);
+                } else {
+                    response_ = handler_.adminHandler(request_, *user_ptr);
+                }
             }
         }
 

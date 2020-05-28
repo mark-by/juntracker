@@ -6,62 +6,101 @@
 #include "../database/session.h"
 
 
-Response Handler::customerHandler(Request request, const User &user) {
-    Response response("<html><h1>Hello world!(From Customer)</h1></html>");
-    // Response response(customer.get(std::stoi(request._data("id"))));
+Response Handler::customerHandler(Request request) {
+    Response response(status::BadRequest);
+    /*if (request.method() == "GET") {
+        if (request.path() == "/") {
+            response = Response(teacherApi.getMainPage());
+        }
+
+        if (request.path() == "/courses") {
+            response = Response(teacherApi.getCoursePage());
+        }
+    } else {
+        if (request.path() == "/course") {
+            response = Response(teacherApi.courseInformation(request.dataTable()));
+        }
+    }*/
+
     return response;
 }
 
 Response Handler::teacherHandler(Request request, const User &user) {
-    Response response("<html><h1>Hello world! (From Teacher)</h1></html>");
-    // Response response(tutor.get(boost::lexical_cast<int>(request._data("id"))));
+    Response response(status::BadRequest);
+    /*if (request.method() == "GET") {
+        if (request.path() == "/") {
+            response = Response(teacherApi.getMainPage(user.id()));
+        }
+
+        if (request.path() == "/teacher/rating") {
+            response = Response(teacherApi.getRatingPage(user.id()));
+        }
+
+        if (request.path() == "/logout") {
+            response.setCookie("session_id", , -1000);
+            response.setHeader("Location", "/");
+            response.setStatus(status::MovedPermanently);
+        }
+    } else {
+        if (request.path() == "/teacher/save_current_lesson") {
+            response = Response(teacherApi.saveCurrentLesson(request.dataTable()));
+        }
+
+        if (request.path() == "/teacher/rate") {
+            response = Response(teacherApi.rate(request.dataTable()));
+        }
+
+        if (request.path() == "/teacher/final_marks") {
+            response = Response(teacherApi.finalRate(request.dataTable()));
+        }
+    }*/
+
     return response;
 }
 
 Response Handler::adminHandler(Request request, const User &user) {
+    Response response(status::BadRequest);
     if (request.method() == "GET") {
         if (request.path() == "/") {
-            Response response(adminApi.getMainPage(user.id()));
-            return response;
+            response = Response(adminApi.getMainPage(user.id()));
         }
 
-        if (request.path() == "/students") {
-            Response response(adminApi.getPageStudents(user.id()));
-            return response;
+        if (request.path() == "/api/students") {
+            response = Response(adminApi.getPageStudents(user.id()));
         }
 
-        if (request.path() == "/student") {
-            Response response(adminApi.findStudent(request.data("name")));
-            return response;
+        if (request.path() == "/api/student") {
+            response = Response(adminApi.findStudent(request.data("name")));
         }
 
+        if (request.path() == "/logout") {
+            response.setCookie("session_id", , -1000);
+            response.setHeader("Location", "/");
+            response.setStatus(status::MovedPermanently);
+        }
     } else {
         if (request.path() == "/api/save_current_lesson") {
-            Response response(adminApi.saveCurrentLesson(request.dataTable()));
-            return response;
+            response = Response(adminApi.saveCurrentLesson(request.dataTable()));
         }
 
-        if (request.path() == "/delete_student") {
-            Response response(adminApi.deleteStudent(std::stoi(request.data("id"))));
-            return response;
+        if (request.path() == "/api/delete_student") {
+            response = Response(adminApi.deleteStudent(std::stoi(request.data("id"))));
         }
 
-        if (request.path() == "/create_student") {
-            Response response(adminApi.createStudent(request.dataTable()));
-            return response;
+        if (request.path() == "/api/create_student") {
+            response = Response(adminApi.createStudent(request.dataTable()));
         }
 
-        if (request.path() == "/add_course") {
-            Response response(adminApi.addCourse(request.dataTable()));
-            return response;
+        if (request.path() == "/api/add_course") {
+            response = Response(adminApi.addCourse(request.dataTable()));
         }
 
-        if (request.path() == "/delete_course") {
-            Response response(adminApi.deleteCourse(std::stoi(request.data("id"))));
-            return response;
+        if (request.path() == "/api/delete_course") {
+            response = Response(adminApi.deleteCourse(std::stoi(request.data("id"))));
         }
     }
-    return Response(status::BadRequest);
+
+    return response;
 }
 
 std::shared_ptr<User> Handler::authorizationHandler(Request request) {
