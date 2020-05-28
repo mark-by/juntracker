@@ -26,4 +26,4 @@ private:
 
 };
 
-#endif //JUNTRACKER_DATETIME_H
+#endif  // JUNTRACKER_DATETIME_H

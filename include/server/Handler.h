@@ -8,9 +8,9 @@
 #include <string>
 #include "http/request.h"
 #include "http/response.h"
-#include "../database/user.h"
+#include "../database/user.h"/*
 #include "../core/TeacherAPI.h"
-#include "../core/CustomerAPI.h"
+#include "../core/CustomerAPI.h"*/
 #include "../core/AdminAPI.h"
 #include "../core/UserAPI.h"
 
@@ -28,9 +28,9 @@ public:
 private:
     AdminAPI adminApi;
     UserAPI userApi;
-    TeacherAPI teacherApi;
-    CustomerAPI customerApi;
+    /*TeacherAPI teacherApi;
+    CustomerAPI customerApi;*/
 };
 
 
-#endif //SERVER_HANDLER_H
+#endif  // SERVER_HANDLER_H

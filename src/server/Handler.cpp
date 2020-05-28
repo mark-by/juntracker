@@ -8,7 +8,7 @@
 
 Response Handler::customerHandler(Request request) {
     Response response(status::BadRequest);
-    if (request.method() == "GET") {
+    /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage());
         }
@@ -20,14 +20,14 @@ Response Handler::customerHandler(Request request) {
         if (request.path() == "/course") {
             response = Response(teacherApi.courseInformation(request.dataTable()));
         }
-    }
+    }*/
 
     return response;
 }
 
 Response Handler::teacherHandler(Request request, const User &user) {
     Response response(status::BadRequest);
-    if (request.method() == "GET") {
+    /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
         }
@@ -47,7 +47,7 @@ Response Handler::teacherHandler(Request request, const User &user) {
         if (request.path() == "/teacher/final_marks") {
             response = Response(teacherApi.finalRate(request.dataTable()));
         }
-    }
+    }*/
 
     return response;
 }

@@ -64,4 +64,4 @@ private:
     std::string body;
     int statusCode;
 };
-#endif //JUNTRACKER_RESPONSE_H
+#endif  // JUNTRACKER_RESPONSE_H
