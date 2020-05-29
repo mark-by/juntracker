@@ -41,7 +41,7 @@ Response Handler::teacherHandler(Request request, const User &user) {
 }
 
 Response Handler::adminHandler(Request request, const User &user) {
-    Response response(status::BadRequest);
+    Response response(status::NotFound);
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(adminApi.getMainPage(user.id()));
