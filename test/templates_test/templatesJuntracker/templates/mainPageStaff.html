@@ -56,4 +56,60 @@
             {% endfor %}
         </div>
 </main>
+{% if user.isAdmin %}
+<div class="lesson-edit-form-wrapper">
+    <form method="POST" enctype="application/x-www-form-urlencoded">
+        <div class="lesson-edit-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
+        <div class="form-grid">
+            <p>Курс</p>
+            <select name="title" id="lesson-edit-title">
+                {% for course in user.courses %}
+                <option value="{{course.id}}">{{course.title}}</option>
+                {% endfor %}
+            </select>
+            <p>Кабинет</p>
+            <select name="cabinet" id="lesson-edit-cabinet">
+                {% for cabinet in user.cabinets %}
+                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
+                {% endfor %}
+            </select>
+            <p>Преподаватель</p>
+            <select name="teacher" id="lesson-edit-teacher">
+                {% for teacher in user.teachers %}
+                <option value="{{teacher.id}}">{{teacher.name}}</option>
+                {% endfor %}
+            </select>
+            <p>Начало занятия</p>
+            <label>
+                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit" value=""/>
+                <span>:</span>
+                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit" value=""/>
+            </label>
+            <p>Конец занятия</p>
+            <label>
+                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit" value=""/>
+                <span>:</span>
+                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit" value=""/>
+            </label>
+        </div>
+        <div class="bottom-flex">
+            <div class="students-title">Студенты</div>
+        </div>
+        <div class="students">
+
+
+        </div>
+        <div class="bottom-control-wrapper">
+            <div class="add-student-button">
+                <img src="static/images/plus.svg" alt="добавить"/>
+            </div>
+            <div class="bottom-flex">
+                <div class="close-form-button">Отмена</div>
+                <input type="submit" value="Сохранить"/>
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endif %}
 {% endblock %}
