@@ -7,7 +7,7 @@
 
 
 Response Handler::customerHandler(Request request, const User &user) {
-    Response response(status::BadRequest);
+    Response response(status::NotFound);
     /*if (request.path() == "/") {
         response = Response(customerApi.getMainPage(user.id()));
     } else if (request.path() == "/schedule") {
@@ -20,7 +20,7 @@ Response Handler::customerHandler(Request request, const User &user) {
 }
 
 Response Handler::teacherHandler(Request request, const User &user) {
-    Response response(status::BadRequest);
+    Response response(status::NotFound);
     /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
