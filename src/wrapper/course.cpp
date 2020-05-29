@@ -37,19 +37,16 @@ int Course::set_price(int price, int course_id) {
 
 std::vector<Student> Course::get_students() const {
     SqlWrapper postgres;
-    std::string query = "SELECT id FROM course WHERE name='" + name() + "';";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int course_id = atoi(PQgetvalue(result, 0, 0));
 
-    query = "SELECT * FROM payment WHERE course_id=" + std::to_string(course_id) + ";";
+    std::string query = "select * from student s join students_for_course c on s.id=c.student_id where course_id="
+            + std::to_string(_id) + ";";
+
     if (!postgres.query(query, &result)) {
         postgres.disconnect();
         throw std::exception();
     }
+
     std::vector<Student> students;
     for (int i = 0; i < PQntuples(result); i++) {
         int s_id = atoi(PQgetvalue(result, i, 0));
@@ -59,6 +56,7 @@ std::vector<Student> Course::get_students() const {
         auto res_student = Student(s_id, s_name, s_surname, s_age);
         students.push_back(res_student);
     }
+
     postgres.disconnect();
     return students;
 }

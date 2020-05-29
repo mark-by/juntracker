@@ -21,8 +21,7 @@ void Connection::start() {
             );
 }
 
-void Connection::doRead(const boost::system::error_code& error,
-                        std::size_t bytes_transferred) {
+void Connection::doRead(const boost::system::error_code& error, std::size_t bytes_transferred) {
     if (!error) {
         std::cout << std::string(buffer_.begin(), buffer_.end()) << std::endl;
         Request request_(std::string(buffer_.begin(), buffer_.end()));
@@ -30,29 +29,34 @@ void Connection::doRead(const boost::system::error_code& error,
         Response response_;
 
         if (request_.header("Host") != "juntracker.ru") {
-            response_.setStatus(status::BadRequest);
+            response_.setStatus(status::BadRequest);  // not our host
         } else {
-            if (request_.path() == "/login" || request_.path() == "/register" || request_.path() == "/logout") {
-                std::cout << "Connection handler" << std::endl;
+            if (request_.path() == "/login") {
+                response_ = handler_.loginHandler(request_);
+            } else if (request_.path() == "/register") {
+                response_ = handler_.loginHandler(request_);
+            } else if (request_.path() == "/logout") {
                 response_ = handler_.loginHandler(request_);
             } else {
-                auto user_ptr = handler_.authorizationHandler(request_);
-                if (!user_ptr) {
+                auto user_ptr = handler_.authorizationHandler(request_);  // try to get user or redirect to login
+
+                if (!user_ptr) {  // not authorized
                     response_.setHeader("Location", "/login");
                     response_.setStatus(status::Found);
                 } else {
-                    response_ = handler_.adminHandler(request_, *user_ptr);
-                }
-            }
-        }
+                    handler_.choosePermission(request_, response_, *user_ptr);
+                }  // if
+            }  // if
+        }  // if
 
-        async::async_write(socket_,
+        async::async_write(
+                socket_,
                 async::buffer(response_.str(), response_.str().max_size()),
-                boost::bind(&Connection::doWrite, shared_from_this(),
-                        async::placeholders::error));
+                boost::bind(&Connection::doWrite, shared_from_this(), async::placeholders::error)
+        );
     } else if (error != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
-    }
+    }  // if
 }
 
 void Connection::doWrite(const boost::system::error_code &e) {

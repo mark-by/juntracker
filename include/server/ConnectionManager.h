@@ -11,15 +11,16 @@
 
 class ConnectionManager: private boost::noncopyable {
 public:
-    ConnectionManager();  // create manager
+    ConnectionManager();
 
-    void start(std::shared_ptr<Connection> connection);
-    void stop(std::shared_ptr<Connection> connection);
+    void start(std::shared_ptr<Connection> connection);  // add connection to pull
+    void stop(std::shared_ptr<Connection> connection);   // close connection and remove from pull
     void stopAll();
+
     size_t connectionsNumber();
 
 private:
-    std::set<std::shared_ptr<Connection>> connections_;  // managed connections
+    std::set<std::shared_ptr<Connection>> connections_;
 };
 
 
