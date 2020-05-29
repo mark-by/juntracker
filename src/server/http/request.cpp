@@ -45,7 +45,7 @@ void Request::parseHeaders(const std::string::const_iterator &begin, const std::
     std::sregex_iterator none;
     while(headerMatch != none) {
         std::string str = headerMatch->str();
-        headers.insert({headerMatch->format("$1"), headerMatch->format("$2")});
+        headers.insert({boost::to_lower_copy(headerMatch->format("$1")), headerMatch->format("$2")});
         headerMatch++;
     }
 }
