@@ -45,9 +45,9 @@ void Connection::doRead(const boost::system::error_code& error, std::size_t byte
                     response_.setStatus(status::Found);
                 } else {
                     handler_.choosePermission(request_, response_, *user_ptr);
-                }
-            }
-        }
+                }  // if
+            }  // if
+        }  // if
 
         async::async_write(
                 socket_,
@@ -56,7 +56,7 @@ void Connection::doRead(const boost::system::error_code& error, std::size_t byte
         );
     } else if (error != async::error::operation_aborted) {
         manager_.stop(shared_from_this());
-    }
+    }  // if
 }
 
 void Connection::doWrite(const boost::system::error_code &e) {
