@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    {% block styles %}
+    {% endblock %}
+    <title>{% block title %}JunTracker{% endblock %}</title>
+</head>
+<body>
+<header>
+    <a class="logo" href="/">JunTracker</a>
+    <div class="header-menu menu">
+        <div class="header-select">
+            <div class="current__option">{% block currentWindow %}Окно Админиcтратора{% endblock %}</div>
+            <a class="control-button">
+                <img src="static/images/arrow-down.svg">
+            </a>
+        </div>
+    </div>
+    <div class="header-user-wrapper menu">
+        <div class="username">{{username}}</div>
+        <div class="avatar-wrapper">
+            <img class="header__avatar" src="static/images/avatar.svg">
+        </div>
+    </div>
+    <div class="hidden-menu" data="off">
+        <div class="header-menu-h hidden-part">
+            {% block hiddenMenu %}
+            <a class="menu__option" href="/students">База учеников</a>
+            <a class="menu__option" href="/schedule">Расписание</a>
+            <a class="menu__option" href="/diary">Журнал</a>
+            <a class="menu__option" href="/finance">Финансы</a>
+            {% endblock %}
+        </div>
+    </div>
+    <div class="hidden-menu" data="off">
+        <div class="user-menu hidden-part">
+            <a class="menu__option" href="/logout">Выйти</a>
+        </div>
+    </div>
+</header>
+{% block main %}
+{% endblock %}
+</body>
+<script type="module" src="static/script/Component.js"></script>
+<script type="module" src="static/script/header.js" defer></script>
+{% block scripts %}
+<script type="module" src="static/script/currentWindow.js" defer></script>
+{% endblock %}
+</html>

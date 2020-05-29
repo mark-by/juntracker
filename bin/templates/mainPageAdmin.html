@@ -1,12 +1,12 @@
-{% extends base.html %}
+{% extends baseAdmin.html %}
 
 {% block title %}JunTracker | Окно Администратора{% endblock %}
 
 {% block hiddenMenu %}
-<a class="menu__option" href="studentsAdmin.html">База учеников</a>
-<a class="menu__option" href="scheduleAdmin.html">Расписание</a>
-<a class="menu__option" href="diaryAdmin.html">Журнал</a>
-<a class="menu__option" href="financeAdmin.html">Финансы</a>
+<a class="menu__option" href="/students">База учеников</a>
+<a class="menu__option" href="/schedule">Расписание</a>
+<a class="menu__option" href="/diary">Журнал</a>
+<a class="menu__option" href="/finance">Финансы</a>
 {% endblock %}
 
 {% block main %}
