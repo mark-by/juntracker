@@ -94,7 +94,7 @@ int User::save(const std::string &username, const std::string &password, const s
     std::string table_name = "users";
     int count_rows = postgres.count_rows(table_name);
     s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
-      << "', '" << username << "', '" << password << "');";
+      << "', '" << username << "', '" << password << "', " << Permission::admin << ");";
 
     std::string query = s.str();
     if (!postgres.exec(query)) {
