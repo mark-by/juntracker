@@ -10,9 +10,9 @@ Response Handler::customerHandler(Request request, const User &user) {
     Response response(status::NotFound);
     /*if (request.path() == "/") {
         response = Response(customerApi.getMainPage(user.id()));
-    } else if (request.path() == "/schedule") {
+    } else if (request.path() == "/api/schedule") {
         response = Response(customerApi.getSchedule(user.id()));
-    } else if (request.path() == "/rating") {
+    } else if (request.path() == "/api/rating") {
         response = Response(customerApi.getRatingPage(user.id()))
     }*/
 
@@ -24,15 +24,15 @@ Response Handler::teacherHandler(Request request, const User &user) {
     /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
-        } else if (request.path() == "/teacher/rating") {
+        } else if (request.path() == "/api/rating") {
             response = Response(teacherApi.getRatingPage(user.id()));
         }
     } else {
-        if (request.path() == "/teacher/save_current_lesson") {
+        if (request.path() == "/api/save_current_lesson") {
             response = Response(teacherApi.saveCurrentLesson(request.dataTable()));
-        } else if (request.path() == "/teacher/rate") {
+        } else if (request.path() == "/api/rate") {
             response = Response(teacherApi.rate(request.dataTable()));
-        } else if (request.path() == "/teacher/final_marks") {
+        } else if (request.path() == "/api/final_marks") {
             response = Response(teacherApi.finalRate(request.dataTable()));
         }
     }*/
