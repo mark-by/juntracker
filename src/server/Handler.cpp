@@ -24,6 +24,7 @@ void Handler::choosePermission(Request request, Response& response, const User &
 }
 
 void Handler::customerHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     /*if (request.path() == "/") {
         response = Response(customerApi.getMainPage(user.id()));
     } else if (request.path() == "/api/schedule") {
@@ -34,6 +35,7 @@ void Handler::customerHandler(Request request, Response& response, const User &u
 }
 
 void Handler::teacherHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
@@ -52,6 +54,7 @@ void Handler::teacherHandler(Request request, Response& response, const User &us
 }
 
 void Handler::adminHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(adminApi.getMainPage(user.id()));
