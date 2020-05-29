@@ -20,7 +20,7 @@ public:
     // methods to fill response from request done by Api
     Response teacherHandler(Request request, const User& user);  // handler_.teacher();
     Response adminHandler(Request request, const User& user);    // handler_.adminHandler();
-    Response customerHandler(Request request);                   // handler_.customer();
+    Response customerHandler(Request request, const User &user); // handler_.customer();
     Response loginHandler(Request request);                      // handle login page
 
     std::shared_ptr<User> authorizationHandler(Request request); // check login or not

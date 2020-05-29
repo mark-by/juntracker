@@ -41,7 +41,21 @@ void Connection::doRead(const boost::system::error_code& error,
                     response_.setHeader("Location", "/login");
                     response_.setStatus(status::Found);
                 } else {
-                    response_ = handler_.adminHandler(request_, *user_ptr);
+                    switch(user_ptr->permission()) {
+                        case Permission::admin:
+                            response_ = handler_.adminHandler(request_, *user_ptr);
+                            break;
+                        case Permission::teacher:
+                            response_ = handler_.teacherHandler(request_, *user_ptr);
+                            break;
+                        case Permission::customer:
+                            response_ = handler_.customerHandler(request_, *user_ptr);
+                            break;
+                        default:
+                            response_.setStatus(status::Unauthorized);
+                            response_.setHeader("Location", "/login");
+                            break;
+                    }
                 }
             }
         }
