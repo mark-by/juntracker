@@ -74,11 +74,15 @@ void Request::parseDataFromPath() {
 void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::string::const_iterator start = begin;
     start++;
-    std::cout << "body: " << std::string(begin, end) << std::endl;
+    std::string temp_body = std::string(begin, end);
+    boost::trim_left(temp_body);
+    auto _start = temp_body.begin();
+    auto _end = temp_body.begin();
+    std::cout << "body: '" << temp_body << "'" <<  std::endl;
     std::string contentType = header("Content-Type");
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
-        std::sregex_iterator parameterMatch(start, end, parameter);
+        std::sregex_iterator parameterMatch(_start, _end, parameter);
         std::sregex_iterator none;
         while (parameterMatch != none) {
             _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
@@ -87,11 +91,11 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     } else if (contentType == "multipart/form-data") {
 
     } else if (contentType == "text/plain") {
-        body = std::string(start, end);
+        body = std::string(_start, _end);
     } else if (contentType == "application/json") {
         std::cout << "HERE" << std::endl;
         start++;
-        std::string json_str = std::string(start, end);
+        std::string json_str = std::string(_start, _end);
         boost::trim(json_str);
         std::cout << json_str << std::endl;
         json_str[json_str.size()] = 0;
