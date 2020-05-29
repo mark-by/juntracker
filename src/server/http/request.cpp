@@ -3,6 +3,7 @@
 #include <iostream>
 #include <context/context.h>
 #include <boost/algorithm/string.hpp>
+#include <curl/curl.h>
 
 Request::Request(const std::string &request) {
     std::regex separator(R"(\r*\n\r*\n)");
@@ -74,8 +75,14 @@ void Request::parseDataFromPath() {
 void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::string::const_iterator start = begin;
     start++;
+    CURL *curl = curl_easy_init();
     std::string temp_body = std::string(begin, end);
-    boost::trim_left(temp_body);
+    int outlength;
+    char *output = curl_easy_unescape(curl, temp_body.c_str(), temp_body.size(), &outlength);
+    temp_body = std::string(output);
+    curl_free(output);
+    curl_easy_cleanup(curl);
+    boost::trim(temp_body);
     auto _start = temp_body.begin();
     auto _end = temp_body.end();
     std::string contentType = header("Content-Type");
