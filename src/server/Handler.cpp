@@ -5,9 +5,25 @@
 #include "Handler.h"
 #include "../database/session.h"
 
+void Handler::choosePermission(Request request, Response& response, const User &user) {
+    switch(user.permission()) {
+        case Permission::admin:
+            adminHandler(request, response, user);
+            break;
+        case Permission::teacher:
+            teacherHandler(request, response, user);
+            break;
+        case Permission::customer:
+            customerHandler(request, response, user);
+            break;
+        default:
+            response.setHeader("Location", "/login");
+            response.setStatus(status::Unauthorized);
+            break;
+    }
+}
 
-Response Handler::customerHandler(Request request, const User &user) {
-    Response response(status::NotFound);
+void Handler::customerHandler(Request request, Response& response, const User &user) {
     /*if (request.path() == "/") {
         response = Response(customerApi.getMainPage(user.id()));
     } else if (request.path() == "/api/schedule") {
@@ -15,12 +31,9 @@ Response Handler::customerHandler(Request request, const User &user) {
     } else if (request.path() == "/api/rating") {
         response = Response(customerApi.getRatingPage(user.id()))
     }*/
-
-    return response;
 }
 
-Response Handler::teacherHandler(Request request, const User &user) {
-    Response response(status::NotFound);
+void Handler::teacherHandler(Request request, Response& response, const User &user) {
     /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
@@ -36,12 +49,9 @@ Response Handler::teacherHandler(Request request, const User &user) {
             response = Response(teacherApi.finalRate(request.dataTable()));
         }
     }*/
-
-    return response;
 }
 
-Response Handler::adminHandler(Request request, const User &user) {
-    Response response(status::NotFound);
+void Handler::adminHandler(Request request, Response& response, const User &user) {
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(adminApi.getMainPage(user.id()));
@@ -63,8 +73,6 @@ Response Handler::adminHandler(Request request, const User &user) {
             response = Response(adminApi.deleteCourse(std::stoi(request.data("id"))));
         }
     }
-
-    return response;
 }
 
 std::shared_ptr<User> Handler::authorizationHandler(Request request) {

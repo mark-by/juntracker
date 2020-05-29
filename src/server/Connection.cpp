@@ -30,32 +30,18 @@ void Connection::doRead(const boost::system::error_code& error,
         Response response_;
 
         if (request_.header("Host") != "juntracker.ru") {
-            response_.setStatus(status::BadRequest);
+            response_.setStatus(status::BadRequest);  // not our host
         } else {
             if (request_.path() == "/login" || request_.path() == "/register" || request_.path() == "/logout") {
-                std::cout << "Connection handler" << std::endl;
                 response_ = handler_.loginHandler(request_);
             } else {
-                auto user_ptr = handler_.authorizationHandler(request_);
-                if (!user_ptr) {
+                auto user_ptr = handler_.authorizationHandler(request_);  // try to get user or redirect to login
+
+                if (!user_ptr) {  // not authorized
                     response_.setHeader("Location", "/login");
                     response_.setStatus(status::Found);
                 } else {
-                    switch(user_ptr->permission()) {
-                        case Permission::admin:
-                            response_ = handler_.adminHandler(request_, *user_ptr);
-                            break;
-                        case Permission::teacher:
-                            response_ = handler_.teacherHandler(request_, *user_ptr);
-                            break;
-                        case Permission::customer:
-                            response_ = handler_.customerHandler(request_, *user_ptr);
-                            break;
-                        default:
-                            response_.setStatus(status::Unauthorized);
-                            response_.setHeader("Location", "/login");
-                            break;
-                    }
+                    handler_.choosePermission(request_, response_, *user_ptr);
                 }
             }
         }
