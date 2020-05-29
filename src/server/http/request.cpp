@@ -51,7 +51,7 @@ void Request::parseHeaders(const std::string::const_iterator &begin, const std::
 }
 
 std::string Request::header(const std::string &key) {
-    return headers[key];
+    return headers[boost::to_lower_copy(key)];
 }
 
 void Request::parseDataFromPath() {
@@ -79,6 +79,7 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     auto _start = temp_body.begin();
     auto _end = temp_body.begin();
     std::string contentType = header("Content-Type");
+    std::cout << "CONTENT TYPE" << contentType << std::endl;
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
         std::sregex_iterator parameterMatch(_start, _end, parameter);
@@ -97,20 +98,18 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     } else if (contentType == "text/plain") {
         body = std::string(_start, _end);
     } else if (contentType == "application/json") {
-        std::cout << "HERE" << std::endl;
         start++;
         std::string json_str = std::string(_start, _end);
         boost::trim(json_str);
         std::cout << json_str << std::endl;
         json_str[json_str.size()] = 0;
         templates::Context json(json_str);
-        std::cout << "HERE NOW" << std::endl;
         _data = json.toMap();
     }
 }
 
 std::string Request::data(const std::string &key) {
-    return _data[key];
+    return _data[boost::to_lower_copy(key)];
 }
 
 std::string Request::data() {
@@ -122,7 +121,7 @@ std::unordered_map<std::string, std::string> Request::dataTable() {
 }
 
 void Request::parseCookies() {
-    std::string cookiesStr = headers["Cookie"];
+    std::string cookiesStr = header("Cookie");
     if (cookiesStr.empty()) {
         return;
     }
