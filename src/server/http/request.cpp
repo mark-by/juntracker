@@ -77,9 +77,8 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     std::string temp_body = std::string(begin, end);
     boost::trim_left(temp_body);
     auto _start = temp_body.begin();
-    auto _end = temp_body.begin();
+    auto _end = temp_body.end();
     std::string contentType = header("Content-Type");
-    std::cout << "CONTENT TYPE" << contentType << std::endl;
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
         std::sregex_iterator parameterMatch(_start, _end, parameter);
