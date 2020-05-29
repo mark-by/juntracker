@@ -6,6 +6,13 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <http/datetime.h>
 
+templates::Context AdminAPI::UserSerializer(const User & user) {
+    templates::Context context;
+    context.put("username", user.login());
+    context.put("isAdmin", true);
+    return context;
+}
+
 templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
@@ -66,7 +73,7 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
 std::string AdminAPI::getMainPage(int userId) {
     templates::Context context;
     auto user = User::get_user(userId);
-    context.put("username", user.login());
+    context.set("user", UserSerializer(user));
     std::vector<WeekDay> days;
     DateTime dateTime;
     for (int weekday = 0; weekday < 7; weekday++) {
@@ -82,7 +89,7 @@ std::string AdminAPI::getMainPage(int userId) {
     } catch(...) {}
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
 
-    _render.set("mainPageAdmin.html");
+    _render.set("mainPageStaff.html");
     return _render.render(context);
 }
 

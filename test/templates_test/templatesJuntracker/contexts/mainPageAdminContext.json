@@ -1,5 +1,8 @@
 {
-  "username": "Homer Simpson",
+  "user" : {
+    "username": "Homer Simpson",
+    "isAdmin" : true
+  },
   "scheduleDays": [
     {
       "weekDay": "Понедельник",

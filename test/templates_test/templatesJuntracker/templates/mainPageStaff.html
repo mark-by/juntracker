@@ -1,6 +1,6 @@
 {% extends baseAdmin.html %}
 
-{% block title %}JunTracker | Окно Администратора{% endblock %}
+{% block title %}JunTracker | Окно {% if user.isAdmin %}Администратора{%else%}Учителя{%endif%}{% endblock %}
 
 {% block hiddenMenu %}
 <a class="menu__option" href="/students">База учеников</a>

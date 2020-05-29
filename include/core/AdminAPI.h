@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "API.h"
 #include <template/template.h>
+#include <user.h>
 
 class AdminAPI : public API {
     struct StudentOnLesson {
@@ -56,6 +57,8 @@ private:
     static templates::Context DaySerializer(const WeekDay &weekday);
 
     templates::Template _render;
+
+    templates::Context UserSerializer(const User &user);
 };
 
 #endif //CORE_ADMINAPI_H
