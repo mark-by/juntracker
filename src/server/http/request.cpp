@@ -128,11 +128,11 @@ void Request::parseCookies() {
     std::sregex_iterator parameterMatch(cookiesStr.cbegin(), cookiesStr.cend(), parameter);
     std::sregex_iterator none;
     while(parameterMatch != none) {
-        cookies[parameterMatch->format("$1")] = parameterMatch->format("$2");
+        cookies[boost::to_lower_copy(parameterMatch->format("$1"))] = parameterMatch->format("$2");
         parameterMatch++;
     }
 }
 
 std::string Request::cookie(const std::string &key) {
-    return cookies[key];
+    return cookies[boost::to_lower_copy(key)];
 }
