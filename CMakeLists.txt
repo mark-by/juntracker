@@ -12,7 +12,9 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
 add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
-
+set(CURL_LIBRARY "-lcurl")
+find_package(CURL REQUIRED)
+include_directories(${CURL_INCLUDE_DIR})
 include_directories("${PROJECT_SOURCE_DIR}/include/boost")
 link_directories("${PROJECT_SOURCE_DIR}/include/boost/stage/lib")
 

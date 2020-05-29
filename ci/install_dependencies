@@ -8,3 +8,4 @@ cd ../..
 rm boost_1_72_0.tar.bz2
 
 sudo apt install libpq-dev -y
+sudo apt-get install libcurl4-openssl-dev -y
