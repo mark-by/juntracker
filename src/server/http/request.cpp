@@ -83,6 +83,7 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
         std::regex parameter(R"(([^&]+)=([^&]+))");
         std::sregex_iterator parameterMatch(_start, _end, parameter);
         std::sregex_iterator none;
+        std::cout << "here" << std::endl;
         while (parameterMatch != none) {
             std::cout << parameterMatch->format("$1") << " | " <<  parameterMatch->format("$2") << std::endl;
             _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
