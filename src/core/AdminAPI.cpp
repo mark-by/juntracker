@@ -22,7 +22,7 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
 
 templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     templates::Context context;
-    context.put("title", lesson.get_title());
+    context.put("title", lesson.get_course().title());
     context.put("id", lesson.id());
     context.put("cabinet", lesson.cabinet());
     context.put("tutor", lesson.get_teacher().name());
@@ -54,10 +54,11 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
 
 templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
-    context.put("title", lesson.get_title());
+    auto course = lesson.get_course();
+    context.put("title", course.title());
     context.put("cabinet", lesson.cabinet());
     context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
-    context.set("course", SimpleTitleSerializer<Course>()(lesson.get_course()))
+    context.set("course", SimpleTitleSerializer<Course>()(course));
     context.put("id", lesson.id());
     context.set("teacher", SimplePersonSerializer<Teacher>()(lesson.get_teacher()));
     context.putArray("children", lesson.get_students(), SimplePersonSerializer<Student>());
@@ -154,7 +155,7 @@ templates::Context StudentDBSerializer(const Student &student) {
     context.put("age", student.age());
     std::vector<std::string> courses;
     for (auto &course : student.get_courses()) {
-        courses.push_back(course.name());
+        courses.push_back(course.title());
     }
     context.putArray("courses", courses);
 

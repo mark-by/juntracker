@@ -19,7 +19,7 @@ public:
     static int remove(int course_id);
 
     int id() const { return  _id; }
-    std::string name() const { return  _name; }
+    std::string title() const { return  _name; }
     int price() const { return  _price; }
 
  private:
