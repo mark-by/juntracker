@@ -43,7 +43,7 @@ bool SqlWrapper::exec(const std::string &comment) {
 bool SqlWrapper::check_connect() {
     if (PQstatus(conn) != CONNECTION_OK) {
         disconnect();
-        throw std::runtime_error("ERROR: DATABASE NOT CONNECTED");
+        throw std::runtime_error("ERROR: DATABASE NOT CONNECTED: " + std::string(PQerrorMessage(conn)));
     }
 }
 PGconn *SqlWrapper::getConn() {

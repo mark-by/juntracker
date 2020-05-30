@@ -16,11 +16,6 @@
 
 int main(int argc, char* argv[]) {
     SqlWrapper postgres;
-   // Check Connection
-    if (!postgres.is_connected()) {
-        std::cout << "Connection to database failed: " << PQerrorMessage(postgres.getConn()) << std::endl;
-        return 1;
-    }
 
     auto lesson = Lesson::get_lesson(4);
     std::cout << lesson.start_time() << " " << lesson.end_time() << std::endl;
