@@ -24,6 +24,7 @@ public:
     std::vector<Lesson> get_current_lessons() const;
     std::vector<Lesson> get_lessons_by_weekday(int l_weekday) const;
     std::vector<Student> get_students() const;
+    std::vector<Course> get_courses() const;
 
     static User get_user(int user_id);
     static User get_user(const std::string &username);

@@ -166,3 +166,25 @@ std::vector<Cabinet> User::get_cabinets() const {
 
     return cabinets;
 }
+
+std::vector<Course> User::get_courses() const {
+    SqlWrapper db;
+
+    db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
+    db.query("Get courses");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, 0),
+                db.get_str(1, 0),
+                db.get_int(2, 0),
+                db.get_int(3, 0),
+                db.get_int(4, 0)
+        );
+    }
+
+    db.disconnect();
+    return courses;
+}
