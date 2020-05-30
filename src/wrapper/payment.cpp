@@ -38,6 +38,8 @@ Course Payment::get_course() const {
 
 Payment Payment::get_payment(int payment_id) {
     SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
 
     db << "select * from payment where id=" << payment_id << ";";
     db.query("Get payment");
@@ -48,7 +50,7 @@ Payment Payment::get_payment(int payment_id) {
             db.get_int(1, 0),
             db.get_int(2, 0),
             db.get_int(3, 0),
-            db.get_str(4, 0),
+            converter.convert(db.get_str(4, 0)),
             db.get_int(5, 0)
             );
 }
