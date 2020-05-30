@@ -116,7 +116,7 @@ int User::save(const std::string &username, const std::string &password,
     if (school_id < 0) {
         db << "insert into schools(school_title) values ('" << username << "');";
         db.exec("Create school");
-        db << "select id from schools where school_title='" << username << "');";
+        db << "select id from schools where school_title='" << username << "';";
         db.exec("Get new school id");
         school_id = db.get_int(0);
     }
