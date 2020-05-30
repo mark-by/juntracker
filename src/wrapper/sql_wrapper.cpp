@@ -31,7 +31,6 @@ bool SqlWrapper::exec(const std::string &comment) {
     clear();
     char *cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
-    auto _result = PQexec(conn, cstr);
     if (PQresultStatus(result) != PGRES_COMMAND_OK) {
         disconnect();
         throw std::runtime_error(strError(conn, result, cstr, comment));

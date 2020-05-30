@@ -15,8 +15,8 @@ public:
             const std::string &_surname,
             int _age,
             const std::string &description = "",
-            const std::string &tel_number,
-            const std::string &parent_name):
+            const std::string &tel_number = "",
+            const std::string &parent_name = ""):
             _id(_id),
             _name(_name),
             _surname(_surname),

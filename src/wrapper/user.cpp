@@ -1,5 +1,5 @@
 #include "user.h"
-#include <common_sql.hpp>
+//#include <common_sql.hpp>
 
 std::vector<Teacher> User::get_teachers() const {
     SqlWrapper db;
@@ -157,8 +157,8 @@ std::vector<Cabinet> User::get_cabinets() const {
     for (int i = 0; i < db.count_tupls(); i++) {
         cabinets.emplace_back(
                 db.get_int(0, i),
-                db.get_int(2, i),
-                db.get_str(1, i)
+                db.get_str(1, i),
+                db.get_int(2, i)
         );
     }
 

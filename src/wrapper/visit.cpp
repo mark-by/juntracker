@@ -60,7 +60,7 @@ Visit Visit::get_visit(int visit_id) {
             v_date,
             db.get_int(5, 0)
             );
-}}
+}
 
 int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     SqlWrapper db;
