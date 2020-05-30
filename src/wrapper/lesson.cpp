@@ -2,13 +2,9 @@
 #include "utils.hpp"
 
 std::vector<Student> Lesson::get_students() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT student_id FROM students_for_lesson WHERE lesson_id=" + std::to_string(id()) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    db << "SELECT student_id FROM students_for_lesson WHERE lesson_id=" << _id << ";";
+    db.query("Get students id on lesson");
     std::vector<int> student_ids;
     for (int i = 0; i < PQntuples(result); i++) {
         student_ids.push_back(atoi(PQgetvalue(result, i, 0)));
@@ -90,7 +86,8 @@ Lesson Lesson::get_lesson(int lesson_id) {
     return Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
 }
 
-int Lesson::save(int cabinet, const std::string& weekday, const std::string& start, const std::string& end) {
+int Lesson::save(int _course_id, int _cabinet_id, int _teacher_id, int _weekday,
+        const std::string& _start_time, const std::string& _end_time, int _school_id) {
     SqlWrapper postgres;
 
     std::ostringstream s;
