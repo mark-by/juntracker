@@ -8,15 +8,19 @@
 void Handler::choosePermission(Request request, Response& response, const User &user) {
     switch(user.permission()) {
         case Permission::admin:
+            std::cout << "ADMIN" << std::endl;
             adminHandler(request, response, user);
             break;
         case Permission::teacher:
+            std::cout << "TEACHER" << std::endl;
             teacherHandler(request, response, user);
             break;
         case Permission::customer:
+            std::cout << "CUSTOMER" << std::endl;
             customerHandler(request, response, user);
             break;
         default:
+            std::cout << "DEFAULT" << std::endl;
             response.setHeader("Location", "/login");
             response.setStatus(status::Unauthorized);
             break;
@@ -106,7 +110,7 @@ Response Handler::loginHandler(Request request) {
             std::cout << "loginHandler signIn" << std::endl;
             session_id = userApi.signIn(request.data("username"), request.data("password"));
         }
-    } else {
+    } else if (request.path() == "/register") {
         if (request.method() == "GET") {
             return Response(userApi.registerPage());
         } else {

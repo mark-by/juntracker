@@ -41,9 +41,11 @@ void Connection::doRead(const boost::system::error_code& error, std::size_t byte
                 auto user_ptr = handler_.authorizationHandler(request_);  // try to get user or redirect to login
 
                 if (!user_ptr) {  // not authorized
+                    std::cout << "NO USER" << std::endl;
                     response_.setHeader("Location", "/login");
                     response_.setStatus(status::Found);
                 } else {
+                    std::cout << "USER" << std::endl;
                     handler_.choosePermission(request_, response_, *user_ptr);
                 }  // if
             }  // if

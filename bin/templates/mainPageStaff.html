@@ -1,0 +1,140 @@
+{% extends baseAdmin.html %}
+
+{% block title %}JunTracker | Окно {% if user.isAdmin %}Администратора{%else%}Учителя{%endif%}{% endblock %}
+
+{% block hiddenMenu %}
+<a class="menu__option" href="/students">База учеников</a>
+<a class="menu__option" href="/schedule">Расписание</a>
+<a class="menu__option" href="/diary">Журнал</a>
+<a class="menu__option" href="/finance">Финансы</a>
+{% endblock %}
+
+{% block main %}
+<main class="administrator-main">
+    {% if user.isAdmin %}
+        {% include AdminSchedule.html %}
+    {% else %}
+        {% include TeacherSchedule.html %}
+    {% endif %}
+    <div class="card-wrapper current-window">
+        <div class="schedule__day_header">
+            <div id="current-week-day" class="week-day"></div>
+            <div id="current-time" class="current-header__time"></div>
+            <div id="current-date" class="current-header__date"></div>
+        </div>
+        <div class="title">Сейчас идет</div>
+        <div id="current-wrapper">
+
+        </div>
+        <div class="title">Далее</div>
+        <div id="next-wrapper">
+            {% for lesson in currentLessons %}
+            <div class="card-wrapper lesson">
+                <div class="lesson__header">
+                    <div class="lesson__header_course">
+                        {{lesson.title}}
+                    </div>
+                    <div class="lesson__header_cab">{{lesson.cabinet}}</div>
+                    <div class="lesson__header_tutor">{{lesson.tutor}}</div>
+                </div>
+                <form class="lesson__content">
+                    <input type="hidden" name="lesson_id" value="{{lesson.id}}"/>
+                    {% for child in lesson.children %}
+                    <div class="lesson__content_child">
+                        <input type="checkbox" name="check" data="{%if child.isHere %}1{%else%}0{%endif%}" {% if child.isHere %}checked{%endif%}/>
+                        <input type="hidden" name="{{child.id}}" value="{{child.isHere}}"/>
+                        <div class="name">{{child.name}}</div>
+                    </div>
+                    {% endfor %}
+                </form>
+                <div class="progress-wrapper">
+                    <div class="start-time">{{lesson.startTime}}</div>
+                    <div class="progress-bar"><span></span></div>
+                    <div class="end-time">{{lesson.endTime}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</main>
+{% if user.isAdmin %}
+<div class="lesson-edit-form-wrapper">
+    <form method="POST" enctype="application/x-www-form-urlencoded">
+        <input id="lesson-id" name="lesson_id" type="hidden" value="">
+        <div class="lesson-edit-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
+        <div class="form-grid">
+            <p>Курс</p>
+            <select name="title" id="lesson-edit-title">
+                {% for course in user.courses %}
+                <option value="{{course.id}}">{{course.title}}</option>
+                {% endfor %}
+            </select>
+            <p>Кабинет</p>
+            <select name="cabinet" id="lesson-edit-cabinet">
+                {% for cabinet in user.cabinets %}
+                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
+                {% endfor %}
+            </select>
+            <p>Преподаватель</p>
+            <select name="teacher" id="lesson-edit-teacher">
+                {% for teacher in user.teachers %}
+                <option value="{{teacher.id}}">{{teacher.name}}</option>
+                {% endfor %}
+            </select>
+            <p>Начало занятия</p>
+            <label>
+                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit" value=""/>
+                <span>:</span>
+                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit" value=""/>
+            </label>
+            <p>Конец занятия</p>
+            <label>
+                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit" value=""/>
+                <span>:</span>
+                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit" value=""/>
+            </label>
+        </div>
+        <div class="bottom-flex">
+            <div class="students-title">Студенты</div>
+        </div>
+        <div class="students">
+        </div>
+        <div class="bottom-control-wrapper">
+            <div class="add-student-button">
+                <div class="add-student-button__new">Создать</div>
+                <img class="add-student-button__plus" src="static/images/plus.svg" alt="добавить"/>
+                <div class="add-student-button__search">Найти</div>
+            </div>
+            <div class="bottom-flex">
+                <div class="close-form-button">Отмена</div>
+                <input type="submit" value="Сохранить"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="student-add-form-wrapper">
+    <p class="student-add-form-wrapper__title">Создать ученика</p>
+    <form class="student-add-form" method="POST" enctype="application/x-www-form-urlencoded">
+        <div class="student-add-form__content">
+            <p>Аватар</p><input type="image"/>
+            <input type="hidden" name="avatar" value=""/>
+            <p>Имя</p><input name="name" type="text"/>
+            <p>Фамилия</p><input name="surname" type="text"/>
+            <p>Возраст</p><input name="age" type="number"/>
+            <p>Родитель</p><input name="parent" type="text"/>
+            <p>Контактный номер</p><input name="tel_number" type="text"/>
+            <p>Электронная почта</p><input name="email" type="email"/>
+            <p>Описание</p><textarea name="description"></textarea>
+        </div>
+        <div class="bottom-flex">
+            <div class="close-form-button">Отмена</div>
+            <input type="submit" value="Сохранить"/>
+        </div>
+    </form>
+</div>
+
+<div class="student-search-wrapper">
+
+</div>
+{% endif %}
+{% endblock %}

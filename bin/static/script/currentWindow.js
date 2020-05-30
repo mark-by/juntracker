@@ -159,7 +159,7 @@ class CurrentLesson extends Lesson {
             if (response.ok) {
                 this.state.element = "";
             } else {
-                alert("Не удалось сохранить текущий урок");
+                // alert("Не удалось сохранить текущий урок");
             }
         })
         this.state.element.remove();
