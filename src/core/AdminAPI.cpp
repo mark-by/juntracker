@@ -131,6 +131,8 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string surname = student.find("surname")->second;
     int age = std::stoi(student.find("age")->second);
 
+    User::save()
+
     Student::save(name, surname, age, user.school_id());
 
     return 0;
