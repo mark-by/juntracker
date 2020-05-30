@@ -3,8 +3,11 @@
 
 std::string strError(PGconn *conn, PGresult *result, char *exec, const std::string &comment) {
     std::ostringstream error;
-    error << "EXEC " << exec << std::endl << "ERROR: " << PQerrorMessage(conn) << std::endl << "STATUS: "
-          << PQresultStatus(result) << std::endl;
+    error << "=================DB ERROR==================" << std::endl
+    <<"EXEC " << exec << std::endl
+    << "ERROR: " << PQerrorMessage(conn) << std::endl
+    << "STATUS: " << PQresultStatus(result) << std::endl
+    << "=======================================" << std::endl;
     if (!comment.empty()) {
         error << "FAIL: " << comment << std::endl;
     }
@@ -19,9 +22,10 @@ bool SqlWrapper::exec(const std::string &comment) {
     std::strcpy(cstr, query.c_str());
     std::cout << "CSTR: " << cstr << std::endl;
     result = PQexec(conn, cstr);
-    if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+        std::cout << strError(conn, result, cstr, comment) << std::endl;
         disconnect();
-        throw std::runtime_error(strError(conn, result, cstr, comment));
+        throw std::runtime_error("db error");
     }
     delete[] cstr;
     return true;
