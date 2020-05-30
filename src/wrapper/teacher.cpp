@@ -23,7 +23,7 @@ std::vector<Course> Teacher::get_courses() const {
 
 Teacher Teacher::get_teacher(int teacher_id) {
     SqlWrapper db;
-    db << "select name, age, surname, salary, tel_number, description, avatar from teacher "
+    db << "select name, surname, age, salary, tel_number, description, avatar from teacher "
        << "join users on teacher.user_id=users.id where teacher.id=" << teacher_id << ";";
 
     db.query("Get teacher by id");
@@ -31,13 +31,13 @@ Teacher Teacher::get_teacher(int teacher_id) {
 
     return Teacher(
             teacher_id,
-            db.get_str(0, 0),
-            db.get_int(1, 0),
+            db.get_str(1, 0),
             db.get_str(2, 0),
             db.get_int(3, 0),
-            db.get_str(4, 0),
+            db.get_int(4, 0),
             db.get_str(5, 0),
-            db.get_str(6, 0)
+            db.get_str(6, 0),
+            db.get_str(7, 0)
             );
 }
 
