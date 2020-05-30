@@ -5,29 +5,27 @@ std::vector<Teacher> User::get_teachers() const {
     SqlWrapper postgres;
     std::ostringstream query;
     PGresult *result = nullptr;
-    query << "select teacher.id, name, surname, age, salary, tel_number, description, avatar"
+    query << "select teacher.id, name, age, surname, salary, tel_number, description, avatar"
     << " from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
-    postgres.query(query.str(), &result, "Get lessons for weekday by user");
+    postgres.query(query.str(), &result, "Get teachers");
 
     std::vector<Teacher> teachers;
     teachers.reserve(PQntuples(result));
     for (int i = 0; i < PQntuples(result); i++) {
-        teachers.emplace_back(std::stoi(PQgetvalue(result, i, 0)),
-                              PQgetvalue(result, i, 1),
-                              PQgetvalue(result, i, 2),
-                              std::stoi(PQgetvalue(result, i, 3)),
-                              std::stoi(PQgetvalue(result, i, 4)),
-                              PQgetvalue(result, i, 5),
-                              PQgetvalue(result, i, 6),
-                              PQgetvalue(result, i, 7),
-
+        teachers.emplace_back(
+                std::stoi(PQgetvalue(result, i, 0)),
+                PQgetvalue(result, i, 1),
+                std::stoi(PQgetvalue(result, i, 2)),
+                PQgetvalue(result, i, 3),
+                std::stoi(PQgetvalue(result, i, 4)),
+                PQgetvalue(result, i, 5),
+                PQgetvalue(result, i, 6),
+                PQgetvalue(result, i, 7)
         );
     }
     postgres.disconnect();
     return teachers;
 }
-
-
 
 std::vector<Lesson> User::get_current_lessons() const {
     SqlWrapper postgres;
@@ -146,4 +144,24 @@ User User::get_user(const std::string &username) {
             PQgetvalue(result, 0, 3),
             std::stoi(PQgetvalue(result, 0, 4)),
             PQgetvalue(result, 0, 5));
+}
+
+std::vector<Cabinet> User::get_cabinets() const {
+    SqlWrapper postgres;
+    std::ostringstream query;
+    PGresult *result = nullptr;
+    query << "select * from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
+    postgres.query(query.str(), &result, "Get cabinets");
+
+    std::vector<Cabinet> cabinets;
+    cabinets.reserve(PQntuples(result));
+    for (int i = 0; i < PQntuples(result); i++) {
+        cabinets.emplace_back(
+                std::stoi(PQgetvalue(result, i, 0)),
+                std::stoi(PQgetvalue(result, i, 2)),
+                PQgetvalue(result, i, 1)
+        );
+    }
+    postgres.disconnect();
+    return cabinets;
 }

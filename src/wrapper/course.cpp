@@ -3,35 +3,38 @@
 
 Teacher Course::get_teacher() const {
     SqlWrapper postgres;
-    std::string query = "SELECT teacher_id FROM course WHERE name='" + name() + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    std::ostringstream query;
+    query << "select teacher.id, teacher.name, age, surname, salary, tel_number, description, users.avatar "
+          << "from teacher "
+          << "join course on teacher.id=course.teacher_id"
+          << "join users on users.id=teacher.user_id "
+          << "where course.id=" << _id << ";";
 
-    int teacher_id = atoi(PQgetvalue(result, 0, 0));
-    query = "SELECT * FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string t_name = std::string(PQgetvalue(result, 0, 1));
-    std::string t_surname = std::string(PQgetvalue(result, 0, 2));
-    int salary = atoi(PQgetvalue(result, 0, 3));
+    PGresult *result = nullptr;
+    postgres.query(query.str(), &result, "Get teacher by course id");
     postgres.disconnect();
-    return Teacher(teacher_id, t_name, t_surname, salary);
+
+    return Teacher(
+            std::stoi(PQgetvalue(result, 0, 0)),
+            PQgetvalue(result, 0, 1),
+            std::stoi(PQgetvalue(result, 0, 2)),
+            PQgetvalue(result, 0, 3),
+            std::stoi(PQgetvalue(result, 0, 4)),
+            PQgetvalue(result, 0, 5),
+            PQgetvalue(result, 0, 6),
+            PQgetvalue(result, 0, 7)
+            );
 }
 
 int Course::set_price(int price, int course_id) {
     SqlWrapper postgres;
 
-    std::string query = "UPDATE course SET price=" + std::to_string(price)  + " WHERE id='" + std::to_string(course_id) + "';";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
+    std::ostringstream query;
+    query << "UPDATE course SET price=" << price << " WHERE id=" << course_id << ";";
+
+    postgres.exec(query.str(), "Set price for course");
     postgres.disconnect();
+
     return 0;
 }
 
@@ -39,70 +42,67 @@ std::vector<Student> Course::get_students() const {
     SqlWrapper postgres;
     PGresult *result = nullptr;
 
-    std::string query = "select * from student s join students_for_course c on s.id=c.student_id where course_id="
-            + std::to_string(_id) + ";";
+    std::ostringstream query;
+    query << "select * from student s join students_for_course c on s.id=c.student_id where course_id=" << _id << ";";
 
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    postgres.query(query.str(), &result, "Get students for course by id");
 
     std::vector<Student> students;
     for (int i = 0; i < PQntuples(result); i++) {
-        int s_id = atoi(PQgetvalue(result, i, 0));
-        std::string s_name = std::string(PQgetvalue(result, i, 1));
-        std::string s_surname = std::string(PQgetvalue(result, i, 2));
-        int s_age = atoi(PQgetvalue(result, i, 3));
-        auto res_student = Student(s_id, s_name, s_surname, s_age);
-        students.push_back(res_student);
+        students.emplace_back(
+                std::stoi(PQgetvalue(result, i, 0)),
+                PQgetvalue(result, i, 1),
+                PQgetvalue(result, i, 2),
+                std::stoi(PQgetvalue(result, i, 3)),
+                PQgetvalue(result, i, 5)
+        );
     }
-
     postgres.disconnect();
+
     return students;
 }
 
 Course Course::get_course(int course_id) {
     SqlWrapper postgres;
 
-    std::string query = "SELECT * FROM course WHERE id=" + std::to_string(course_id) + ";";
+    std::ostringstream query;
+    query << "SELECT * FROM course WHERE id=" << course_id << ";";
+
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string name = std::string(PQgetvalue(result, 0, 1));
-    int price = atoi(PQgetvalue(result, 0, 2));
+    postgres.query(query.str(), &result, "Get course by id");
     postgres.disconnect();
-    return Course(course_id, name, price);
+
+    return Course(
+            std::stoi(PQgetvalue(result, 0, 0)),
+            PQgetvalue(result, 0, 1),
+            std::stoi(PQgetvalue(result, 0, 2)),
+            std::stoi(PQgetvalue(result, 0, 3)),
+            std::stoi(PQgetvalue(result, 0, 4))
+    );
+
 }
 
-int Course::save(const std::string& name, int price) {
+int Course::save(const std::string& name, int price, int schoolId, int teacher_id) {
     SqlWrapper postgres;
 
     std::ostringstream s;
-    std::string table_name = "course";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO course (id, name, price) VALUES ("
-    << std::to_string(count_rows + 1) << ", '" << name << "', " << std::to_string(price) << ");";
+    s << "INSERT INTO course(name, price, teacher_id, school_id) VALUES ('"
+      << name << "', " << price << ", " << teacher_id << ", " << schoolId << ");";
 
-    std::string query = s.str();
-
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
+    postgres.exec(s.str(), "Save course");
     postgres.disconnect();
+
     return 0;
 }
 
 int Course::remove(int course_id) {
     SqlWrapper postgres;
 
-    std::string query = "DELETE FROM course WHERE id=" + std::to_string(course_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
+    std::ostringstream query;
+    query << "DELETE FROM course WHERE id=" << course_id << ";";
+
+    postgres.exec(query.str(), "Remove course");
     postgres.disconnect();
+
     return 0;
 }

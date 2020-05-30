@@ -6,21 +6,16 @@ class Course;
 #include "student.h"
 
 class Course {
- public:
-    explicit Course(int _id, std::string& _name, int _price)
-        : _id(_id)
-        , _name(_name)
-        , _price(_price){}
-    explicit Course(std::string& _name, int _price)
-        : _name(_name)
-        , _price(_price) {}
+public:
+    explicit Course(int _id, const std::string& _name, int _price, int teacher_id, int school_id):
+        _id(_id), _name(_name), _price(_price), _school_id(school_id), _teacher_id(teacher_id) { }
 
     Teacher get_teacher() const;
     static int set_price(int price, int course_id);
     std::vector<Student> get_students() const;
 
     static Course get_course(int course_id);
-    static int save(const std::string& name, int price);
+    static int save(const std::string& name, int price, int schoolId, int teacher_id);
     static int remove(int course_id);
 
     int id() const { return  _id; }
@@ -29,8 +24,10 @@ class Course {
 
  private:
     int _id;
-    std::string _name;
     int _price;
+    int _school_id;
+    int _teacher_id;
+    std::string _name;
 };
 
 #endif  // INCLUDE_DATABASE_COURSE_H_
