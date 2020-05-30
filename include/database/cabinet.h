@@ -5,14 +5,14 @@
 
 class Cabinet {
 public:
-    explicit Cabinet(int id, int school_id, const std::string &title): _id(id), _schoolId(school_id), _title(title) {};
+    explicit Cabinet(int id, const std::string &title, int school_id): _id(id), _schoolId(school_id), _title(title) {};
 
     static void save(const std::string &title, int schoolId);
     static void remove(int id);
     static Cabinet get(int id);
 
-    int id() { return _id;}
-    std::string title() { return _title;}
+    int id() const { return _id;}
+    std::string title() const { return _title;}
 
 private:
     int _id;

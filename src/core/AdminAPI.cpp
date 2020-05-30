@@ -22,7 +22,7 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
 
 templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     templates::Context context;
-    context.put("title", lesson.get_title());
+    context.put("title", lesson.get_course().title());
     context.put("id", lesson.id());
     context.put("cabinet", lesson.cabinet());
     context.put("tutor", lesson.get_teacher().name());
@@ -54,10 +54,11 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
 
 templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
-    context.put("title", lesson.get_title());
+    auto course = lesson.get_course();
+    context.put("title", course.title());
     context.put("cabinet", lesson.cabinet());
     context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
-    context.set("course", SimpleTitleSerializer<Course>()(lesson.get_course()))
+    context.set("course", SimpleTitleSerializer<Course>()(course));
     context.put("id", lesson.id());
     context.set("teacher", SimplePersonSerializer<Teacher>()(lesson.get_teacher()));
     context.putArray("children", lesson.get_students(), SimplePersonSerializer<Student>());
@@ -140,7 +141,7 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string parentName = student.find("parent_name")->second;
 
     std::string username = randomStr(10);
-    User::save(username, randomStr(10), email, Permission::customer);
+    User::save(username, randomStr(10), email, Permission::customer, user.school_id());
     auto customer = User::get_user(username);
     Student::save(name, surname, age, customer.id(), description, telNumber, parentName);
 
@@ -155,7 +156,7 @@ templates::Context StudentDBSerializer(const Student &student) {
     context.put("age", student.age());
     std::vector<std::string> courses;
     for (auto &course : student.get_courses()) {
-        courses.push_back(course.name());
+        courses.push_back(course.title());
     }
     context.putArray("courses", courses);
 
@@ -172,10 +173,11 @@ std::string AdminAPI::getPageStudents(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data) {
-    auto name = data.at("title");
-    int price = std::stoi(data.at("price"));
-    Course::save(name, price);
+int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    auto name = data.find("title")->second;
+    int price = std::stoi(data.find("price")->second);
+    int teacher_id = std::stoi(data.find("teacher_id")->second);
+    Course::save(name, price, user.school_id(), teacher_id);
 
     return 0;
 }

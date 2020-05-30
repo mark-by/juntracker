@@ -13,7 +13,7 @@ public:
     std::string data(const std::string& key);
     std::string data();
     std::string cookie(const std::string & key);
-    std::unordered_map<std::string, std::string> dataTable();
+    std::unordered_multimap<std::string, std::string> dataTable();
 
 private:
     std::string _method;

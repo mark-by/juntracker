@@ -50,14 +50,20 @@ Teacher Lesson::get_teacher() const {
             );
 }
 
-std::string Lesson::get_title() const {
+Course Lesson::get_course() const {
     SqlWrapper db;
 
-    db << "select course.name from course join lesson on lesson.course_id=course.id where lesson.id=" << _id << ";";
+    db << "select * from course join lesson on lesson.course_id=course.id where lesson.id=" << _id << ";";
     db.query("Get lesson title");
 
     db.disconnect();
-    return db.get_str(0, 0);
+    return Course(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_int(2, 0),
+            db.get_int(3, 0),
+            db.get_int(4, 0)
+    );
 }
 
 Lesson Lesson::get_lesson(int lesson_id) {
@@ -100,6 +106,20 @@ int Lesson::remove(int lesson_id) {
 
     db.disconnect();
     return 0;
+}
+
+Cabinet Lesson::get_cabinet() const {
+    SqlWrapper db;
+
+    db << "select * from cabinet join lesson on lesson.cabinet_id=cabinet.id where lesson.id=" << _id << ";";
+    db.query("Get cabinet from lesson");
+
+    db.disconnect();
+    return Cabinet(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_int(2, 0)
+            );
 }
 
 

@@ -147,7 +147,7 @@ User User::get_user(const std::string &username) {
             db.get_str(5));
 }
 
-std::vector<cabinet> User::get_cabinets() const {
+std::vector<Cabinet> User::get_cabinets() const {
     SqlWrapper db;
     db << "select * from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
     db.query("Get cabinets");
@@ -165,4 +165,26 @@ std::vector<cabinet> User::get_cabinets() const {
     db.disconnect();
 
     return cabinets;
+}
+
+std::vector<Course> User::get_courses() const {
+    SqlWrapper db;
+
+    db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
+    db.query("Get courses");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, 0),
+                db.get_str(1, 0),
+                db.get_int(2, 0),
+                db.get_int(3, 0),
+                db.get_int(4, 0)
+        );
+    }
+
+    db.disconnect();
+    return courses;
 }

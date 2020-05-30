@@ -52,7 +52,11 @@ void Request::parseHeaders(const std::string::const_iterator &begin, const std::
 }
 
 std::string Request::header(const std::string &key) {
-    return headers[boost::to_lower_copy(key)];
+    auto match =  headers.find(boost::to_lower_copy(key));
+    if (match != headers.end()){
+        return match->second;
+    }
+    return "";
 }
 
 void Request::parseDataFromPath() {
