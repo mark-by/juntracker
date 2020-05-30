@@ -40,48 +40,39 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
 Student Student::get_student(int student_id) {
     SqlWrapper db;
 
-    std::string query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
-    PGresult *result = nullptr;
-    if (!db.query(query, &result)) {
-        db.disconnect();
-        throw std::exception();
-    }
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age);
+    db << "select id, name, surname, age, description from student where id=" << student_id << ";";
+    db.query("Get student by id");
     db.disconnect();
-    return res_student;
+
+    return Student(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0)
+            );
 }
 
-int Student::save(const std::string name, const std::string& surname, int age) {
+int Student::save(const std::string name, const std::string& surname, int age,
+        int user_id, const std::string& description) {
     SqlWrapper db;
 
-    std::ostringstream s;
-    std::string table_name = "student";
-    int count_rows = db.count_rows(table_name);
-    s << "INSERT INTO student VALUES (" << std::to_string(count_rows + 1) << ", '"
-      << name << "', '" << surname << "', "
-      << std::to_string(age) << ");";
-
-    std::string query = s.str();
-    if (!db.exec(query)) {
-        db.disconnect();
-        return -1;
-    }
+    db << "insert into student (name, surname, age, user_id, description) "
+       << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
+       << ", '" << description << "');";
+    db.exec("Save student");
     db.disconnect();
+
     return 0;
 }
 
 int Student::remove(int student_id) {
     SqlWrapper db;
 
-    std::string query = "DELETE FROM student WHERE id=" + std::to_string(student_id) + ";";
-    if (!db.exec(query)) {
-        db.disconnect();
-        return -1;
-    }
+    db << "delete from student where id=" << student_id << ";";
+    db.exec("Remove student");
     db.disconnect();
+
     return 0;
 }
 

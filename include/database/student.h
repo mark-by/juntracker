@@ -25,7 +25,8 @@ public:
     Visit get_visit(int lesson_id, const boost::posix_time::ptime &date) const;
 
     static Student get_student(int student_id);
-    static int save(const std::string name, const std::string &surname, int age);
+    static int save(const std::string name, const std::string &surname,
+            int age, int user_id, const std::string& description);
     static int remove(int student_id);
 
     int id() const { return _id;}
