@@ -2,89 +2,72 @@
 #include "utils.hpp"
 
 Student Payment::get_student() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT student_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int student_id = atoi(PQgetvalue(result, 0, 0));
-    query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int s_age = atoi(PQgetvalue(result, 0, 3));
-    postgres.disconnect();
-    return Student(student_id, s_name, s_surname, s_age);
+    SqlWrapper db;
+
+    db << "SELECT student.id, student.name, student.surname, student.age, student.description FROM student "
+        << "join payment on payment.student_id=student.id where payment.id" << _id << ";";
+    db.query("Get student by payment id");
+    db.disconnect();
+
+    return Student(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0)
+            );
 }
 
 Course Payment::get_course() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT course_id FROM payment WHERE id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int course_id = atoi(PQgetvalue(result, 0, 0));
-    query = "SELECT * FROM course WHERE id=" + std::to_string(course_id) + ";";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string name = std::string(PQgetvalue(result, 0, 1));
-    int price = atoi(PQgetvalue(result, 0, 2));
-    postgres.disconnect();
-    return Course(course_id, name, price);
+    SqlWrapper db;
+
+    db << "select course.id, course.name, course.price, course.school_id, course.teacher_id from course"
+          << "join payment on payment.course_id = course.id where payment.id" << _id << ";";
+    db.query("Get course by payment id");
+    db.disconnect();
+    return Course(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_int(2, 0),
+            db.get_int(3, 0),
+            db.get_int(4, 0)
+            );
 }
 
 Payment Payment::get_payment(int payment_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "SELECT * FROM payment WHERE id=" + std::to_string(payment_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    db << "select * from payment where id=" << payment_id << ";";
+    db.query("Get payment");
+    db.disconnect();
 
-    int p_amount = atoi(PQgetvalue(result, 0, 3));
-    std::string p_date = std::string(PQgetvalue(result, 0, 4));
-    postgres.disconnect();
-    return Payment(payment_id, p_amount, p_date, postgres);
+    return Payment(
+            db.get_int(0, 0),
+            db.get_int(1, 0),
+            db.get_int(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0),
+            db.get_int(5, 0)
+            );
 }
 
-int Payment::save(int student_id, int course_id, int amount) {
-    SqlWrapper postgres;;
+int Payment::save(int student_id, int course_id, int amount, std::string& payment_date, int school_id) {
+    SqlWrapper db;
+    db << "insert into payment (student_id, course_id, amount, payment_date, school_id) values("
+        << student_id << ", " << course_id << ", " << amount << ", '"
+        << payment_date << "', " << school_id << ");";
+    db.exec("Save payment");
+    db.disconnect();
 
-    std::ostringstream s;
-    std::string table_name = "payment";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO payment VALUES (" << std::to_string(count_rows + 1) << ", "
-      << std::to_string(student_id) << ", " << std::to_string(course_id) << ", "
-      << std::to_string(amount) << "');";
-
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
     return 0;
 }
 
 int Payment::remove(int payment_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "DELETE FROM payment WHERE id=" + std::to_string(payment_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db << "DELETE FROM payment WHERE id=" << payment_id << ";";
+    db.exec("Delete from payment");
+    db.disconnect();
+
     return 0;
 }

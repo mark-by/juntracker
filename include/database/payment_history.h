@@ -14,7 +14,7 @@ class PaymentHistory {
 
     std::vector<Payment> get_payments_by_student(int id) const;
     std::vector<Payment> get_payments_by_course(int id) const;
-    std::vector<Payment> get_payments_by_pass(std::string start, std::string end) const;
+    //std::vector<Payment> get_payments_by_pass(std::string start, std::string end) const;
 
  private:
     std::vector<Payment> payments;

@@ -29,19 +29,14 @@ public:
     std::vector<Course> get_courses() const;
 
     static Teacher get_teacher(int teacher_id);
-
-    static int save(const std::string &name, const std::string &surname, int salary);
-
+    static int save(const std::string &name, const std::string &surname, int salary,
+            int age, const std::string& tel_number, int user_id, const std::string& description);
     static int remove(int teacher_id);
 
     int id() const override { return _id; }
-
     std::string name() const override { return _name; }
-
     std::string surname() const override { return _surname; }
-
     int salary() const { return _salary; }
-
     std::string description() const { return _description; }
 
 private:

@@ -1,7 +1,8 @@
 #ifndef INCLUDE_DATABASE_LESSON_H
 #define INCLUDE_DATABASE_LESSON_H
 
-#include "course.h"
+#include "teacher.h"
+#include "student.h"
 
 class Lesson {
 public:
@@ -18,7 +19,7 @@ public:
     std::string get_title() const;
 
     static Lesson get_lesson(int lesson_id);
-    static int save(int cabinet, const std::string& weekaday, const std::string& start, const std::string& end);
+    static int save(int cabinet, const std::string& weekday, const std::string& start, const std::string& end);
     static int remove(int lesson_id);
 
     int id() const { return _id; }

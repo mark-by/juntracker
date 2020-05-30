@@ -1,48 +1,55 @@
 #include "visit_history.h"
 
 std::vector<Visit> VisitHistory::get_visits_by_student(int s_id) const {
-    SqlWrapper postgres;
-    const std::string format = "%a, %d %b %Y %H:%M:%S";
+    SqlWrapper db;
+    const std::string format = "%d.%m.%Y";
     DateTimeConverter converter(format);
-    std::string query = "SELECT * FROM visit WHERE student_id='" + std::to_string(s_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+
+    db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit "
+       << "where student_id=" << s_id << ";";
+    db.query("Get student visits");
+
     std::vector<Visit> res_visits;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int v_id = atoi(PQgetvalue(result, i, 0));
-        int v_was_in_class = atoi(PQgetvalue(result, i, 1));
-        std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
-        boost::posix_time::ptime v_date = converter.convert(str_v_date);
-        Visit new_visit(v_id, v_was_in_class, v_date);
-        res_visits.push_back(new_visit);
+    res_visits.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_visits.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_bool(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i)
+                );
     }
-    postgres.disconnect();
+
+    db.disconnect();
     return res_visits;
 }
 
 std::vector<Visit> VisitHistory::get_visits_by_lesson(int c_id) const {
-    SqlWrapper postgres;
-    const std::string format = "%a, %d %b %Y %H:%M:%S";
+    SqlWrapper db;
+    const std::string format = "%d.%m.%Y";
     DateTimeConverter converter(format);
-    std::string query = "SELECT * FROM visit WHERE lesson_id='" + std::to_string(c_id) + "' and was_in_class=true;";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+
+    db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit "
+       << "where lesson_id=" << c_id << " and was_in_class=true;";
+    db.query("Get visits on lesson");
+
+
     std::vector<Visit> res_visits;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int v_id = atoi(PQgetvalue(result, i, 0));
-        int v_was_in_class = atoi(PQgetvalue(result, i, 1));
-        std::string str_v_date = std::string(PQgetvalue(result, 0, 2));
-        boost::posix_time::ptime v_date = converter.convert(str_v_date);
-        Visit new_visit(v_id, v_was_in_class, v_date);
-        res_visits.push_back(new_visit);
+    res_visits.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_visits.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_bool(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i)
+        );
     }
-    postgres.disconnect();
+    db.disconnect();
+
     return res_visits;
 }
 

@@ -3,7 +3,7 @@
 
 #include "sql_wrapper.h"
 #include "lesson.h"
-#include "Cabinet.h"
+#include "cabinet.h"
 
 enum Permission {
     customer, teacher, admin
@@ -32,7 +32,7 @@ public:
     int permission() const { return _permission; }
 
     std::vector<Teacher> get_teachers() const;
-    std::vector<Cabinet> get_cabinets() const;
+    std::vector<cabinet> get_cabinets() const;
 
 
 private:

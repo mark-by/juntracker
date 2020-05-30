@@ -1,7 +1,11 @@
 #ifndef DATABASE_SCHEDULE_H
 #define DATABASE_SCHEDULE_H
 
+#include <string>
+#include <vector>
+
 #include "lesson.h"
+#include "sql_wrapper.h"
 
 class Schedule {
 public:

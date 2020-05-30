@@ -2,27 +2,27 @@
 #include <utils.hpp>
 
 std::vector<Course> Student::get_courses() const {
-//    SqlWrapper db;
-//    db << "SELECT course_id FROM payment WHERE student_id='" << _id << "';";
-//    db.query("Get courses by student");
-//    std::vector<Course> res_courses;
-//    for (int i = 0; i < db.count_tupls(); i++) {
-//        int c_id = atoi(PQgetvalue(result, i, 0));
-//        query = "SELECT * FROM course WHERE id=" + std::to_string(c_id) + ";";
-//        if (!db.query(query, &result)) {
-//            db.disconnect();
-//            throw std::exception();
-//        }
-//        std::string c_name = std::string(PQgetvalue(result, 0, 1));
-//        int c_price = atoi(PQgetvalue(result, 0, 2));
-//        std::string c_start_date = PQgetvalue(result, 0, 3);
-//        std::string c_end_date = PQgetvalue(result, 0, 4);
-//        auto res_course = Course(c_id, c_name, c_price);
-//        res_courses.push_back(res_course);
-//    }
-//    db.disconnect();
-//МИША, МНЕ КАЖЕТСЯ, ТУТ НУЖНЫ ТВОИ JOIN
-//    return res_courses;
+    SqlWrapper db;
+    db << "select course.id, name, price, teacher_id, school_id "
+       << "from course "
+       << "join students_for_course c on course.id=c.course_id "
+       << "where c.student_id=" << _id << ";";
+    db.query("Get courses by student");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i)
+        );
+    }
+
+    db.disconnect();
+    return courses;
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
@@ -40,48 +40,39 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
 Student Student::get_student(int student_id) {
     SqlWrapper db;
 
-    std::string query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
-    PGresult *result = nullptr;
-    if (!db.query(query, &result)) {
-        db.disconnect();
-        throw std::exception();
-    }
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age);
+    db << "select id, name, surname, age, description from student where id=" << student_id << ";";
+    db.query("Get student by id");
     db.disconnect();
-    return res_student;
+
+    return Student(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0)
+            );
 }
 
-int Student::save(const std::string name, const std::string& surname, int age) {
+int Student::save(const std::string name, const std::string& surname, int age,
+        int user_id, const std::string& description) {
     SqlWrapper db;
 
-    std::ostringstream s;
-    std::string table_name = "student";
-    int count_rows = db.count_rows(table_name);
-    s << "INSERT INTO student VALUES (" << std::to_string(count_rows + 1) << ", '"
-      << name << "', '" << surname << "', "
-      << std::to_string(age) << ");";
-
-    std::string query = s.str();
-    if (!db.exec(query)) {
-        db.disconnect();
-        return -1;
-    }
+    db << "insert into student (name, surname, age, user_id, description) "
+       << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
+       << ", '" << description << "');";
+    db.exec("Save student");
     db.disconnect();
+
     return 0;
 }
 
 int Student::remove(int student_id) {
     SqlWrapper db;
 
-    std::string query = "DELETE FROM student WHERE id=" + std::to_string(student_id) + ";";
-    if (!db.exec(query)) {
-        db.disconnect();
-        return -1;
-    }
+    db << "delete from student where id=" << student_id << ";";
+    db.exec("Remove student");
     db.disconnect();
+
     return 0;
 }
 

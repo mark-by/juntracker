@@ -5,7 +5,7 @@
 
 class Session {
  public:
-    explicit Session(int _id, std::string& _cookie)
+    explicit Session(int _id, const std::string& _cookie)
             : _id(_id)
             , _cookie(_cookie) {}
 

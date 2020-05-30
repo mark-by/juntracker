@@ -9,8 +9,7 @@
 
 class VisitHistory {
  public:
-    explicit VisitHistory(std::vector<Visit> visits)
-    : visits(visits) {}
+    explicit VisitHistory(std::vector<Visit> visits): visits(visits) {}
 
     std::vector<Visit> get_visits_by_student(int id) const;
     std::vector<Visit> get_visits_by_lesson(int id) const;
