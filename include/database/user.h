@@ -30,7 +30,7 @@ public:
     std::string login() const { return _login; }
     std::string password() const { return _password; }
     int permission() const { return _permission; }
-    int school_id() { return _school_id; }
+    int school_id() const { return _school_id; }
 
     std::vector<Teacher> get_teachers() const;
     std::vector<cabinet> get_cabinets() const;
