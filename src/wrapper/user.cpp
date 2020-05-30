@@ -160,7 +160,7 @@ User User::get_user(const std::string &username) {
 
 std::vector<Cabinet> User::get_cabinets() const {
     SqlWrapper db;
-    db << "select * from cabinet school_id=" << _school_id << ";";
+    db << "select * from cabinet where school_id=" << _school_id << ";";
     db.exec("Get cabinets");
 
     std::vector<Cabinet> cabinets;
