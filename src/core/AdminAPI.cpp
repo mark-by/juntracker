@@ -16,6 +16,7 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
     context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+
     return context;
 }
 
@@ -32,6 +33,7 @@ templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
     context.putArray("children", students, StudentSerializer);
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
+
     return context;
 }
 
@@ -54,11 +56,14 @@ templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
     context.put("cabinet", lesson.cabinet());
+    context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
+    context.set("course", SimpleTitleSerializer<Course>()(lesson.get_course()))
     context.put("id", lesson.id());
-    context.put("tutor", lesson.get_teacher().name());
-    context.putArray("children", lesson.get_students(), ShortStudentSerializer);
+    context.set("teacher", SimplePersonSerializer<Teacher>()(lesson.get_teacher()));
+    context.putArray("children", lesson.get_students(), SimplePersonSerializer<Student>());
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
+
     return context;
 }
 
@@ -67,6 +72,7 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
     context.put("weekDay", weekday.weekday);
     context.put("date", weekday.date);
     context.putArray("lessons", weekday.lessons, LessonSerializer);
+
     return context;
 }
 
@@ -90,6 +96,7 @@ std::string AdminAPI::getMainPage(int userId) {
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
 
     _render.set("mainPageStaff.html");
+
     return _render.render(context);
 }
 
@@ -114,6 +121,7 @@ std::string AdminAPI::findStudent(const std::string &str) {
 
 int AdminAPI::deleteStudent(int student_id) {
     Student::remove(student_id);
+
     return 0;
 }
 
@@ -126,10 +134,14 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string surname = student.find("surname")->second;
     int age = std::stoi(student.find("age")->second);
     std::string email = student.find("email")->second;
-    std::sting username = randomStr(10);
-    User::save(, randomStr(10), email, Permission::customer);
+    std::string description = student.find("description")->second;
+    std::string telNumber = student.find("tel_number")->second;
+    std::string parentName = student.find("parent_name")->second;
 
-    Student::save(name, surname, age, user.school_id());
+    std::string username = randomStr(10);
+    User::save(username, randomStr(10), email, Permission::customer, user.school_id());
+    auto customer = User::get_user(username);
+    Student::save(name, surname, age, customer.id(), description, telNumber, parentName);
 
     return 0;
 }
@@ -145,6 +157,7 @@ templates::Context StudentDBSerializer(const Student &student) {
         courses.push_back(course.name());
     }
     context.putArray("courses", courses);
+
     return context;
 }
 
@@ -154,6 +167,7 @@ std::string AdminAPI::getPageStudents(int userId) {
     context.put("username", user.login());
     context.putArray("students", user.get_students(), StudentDBSerializer);
     _render.set("studentsAdmin.html");
+
     return _render.render(context);
 }
 
@@ -161,11 +175,13 @@ int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> 
     auto name = data.at("title");
     int price = std::stoi(data.at("price"));
     Course::save(name, price);
+
     return 0;
 }
 
 int AdminAPI::deleteCourse(int courseId) {
     Course::remove(courseId);
+
     return 0;
 }
 
