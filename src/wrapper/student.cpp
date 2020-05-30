@@ -29,20 +29,22 @@ std::vector<Course> Student::get_courses() const {
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
     SqlWrapper db;
+
     const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);
+
     db << "SELECT * FROM visit WHERE lesson_id=" << std::to_string(lesson_id) << " and visit_date='"
     << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "' and student_id=" << _id << ";";
+
     db.query("Get visit by student");
     db.disconnect();
-    boost::posix_time::ptime v_date = converter.convert(db.get_str(4));
 
     return Visit(
             db.get_int(0, 0),
             db.get_int(1, 0),
             db.get_int(2, 0),
             db.get_bool(3, 0),
-            v_date,
+            converter.convert(db.get_str(4)),
             db.get_int(5, 0)
             );
 }

@@ -40,7 +40,7 @@ Lesson Visit::get_lesson() const {
 
 Visit Visit::get_visit(int visit_id) {
     SqlWrapper db;
-    const std::string format = "%a, %d %b %Y %H:%M:%S";
+    const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);
 
     db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit where id="
