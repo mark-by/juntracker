@@ -2,27 +2,27 @@
 #include <utils.hpp>
 
 std::vector<Course> Student::get_courses() const {
-//    SqlWrapper db;
-//    db << "SELECT course_id FROM payment WHERE student_id='" << _id << "';";
-//    db.query("Get courses by student");
-//    std::vector<Course> res_courses;
-//    for (int i = 0; i < db.count_tupls(); i++) {
-//        int c_id = atoi(PQgetvalue(result, i, 0));
-//        query = "SELECT * FROM course WHERE id=" + std::to_string(c_id) + ";";
-//        if (!db.query(query, &result)) {
-//            db.disconnect();
-//            throw std::exception();
-//        }
-//        std::string c_name = std::string(PQgetvalue(result, 0, 1));
-//        int c_price = atoi(PQgetvalue(result, 0, 2));
-//        std::string c_start_date = PQgetvalue(result, 0, 3);
-//        std::string c_end_date = PQgetvalue(result, 0, 4);
-//        auto res_course = Course(c_id, c_name, c_price);
-//        res_courses.push_back(res_course);
-//    }
-//    db.disconnect();
-//МИША, МНЕ КАЖЕТСЯ, ТУТ НУЖНЫ ТВОИ JOIN
-//    return res_courses;
+    SqlWrapper db;
+    db << "select course.id, name, price, teacher_id, school_id "
+       << "from course "
+       << "join students_for_course c on course.id=c.course_id "
+       << "where c.student_id=" << _id << ";";
+    db.query("Get courses by student");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i)
+        );
+    }
+
+    db.disconnect();
+    return courses;
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
