@@ -33,8 +33,11 @@ Lesson Visit::get_lesson() const {
             db.get_int(0, 0),
             db.get_int(1, 0),
             db.get_int(2, 0),
-            db.get_str(3, 0),
-            db.get_str(4, 0)
+            db.get_int(3, 0),
+            db.get_int(4, 0),
+            db.get_str(5, 0),
+            db.get_str(6, 0),
+            db.get_int(7, 0)
     );
 }
 

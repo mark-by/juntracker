@@ -3,7 +3,7 @@
 
 std::vector<Teacher> User::get_teachers() const {
     SqlWrapper db;
-    db << "select teacher.id, name, age, surname, salary, tel_number, description, avatar"
+    db << "select teacher.id, name, surname, age, salary, tel_number, description, avatar"
        << " from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
     db.query("Get teachers");
 
@@ -13,8 +13,8 @@ std::vector<Teacher> User::get_teachers() const {
         teachers.emplace_back(
                 db.get_int(0, i),
                 db.get_str(1, i),
-                db.get_int(2, i),
-                db.get_str(3, i),
+                db.get_str(2, i),
+                db.get_int(3, i),
                 db.get_int(4, i),
                 db.get_str(5, i),
                 db.get_str(6, i),
@@ -37,10 +37,14 @@ std::vector<Lesson> User::get_current_lessons() const {
     for (int i = 0; i < db.count_tupls(); i++) {
         res_lesson.emplace_back(
                 db.get_int(0, i),
+                db.get_int(1, i),
                 db.get_int(2, i),
-                curr_weekday,
+                db.get_int(3, i),
+                db.get_int(4, i),
                 db.get_str(5, i),
-                db.get_str(6, i));
+                db.get_str(6, i),
+                db.get_int(7, i)
+                );
     }
     db.disconnect();
     return res_lesson;
@@ -55,10 +59,14 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     for (int i = 0; i < db.count_tupls(); i++) {
         res_lesson.emplace_back(
                 db.get_int(0, i),
+                db.get_int(1, i),
                 db.get_int(2, i),
-                l_weekday,
+                db.get_int(3, i),
+                db.get_int(4, i),
                 db.get_str(5, i),
-                db.get_str(6, i));
+                db.get_str(6, i),
+                db.get_int(7, i)
+        );
     }
     db.disconnect();
     return res_lesson;
