@@ -29,8 +29,8 @@ void Connection::doRead(const boost::system::error_code& error, std::size_t byte
         Response response_;
 
         if (request_.header("Host") != "juntracker.ru") {
-            response_.setStatus(status::BadRequest);  // not our host
-        } else {
+//            response_.setStatus(status::BadRequest);  // not our host
+//        } else {
             if (request_.path() == "/login") {
                 response_ = handler_.loginHandler(request_);
             } else if (request_.path() == "/register") {
