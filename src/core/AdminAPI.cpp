@@ -116,6 +116,7 @@ int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::
 }
 
 std::string AdminAPI::findStudent(const std::string &str) {
+
     return std::string();
 }
 
