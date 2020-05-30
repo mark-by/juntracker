@@ -21,7 +21,7 @@ bool SqlWrapper::exec(const std::string &comment) {
     char *cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
     result = PQexec(conn, cstr);
-    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+    if (PQresultStatus(result) != PGRES_COMMAND_OK && PQresultStatus(result) != PGRES_TUPLES_OK) {
         std::cout << strError(conn, result, cstr, comment) << std::endl;
         disconnect();
         throw std::runtime_error("db error");
