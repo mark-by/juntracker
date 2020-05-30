@@ -3,45 +3,36 @@
 
 Student Visit::get_student() const {
     SqlWrapper db;
-    std::string query = "SELECT student_id FROM visit WHERE id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int student_id = atoi(PQgetvalue(result, 0, 0));
-    query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int age = atoi(PQgetvalue(result, 0, 3));
-    postgres.disconnect();
-    return Student(student_id, s_name, s_surname, age);
+
+    db << "SELECT student.id, student.name, student.surname, student.age, student.description FROM student "
+       << "join visit on visit.student_id=student.id where visit.id" << _id << ";";
+    db.query("Get student by visit id");
+    db.disconnect();
+
+    return Student(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0)
+    );
 }
 
 Lesson Visit::get_lesson() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT lesson_id FROM visit WHERE id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int lesson_id = atoi(PQgetvalue(result, 0, 0));
-    query = "SELECT * FROM lesson WHERE id=" + std::to_string(lesson_id) + ";";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int l_cabinet = atoi(PQgetvalue(result, 0, 2));
-    int l_weekday = atoi(PQgetvalue(result, 0, 4));
-    std::string l_start_time = std::string(PQgetvalue(result, 0, 5));
-    std::string l_end_time = std::string(PQgetvalue(result, 0, 6));
-    postgres.disconnect();
-    return Lesson(lesson_id, l_cabinet, l_weekday, l_start_time, l_end_time);
+    SqlWrapper db;
+
+    db << "SELECT lesson.id, lesson.course_id, lesson.cabinet_id, lesson.teacher_id, lesson.weekday, lesson.start_time, lesson.end_time FROM lesson"
+       << "join visit on visit.lesson_id=lesson.id where visit.id=" << _id << ";";
+    db.query("Get student by visit id");
+    db.disconnect();
+
+    return Lesson(
+            db.get_int(0, 0),
+            db.get_int(1, 0),
+            db.get_int(2, 0),
+            db.get_str(3, 0),
+            db.get_str(4, 0)
+    );
 }
 
 Visit Visit::get_visit(int visit_id) {
