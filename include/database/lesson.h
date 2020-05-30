@@ -6,7 +6,7 @@
 class Lesson {
 public:
     explicit Lesson(int _id, int _cabinet, int _weekday,
-            std::string& _start_time, std::string& _end_time)
+            const std::string& _start_time, const std::string& _end_time)
             : _id(_id)
             , _cabinet(_cabinet)
             , _weekday(_weekday)

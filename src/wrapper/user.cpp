@@ -1,24 +1,51 @@
 #include "user.h"
-#include <utils.hpp>
+#include <common_sql.hpp>
+
+std::vector<Teacher> User::get_teachers() const {
+    SqlWrapper postgres;
+    std::ostringstream query;
+    PGresult *result = nullptr;
+    query << "select teacher.id, name, surname, age, salary, tel_number, description, avatar"
+    << " from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
+    postgres.query(query.str(), &result, "Get lessons for weekday by user");
+
+    std::vector<Teacher> teachers;
+    teachers.reserve(PQntuples(result));
+    for (int i = 0; i < PQntuples(result); i++) {
+        teachers.emplace_back(std::stoi(PQgetvalue(result, i, 0)),
+                              PQgetvalue(result, i, 1),
+                              PQgetvalue(result, i, 2),
+                              std::stoi(PQgetvalue(result, i, 3)),
+                              std::stoi(PQgetvalue(result, i, 4)),
+                              PQgetvalue(result, i, 5),
+                              PQgetvalue(result, i, 6),
+                              PQgetvalue(result, i, 7),
+
+        );
+    }
+    postgres.disconnect();
+    return teachers;
+}
+
+
 
 std::vector<Lesson> User::get_current_lessons() const {
     SqlWrapper postgres;
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
+    std::ostringstream query;
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    query << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
+    postgres.query(query.str(), &result, "Get lessons for weekday by user");
+
     std::vector<Lesson> res_lesson;
+    res_lesson.reserve(PQntuples(result));
     for (int i = 0; i < PQntuples(result); i++) {
-        int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
-        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time);
-        res_lesson.push_back(curr_lesson);
+        res_lesson.emplace_back(std::stoi(PQgetvalue(result, i, 0)),
+                                std::stoi(PQgetvalue(result, i, 2)),
+                                curr_weekday,
+                                PQgetvalue(result, i, 5),
+                                PQgetvalue(result, i, 6));
     }
     postgres.disconnect();
     return res_lesson;
@@ -26,20 +53,18 @@ std::vector<Lesson> User::get_current_lessons() const {
 
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     SqlWrapper postgres;
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
+    std::ostringstream query;
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    query << "SELECT * FROM lesson WHERE weekday='" << l_weekday << "' and school_id=" << _school_id << ";";
+    postgres.query(query.str(), &result, "Get lessons for weekday by user");
     std::vector<Lesson> res_lesson;
+    res_lesson.reserve(PQntuples(result));
     for (int i = 0; i < PQntuples(result); i++) {
-        int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
-        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
-        res_lesson.push_back(curr_lesson);
+        res_lesson.emplace_back(atoi(PQgetvalue(result, i, 0)),
+                                atoi(PQgetvalue(result, i, 2)),
+                                l_weekday,
+                                PQgetvalue(result, i, 5),
+                                PQgetvalue(result, i, 6));
     }
     postgres.disconnect();
     return res_lesson;
@@ -47,19 +72,20 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
 
 std::vector<Student> User::get_students() const {
     SqlWrapper postgres;
-    std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
+    std::ostringstream query;
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    query << "SELECT * FROM student WHERE school_id='" << _school_id << "';";
+    postgres.query(query.str(), &result, "Get students");
+
     std::vector<Student> res_students;
+    res_students.reserve(PQntuples(result));
     for (int i = 0; i < PQntuples(result); i++) {
-        int student_id = atoi(PQgetvalue(result, i, 0));
-        std::string s_name = std::string(PQgetvalue(result, i, 1));
-        std::string s_surname = std::string(PQgetvalue(result, i, 2));
-        int s_age = atoi(PQgetvalue(result, i, 3));
-        res_students.emplace_back(student_id, s_name, s_surname, s_age);
+        res_students.emplace_back(
+                std::stoi(PQgetvalue(result, i, 0)),
+                PQgetvalue(result, i, 1),
+                PQgetvalue(result, i, 2),
+                std::stoi(PQgetvalue(result, i, 3)),
+                PQgetvalue(result, i, 5));
     }
     postgres.disconnect();
     return res_students;
@@ -67,69 +93,57 @@ std::vector<Student> User::get_students() const {
 
 User User::get_user(int user_id) {
     SqlWrapper postgres;
+    std::ostringstream query;
+    query << "SELECT * FROM users WHERE id=" << user_id << ";";
 
-    std::string query = "SELECT * FROM users WHERE id=" + std::to_string(user_id) + ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string u_email = std::string(PQgetvalue(result, 0, 1));
-    std::string u_login = std::string(PQgetvalue(result, 0, 2));
-    std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    int u_permission = atoi(PQgetvalue(result, 0, 4));
+    postgres.query(query.str(), &result, "Get user by id");
+
     postgres.disconnect();
-    return User(user_id, u_email, u_login, u_password, u_permission);
+    return User(
+            user_id,
+            PQgetvalue(result, 0, 1),
+            PQgetvalue(result, 0, 2),
+            std::stoi(PQgetvalue(result, 0, 6)),
+            PQgetvalue(result, 0, 3),
+            std::stoi(PQgetvalue(result, 0, 4)),
+            PQgetvalue(result, 0, 5));
 }
 
-int User::save(const std::string &username, const std::string &password, const std::string &email) {
+int User::save(const std::string &username, const std::string &password, const std::string &email, int permission) {
     SqlWrapper postgres;
-
-    if(!postgres.is_connected()) {
-        postgres.disconnect();
-        return 1;
-    }
-
     std::ostringstream s;
-    std::string table_name = "users";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
-      << "', '" << username << "', '" << password << "');";
+    s << "INSERT INTO users(email, login, password, permission) VALUES ('" << email << "', '" << username << "', '"
+      << password << "', " << permission << ");";
 
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
+    postgres.exec(s.str(), "Save user");
     postgres.disconnect();
     return 0;
 }
 
 int User::remove(int user_id) {
     SqlWrapper postgres;
-
-    std::string query = "DELETE FROM users WHERE id=" + std::to_string(user_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
+    std::ostringstream query;
+    query << "DELETE FROM users WHERE id=" << user_id << ";";
+    postgres.exec(query.str(), "Remove user");
     postgres.disconnect();
     return 0;
 }
 
 User User::get_user(const std::string &username) {
     SqlWrapper postgres;
-
-    std::string query = "SELECT * FROM users WHERE login=" + username + ";";
+    std::ostringstream query;
+    query << "SELECT * FROM users WHERE login=" << username << ";";
     PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
-    }
-    std::string u_email = std::string(PQgetvalue(result, 0, 1));
-    int user_id = std::stoi(PQgetvalue(result, 0, 0));
-    std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    int u_permission = atoi(PQgetvalue(result, 0, 4));
-    std::string login = username;
+    postgres.query(query.str(), &result, "Get user by username");
+
     postgres.disconnect();
-    return User(user_id, u_email, login, u_password, u_permission);
+    return User(
+            std::stoi(PQgetvalue(result, 0, 0)),
+            PQgetvalue(result, 0, 1),
+            username,
+            std::stoi(PQgetvalue(result, 0, 6)),
+            PQgetvalue(result, 0, 3),
+            std::stoi(PQgetvalue(result, 0, 4)),
+            PQgetvalue(result, 0, 5));
 }
