@@ -24,10 +24,10 @@ public:
 
  private:
     int _id;
+    std::string _name;
     int _price;
     int _school_id;
     int _teacher_id;
-    std::string _name;
 };
 
 #endif  // INCLUDE_DATABASE_COURSE_H_

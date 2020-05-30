@@ -14,7 +14,9 @@ Student Payment::get_student() const {
             db.get_str(1, 0),
             db.get_str(2, 0),
             db.get_int(3, 0),
-            db.get_str(4, 0)
+            db.get_str(4, 0),
+            db.get_str(5, 0),
+            db.get_str(6, 0)
             );
 }
 
