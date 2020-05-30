@@ -38,7 +38,7 @@ Session Session::create_session(const std::string& username, const std::string& 
     std::string new_cookie = username;
 
     db << "insert into session (cookie, user_id) "
-       << "values ('" << new_cookie << "', " << user_id << ";";
+       << "values ('" << new_cookie << "', " << user_id << ");";
     db.exec("Create session");
 
     db << "select id, cookie from session";
