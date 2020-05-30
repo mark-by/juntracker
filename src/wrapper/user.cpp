@@ -110,10 +110,11 @@ User User::get_user(int user_id) {
             db.get_str(5));
 }
 
-int User::save(const std::string &username, const std::string &password, const std::string &email, int permission) {
+int User::save(const std::string &username, const std::string &password,
+        const std::string &email, int permission, int school_id) {
     SqlWrapper db;
-    db << "INSERT INTO users(email, login, password, permission) VALUES ('" << email << "', '" << username << "', '"
-      << password << "', " << permission << ");";
+    db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('" << email << "', '" << username << "', '"
+      << password << "', " << permission << ", " << school_id << ");";
     db.exec("Save user");
     db.disconnect();
 
