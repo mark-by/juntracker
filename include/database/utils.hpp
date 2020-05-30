@@ -34,7 +34,7 @@ inline std::string randomStr(int len) {
 }
 
 inline std::pair<std::string, std::string> parse_name_surname(const std::string& str) {
-    std::regex tag(R"((\w+)\s+(\w+))");
+    std::regex tag(R"((\w+)\s+([\w+]*))");
     std::sregex_iterator match(str.begin(), str.end(), tag);
     return {match->format("$1"), match->format("$2")};
 }

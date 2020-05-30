@@ -5,6 +5,7 @@
 #include <visit.h>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <http/datetime.h>
+#include <utils.hpp>
 
 
 
@@ -124,8 +125,9 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string name = student.find("name")->second;
     std::string surname = student.find("surname")->second;
     int age = std::stoi(student.find("age")->second);
-
-    User::save()
+    std::string email = student.find("email")->second;
+    std::sting username = randomStr(10);
+    User::save(, randomStr(10), email, Permission::customer);
 
     Student::save(name, surname, age, user.school_id());
 
