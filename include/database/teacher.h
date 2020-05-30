@@ -9,10 +9,11 @@ class Teacher;
 
 class Teacher : public Person {
 public:
-    explicit Teacher(int _id,
+    explicit Teacher(
+            int _id,
             const std::string &_name,
-            int age,
             const std::string &_surname,
+            int age,
             int _salary,
             const std::string &_tel_number,
             const std::string &_description,
