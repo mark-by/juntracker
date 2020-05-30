@@ -56,9 +56,11 @@ templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
     context.put("title", lesson.get_title());
     context.put("cabinet", lesson.cabinet());
+    context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
+    context.set("course", SimpleTitleSerializer<Course>()(lesson.get_course()))
     context.put("id", lesson.id());
-    context.put("tutor", lesson.get_teacher().name());
-    context.putArray("children", lesson.get_students(), ShortStudentSerializer);
+    context.set("teacher", SimplePersonSerializer<Teacher>()(lesson.get_teacher()));
+    context.putArray("children", lesson.get_students(), SimplePersonSerializer<Student>());
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
 
@@ -132,10 +134,14 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string surname = student.find("surname")->second;
     int age = std::stoi(student.find("age")->second);
     std::string email = student.find("email")->second;
-    std::sting username = randomStr(10);
-    User::save(, randomStr(10), email, Permission::customer);
+    std::string description = student.find("description")->second;
+    std::string telNumber = student.find("tel_number")->second;
+    std::string parentName = student.find("parent_name")->second;
 
-    Student::save(name, surname, age, user.school_id());
+    std::string username = randomStr(10);
+    User::save(username, randomStr(10), email, Permission::customer);
+    auto customer = User::get_user(username);
+    Student::save(name, surname, age, customer.id(), description, telNumber, parentName);
 
     return 0;
 }
