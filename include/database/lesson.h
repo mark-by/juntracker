@@ -3,6 +3,7 @@
 
 #include "teacher.h"
 #include "student.h"
+#include "cabinet.h"
 
 class Lesson {
 public:
@@ -19,7 +20,8 @@ public:
 
     std::vector<Student> get_students() const;
     Teacher get_teacher() const;
-    std::string get_title() const;
+    Course get_course() const;
+    Cabinet get_cabinet() const;
 
     static Lesson get_lesson(int lesson_id);
     static int save(int course_id, int cabinet_id, int teacher_id, int weekday,

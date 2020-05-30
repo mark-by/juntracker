@@ -147,7 +147,7 @@ User User::get_user(const std::string &username) {
             db.get_str(5));
 }
 
-std::vector<cabinet> User::get_cabinets() const {
+std::vector<Cabinet> User::get_cabinets() const {
     SqlWrapper db;
     db << "select * from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
     db.query("Get cabinets");
