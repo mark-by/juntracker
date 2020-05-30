@@ -17,6 +17,7 @@ bool SqlWrapper::query(const std::string &comment) {
     clear();
     char *cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
+    std::cout << "CSTR: " << cstr << std::endl;
     result = PQexec(conn, cstr);
     if (PQresultStatus(result) != PGRES_TUPLES_OK) {
         disconnect();
