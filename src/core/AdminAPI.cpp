@@ -211,7 +211,6 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
 //    student=5
 //    student=6
 //    student=7"
-    auto none = data.end();
     std::vector<int> students_id;
 
     for (auto &pair : data) {

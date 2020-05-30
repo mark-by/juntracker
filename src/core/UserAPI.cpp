@@ -5,19 +5,19 @@
 #include <iostream>
 
 
-std::string UserAPI::signUp(const std::unordered_map<std::string, std::string> &data) {
+std::string UserAPI::signUp(const std::unordered_multimap<std::string, std::string> &data) {
     std::string username;
     std::string password;
     std::string email;
     try {
-        username = data.at("username");
-        password = data.at("password");
-        email = data.at("email");
+        username = data.find("username")->second;
+        password = data.find("password")->second;
+        email = data.find("email")->second;
     } catch (...) {
         return "";
     }
     try {
-        User::save(username, password, email);
+        User::save(username, password, email, Permission::admin, -1);
     } catch (...) {
         return "";
     }
