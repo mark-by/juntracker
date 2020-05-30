@@ -2,6 +2,7 @@
 #include <utils.hpp>
 #include <vector>
 
+
 std::vector<Course> Student::get_courses() const {
     SqlWrapper db;
     db << "select course.id, name, price, teacher_id, school_id "
@@ -91,12 +92,20 @@ int Student::remove(int student_id) {
     return 0;
 }
 
-std::vector<Student> Student::get_students_like(const std::string str) {
+std::vector<Student> Student::get_students_like(const std::string &str) {
     SqlWrapper db;
+    std::pair<std::string, std::string> name_surname = parse_name_surname(str);
 
+    if (name_surname.second.empty()) {
+        db << "select * from student where name like '" << name_surname.first
+            << "' or surname like '" << name_surname.first << "';";
+    } else {
+        db << "select * from student where name like '" << name_surname.first
+           << "' or surname like '" << name_surname.second << "' union "
+           << "select * from student where name like '" << name_surname.second
+           << "' or surname like '" << name_surname.first << "';";
+    }
 
-
-    db << "select * from student where name like '" << surname << "';";
     db.query("Find students like");
 
     std::vector<Student> res_students;
