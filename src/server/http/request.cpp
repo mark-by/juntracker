@@ -115,14 +115,18 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
 }
 
 std::string Request::data(const std::string &key) {
-    return _data[boost::to_lower_copy(key)];
+    auto search = _data.find(boost::to_lower_copy(key));
+    if (search != _data.end()) {
+        return search->second;
+    }
+    return "";
 }
 
 std::string Request::data() {
     return body;
 }
 
-std::unordered_map<std::string, std::string> Request::dataTable() {
+std::unordered_multimap<std::string, std::string> Request::dataTable() {
     return _data;
 }
 

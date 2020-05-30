@@ -29,17 +29,19 @@ public:
 
     std::string getMainPage(int userId) override;
 
-    static int saveCurrentLesson(const std::unordered_map<std::string, std::string> &data);
+    int updateLesson(const std::unordered_multimap<std::string, std::string> & data);
+
+    static int saveCurrentLesson(const std::unordered_multimap<std::string, std::string> &data);
 
     std::string findStudent(const std::string &);
 
     int deleteStudent(int student_id);
 
-    int createStudent(const std::unordered_map<std::string, std::string> &data);
+    int createStudent(const std::unordered_multimap<std::string, std::string> &data);
 
     std::string getPageStudents(int);
 
-    int addCourse(const std::unordered_map<std::string, std::string> &data);
+    int addCourse(const std::unordered_multimap<std::string, std::string> &data);
 
     int deleteCourse(int course_id);
 

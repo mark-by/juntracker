@@ -93,11 +93,11 @@ std::string AdminAPI::getMainPage(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::saveCurrentLesson(const std::unordered_map<std::string, std::string> &data) {
+int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::string> &data) {
     if (data.empty()) {
         return 400;
     }
-    int lesson_id = std::stoi(data.at("lesson_id"));
+    int lesson_id = std::stoi(data.find("lesson_id")->second);
 
     for (auto &pair : data) {
         if (pair.first != "check" && pair.first != "lesson_id") {
@@ -117,14 +117,14 @@ int AdminAPI::deleteStudent(int student_id) {
     return 0;
 }
 
-int AdminAPI::createStudent(const std::unordered_map<std::string, std::string> &student) {
+int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::string> &student) {
     if (student.empty()) {
         return -1;
     }
 
-    std::string name = student.at("name");
-    std::string surname = student.at("surname");
-    int age = std::stoi(student.at("age"));
+    std::string name = student.find("name")->second;
+    std::string surname = student.find("surname")->second;
+    int age = std::stoi(student.find("age")->second);
 
     Student::save(name, surname, age);
 
@@ -154,7 +154,7 @@ std::string AdminAPI::getPageStudents(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::addCourse(const std::unordered_map<std::string, std::string> &data) {
+int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data) {
     auto name = data.at("title");
     int price = std::stoi(data.at("price"));
     Course::save(name, price);
@@ -168,4 +168,38 @@ int AdminAPI::deleteCourse(int courseId) {
 
 std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
     return std::string();
+}
+
+int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data) {
+    if (data.empty()) {
+        return -1;
+    }
+//    "lesson_id=1
+//    title=2
+//    cabinet=1
+//    teacher=1
+//    start-hours=14
+//    start-minutes=30 >> "14:30"
+//    end-hours=16
+//    end-minutes=00
+//    student=1
+//    student=2
+//    student=3
+//    student=4
+//    student=5
+//    student=6
+//    student=7"
+    auto none = data.end();
+    std::vector<int> students_id;
+
+    for (auto &pair : data) {
+        if (pair.first == "student") {
+            students_id.push_back(std::stoi(pair.second));
+        }
+    }
+
+    auto lesson = Lesson::get_lesson(std::stoi(data.find("lesson_id")->second));
+    auto students = lesson.get_students();
+
+    return 0;
 }

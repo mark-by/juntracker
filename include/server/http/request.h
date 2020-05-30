@@ -19,8 +19,8 @@ private:
     std::string _method;
     std::string _path;
     std::string body;
-    std::unordered_map<std::string, std::string> headers;
-    std::unordered_map<std::string, std::string> _data;
+    std::unordered_multimap<std::string, std::string> headers;
+    std::unordered_multimap<std::string, std::string> _data;
     std::unordered_map<std::string, std::string> cookies;
 
     void parseStartLine(const std::string::const_iterator &begin, const std::string::const_iterator &end);
