@@ -16,7 +16,6 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
     context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
-
     return context;
 }
 
