@@ -15,29 +15,24 @@ class Lesson;
 
 class Visit {
 public:
-    explicit Visit(int _id, int _student_id, int _lesson_id, bool _was_in_class, boost::posix_time::ptime &_visit_date,
-                   int _school_id)
-            : _id(_id),
-              _student_id(_student_id),
-              _lesson_id(_lesson_id),
-              _was_in_class(_was_in_class),
-              _visit_date(_visit_date),
-              _school_id(_school_id) {}
+    explicit Visit(int _id, int _student_id, int _lesson_id, bool _was_in_class,
+            const boost::posix_time::ptime &_visit_date, int _school_id):
+            _id(_id),
+            _student_id(_student_id),
+            _lesson_id(_lesson_id),
+            _was_in_class(_was_in_class),
+            _visit_date(_visit_date),
+            _school_id(_school_id) {}
 
     Student get_student() const;
-
     Lesson get_lesson() const;
 
     static Visit get_visit(int visit_id);
-
-    static int save(int student_id, int lesson_id, bool was_in_class);
-
+    static int save(int student_id, int lesson_id, bool was_in_class, int school_id);
     static int remove(int visit_id);
 
     int id() const { return _id; }
-
     bool was_in_class() const { return _was_in_class; }
-
     boost::posix_time::ptime date() const { return _date; }
 
 private:
