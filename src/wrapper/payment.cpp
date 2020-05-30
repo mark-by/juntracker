@@ -6,7 +6,7 @@ Student Payment::get_student() const {
 
     db << "SELECT student.id, student.name, student.surname, student.age, student.description FROM student "
         << "join payment on payment.student_id=student.id where payment.id" << _id << ";";
-    db.query("Get student by payment id");
+    db.exec("Get student by payment id");
     db.disconnect();
 
     return Student(
@@ -25,7 +25,7 @@ Course Payment::get_course() const {
 
     db << "select course.id, course.name, course.price, course.school_id, course.teacher_id from course"
           << "join payment on payment.course_id = course.id where payment.id" << _id << ";";
-    db.query("Get course by payment id");
+    db.exec("Get course by payment id");
     db.disconnect();
     return Course(
             db.get_int(0, 0),
@@ -42,7 +42,7 @@ Payment Payment::get_payment(int payment_id) {
     DateTimeConverter converter(format);
 
     db << "select * from payment where id=" << payment_id << ";";
-    db.query("Get payment");
+    db.exec("Get payment");
     db.disconnect();
 
     return Payment(

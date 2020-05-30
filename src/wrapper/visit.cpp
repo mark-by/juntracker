@@ -6,7 +6,7 @@ Student Visit::get_student() const {
 
     db << "SELECT student.id, student.name, student.surname, student.age, student.description FROM student "
        << "join visit on visit.student_id=student.id where visit.id" << _id << ";";
-    db.query("Get student by visit id");
+    db.exec("Get student by visit id");
     db.disconnect();
 
     return Student(
@@ -26,7 +26,7 @@ Lesson Visit::get_lesson() const {
     db << "SELECT lesson.id, lesson.course_id, lesson.cabinet_id, lesson.teacher_id, "
        << "lesson.weekday, lesson.start_time, lesson.end_time FROM lesson "
        << "join visit on visit.lesson_id=lesson.id where visit.id=" << _id << ";";
-    db.query("Get student by visit id");
+    db.exec("Get student by visit id");
     db.disconnect();
 
     return Lesson(
@@ -48,7 +48,7 @@ Visit Visit::get_visit(int visit_id) {
 
     db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit where id="
        << visit_id << ";";
-    db.query("Get visit");
+    db.exec("Get visit");
 
     boost::posix_time::ptime v_date = converter.convert(db.get_str(4, 0));
     db.disconnect();
@@ -73,7 +73,7 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
 
     db << "select count(*) from visit where student_id=" << student_id << " and lesson_id=" << lesson_id <<
     " and visit_date='" << today << "' and school_id=" << school_id << ";";
-    db.query("Count visit");
+    db.exec("Count visit");
 
     if (db.get_int(0, 0)) {
         db << "update visit set was_in_class='" << was_in_class_ch << "' where student_id=" << student_id <<

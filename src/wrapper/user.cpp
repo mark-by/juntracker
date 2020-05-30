@@ -5,7 +5,7 @@ std::vector<Teacher> User::get_teachers() const {
     SqlWrapper db;
     db << "select teacher.id, name, surname, age, salary, tel_number, description, avatar"
        << " from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
-    db.query("Get teachers");
+    db.exec("Get teachers");
 
     std::vector<Teacher> teachers;
     teachers.reserve(db.count_tupls());
@@ -30,7 +30,7 @@ std::vector<Lesson> User::get_current_lessons() const {
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
     db << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
-    db.query("Get lessons for weekday by user");
+    db.exec("Get lessons for weekday by user");
 
     std::vector<Lesson> res_lesson;
     res_lesson.reserve(db.count_tupls());
@@ -53,7 +53,7 @@ std::vector<Lesson> User::get_current_lessons() const {
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     SqlWrapper db;
     db << "SELECT * FROM lesson WHERE weekday='" << l_weekday << "' and school_id=" << _school_id << ";";
-    db.query("Get lessons for weekday by user");
+    db.exec("Get lessons for weekday by user");
     std::vector<Lesson> res_lesson;
     res_lesson.reserve(db.count_tupls());
     for (int i = 0; i < db.count_tupls(); i++) {
@@ -75,7 +75,7 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
 std::vector<Student> User::get_students() const {
     SqlWrapper db;
     db << "SELECT * FROM student WHERE school_id='" << _school_id << "';";
-    db.query("Get students");
+    db.exec("Get students");
 
     std::vector<Student> res_students;
     res_students.reserve(db.count_tupls());
@@ -97,7 +97,7 @@ std::vector<Student> User::get_students() const {
 User User::get_user(int user_id) {
     SqlWrapper db;
     db << "SELECT * FROM users WHERE id=" << user_id << ";";
-    db.query("Get user by id");
+    db.exec("Get user by id");
 
     db.disconnect();
     return User(
@@ -117,8 +117,8 @@ int User::save(const std::string &username, const std::string &password,
         db << "insert into schools(school_title) values ('" << username << "');";
         db.exec("Create school");
         db << "select id from schools where school_title='" << username << "');";
+        db.exec("Get new school id");
         school_id = db.get_int(0);
-        /*сюда попадаем, если создаем админа. при создании админа должна создаваться сначала школа, к которой прикрепится user*/
     }
     db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('" << email << "', '" << username << "', '"
       << password << "', " << permission << ", " << school_id << ");";
@@ -140,7 +140,7 @@ int User::remove(int user_id) {
 User User::get_user(const std::string &username) {
     SqlWrapper db;
     db << "SELECT * FROM users WHERE login=" << username << ";";
-    db.query("Get user by username");
+    db.exec("Get user by username");
 
     db.disconnect();
 
@@ -157,7 +157,7 @@ User User::get_user(const std::string &username) {
 std::vector<Cabinet> User::get_cabinets() const {
     SqlWrapper db;
     db << "select * from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
-    db.query("Get cabinets");
+    db.exec("Get cabinets");
 
     std::vector<Cabinet> cabinets;
     cabinets.reserve(db.count_tupls());
@@ -178,7 +178,7 @@ std::vector<Course> User::get_courses() const {
     SqlWrapper db;
 
     db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
-    db.query("Get courses");
+    db.exec("Get courses");
 
     std::vector<Course> courses;
     courses.reserve(db.count_tupls());

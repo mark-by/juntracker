@@ -7,7 +7,7 @@ std::vector<Student> Lesson::get_students() const {
     db << "select * from student "
        << "join students_for_lesson s on s.student_id=student.id "
        << "where s.lesson_id=" << _id << ";";
-    db.query("Students on lesson");
+    db.exec("Students on lesson");
 
     std::vector<Student> res_students;
     res_students.reserve(db.count_tupls());
@@ -35,7 +35,7 @@ Teacher Lesson::get_teacher() const {
        << "join users on teacher.user_id=users.id "
        << "join lesson on lesson.teacher_id=teacher.id "
        << "where lesson.id=" << _id << ";";
-    db.query("Get teacher for lesson");
+    db.exec("Get teacher for lesson");
 
     db.disconnect();
     return Teacher(
@@ -54,7 +54,7 @@ Course Lesson::get_course() const {
     SqlWrapper db;
 
     db << "select * from course join lesson on lesson.course_id=course.id where lesson.id=" << _id << ";";
-    db.query("Get lesson title");
+    db.exec("Get lesson title");
 
     db.disconnect();
     return Course(
@@ -70,7 +70,7 @@ Lesson Lesson::get_lesson(int lesson_id) {
     SqlWrapper db;
 
     db << "select * from lesson where id=" << lesson_id << ";";
-    db.query("Get lesson");
+    db.exec("Get lesson");
 
     db.disconnect();
     return Lesson(
@@ -112,7 +112,7 @@ Cabinet Lesson::get_cabinet() const {
     SqlWrapper db;
 
     db << "select * from cabinet join lesson on lesson.cabinet_id=cabinet.id where lesson.id=" << _id << ";";
-    db.query("Get cabinet from lesson");
+    db.exec("Get cabinet from lesson");
 
     db.disconnect();
     return Cabinet(

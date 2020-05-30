@@ -7,7 +7,7 @@ User Session::get_user(const std::string& s_cookie) {
     db << "select users.id, email, login, school_id, password, permission, avatar from users "
        << "join session on session.user_id=users.id"
        << "where session.cookie='" << s_cookie << "';";
-    db.query("Get user");
+    db.exec("Get user");
     db.disconnect();
 
     return User(
@@ -25,14 +25,14 @@ Session Session::create_session(const std::string& username, const std::string& 
     SqlWrapper db;
 
     db << "select password from users where login='" << username << "';";
-    db.query("Compare passwords");
+    db.exec("Compare passwords");
     if (db.get_str(0, 0) != password.c_str()) {
         db.disconnect();
         throw std::exception();
     }
 
     db << "SELECT id FROM users WHERE login='" << username << "';";
-    db.query("Get id by login");
+    db.exec("Get id by login");
     int user_id = db.get_int(0, 0);
 
     std::string new_cookie = username;
@@ -42,7 +42,7 @@ Session Session::create_session(const std::string& username, const std::string& 
     db.exec("Create session");
 
     db << "select id, cookie from session";
-    db.query("Get session");
+    db.exec("Get session");
     db.disconnect();
 
     return Session(db.get_int(0, 0), db.get_str(1, 0));

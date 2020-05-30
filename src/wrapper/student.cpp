@@ -9,7 +9,7 @@ std::vector<Course> Student::get_courses() const {
        << "from course "
        << "join students_for_course c on course.id=c.course_id "
        << "where c.student_id=" << _id << ";";
-    db.query("Get courses by student");
+    db.exec("Get courses by student");
 
     std::vector<Course> courses;
     courses.reserve(db.count_tupls());
@@ -37,7 +37,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     db << "SELECT * FROM visit WHERE lesson_id=" << std::to_string(lesson_id) << " and visit_date='"
     << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "' and student_id=" << _id << ";";
 
-    db.query("Get visit by student");
+    db.exec("Get visit by student");
     db.disconnect();
 
     return Visit(
@@ -55,7 +55,7 @@ Student Student::get_student(int student_id) {
 
     db << "select id, name, surname, age, description, tel_number, parent_name"
           << " from student where id=" << student_id << ";";
-    db.query("Get student by id");
+    db.exec("Get student by id");
     db.disconnect();
 
     return Student(
@@ -106,7 +106,7 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
            << "' or surname like '" << name_surname.first << "';";
     }
 
-    db.query("Find students like");
+    db.exec("Find students like");
 
     std::vector<Student> res_students;
     res_students.reserve(db.count_tupls());

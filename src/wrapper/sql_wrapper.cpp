@@ -12,7 +12,7 @@ std::string strError(PGconn *conn, PGresult *result, char *exec, const std::stri
     return error.str();
 }
 
-bool SqlWrapper::query(const std::string &comment) {
+bool SqlWrapper::exec(const std::string &comment) {
     std::string query = os.str();
     clear();
     char *cstr = new char[query.length() + 1];
@@ -27,19 +27,6 @@ bool SqlWrapper::query(const std::string &comment) {
     return true;
 }
 
-bool SqlWrapper::exec(const std::string &comment) {
-    std::string query = os.str();
-    clear();
-    char *cstr = new char[query.length() + 1];
-    std::strcpy(cstr, query.c_str());
-    result = PQexec(conn, cstr);
-    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
-        disconnect();
-        throw std::runtime_error(strError(conn, result, cstr, comment));
-    }
-    delete[] cstr;
-    return true;
-}
 
 bool SqlWrapper::check_connect() {
     if (PQstatus(conn) != CONNECTION_OK) {

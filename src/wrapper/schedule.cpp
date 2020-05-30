@@ -5,7 +5,7 @@ std::vector<Lesson> Schedule::get_schedule_by_student(int s_id) const {
 
     db << "select * from lesson "
        << "join payment on lesson.course_id=payment.course_id where payment.student_id=" << s_id << ";";
-    db.query("Get schedule by student");
+    db.exec("Get schedule by student");
 
     std::vector<Lesson> schedule;
     schedule.reserve(db.count_tupls());
@@ -31,7 +31,7 @@ std::vector<Lesson> Schedule::get_schedule_by_course(int c_id) const {
     SqlWrapper db;
 
     db << "select * from lesson where course_id=" << c_id << ";";
-    db.query("Get schedule by course");
+    db.exec("Get schedule by course");
 
     std::vector<Lesson> schedule;
     schedule.reserve(db.count_tupls());
@@ -57,7 +57,7 @@ std::vector<Lesson> Schedule::get_schedule_by_teacher(int t_id) const {
     SqlWrapper db;
 
     db << "select * from lesson where teacher_id=" << t_id << ";";
-    db.query("Get schedule by teacher");
+    db.exec("Get schedule by teacher");
 
     std::vector<Lesson> schedule;
     schedule.reserve(db.count_tupls());

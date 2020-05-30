@@ -7,7 +7,7 @@ std::vector<Visit> VisitHistory::get_visits_by_student(int s_id) const {
 
     db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit "
        << "where student_id=" << s_id << ";";
-    db.query("Get student visits");
+    db.exec("Get student visits");
 
     std::vector<Visit> res_visits;
     res_visits.reserve(db.count_tupls());
@@ -33,7 +33,7 @@ std::vector<Visit> VisitHistory::get_visits_by_lesson(int c_id) const {
 
     db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit "
        << "where lesson_id=" << c_id << " and was_in_class=true;";
-    db.query("Get visits on lesson");
+    db.exec("Get visits on lesson");
 
 
     std::vector<Visit> res_visits;

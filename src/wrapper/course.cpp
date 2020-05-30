@@ -9,7 +9,7 @@ Teacher Course::get_teacher() const {
        << "join course on teacher.id=course.teacher_id"
        << "join users on users.id=teacher.user_id "
        << "where course.id=" << _id << ";";
-    db.query("Get teacher by course id");
+    db.exec("Get teacher by course id");
 
     db.disconnect();
     return Teacher(
@@ -38,7 +38,7 @@ std::vector<Student> Course::get_students() const {
     SqlWrapper db;
 
     db << "select * from student s join students_for_course c on s.id=c.student_id where course_id=" << _id << ";";
-    db.query("Get students for course by id");
+    db.exec("Get students for course by id");
 
     std::vector<Student> students;
     students.reserve(db.count_tupls());
@@ -62,7 +62,7 @@ Course Course::get_course(int course_id) {
     SqlWrapper db;
 
     db << "SELECT * FROM course WHERE id=" << course_id << ";";
-    db.query("Get course by id");
+    db.exec("Get course by id");
 
     db.disconnect();
     return Course(

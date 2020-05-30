@@ -6,7 +6,7 @@ std::vector<Payment> PaymentHistory::get_payments_by_student(int s_id) const {
     DateTimeConverter converter(format);
 
     db << "SELECT * FROM payment WHERE student_id=" << s_id << ";";
-    db.query("Get all payments by student");
+    db.exec("Get all payments by student");
 
     std::vector<Payment> res_payments;
     res_payments.reserve(db.count_tupls());
@@ -31,7 +31,7 @@ std::vector<Payment> PaymentHistory::get_payments_by_course(int c_id) const {
     DateTimeConverter converter(format);
 
     db << "SELECT * FROM payment WHERE course_id=" << c_id << ";";
-    db.query("Get all payments for course");
+    db.exec("Get all payments for course");
     std::vector<Payment> res_payments;
     res_payments.reserve(db.count_tupls());
     for (int i = 0; i < db.count_tupls(); i++) {

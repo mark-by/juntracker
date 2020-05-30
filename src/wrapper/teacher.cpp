@@ -4,7 +4,7 @@
 std::vector<Course> Teacher::get_courses() const {
     SqlWrapper db;
     db << "select id, name, price, school_id from course where teacher_id=" << _id << ";";
-    db.query("Get courses by teacher");
+    db.exec("Get courses by teacher");
 
     std::vector<Course> courses;
     courses.reserve(db.count_tupls());
@@ -26,7 +26,7 @@ Teacher Teacher::get_teacher(int teacher_id) {
     db << "select name, surname, age, salary, tel_number, description, avatar from teacher "
        << "join users on teacher.user_id=users.id where teacher.id=" << teacher_id << ";";
 
-    db.query("Get teacher by id");
+    db.exec("Get teacher by id");
     db.disconnect();
 
     return Teacher(

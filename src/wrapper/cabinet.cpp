@@ -24,7 +24,7 @@ void Cabinet::remove(int id) {
 Cabinet Cabinet::get(int id) {
     SqlWrapper db;
     db << "select * FROM cabinet WHERE id=" << id << ";";
-    db.query("Get user by username");
+    db.exec("Get user by username");
     db.disconnect();
 
     return Cabinet(
