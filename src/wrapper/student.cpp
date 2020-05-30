@@ -91,3 +91,31 @@ int Student::remove(int student_id) {
     return 0;
 }
 
+std::vector<Student> Student::get_students_like(const std::string str) {
+    SqlWrapper db;
+
+
+
+    db << "select * from student where name like '" << surname << "';";
+    db.query("Find students like");
+
+    std::vector<Student> res_students;
+    res_students.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_students.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_str(2, i),
+                db.get_int(3, i),
+                db.get_str(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i)
+        );
+    }
+
+    db.disconnect();
+
+    return res_students;
+}
+
+
