@@ -59,12 +59,13 @@ Visit Visit::get_visit(int visit_id) {
             );
 }}
 
-int Visit::save(int student_id, int lesson_id, bool was_in_class, int school_id) {
+int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     SqlWrapper db;
     const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);
     auto today = converter.convert(boost::posix_time::second_clock::universal_time(), "");
 
+    int school_id = 0;
     char was_in_class_ch = (was_in_class ? 't' : 'f');
 
     db << "select count(*) from visit where student_id=" << student_id << " and lesson_id=" << lesson_id <<

@@ -28,7 +28,7 @@ public:
     Lesson get_lesson() const;
 
     static Visit get_visit(int visit_id);
-    static int save(int student_id, int lesson_id, bool was_in_class, int school_id);
+    static int save(int student_id, int lesson_id, bool was_in_class);
     static int remove(int visit_id);
 
     int id() const { return _id; }

@@ -6,10 +6,15 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <http/datetime.h>
 
+
+
 templates::Context AdminAPI::UserSerializer(const User & user) {
     templates::Context context;
     context.put("username", user.login());
     context.put("isAdmin", true);
+    context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
+    context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
+    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     return context;
 }
 
@@ -41,12 +46,6 @@ templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
         context.put("isHere", false);
     }
 
-    return context;
-}
-
-templates::Context AdminAPI::ShortStudentSerializer(const Student &student) {
-    templates::Context context;
-    context.put("name", student.name() + " " + student.surname());
     return context;
 }
 

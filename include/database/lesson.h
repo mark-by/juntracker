@@ -27,7 +27,7 @@ public:
     static int remove(int lesson_id);
 
     int id() const { return _id; }
-    int cabinet() const { return _cabinet; }
+    int cabinet() const { return _cabinet_id; }
     int weekday() const { return _weekday; }
     std::string start_time() const { return _start_time; }
     std::string end_time() const { return _end_time; }
