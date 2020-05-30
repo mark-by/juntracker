@@ -40,7 +40,7 @@ public:
     int school_id() const { return _school_id; }
 
     std::vector<Teacher> get_teachers() const;
-    std::vector<cabinet> get_cabinets() const;
+    std::vector<Cabinet> get_cabinets() const;
 
 
 private:

@@ -33,7 +33,7 @@ public:
 
     int id() const { return _id; }
     bool was_in_class() const { return _was_in_class; }
-    boost::posix_time::ptime date() const { return _date; }
+    boost::posix_time::ptime date() const { return _visit_date; }
 
 private:
     int _id;

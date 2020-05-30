@@ -45,8 +45,8 @@ private:
     std::string _name;
     std::string _surname;
     int _age;
-    int _salary;
     std::string _tel_number;
+    int _salary;
     std::string _description;
     std::string _avatar;
 };

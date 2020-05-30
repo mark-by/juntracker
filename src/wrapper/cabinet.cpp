@@ -28,8 +28,8 @@ Cabinet Cabinet::get(int id) {
     db.disconnect();
 
     return Cabinet(
-            db.get_int(0, 0),
-            db.get_int(2, 0),
-            db.get_str(1, 0)
+            db.get_int(0),
+            db.get_str(1),
+            db.get_int(2)
             );
 }

@@ -25,7 +25,7 @@ public:
 
     static Lesson get_lesson(int lesson_id);
     static int save(int course_id, int cabinet_id, int teacher_id, int weekday,
-            const std::string& start_time, const std::string& end_time, int school_id));
+            const std::string& start_time, const std::string& end_time, int school_id);
     static int remove(int lesson_id);
 
     int id() const { return _id; }

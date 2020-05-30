@@ -172,10 +172,11 @@ std::string AdminAPI::getPageStudents(int userId) {
     return _render.render(context);
 }
 
-int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data) {
-    auto name = data.at("title");
-    int price = std::stoi(data.at("price"));
-    Course::save(name, price);
+int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    auto name = data.find("title")->second;
+    int price = std::stoi(data.find("price")->second);
+    int teacher_id = std::stoi(data.find("teacher_id")->second);
+    Course::save(name, price, user.school_id(), teacher_id);
 
     return 0;
 }
