@@ -5,7 +5,7 @@ User Session::get_user(const std::string& s_cookie) {
     SqlWrapper db;
 
     db << "select users.id, email, login, school_id, password, permission, avatar from users "
-       << "join session on session.user_id=users.id"
+       << "join session on session.user_id=users.id "
        << "where session.cookie='" << s_cookie << "';";
     db.exec("Get user");
     db.disconnect();
