@@ -20,7 +20,7 @@ bool SqlWrapper::query(const std::string &comment) {
     result = PQexec(conn, cstr);
     if (PQresultStatus(result) != PGRES_TUPLES_OK) {
         disconnect();
-        throw std::runtime_error(strError(conn, result, cstr, comment))
+        throw std::runtime_error(strError(conn, result, cstr, comment));
     }
     delete[] cstr;
     return true;
@@ -31,8 +31,8 @@ bool SqlWrapper::exec(const std::string &comment) {
     clear();
     char *cstr = new char[query.length() + 1];
     std::strcpy(cstr, query.c_str());
-    auto _result = PQexec(conn.get(), cstr);
-    if (PQresultStatus(result.get()) != PGRES_COMMAND_OK) {
+    auto _result = PQexec(conn, cstr);
+    if (PQresultStatus(result) != PGRES_COMMAND_OK) {
         disconnect();
         throw std::runtime_error(strError(conn, result, cstr, comment));
     }
@@ -45,7 +45,9 @@ bool SqlWrapper::check_connect() {
         disconnect();
         throw std::runtime_error("ERROR: DATABASE NOT CONNECTED: " + std::string(PQerrorMessage(conn)));
     }
+    return true;
 }
+
 PGconn *SqlWrapper::getConn() {
     return conn;
 }
