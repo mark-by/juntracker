@@ -38,7 +38,6 @@ public:
     std::string name() const { return _name;}
     std::string surname() const { return _surname;}
     int age() const { return _age;}
-
     std::string description() const { return _description;}
 private:
     int _id;
