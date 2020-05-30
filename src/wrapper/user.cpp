@@ -112,10 +112,14 @@ User User::get_user(int user_id) {
 
 int User::save(const std::string &username, const std::string &password,
         const std::string &email, int permission, int school_id) {
+    SqlWrapper db;
     if (school_id < 0) {
+        db << "insert into schools(school_title) values ('" << username << "');";
+        db.exec("Create school");
+        db << "select id from schools where school_title='" << username << "');";
+        school_id = db.get_int(0);
         /*сюда попадаем, если создаем админа. при создании админа должна создаваться сначала школа, к которой прикрепится user*/
     }
-    SqlWrapper db;
     db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('" << email << "', '" << username << "', '"
       << password << "', " << permission << ", " << school_id << ");";
     db.exec("Save user");
