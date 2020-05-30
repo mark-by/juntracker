@@ -116,7 +116,7 @@ int AdminAPI::deleteStudent(int student_id) {
     return 0;
 }
 
-int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::string> &student) {
+int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::string> &student, const User & user) {
     if (student.empty()) {
         return -1;
     }
@@ -125,7 +125,7 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string surname = student.find("surname")->second;
     int age = std::stoi(student.find("age")->second);
 
-    Student::save(name, surname, age);
+    Student::save(name, surname, age, user.school_id());
 
     return 0;
 }

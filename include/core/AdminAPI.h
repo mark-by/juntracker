@@ -37,7 +37,7 @@ public:
 
     int deleteStudent(int student_id);
 
-    int createStudent(const std::unordered_multimap<std::string, std::string> &data);
+    int createStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     std::string getPageStudents(int);
 
@@ -51,8 +51,6 @@ private:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
 
     static templates::Context StudentSerializer(const StudentOnLesson &student);
-
-    static templates::Context ShortStudentSerializer(const Student &student);
 
     static templates::Context LessonSerializer(const Lesson &lesson);
 
