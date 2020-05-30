@@ -2,7 +2,7 @@
 #include <utils.hpp>
 
 Student Visit::get_student() const {
-    SqlWrapper postgres;
+    SqlWrapper db;
     std::string query = "SELECT student_id FROM visit WHERE id='" + std::to_string(this->_id) + "';";
     PGresult *result = nullptr;
     if (!postgres.query(query, &result)) {
