@@ -26,14 +26,14 @@ Session Session::create_session(const std::string& username, const std::string& 
 
     db << "select password from users where login='" << username << "';";
     db.exec("Compare passwords");
-    if (db.get_str(0, 0) != password.c_str()) {
+    if (strcmp(db.get_str(0), password.c_str()) != 0) {
         db.disconnect();
         throw std::exception();
     }
 
     db << "SELECT id FROM users WHERE login='" << username << "';";
     db.exec("Get id by login");
-    int user_id = db.get_int(0, 0);
+    int user_id = db.get_int(0);
 
     std::string new_cookie = username;
 
@@ -45,7 +45,7 @@ Session Session::create_session(const std::string& username, const std::string& 
     db.exec("Get session");
     db.disconnect();
 
-    return Session(db.get_int(0, 0), db.get_str(1, 0));
+    return Session(db.get_int(0), db.get_str(1));
 }
 
 int Session::remove(int user_id) {
