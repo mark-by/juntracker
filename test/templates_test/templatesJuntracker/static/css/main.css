@@ -231,6 +231,8 @@ input[type=checkbox] {
     padding: 15px;
 }
 
+
+
 .lesson__header_course {
     font-weight: bold;
     width: max-content;
@@ -286,6 +288,28 @@ input[type=checkbox] {
     row-gap: 10px;
 }
 
+.add-student-button__plus {
+    transition: opacity 0.2s;
+}
+
+.add-student-button:hover> .add-student-button__plus {
+    opacity: 0;
+}
+
+.add-student-button__new, .add-student-button__search {
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.add-student-button:hover> .add-student-button__search {
+    opacity: 100%;
+}
+
+.add-student-button:hover> .add-student-button__new {
+    opacity: 100%;
+}
+
 .bottom-control-wrapper>.bottom-flex>.close-form-button, .bottom-control-wrapper>.bottom-flex>input[type=submit]{
     font-size: 18px;
     background: black;
@@ -293,15 +317,15 @@ input[type=checkbox] {
     padding: 5px 15px;
     border-radius: 10px;
     color: white;
-    cursor: pointer;
 }
 
 .bottom-control-wrapper>.add-student-button {
-    width: 30px;
+    display: flex;
+    width: 36%;
     height: 30px;
     background: white;
-    cursor: pointer;
     text-align: center;
+    justify-content: space-between;
 }
 
 .l-label {
@@ -359,7 +383,7 @@ input[type=number] {
 }
 
 .students>.lesson__content_child {
-    margin: 20px 0;
+    margin: 8px 0;
 }
 
 .lesson__content_child {
