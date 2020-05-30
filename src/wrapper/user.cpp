@@ -77,7 +77,10 @@ std::vector<Student> User::get_students() const {
                 db.get_str(1, i),
                 db.get_str(2, i),
                 db.get_int(3, i),
-                db.get_str(5, i));
+                db.get_str(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i)
+                );
     }
     db.disconnect();
     return res_students;
@@ -105,6 +108,7 @@ int User::save(const std::string &username, const std::string &password, const s
       << password << "', " << permission << ");";
     db.exec("Save user");
     db.disconnect();
+
     return 0;
 }
 
@@ -113,6 +117,7 @@ int User::remove(int user_id) {
     db << "DELETE FROM users WHERE id=" << user_id << ";";
     db.exec("Remove user");
     db.disconnect();
+
     return 0;
 }
 
@@ -122,6 +127,7 @@ User User::get_user(const std::string &username) {
     db.query("Get user by username");
 
     db.disconnect();
+
     return User(
             db.get_int(0),
             db.get_str(1),
@@ -146,6 +152,8 @@ std::vector<cabinet> User::get_cabinets() const {
                 db.get_str(1, i)
         );
     }
+
     db.disconnect();
+
     return cabinets;
 }

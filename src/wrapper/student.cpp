@@ -1,5 +1,6 @@
 #include "student.h"
 #include <utils.hpp>
+#include <vector>
 
 std::vector<Course> Student::get_courses() const {
     SqlWrapper db;
@@ -22,6 +23,7 @@ std::vector<Course> Student::get_courses() const {
     }
 
     db.disconnect();
+
     return courses;
 }
 
@@ -34,13 +36,22 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
     db.query("Get visit by student");
     db.disconnect();
     boost::posix_time::ptime v_date = converter.convert(db.get_str(4));
-    return Visit(db.get_int(0), db.get_bool(3), v_date);
+
+    return Visit(
+            db.get_int(0, 0),
+            db.get_int(1, 0),
+            db.get_int(2, 0),
+            db.get_bool(3, 0),
+            v_date,
+            db.get_int(5, 0)
+            );
 }
 
 Student Student::get_student(int student_id) {
     SqlWrapper db;
 
-    db << "select id, name, surname, age, description from student where id=" << student_id << ";";
+    db << "select id, name, surname, age, description, tel_number, parent_name"
+          << " from student where id=" << student_id << ";";
     db.query("Get student by id");
     db.disconnect();
 
@@ -49,17 +60,19 @@ Student Student::get_student(int student_id) {
             db.get_str(1, 0),
             db.get_str(2, 0),
             db.get_int(3, 0),
-            db.get_str(4, 0)
+            db.get_str(4, 0),
+            db.get_str(5, 0),
+            db.get_str(6, 0)
             );
 }
 
 int Student::save(const std::string name, const std::string& surname, int age,
-        int user_id, const std::string& description) {
+        int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name) {
     SqlWrapper db;
 
-    db << "insert into student (name, surname, age, user_id, description) "
+    db << "insert into student (name, surname, age, user_id, description, tel_number, parent_name) "
        << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
-       << ", '" << description << "');";
+       << ", '" << description << ", '" << tel_number << ", '" << parent_name << "');";
     db.exec("Save student");
     db.disconnect();
 
