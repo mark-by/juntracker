@@ -133,7 +133,7 @@ int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::stri
     std::string parentName = student.find("parent_name")->second;
 
     std::string username = randomStr(10);
-    User::save(username, randomStr(10), email, Permission::customer);
+    User::save(username, randomStr(10), email, Permission::customer, user.school_id());
     auto customer = User::get_user(username);
     Student::save(name, surname, age, customer.id(), description, telNumber, parentName);
 
