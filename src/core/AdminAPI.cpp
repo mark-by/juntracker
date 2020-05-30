@@ -13,14 +13,9 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
     templates::Context context;
     context.put("username", user.login());
     context.put("isAdmin", true);
-    std::cout << "AdminAPI::UserSerializer: course" << std::endl;
     context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
-    std::cout << "AdminAPI::UserSerializer: teachers" << std::endl;
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
-    std::cout << "AdminAPI::UserSerializer: cabinets" << std::endl;
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
-    std::cout << "AdminAPI::UserSerializer: pass" << std::endl;
-
     return context;
 }
 
@@ -83,27 +78,21 @@ templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
 
 std::string AdminAPI::getMainPage(int userId) {
     templates::Context context;
-    std::cout << "before user" << std::endl;
     auto user = User::get_user(userId);
-    std::cout << "after user" << std::endl;
     context.set("user", UserSerializer(user));
     std::vector<WeekDay> days;
     DateTime dateTime;
-    std::cout << "before for" << std::endl;
     for (int weekday = 0; weekday < 7; weekday++) {
         try {
             days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
                           user.get_lessons_by_weekday(weekday));
         } catch(...) {}
     }
-    std::cout << "after for" << std::endl;
     context.putArray("scheduleDays", days, DaySerializer);
     std::vector<Lesson> currentLessons;
-    std::cout << "before try curr lesson" << std::endl;
     try {
         currentLessons = user.get_current_lessons();
     } catch(...) {}
-    std::cout << "after try curr lesson" << std::endl;
     context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
 
     _render.set("mainPageStaff.html");
