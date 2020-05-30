@@ -4,10 +4,10 @@
 Teacher Course::get_teacher() const {
     SqlWrapper db;
     db << "select teacher.id, teacher.name, age, surname, salary, tel_number, description, users.avatar "
-          << "from teacher "
-          << "join course on teacher.id=course.teacher_id"
-          << "join users on users.id=teacher.user_id "
-          << "where course.id=" << _id << ";";
+       << "from teacher "
+       << "join course on teacher.id=course.teacher_id"
+       << "join users on users.id=teacher.user_id "
+       << "where course.id=" << _id << ";";
     db.query("Get teacher by course id");
     db.disconnect();
     return Teacher(
@@ -19,7 +19,7 @@ Teacher Course::get_teacher() const {
             db.get_str(5),
             db.get_str(6),
             db.get_str(7)
-            );
+    );
 }
 
 int Course::set_price(int price, int course_id) {
@@ -38,7 +38,7 @@ std::vector<Student> Course::get_students() const {
 
     std::vector<Student> students;
     students.reserve(db.count_tupls());
-for (int i = 0; i < db.count_tupls(); i++) {
+    for (int i = 0; i < db.count_tupls(); i++) {
         students.emplace_back(
                 db.get_int(0, i),
                 db.get_str(1, i),
@@ -67,10 +67,10 @@ Course Course::get_course(int course_id) {
 
 }
 
-int Course::save(const std::string& name, int price, int schoolId, int teacher_id) {
+int Course::save(const std::string &name, int price, int schoolId, int teacher_id) {
     SqlWrapper db;
     db << "INSERT INTO course(name, price, teacher_id, school_id) VALUES ('"
-      << name << "', " << price << ", " << teacher_id << ", " << schoolId << ");";
+       << name << "', " << price << ", " << teacher_id << ", " << schoolId << ");";
     db.exec("Save course");
     db.disconnect();
     return 0;
