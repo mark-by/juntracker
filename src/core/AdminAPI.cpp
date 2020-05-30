@@ -13,9 +13,13 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
     templates::Context context;
     context.put("username", user.login());
     context.put("isAdmin", true);
+    std::cout << "AdminAPI::UserSerializer: course" << std::endl;
     context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
+    std::cout << "AdminAPI::UserSerializer: teachers" << std::endl;
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
+    std::cout << "AdminAPI::UserSerializer: cabinets" << std::endl;
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+    std::cout << "AdminAPI::UserSerializer: pass" << std::endl;
 
     return context;
 }
