@@ -72,6 +72,8 @@ Lesson Lesson::get_lesson(int lesson_id) {
     db << "select * from lesson where id=" << lesson_id << ";";
     db.exec("Get lesson");
 
+    std::cout << db.get_int(4, 0) << std::endl;
+
     db.disconnect();
     return Lesson(
             db.get_int(0, 0),
@@ -90,7 +92,7 @@ int Lesson::save(int course_id, int cabinet_id, int teacher_id, int weekday,
     SqlWrapper db;
 
     db << "insert into lesson (course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id) "
-       << "values (" << course_id << ", " << cabinet_id << ", " << teacher_id << ", " << weekday << ", '"
+       << "values (" << course_id << ", " << cabinet_id << ", " << teacher_id << ", '" << weekday << "', '"
        << start_time << "', '" << end_time << "', " << school_id << ";";
     db.exec("Save lesson");
 
