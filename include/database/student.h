@@ -32,13 +32,14 @@ public:
     static int save(const std::string name, const std::string &surname,
             int age, int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name);
     static int remove(int student_id);
+    static std::vector<Student> get_students_like(const std::string str);
 
     int id() const { return _id;}
     std::string name() const { return _name;}
     std::string surname() const { return _surname;}
     int age() const { return _age;}
-    std::string description() const { return _description;}
 
+    std::string description() const { return _description;}
 private:
     int _id;
     std::string _name;
@@ -46,6 +47,7 @@ private:
     int _age;
     std::string _description;
     std::string _tel_number;
+
     std::string _parent_name;
 };
 
