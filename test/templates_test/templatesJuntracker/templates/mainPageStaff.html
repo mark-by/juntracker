@@ -59,6 +59,7 @@
 {% if user.isAdmin %}
 <div class="lesson-edit-form-wrapper">
     <form method="POST" enctype="application/x-www-form-urlencoded">
+        <input id="lesson-id" name="lesson_id" type="hidden" value="">
         <div class="lesson-edit-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
         <div class="form-grid">
             <p>Курс</p>
@@ -101,13 +102,21 @@
         </div>
         <div class="bottom-control-wrapper">
             <div class="add-student-button">
-                <img src="static/images/plus.svg" alt="добавить"/>
+                <div class="add-student-button__new">Создать</div>
+                <img class="add-student-button__plus" src="static/images/plus.svg" alt="добавить"/>
+                <div class="add-student-button__search">Найти</div>
             </div>
             <div class="bottom-flex">
                 <div class="close-form-button">Отмена</div>
                 <input type="submit" value="Сохранить"/>
             </div>
         </div>
+
+    </form>
+</div>
+
+<div class="student-add-form-wrapper">
+    <form class="student-add-form" method="POST" enctype="application/x-www-form-urlencoded">
 
     </form>
 </div>

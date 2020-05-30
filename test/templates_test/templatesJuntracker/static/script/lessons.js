@@ -35,6 +35,7 @@ class Input extends Component {
         super({value: element.getAttribute("value")});
         this.element = element;
     }
+
     set(value) {
         this.setState({value: value});
     }
@@ -76,12 +77,9 @@ class Student {
     }
 
     str() {
-        "<div class='lesson__content_child' hidden>" +
-        "<div class='name'>" + this.name + "</div>" +
-        "<div class='delete-student-button'>" +
-        "<input type='hidden' name='student' value='" + this.id + "'/>"
-        "<img src='static/images/trash.svg' alt='удалить'/>" +
-        "</div></div>"
+        return `<div class='lesson__content_child' hidden><div class='name'>${this.name}</div>
+                <div class='delete-student-button'><input type='hidden' name='student' value='${this.id}'/>
+                <img src='static/images/close.svg' alt='удалить'/></div></div>`
     }
 }
 
@@ -91,29 +89,74 @@ class StudentList extends Component {
         this.element = element;
     }
 
+    clear() {
+        this.element.innerHTML = "";
+    }
+
+    addStudent(student) {
+        const _student = new Student(student.name, student.id);
+        this.element.innerHTML += _student.str();
+    }
+
     render() {
         this.element.innerHTML = "";
         this.state.students.map(student => {
-            const _student = new Stdent(student.name, student.id);
+            const _student = new Student(student.name, student.id);
             this.element.innerHTML += _student.str();
         });
-        //init delete button
+        [...this.element.children].map(element => {
+            element.querySelector('.delete-student-button').onclick = () => {
+                element.remove();
+            }
+        })
+    }
+}
+
+class CreateStudentForm extends Component {
+    constructor() {
+        super();
     }
 }
 
 class LessonEditForm {
-    constructor(students) {
+    constructor(closeHandler, students) {
+        console.log(students);
         this.form = document.querySelector('.lesson-edit-form-wrapper');
         this.selectTitle = new Select(document.querySelector('#lesson-edit-title'));
         this.selectCabinet = new Select(document.querySelector('#lesson-edit-cabinet'));
         this.selectTeacher = new Select(document.querySelector('#lesson-edit-teacher'));
         this.startTimeHours = new Input(document.querySelector("#start-hours-edit"));
         this.startTimeMinutes = new Input(document.querySelector("#start-minutes-edit"));
+        this.lessonId = new Input(this.form.querySelector("#lesson-id"));
         this.endTimeHours = new Input(document.querySelector("#end-hours-edit"));
         this.endTimeMinutes = new Input(document.querySelector("#end-minutes-edit"));
         this.studentList = new StudentList(document.querySelector(".students"), students);
         this.closeButton = this.form.querySelector('.close-form-button');
+        this.createStudent = this.form.querySelector('.add-student-button__new');
+        this.searchStudent = this.form.querySelector('.add-student-button__search');
+
+        this.form.onsubmit = (event) => this.save(event);
+        this.close = () => closeHandler();
     }
+
+    save(event) {
+        event.preventDefault();
+        fetch('/api/save_lesson', {
+            method: 'POST',
+            headers: {
+                'content-type' : 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(new FormData(this.form.querySelector('form'))).toString()
+        }).then(response => {
+            if (response.ok) {
+                this.close();
+            } else {
+                this.close()
+                console.log("error");
+            }
+        })
+    }
+
 }
 
 class ScheduleLesson extends Component {
@@ -128,7 +171,8 @@ class ScheduleLesson extends Component {
         this.time = new Title(element.querySelector('.lesson__footer').firstChild)
         this.settingsButton = element.querySelector('.button-settings-lesson');
 
-        this.form = new LessonEditForm(this.getStudents());
+        this.id = this.element.getAttribute("data");
+        this.form = new LessonEditForm(this.close.bind(this), this.getStudents());
 
 
         this.form.closeButton.onclick = () => this.close();
@@ -155,6 +199,7 @@ class ScheduleLesson extends Component {
     }
 
     initForm() {
+        this.form.lessonId.set(this.id);
         this.form.selectTitle.select(this.course.element.getAttribute("data"));
         this.form.selectCabinet.select(this.cabinet.element.getAttribute("data"));
         this.form.selectTeacher.select(this.teacher.element.getAttribute("data"));
@@ -163,12 +208,14 @@ class ScheduleLesson extends Component {
         this.form.startTimeMinutes.set(time.startMinutes);
         this.form.endTimeHours.set(time.endHours);
         this.form.endTimeMinutes.set(time.endMinutes);
+        this.form.studentList.render();
     }
 
     dropForm() {
         this.form.selectTitle.deselect();
         this.form.selectCabinet.deselect();
         this.form.selectTeacher.deselect();
+        this.form.studentList.clear();
     }
 
     setCourse(course) {
@@ -202,7 +249,6 @@ class ScheduleLesson extends Component {
         const studElements = [...this.element.querySelectorAll('.lesson__content_child')];
         studElements.map(element => {
             students.push({id: element.getAttribute("data"), name: element.innerText});
-            element = () => alert(element.innerText);
         })
         return students;
     }
@@ -218,6 +264,5 @@ class ScheduleLesson extends Component {
 
 let lessons = [...document.querySelectorAll(".schedule .card-wrapper")];
 lessons.map(lesson => {
-    console.log(lesson)
     return new ScheduleLesson(lesson);
 });
