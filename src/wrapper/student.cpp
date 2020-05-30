@@ -1,105 +1,130 @@
 #include "student.h"
 #include <utils.hpp>
+#include <vector>
+
 
 std::vector<Course> Student::get_courses() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT course_id FROM payment WHERE student_id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
+    SqlWrapper db;
+    db << "select course.id, name, price, teacher_id, school_id "
+       << "from course "
+       << "join students_for_course c on course.id=c.course_id "
+       << "where c.student_id=" << _id << ";";
+    db.query("Get courses by student");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i)
+        );
     }
-    std::vector<Course> res_courses;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int c_id = atoi(PQgetvalue(result, i, 0));
-        query = "SELECT * FROM course WHERE id=" + std::to_string(c_id) + ";";
-        if (!postgres.query(query, &result)) {
-            postgres.disconnect();
-            throw std::exception();
-        }
-        std::string c_name = std::string(PQgetvalue(result, 0, 1));
-        int c_price = atoi(PQgetvalue(result, 0, 2));
-        std::string c_start_date = PQgetvalue(result, 0, 3);
-        std::string c_end_date = PQgetvalue(result, 0, 4);
-        auto res_course = Course(c_id, c_name, c_price);
-        res_courses.push_back(res_course);
-    }
-    postgres.disconnect();
-    return res_courses;
+
+    db.disconnect();
+
+    return courses;
 }
 
 Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) const {
-    SqlWrapper postgres;
+    SqlWrapper db;
+
     const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);
 
-    std::ostringstream query;
-    query << "SELECT * FROM visit WHERE lesson_id=" << std::to_string(lesson_id) << " and visit_date='"
+    db << "SELECT * FROM visit WHERE lesson_id=" << std::to_string(lesson_id) << " and visit_date='"
     << converter.convert(boost::posix_time::second_clock::universal_time(), "") << "' and student_id=" << _id << ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query.str(), &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    if (!PQntuples(result)) {
-        postgres.disconnect();
-        throw std::runtime_error("visit not found");
-    }
-    int visit_id = atoi(PQgetvalue(result, 0, 0));
-    std::cout << "PQVALUE: " <<  *PQgetvalue(result, 0, 3) << std::endl;
-    bool v_was_in_class = *PQgetvalue(result, 0, 3) == 't';
-    std::string str_v_date = std::string(PQgetvalue(result, 0, 4));
-    boost::posix_time::ptime v_date = converter.convert(str_v_date);
-    Visit res_visit(visit_id, v_was_in_class, v_date);
-    postgres.disconnect();
-    return res_visit;
+
+    db.query("Get visit by student");
+    db.disconnect();
+
+    return Visit(
+            db.get_int(0, 0),
+            db.get_int(1, 0),
+            db.get_int(2, 0),
+            db.get_bool(3, 0),
+            converter.convert(db.get_str(4)),
+            db.get_int(5, 0)
+            );
 }
 
 Student Student::get_student(int student_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "SELECT * FROM student WHERE id=" + std::to_string(student_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string s_name = std::string(PQgetvalue(result, 0, 1));
-    std::string s_surname = std::string(PQgetvalue(result, 0, 2));
-    int s_age = atoi(PQgetvalue(result, 0, 3));
-    auto res_student = Student(student_id, s_name, s_surname, s_age);
-    postgres.disconnect();
-    return res_student;
+    db << "select id, name, surname, age, description, tel_number, parent_name"
+          << " from student where id=" << student_id << ";";
+    db.query("Get student by id");
+    db.disconnect();
+
+    return Student(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0),
+            db.get_str(5, 0),
+            db.get_str(6, 0)
+            );
 }
 
-int Student::save(const std::string name, const std::string& surname, int age) {
-    SqlWrapper postgres;
+int Student::save(const std::string name, const std::string& surname, int age,
+        int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name) {
+    SqlWrapper db;
 
-    std::ostringstream s;
-    std::string table_name = "student";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO student VALUES (" << std::to_string(count_rows + 1) << ", '"
-      << name << "', '" << surname << "', "
-      << std::to_string(age) << ");";
+    db << "insert into student (name, surname, age, user_id, description, tel_number, parent_name) "
+       << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
+       << ", '" << description << ", '" << tel_number << ", '" << parent_name << "');";
+    db.exec("Save student");
+    db.disconnect();
 
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
     return 0;
 }
 
 int Student::remove(int student_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "DELETE FROM student WHERE id=" + std::to_string(student_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db << "delete from student where id=" << student_id << ";";
+    db.exec("Remove student");
+    db.disconnect();
+
     return 0;
 }
+
+std::vector<Student> Student::get_students_like(const std::string &str) {
+    SqlWrapper db;
+    std::pair<std::string, std::string> name_surname = parse_name_surname(str);
+
+    if (name_surname.second.empty()) {
+        db << "select * from student where name like '" << name_surname.first
+            << "' or surname like '" << name_surname.first << "';";
+    } else {
+        db << "select * from student where name like '" << name_surname.first
+           << "' or surname like '" << name_surname.second << "' union "
+           << "select * from student where name like '" << name_surname.second
+           << "' or surname like '" << name_surname.first << "';";
+    }
+
+    db.query("Find students like");
+
+    std::vector<Student> res_students;
+    res_students.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_students.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_str(2, i),
+                db.get_int(3, i),
+                db.get_str(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i)
+        );
+    }
+
+    db.disconnect();
+
+    return res_students;
+}
+
 

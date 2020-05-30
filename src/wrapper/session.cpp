@@ -2,91 +2,69 @@
 #include <utils.hpp>
 
 User Session::get_user(const std::string& s_cookie) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "SELECT * FROM session WHERE cookie='" + s_cookie + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    db << "select users.id, email, login, school_id, password, permission, avatar from users "
+       << "join session on session.user_id=users.id"
+       << "where session.cookie='" << s_cookie << "';";
+    db.query("Get user");
+    db.disconnect();
 
-    int s_uid = atoi(PQgetvalue(result, 0, 2));
-    query = "SELECT * FROM users WHERE id=" + std::to_string(s_uid) + ";";
-
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string u_email = std::string(PQgetvalue(result, 0, 1));
-    std::string u_login = std::string(PQgetvalue(result, 0, 2));
-    std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    int u_permission = atoi(PQgetvalue(result, 0, 4));
-    postgres.disconnect();
-    return User(s_uid, u_email, u_login, u_password, u_permission);
+    return User(
+            db.get_int(0, 0),
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_str(4, 0),
+            db.get_int(5, 0),
+            db.get_str(6, 0)
+            );
 }
 
 Session Session::create_session(const std::string& username, const std::string& password) {
-    std::cout << "USER: " << username << std::endl;
-    std::cout << "PASSWORD: " << password << std::endl;
-    SqlWrapper postgres;
-    std::string query = "SELECT password FROM users WHERE login='" + username + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    char *res_password = PQgetvalue(result, 0, 0);
-    if (strcmp(res_password, password.c_str())) {
-        postgres.disconnect();
+    SqlWrapper db;
+
+    db << "select password from users where login='" << username << "';";
+    db.query("Compare passwords");
+    if (db.get_str(0, 0) != password.c_str()) {
+        db.disconnect();
         throw std::exception();
     }
 
-    query = "SELECT id FROM users WHERE login='" + username + "';";
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    int user_id = atoi(PQgetvalue(result, 0, 0));
+    db << "SELECT id FROM users WHERE login='" << username << "';";
+    db.query("Get id by login");
+    int user_id = db.get_int(0, 0);
 
-    std::ostringstream s;
-    std::string table_name = "session";
     std::string new_cookie = username;
-    int count_rows = postgres.count_rows(table_name);
 
-    s << "INSERT INTO session VALUES (" << count_rows + 1 << ", '"
-      << new_cookie << "', " << user_id << ");";
+    db << "insert into session (cookie, user_id) "
+       << "values ('" << new_cookie << "', " << user_id << ";";
+    db.exec("Create session");
 
-    query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    postgres.disconnect();
-    return Session(count_rows + 1, new_cookie);
+    db << "select id, cookie from session";
+    db.query("Get session");
+    db.disconnect();
+
+    return Session(db.get_int(0, 0), db.get_str(1, 0));
 }
 
 int Session::remove(int user_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "DELETE FROM session WHERE user_id=" + std::to_string(user_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db << "delete from session where user_id=" << user_id << ";";
+    db.exec("Remove session");
+    db.disconnect();
+
     return 0;
 }
 
 int Session::remove(const std::string cookie) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "DELETE FROM session WHERE cookie=" + cookie + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db << "delete from session where cookie='" << cookie << "';";
+    db.exec("Remove session");
+    db.disconnect();
+
     return 0;
 }
 

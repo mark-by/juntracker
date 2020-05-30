@@ -28,6 +28,7 @@ void Handler::choosePermission(Request request, Response& response, const User &
 }
 
 void Handler::customerHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     /*if (request.path() == "/") {
         response = Response(customerApi.getMainPage(user.id()));
     } else if (request.path() == "/api/schedule") {
@@ -38,6 +39,7 @@ void Handler::customerHandler(Request request, Response& response, const User &u
 }
 
 void Handler::teacherHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     /*if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user.id()));
@@ -56,6 +58,7 @@ void Handler::teacherHandler(Request request, Response& response, const User &us
 }
 
 void Handler::adminHandler(Request request, Response& response, const User &user) {
+    response.setStatus(status::NotFound);
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(adminApi.getMainPage(user.id()));
@@ -70,9 +73,9 @@ void Handler::adminHandler(Request request, Response& response, const User &user
         } else if (request.path() == "/api/delete_student") {
             response = Response(adminApi.deleteStudent(std::stoi(request.data("id"))));
         } else if (request.path() == "/api/create_student") {
-            response = Response(adminApi.createStudent(request.dataTable()));
+            response = Response(adminApi.createStudent(request.dataTable(), user));
         } else if (request.path() == "/api/add_course") {
-            response = Response(adminApi.addCourse(request.dataTable()));
+            response = Response(adminApi.addCourse(request.dataTable(), user));
         } else if (request.path() == "/api/delete_course") {
             response = Response(adminApi.deleteCourse(std::stoi(request.data("id"))));
         }

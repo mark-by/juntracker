@@ -9,6 +9,9 @@
 #include <string>
 #include "ConnectionManager.h"
 
+namespace async = boost::asio;
+namespace net   = async::ip;
+
 class Server: private boost::asio::noncopyable {
 public:
     Server(const std::string& addr, const std::string& port);  // may added another data to build server
@@ -16,13 +19,13 @@ public:
     void stopServer();
 
 private:
-    void accept(const boost::system::error_code& error);  // do async accept
-    void stop();  // "handler" to stop Server
+    void accept(const boost::system::error_code& error);
+    void stop();
 
     ConnectionManager manager_;
 
-    boost::asio::io_service service_;  // main thing in boost::asio
-    boost::asio::ip::tcp::acceptor acceptor_;
+    async::io_service service_;  // main thing in boost::asio
+    net::tcp::acceptor acceptor_;
 
     std::shared_ptr<Connection> connection_;
 };

@@ -174,9 +174,22 @@ input[type=checkbox] {
 }
 
 .card-wrapper {
+    position: relative;
     background: white;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-settings-lesson {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(50%, -50%);
 }
 
 .schedule {
@@ -218,6 +231,8 @@ input[type=checkbox] {
     padding: 15px;
 }
 
+
+
 .lesson__header_course {
     font-weight: bold;
     width: max-content;
@@ -227,8 +242,107 @@ input[type=checkbox] {
     text-align: center;
 }
 
+.lesson-edit-form-wrapper {
+    display: none;
+    font-size: 18px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, 0.2);
+    z-index: 3000;
+}
+
 .lesson__header_tutor {
     text-align: end;
+}
+
+.lesson-edit-form-wrapper>form {
+    background: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    overflow-y: scroll;
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 80%;
+}
+
+.bottom-flex {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.bottom-control-wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+}
+
+.add-student-button__plus {
+    transition: opacity 0.2s;
+}
+
+.add-student-button:hover> .add-student-button__plus {
+    opacity: 0;
+}
+
+.add-student-button__new, .add-student-button__search {
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.add-student-button:hover> .add-student-button__search {
+    opacity: 100%;
+}
+
+.add-student-button:hover> .add-student-button__new {
+    opacity: 100%;
+}
+
+.bottom-control-wrapper>.bottom-flex>.close-form-button, .bottom-control-wrapper>.bottom-flex>input[type=submit]{
+    font-size: 18px;
+    background: black;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 10px;
+    color: white;
+}
+
+.bottom-control-wrapper>.add-student-button {
+    display: flex;
+    width: 36%;
+    height: 30px;
+    background: white;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.l-label {
+    display: flex;
+    margin: 10px 0;
+    margin-left: 15px;
+}
+
+.l-label>p {
+    display: block;
+    margin: 2px;
+    margin-right: 10px;
+}
+
+input[type=number] {
+    width: 50px;
+    margin: 0 2px;
 }
 
 .lesson__content {
@@ -238,12 +352,53 @@ input[type=checkbox] {
     position: relative;
 }
 
+.lesson-edit-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.lesson__content_child>.delete-student-button {
+    position: absolute;
+    background: white;
+    width: 30px;
+    height: 30px;
+    right: 0;
+    top: 0;
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+    cursor: pointer;
+}
+
+.students {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.delete-student-button>img {
+    width: 25px;
+    height: 25px;
+}
+
+.students>.lesson__content_child {
+    margin: 8px 0;
+}
+
 .lesson__content_child {
+    position:relative;
+    display: flex;
+    align-items: center;
     width: max-content;
     padding: 15px;
     margin: 5px;
     background: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
+}
+
+.students-title {
+    margin-top: 20px;
 }
 
 .lesson__footer {

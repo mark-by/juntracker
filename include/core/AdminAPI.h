@@ -29,17 +29,19 @@ public:
 
     std::string getMainPage(int userId) override;
 
-    static int saveCurrentLesson(const std::unordered_map<std::string, std::string> &data);
+    int updateLesson(const std::unordered_multimap<std::string, std::string> & data);
+
+    static int saveCurrentLesson(const std::unordered_multimap<std::string, std::string> &data);
 
     std::string findStudent(const std::string &);
 
     int deleteStudent(int student_id);
 
-    int createStudent(const std::unordered_map<std::string, std::string> &data);
+    int createStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     std::string getPageStudents(int);
 
-    int addCourse(const std::unordered_map<std::string, std::string> &data);
+    int addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int deleteCourse(int course_id);
 
@@ -49,8 +51,6 @@ private:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
 
     static templates::Context StudentSerializer(const StudentOnLesson &student);
-
-    static templates::Context ShortStudentSerializer(const Student &student);
 
     static templates::Context LessonSerializer(const Lesson &lesson);
 

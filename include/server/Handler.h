@@ -17,11 +17,10 @@
 class Handler {
 public:
     Handler() = default;
-    // methods to fill response from request done by Api
     void choosePermission(Request request, Response& response, const User& user);
-    Response loginHandler(Request request);                      // handle login page
+    Response loginHandler(Request request);  // handle login page
 
-    std::shared_ptr<User> authorizationHandler(Request request); // check login or not
+    std::shared_ptr<User> authorizationHandler(Request request);  // check login or not
 
 private:
     AdminAPI adminApi;

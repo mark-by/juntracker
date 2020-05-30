@@ -2,71 +2,64 @@
 #include <utils.hpp>
 
 std::vector<Course> Teacher::get_courses() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT * FROM course WHERE teacher_id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    db << "select id, name, price, school_id from course where teacher_id=" << _id << ";";
+    db.query("Get courses by teacher");
 
     std::vector<Course> courses;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int c_id = atoi(PQgetvalue(result, i, 0));
-        std::string c_name = std::string(PQgetvalue(result, i, 1));
-        int c_price = atoi(PQgetvalue(result, i, 2));
-        std::string c_start_date = std::string(PQgetvalue(result, i, 3));
-        std::string c_end_date = std::string(PQgetvalue(result, i, 4));
-        auto res_course = Course(c_id, c_name, c_price);
-        courses.push_back(res_course);
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i),
+                _id,
+                db.get_int(3, i)
+                );
     }
-    postgres.disconnect();
+    db.disconnect();
     return courses;
 }
 
 Teacher Teacher::get_teacher(int teacher_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
+    db << "select name, surname, age, salary, tel_number, description, avatar from teacher "
+       << "join users on teacher.user_id=users.id where teacher.id=" << teacher_id << ";";
 
-    std::string query = "SELECT * FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string t_name = std::string(PQgetvalue(result, 0, 1));
-    std::string t_surname = std::string(PQgetvalue(result, 0, 2));
-    int t_salary = atoi(PQgetvalue(result, 0, 3));
-    postgres.disconnect();
-    return Teacher(teacher_id, t_name, t_surname, t_salary);
+    db.query("Get teacher by id");
+    db.disconnect();
+
+    return Teacher(
+            teacher_id,
+            db.get_str(1, 0),
+            db.get_str(2, 0),
+            db.get_int(3, 0),
+            db.get_int(4, 0),
+            db.get_str(5, 0),
+            db.get_str(6, 0),
+            db.get_str(7, 0)
+            );
 }
 
-int Teacher::save(const std::string& name, const std::string& surname, int salary) {
-    SqlWrapper postgres;
+int Teacher::save(const std::string& name, const std::string& surname, int salary,
+                  int age, const std::string& tel_number, int user_id, const std::string& description) {
+    SqlWrapper db;
 
-    std::ostringstream s;
-    std::string table_name = "teacher";
-    int count_rows = postgres.count_rows(table_name);
+    db << "insert into teacher(name, surname, age, salary, tel_number, user_id, description) "
+       << "values ('" << name << "', '" << surname << "', " << age << ", " << salary << ", '" << tel_number
+       << "', " << user_id << ", '" << description << "');";
+    db.exec("Save teacher");
 
-    s << "INSERT INTO teacher VALUES (" << std::to_string(count_rows + 1) << ", '"
-      << name << "', '" << surname << "', " << std::to_string(salary) << ");";
-
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db.disconnect();
     return 0;
 }
 
 int Teacher::remove(int teacher_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
 
-    std::string query = "DELETE FROM teacher WHERE id=" + std::to_string(teacher_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
+    db << "delete from teacher where id=" << teacher_id << ";";
+    db.exec("Remove teacher");
+
+    db.disconnect();
     return 0;
 }

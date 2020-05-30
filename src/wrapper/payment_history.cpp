@@ -1,41 +1,49 @@
 #include "payment_history.h"
 
 std::vector<Payment> PaymentHistory::get_payments_by_student(int s_id) const {
-    SqlWrapper postgres;
-    std::string query = "SELECT * FROM payment WHERE student_id='" + std::to_string(s_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
+
+    db << "SELECT * FROM payment WHERE student_id=" << s_id << ";";
+    db.query("Get all payments by student");
+
     std::vector<Payment> res_payments;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int p_id = atoi(PQgetvalue(result, i, 0));
-        int p_amount = atoi(PQgetvalue(result, i, 3));
-        std::string p_date = PQgetvalue(result, i, 4);
-        Payment new_payment(p_id, p_amount, p_date, postgres);
-        res_payments.push_back(new_payment);
+    res_payments.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_payments.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i)
+        );
     }
-    postgres.disconnect();
+    db.disconnect();
+
     return res_payments;
 }
 
 std::vector<Payment> PaymentHistory::get_payments_by_course(int c_id) const {
-    SqlWrapper postgres;
-    std::string query = "SELECT * FROM payment WHERE course_id='" + std::to_string(c_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
+
+    db << "SELECT * FROM payment WHERE course_id=" << c_id << ";";
+    db.query("Get all payments for course");
     std::vector<Payment> res_payments;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int p_id = atoi(PQgetvalue(result, i, 0));
-        int p_amount = atoi(PQgetvalue(result, i, 3));
-        std::string p_date = PQgetvalue(result, i, 4);
-        Payment new_payment(p_id, p_amount, p_date, postgres);
-        res_payments.push_back(new_payment);
+    res_payments.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_payments.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i));
     }
-    postgres.disconnect();
+    db.disconnect();
+
     return res_payments;
 }

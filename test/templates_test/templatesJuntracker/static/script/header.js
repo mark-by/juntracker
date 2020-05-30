@@ -1,5 +1,4 @@
 import Component from "./Component.js";
-console.log("fuck");
 class Menu {
     constructor(button, element) {
         this.element = element;
@@ -36,9 +35,7 @@ class Menu {
 // document.querySelector('.header-menu').onclick = (event) => menu.setState({isOpen: !menu.state.isOpen, event: event})
 
 let buttons = [...document.querySelectorAll('.menu')];
-console.log(buttons);
 let elements = [...document.querySelectorAll('.hidden-menu')];
-console.log(elements);
 elements.map((element, idx) => {
     return new Menu(buttons[idx], element);
 });

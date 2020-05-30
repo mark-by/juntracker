@@ -1,135 +1,193 @@
 #include "user.h"
-#include <utils.hpp>
+//#include <common_sql.hpp>
+
+std::vector<Teacher> User::get_teachers() const {
+    SqlWrapper db;
+    db << "select teacher.id, name, surname, age, salary, tel_number, description, avatar"
+       << " from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
+    db.query("Get teachers");
+
+    std::vector<Teacher> teachers;
+    teachers.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        teachers.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_str(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i),
+                db.get_str(7, i)
+        );
+    }
+    db.disconnect();
+    return teachers;
+}
 
 std::vector<Lesson> User::get_current_lessons() const {
-    SqlWrapper postgres;
+    SqlWrapper db;
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number();
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(curr_weekday) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    db << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
+    db.query("Get lessons for weekday by user");
+
     std::vector<Lesson> res_lesson;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
-        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, curr_weekday, l_start_time, l_end_time);
-        res_lesson.push_back(curr_lesson);
+    res_lesson.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_lesson.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i),
+                db.get_int(7, i)
+                );
     }
-    postgres.disconnect();
+    db.disconnect();
     return res_lesson;
 }
 
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
-    SqlWrapper postgres;
-    std::string query = "SELECT * FROM lesson WHERE weekday='" + std::to_string(l_weekday) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    db << "SELECT * FROM lesson WHERE weekday='" << l_weekday << "' and school_id=" << _school_id << ";";
+    db.query("Get lessons for weekday by user");
     std::vector<Lesson> res_lesson;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int l_id = atoi(PQgetvalue(result, i, 0));
-        int l_cabinet = atoi(PQgetvalue(result, i, 2));
-        std::string l_start_time = std::string(PQgetvalue(result, i, 5));
-        std::string l_end_time = std::string(PQgetvalue(result, i, 6));
-        auto curr_lesson = Lesson(l_id, l_cabinet, l_weekday, l_start_time, l_end_time);
-        res_lesson.push_back(curr_lesson);
+    res_lesson.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_lesson.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i),
+                db.get_int(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i),
+                db.get_int(7, i)
+        );
     }
-    postgres.disconnect();
+    db.disconnect();
     return res_lesson;
 }
 
 std::vector<Student> User::get_students() const {
-    SqlWrapper postgres;
-    std::string query = "SELECT * FROM student WHERE user_id='" + std::to_string(this->_id) + "';";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
+    SqlWrapper db;
+    db << "SELECT * FROM student WHERE school_id='" << _school_id << "';";
+    db.query("Get students");
+
     std::vector<Student> res_students;
-    for (int i = 0; i < PQntuples(result); i++) {
-        int student_id = atoi(PQgetvalue(result, i, 0));
-        std::string s_name = std::string(PQgetvalue(result, i, 1));
-        std::string s_surname = std::string(PQgetvalue(result, i, 2));
-        int s_age = atoi(PQgetvalue(result, i, 3));
-        res_students.emplace_back(student_id, s_name, s_surname, s_age);
+    res_students.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        res_students.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_str(2, i),
+                db.get_int(3, i),
+                db.get_str(4, i),
+                db.get_str(5, i),
+                db.get_str(6, i)
+                );
     }
-    postgres.disconnect();
+    db.disconnect();
     return res_students;
 }
 
 User User::get_user(int user_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
+    db << "SELECT * FROM users WHERE id=" << user_id << ";";
+    db.query("Get user by id");
 
-    std::string query = "SELECT * FROM users WHERE id=" + std::to_string(user_id) + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        postgres.disconnect();
-        throw std::exception();
-    }
-    std::string u_email = std::string(PQgetvalue(result, 0, 1));
-    std::string u_login = std::string(PQgetvalue(result, 0, 2));
-    std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    int u_permission = atoi(PQgetvalue(result, 0, 4));
-    postgres.disconnect();
-    return User(user_id, u_email, u_login, u_password, u_permission);
+    db.disconnect();
+    return User(
+            user_id,
+            db.get_str(1),
+            db.get_str(2),
+            db.get_int(6),
+            db.get_str(3),
+            db.get_int(4),
+            db.get_str(5));
 }
 
-int User::save(const std::string &username, const std::string &password, const std::string &email) {
-    SqlWrapper postgres;
-
-    if(!postgres.is_connected()) {
-        postgres.disconnect();
-        return 1;
+int User::save(const std::string &username, const std::string &password,
+        const std::string &email, int permission, int school_id) {
+    if (school_id < 0) {
+        /*сюда попадаем, если создаем админа. при создании админа должна создаваться сначала школа, к которой прикрепится user*/
     }
+    SqlWrapper db;
+    db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('" << email << "', '" << username << "', '"
+      << password << "', " << permission << ", " << school_id << ");";
+    db.exec("Save user");
+    db.disconnect();
 
-    std::ostringstream s;
-    std::string table_name = "users";
-    int count_rows = postgres.count_rows(table_name);
-    s << "INSERT INTO users VALUES (" << std::to_string(count_rows + 1) << ", '" << email
-      << "', '" << username << "', '" << password << "', " << Permission::admin << ");";
-
-    std::string query = s.str();
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
     return 0;
 }
 
 int User::remove(int user_id) {
-    SqlWrapper postgres;
+    SqlWrapper db;
+    db << "DELETE FROM users WHERE id=" << user_id << ";";
+    db.exec("Remove user");
+    db.disconnect();
 
-    std::string query = "DELETE FROM users WHERE id=" + std::to_string(user_id) + ";";
-    if (!postgres.exec(query)) {
-        postgres.disconnect();
-        return -1;
-    }
-    postgres.disconnect();
     return 0;
 }
 
 User User::get_user(const std::string &username) {
-    SqlWrapper postgres;
+    SqlWrapper db;
+    db << "SELECT * FROM users WHERE login=" << username << ";";
+    db.query("Get user by username");
 
-    std::string query = "SELECT * FROM users WHERE login=" + username + ";";
-    PGresult *result = nullptr;
-    if (!postgres.query(query, &result)) {
-        throw std::exception();
+    db.disconnect();
+
+    return User(
+            db.get_int(0),
+            db.get_str(1),
+            username,
+            db.get_int(6),
+            db.get_str(3),
+            db.get_int(4),
+            db.get_str(5));
+}
+
+std::vector<Cabinet> User::get_cabinets() const {
+    SqlWrapper db;
+    db << "select * from teacher join users on teacher.user_id=users.id where users.school_id=" << _school_id << ";";
+    db.query("Get cabinets");
+
+    std::vector<Cabinet> cabinets;
+    cabinets.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        cabinets.emplace_back(
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i)
+        );
     }
-    std::string u_email = std::string(PQgetvalue(result, 0, 1));
-    int user_id = std::stoi(PQgetvalue(result, 0, 0));
-    std::string u_password = std::string(PQgetvalue(result, 0, 3));
-    int u_permission = atoi(PQgetvalue(result, 0, 4));
-    std::string login = username;
-    postgres.disconnect();
-    return User(user_id, u_email, login, u_password, u_permission);
+
+    db.disconnect();
+
+    return cabinets;
+}
+
+std::vector<Course> User::get_courses() const {
+    SqlWrapper db;
+
+    db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
+    db.query("Get courses");
+
+    std::vector<Course> courses;
+    courses.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        courses.emplace_back(
+                db.get_int(0, 0),
+                db.get_str(1, 0),
+                db.get_int(2, 0),
+                db.get_int(3, 0),
+                db.get_int(4, 0)
+        );
+    }
+
+    db.disconnect();
+    return courses;
 }
