@@ -57,6 +57,7 @@ Payment Payment::get_payment(int payment_id) {
 
 int Payment::save(int student_id, int course_id, int amount, std::string& payment_date, int school_id) {
     SqlWrapper db;
+
     db << "insert into payment (student_id, course_id, amount, payment_date, school_id) values("
         << student_id << ", " << course_id << ", " << amount << ", '"
         << payment_date << "', " << school_id << ");";
