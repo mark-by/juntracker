@@ -127,7 +127,7 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
     return res_students;
 }
 
-int Student::save(const std::string &name, const std::string &surname, const std::string &school_id) {
+int Student::save(const std::string &name, const std::string &surname, int school_id) {
     SqlWrapper db;
 
     db << "insert into user (login, password, permission, school_id) values ("
