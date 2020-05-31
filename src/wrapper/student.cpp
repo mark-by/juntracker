@@ -127,4 +127,27 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
     return res_students;
 }
 
+int Student::save(const std::string &name, const std::string &surname, int school_id) {
+    SqlWrapper db;
+
+    db << "insert into user (login, password, permission, school_id) values ("
+        << name + surname << ", "
+        << name + surname << ", "
+        << 0 << ", "
+        << school_id << ") returning id;";
+    db.exec("Create new student user");
+
+    int user_id = db.get_int(0, 0);
+
+    db << "insert table student (name, surname, user_id) values(" << name << ", " << surname << ", " << user_id << ") returning id;";
+    db.exec("Create student by name, surname, user_id");
+    int new_student_id = db.get_int(0, 0);
+
+    db.disconnect();
+
+    return new_student_id;
+}
+
+
+
 

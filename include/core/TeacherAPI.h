@@ -9,13 +9,10 @@
 #include <unordered_map>
 #include "API.h"
 
-
-#include "API.h"
-
 class TeacherAPI: public API {
 public:
     TeacherAPI();
-    std::string getMainPage(const std::string&);
+    std::string getMainPage(int user_id);
     int rate(std::unordered_map<std::string, std::string> &);//
 };
 

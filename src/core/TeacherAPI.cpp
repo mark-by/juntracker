@@ -2,13 +2,14 @@
 // Created by timofei on 22.04.2020.
 //
 
-#include "../../include/core/TeacherAPI.h"
+#include "TeacherAPI.h"
 
 TeacherAPI::TeacherAPI() {}
 
 /*std::string TeacherAPI::getMainPage(const std::string &str) {
     return
 }*/
+
 
 int TeacherAPI::rate(std::unordered_map<std::string, std::string> &group) {
     if (group.empty()) {
