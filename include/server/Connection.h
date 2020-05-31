@@ -33,7 +33,7 @@ private:
     ConnectionManager& manager_;
     Handler handler_;
 
-    std::array<char, 4096> buffer_;
+    std::array<char, 8192> buffer_;
 
     void doRead(const boost::system::error_code& e, std::size_t bytes_transferred);  // handle requests
     void doWrite(const boost::system::error_code& e);  // send response to client
