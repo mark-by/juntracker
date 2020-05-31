@@ -31,6 +31,7 @@ public:
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string &surname,
             int age, int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name);
+    static int save(const std::string &name, const std::string &surname, const std::string &school_id);
     static int remove(int student_id);
     static std::vector<Student> get_students_like(const std::string &str);
 
@@ -46,8 +47,8 @@ private:
     int _age;
     std::string _description;
     std::string _tel_number;
-
     std::string _parent_name;
+
 };
 
 #endif  // INCLUDE_DATABASE_STUDENT_H_
