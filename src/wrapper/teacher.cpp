@@ -63,3 +63,17 @@ int Teacher::remove(int teacher_id) {
     db.disconnect();
     return 0;
 }
+
+int Teacher::setMark(int lesson_id, int student_id, int mark, int school_id) const {
+    SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
+    auto today = converter.convert(boost::posix_time::second_clock::universal_time(), "");
+
+    db << "insert into marks (student_id, teacher_id, school_id, mark, mark_date, lesson_id) "
+       << "values (" << student_id << ", " << _id << ", " << school_id << ", " << mark << ", "
+       << today << ", " << lesson_id << ";";
+    db.exec("Set mark");
+
+    return 0;
+}
