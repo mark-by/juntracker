@@ -193,7 +193,7 @@ std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
 
 int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data) {
     if (data.empty()) {
-        return -1;
+        return 404;
     }
     std::vector<int> students_id;
     for (auto &pair : data) {
@@ -214,5 +214,5 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
                   lesson.school_id());
     auto students = lesson.get_students();
 
-    return 0;
+    return 200;
 }
