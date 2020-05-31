@@ -148,11 +148,7 @@ class LessonEditForm {
             },
             body: new URLSearchParams(new FormData(this.form.querySelector('form'))).toString()
         }).then(response => {
-            if (response.ok) {
-                this.close();
-            } else {
-                this.close()
-            }
+            this.close()
             window.location.reload();
         })
     }
