@@ -22,6 +22,8 @@ public:
     Teacher get_teacher() const;
     Course get_course() const;
     Cabinet get_cabinet() const;
+    int update(int lesson_id, int course_id, int cabinet_id, int teacher_id, int weekday,
+               const std::string& start_time, const std::string& end_time, int school_id);
 
     static Lesson get_lesson(int lesson_id);
     static int save(int course_id, int cabinet_id, int teacher_id, int weekday,
@@ -31,6 +33,7 @@ public:
     int id() const { return _id; }
     int cabinet() const { return _cabinet_id; }
     int weekday() const { return _weekday; }
+    int school_id() const { return _school_id; }
     std::string start_time() const { return _start_time; }
     std::string end_time() const { return _end_time; }
 

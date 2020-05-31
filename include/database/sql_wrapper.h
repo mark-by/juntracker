@@ -33,7 +33,6 @@ public:
 
     void disconnect();
 
-    bool query(const std::string& comment = "");
     bool exec(const std::string& comment = "");
     char * get_str(int field_num, int tup_num = 0);
     int get_int(int field_num, int tup_num = 0);

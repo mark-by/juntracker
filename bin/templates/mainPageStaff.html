@@ -63,7 +63,17 @@
         <div class="lesson-edit-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
         <div class="form-grid">
             <p>Курс</p>
-            <select name="title" id="lesson-edit-title">
+            <select name="weekday" id="lesson-edit-weekday">
+                <option value="0">Понедельник</option>
+                <option value="1">Вторник</option>
+                <option value="2">Среда</option>
+                <option value="3">Четверг</option>
+                <option value="4">Пятница</option>
+                <option value="5">Cуббота</option>
+                <option value="6">Воскресенье</option>
+            </select>
+            <p>День недели</p>
+            <select name="course" id="lesson-edit-title">
                 {% for course in user.courses %}
                 <option value="{{course.id}}">{{course.title}}</option>
                 {% endfor %}
@@ -82,15 +92,15 @@
             </select>
             <p>Начало занятия</p>
             <label>
-                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit" value=""/>
+                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit"/>
                 <span>:</span>
-                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit" value=""/>
+                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit"/>
             </label>
             <p>Конец занятия</p>
             <label>
-                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit" value=""/>
+                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit"/>
                 <span>:</span>
-                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit" value=""/>
+                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit"/>
             </label>
         </div>
         <div class="bottom-flex">

@@ -24,13 +24,15 @@ void Connection::start() {
 void Connection::doRead(const boost::system::error_code& error, std::size_t bytes_transferred) {
     if (!error) {
         std::cout << std::string(buffer_.begin(), buffer_.end()) << std::endl;
+        std::cout << bytes_transferred << std::endl;
         Request request_(std::string(buffer_.begin(), buffer_.end()));
+        std::cout << "Content: " << request_.header("Content-Length");
 
         Response response_;
 
         if (request_.header("Host") != "juntracker.ru") {
-            response_.setStatus(status::BadRequest);  // not our host
-        } else {
+//            response_.setStatus(status::BadRequest);  // not our host
+//        } else {
             if (request_.path() == "/login") {
                 response_ = handler_.loginHandler(request_);
             } else if (request_.path() == "/register") {

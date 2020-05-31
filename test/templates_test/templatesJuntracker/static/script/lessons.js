@@ -141,7 +141,7 @@ class LessonEditForm {
 
     save(event) {
         event.preventDefault();
-        fetch('/api/save_lesson', {
+        fetch('/api/update_lesson', {
             method: 'POST',
             headers: {
                 'content-type' : 'application/x-www-form-urlencoded',
@@ -152,8 +152,8 @@ class LessonEditForm {
                 this.close();
             } else {
                 this.close()
-                console.log("error");
             }
+            window.location.reload();
         })
     }
 
