@@ -33,7 +33,8 @@ void Server::startServer() {
     std::vector<std::thread> threads;
 
     // std::thread::hardware_concurrency() - number of cores
-    for (unsigned int i = 0; i < std::thread::hardware_concurrency(); i++) {
+    for (unsigned int i = 0; i < 1; i++) {
+//    for (unsigned int i = 0; i < std::thread::hardware_concurrency(); i++) {
         threads.emplace_back([service = &service_] { service->run();});
     }
 

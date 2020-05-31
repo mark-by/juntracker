@@ -20,7 +20,7 @@ std::vector<Student> Lesson::get_students() const {
                 db.get_str(4, i),
                 db.get_str(5, i),
                 db.get_str(6, i)
-                );
+        );
     }
 
     db.disconnect();
@@ -47,7 +47,7 @@ Teacher Lesson::get_teacher() const {
             db.get_str(5, 0),
             db.get_str(6, 0),
             db.get_str(7, 0)
-            );
+    );
 }
 
 Course Lesson::get_course() const {
@@ -84,35 +84,17 @@ Lesson Lesson::get_lesson(int lesson_id) {
             db.get_str(5, 0),
             db.get_str(6, 0),
             db.get_int(7, 0)
-            );
+    );
 }
 
 int Lesson::save(int course_id, int cabinet_id, int teacher_id, int weekday,
-        const std::string& start_time, const std::string& end_time, int school_id) {
+                 const std::string &start_time, const std::string &end_time, int school_id) {
     SqlWrapper db;
 
-    db << "select id from lesson where "
-       << "course_id=" << course_id << ", and cabinet_id=" << cabinet_id << ", and teacher_id" << teacher_id
-       << ", and weekday='" << weekday << "', and start_time='"
-       << start_time << "', and end_time='" << end_time << "', and school_id=" << school_id << ";";
-    db.exec("Get lesson id");
-
-    if (!db.count_tupls()) {
-        db << "insert into lesson (course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id) "
-           << "values (" << course_id << ", " << cabinet_id << ", " << teacher_id << ", '" << weekday << "', '"
-           << start_time << "', '" << end_time << "', " << school_id << ";";
-        db.exec("Save lesson");
-    } else {
-        int id = db.get_int(0);
-        db << "update lesson "
-           << "set course_id=" << course_id << ", "
-           << "set cabinet_id=" << cabinet_id << ", "
-           << "set teacher_id=" << teacher_id << ", "
-           << "set weekday='" << weekday << "', "
-           << "set start_time='" << start_time << "', "
-           << "set end_time='" << end_time << "', where id=" << id << ";";
-        db.exec("Update lesson");
-    }
+    db << "insert into lesson (course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id) "
+       << "values (" << course_id << ", " << cabinet_id << ", " << teacher_id << ", '" << weekday << "', '"
+       << start_time << "', '" << end_time << "', " << school_id << ";";
+    db.exec("Save lesson");
 
     db.disconnect();
     return 0;
@@ -139,7 +121,23 @@ Cabinet Lesson::get_cabinet() const {
             db.get_int(0),
             db.get_str(1),
             db.get_int(2)
-            );
+    );
+}
+
+int
+Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id, int weekday, const std::string &start_time,
+               const std::string &end_time, int school_id) {
+    SqlWrapper db;
+    db << "update lesson "
+       << "set course_id=" << course_id << ", "
+       << "cabinet_id=" << cabinet_id << ", "
+       << "teacher_id=" << teacher_id << ", "
+       << "weekday='" << weekday << "', "
+       << "start_time='" << start_time << "', "
+       << "end_time='" << end_time << "' where id=" << lesson_id << ";";
+    db.exec("Update lesson");
+    db.disconnect();
+    return 0;
 }
 
 

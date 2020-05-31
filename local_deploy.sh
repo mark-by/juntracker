@@ -1,7 +1,3 @@
-cd build
-cmake --build . --target server -- -j 4
-cd ..
-mv build/examples/server bin/.
 rm -rf bin/templates
 rm -rf bin/includes
 rm -rf bin/static

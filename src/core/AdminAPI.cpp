@@ -195,30 +195,23 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     if (data.empty()) {
         return -1;
     }
-//    "lesson_id=1
-//    title=2
-//    cabinet=1
-//    teacher=1
-//    start-hours=14
-//    start-minutes=30 >> "14:30"
-//    end-hours=16
-//    end-minutes=00
-//    student=1
-//    student=2
-//    student=3
-//    student=4
-//    student=5
-//    student=6
-//    student=7"
     std::vector<int> students_id;
-
     for (auto &pair : data) {
         if (pair.first == "student") {
             students_id.push_back(std::stoi(pair.second));
         }
     }
 
-    auto lesson = Lesson::get_lesson(std::stoi(data.find("lesson_id")->second));
+    int lesson_id = std::stoi(data.find("lesson_id")->second);
+    auto lesson = Lesson::get_lesson(lesson_id);
+    lesson.update(lesson_id,
+                  std::stoi(data.find("course")->second),
+                  std::stoi(data.find("cabinet")->second),
+                  std::stoi(data.find("teacher")->second),
+                  std::stoi(data.find("weekday")->second),
+                  data.find("start-hours")->second + ":" + data.find("start-minutes")->second,
+                  data.find("end-hours")->second + ":" + data.find("end-minutes")->second,
+                  lesson.school_id());
     auto students = lesson.get_students();
 
     return 0;
