@@ -26,7 +26,7 @@ void Connection::doRead(const boost::system::error_code& error, std::size_t byte
         std::cout << std::string(buffer_.begin(), buffer_.end()) << std::endl;
         std::cout << bytes_transferred << std::endl;
         Request request_(std::string(buffer_.begin(), buffer_.end()));
-        std::cout << request_.data("Content-length");
+        std::cout << request_.data("Content-Length");
 
         Response response_;
 
