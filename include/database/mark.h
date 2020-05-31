@@ -5,6 +5,7 @@
 #ifndef JUNTRACKER_MARK_H
 #define JUNTRACKER_MARK_H
 
+#include "sql_wrapper.h"
 #include "http/datetime.h"
 #include "vector"
 
