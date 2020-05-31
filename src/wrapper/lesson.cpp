@@ -144,7 +144,7 @@ int Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id,
     return 0;
 }
 
-void Lesson::deleteStudent(int student_id, int lesson_id) {
+void Lesson::delete_student(int student_id, int lesson_id) {
     SqlWrapper db;
     db << "delete from students_for_lesson where student_id" << student_id
     << " and lesson_id=" << lesson_id << ";";
@@ -152,7 +152,7 @@ void Lesson::deleteStudent(int student_id, int lesson_id) {
     db.disconnect();
 }
 
-void Lesson::addStudent(int student_id, int lesson_id) {
+void Lesson::add_student(int student_id, int lesson_id) {
     SqlWrapper db;
     db << "insert into students_for_lesson (student_id, lesson_id) values(" << student_id
        << ", " << lesson_id << ");";
