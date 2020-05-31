@@ -75,5 +75,6 @@ int Teacher::setMark(int lesson_id, int student_id, int mark, int school_id) con
        << today << ", " << lesson_id << ";";
     db.exec("Set mark");
 
+    db.disconnect();
     return 0;
 }
