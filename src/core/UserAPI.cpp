@@ -44,7 +44,6 @@ std::string UserAPI::signIn(const std::string &username, const std::string &pass
     try {
         std::cout << "USERAPI CREATE SESSION" << std::endl;
         return Session::create_session(username, password).cookie();
-        std::cout << "USERAPI CREATE SESSION DONE" << std::endl;
     } catch(...) {
         return "";
     }

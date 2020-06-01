@@ -61,13 +61,13 @@ void Handler::adminHandler(Request request, Response& response, const User &user
     response.setStatus(status::NotFound);
     if (request.method() == "GET") {
         if (request.path() == "/") {
-            response = Response(adminApi.getMainPage(user.id()));
+            response = Response(adminApi.getMainPage(user));
         } else if (request.path() == "/students") {
-            response = Response(adminApi.getPageStudents(user.id()));
+            response = Response(adminApi.getPageStudents(user));
         } else if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
         } else if (request.path() == "/api/user_data") {
-            response = Response(adminApi.get(user));
+            response = Response(adminApi.getUserData(user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {

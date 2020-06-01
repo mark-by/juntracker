@@ -28,7 +28,7 @@ std::string DateTime::weekdayToStr(int weekday) {
         case 0:
             return "Понедельник";
         case 1:
-            return "Вторик";
+            return "Вторник";
         case 2:
             return "Среда";
         case 3:

@@ -11,6 +11,7 @@ set(api_source
         UserAPI.cpp
         AdminAPI.cpp
         TeacherAPI.cpp
-        CustomerAPI.cpp)
+        CustomerAPI.cpp
+        StaffAPI.cpp)
 
 add_library(api STATIC ${api_source})

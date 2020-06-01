@@ -4,98 +4,7 @@
 #include <lesson.h>
 #include <visit.h>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <http/datetime.h>
 #include <utils.hpp>
-
-
-
-templates::Context AdminAPI::UserSerializer(const User & user) {
-    templates::Context context;
-    context.put("username", user.login());
-    context.put("isAdmin", true);
-    return context;
-}
-
-templates::Context AdminAPI::CurrentLessonSerializer(const Lesson &lesson) {
-    templates::Context context;
-    context.put("title", lesson.get_course().title());
-    context.put("id", lesson.id());
-    context.put("cabinet", lesson.cabinet());
-    context.put("tutor", lesson.get_teacher().name());
-    std::vector<StudentOnLesson> students;
-    for (auto &student : lesson.get_students()) {
-        students.emplace_back(student, lesson);
-    }
-    context.putArray("children", students, StudentSerializer);
-    context.put("startTime", lesson.start_time());
-    context.put("endTime", lesson.end_time());
-
-    return context;
-}
-
-templates::Context AdminAPI::StudentSerializer(const StudentOnLesson &student) {
-    templates::Context context;
-    context.put("name", student.student.name() + " " + student.student.surname());
-    context.put("id", student.student.id());
-    try {
-        bool was = student.student.get_visit(student.lesson.id(),boost::posix_time::second_clock::universal_time()).was_in_class();
-        std::cout << "ID NAME: " << student.student.name() << " " << "WAS IN CLASS: " <<  was << std::endl;
-        context.put("isHere", was);
-    } catch(...) {
-        context.put("isHere", false);
-    }
-
-    return context;
-}
-
-templates::Context AdminAPI::LessonSerializer(const Lesson &lesson) {
-    templates::Context context;
-    auto course = lesson.get_course();
-    context.put("title", course.title());
-    context.put("cabinet", lesson.cabinet());
-    context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
-    context.set("course", SimpleTitleSerializer<Course>()(course));
-    context.put("id", lesson.id());
-    context.set("teacher", SimplePersonSerializer<Teacher>()(lesson.get_teacher()));
-    context.putArray("children", lesson.get_students(), SimplePersonSerializer<Student>());
-    context.put("startTime", lesson.start_time());
-    context.put("endTime", lesson.end_time());
-
-    return context;
-}
-
-templates::Context AdminAPI::DaySerializer(const WeekDay &weekday) {
-    templates::Context context;
-    context.put("weekDay", weekday.weekday);
-    context.put("date", weekday.date);
-    context.putArray("lessons", weekday.lessons, LessonSerializer);
-
-    return context;
-}
-
-std::string AdminAPI::getMainPage(int userId) {
-    templates::Context context;
-    auto user = User::get_user(userId);
-    context.set("user", UserSerializer(user));
-    std::vector<WeekDay> days;
-    DateTime dateTime;
-    for (int weekday = 0; weekday < 7; weekday++) {
-        try {
-            days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
-                          user.get_lessons_by_weekday(weekday));
-        } catch(...) {}
-    }
-    context.putArray("scheduleDays", days, DaySerializer);
-    std::vector<Lesson> currentLessons;
-    try {
-        currentLessons = user.get_current_lessons();
-    } catch(...) {}
-    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
-
-    _render.set("mainPageStaff.html");
-
-    return _render.render(context);
-}
 
 int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::string> &data) {
     if (data.empty()) {
@@ -138,9 +47,8 @@ templates::Context StudentDBSerializer(const Student &student) {
     return context;
 }
 
-std::string AdminAPI::getPageStudents(int userId) {
+std::string AdminAPI::getPageStudents(const User &user) {
     templates::Context context;
-    auto user = User::get_user(userId);
     context.put("username", user.login());
     context.putArray("students", user.get_students(), StudentDBSerializer);
     _render.set("studentsAdmin.html");
@@ -196,13 +104,7 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     return 200;
 }
 
-templates::Context AdminAPI::get(const User &user) {
-    templates::Context context;
-    context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
-    context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
-    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
-    return context;
-}
+
 
 std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
     templates::Context context;
@@ -211,57 +113,24 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
         return {404, context};
     }
 
-    int age = 0;
-    std::string name, surname, description, tel_number, e_mail, parent_name, avatar;
-    auto none = student.end();
-    auto match = student.find("name");
-
-    if (match != none) {
-        name = student.find("name")->second;
-    } else {
-        return {404, context};
-    }
-
-    match = student.find("surname");
-    if (match != none) {
-        surname = student.find("surname")->second;
-    } else {
-        return {404, context};
-    }
-
-    match = student.find("age");
-    if (match != none) {
-        age = std::stoi(student.find("age")->second);
-    }
-
-    match = student.find("description");
-    if (match != none) {
-        description = student.find("description")->second;
-    }
-
-    match = student.find("tel_number");
-    if (match != none) {
-        tel_number = student.find("tel_number")->second;
-    }
-
-    match = student.find("email");
-    if (match != none) {
-        e_mail = student.find("email")->second;
-    }
-
-    match = student.find("parent");
-    if (match != none) {
-        parent_name = student.find("parent")->second;
-    }
-
-    match = student.find("avatar");
-    if (match != none) {
-        avatar = student.find("avatar")->second;
-    }
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("name", student);
+    if (!success) return {404, context};
+    auto name = result;
+    std::tie(result, success) = fetch("surname", student);
+    if (!success) return {404, context};
+    auto surname = result;
+    int age = std::stoi(get("age", student));
+    auto description = get("description", student);
+    auto tel_number = get("tel_number", student);
+    auto email = get("email", student);
+    auto parent = get("parent", student);
+    auto avatar = get("avatar", student);
 
     int school_id = user.school_id();
 
-    int id = Student::save(name, surname, age, description, tel_number, e_mail, parent_name, avatar, school_id);
+    int id = Student::save(name, surname, age, description, tel_number, email, parent, avatar, school_id);
     context.put("id", id);
 
     return {200, context};

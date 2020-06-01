@@ -7,12 +7,11 @@
 
 #include <string>
 #include <unordered_map>
-#include "API.h"
+#include <StaffAPI.h>
 
-class TeacherAPI: public API {
+class TeacherAPI: public StaffAPI {
 public:
     TeacherAPI();
-    std::string getMainPage(int user_id);
     int rate(std::unordered_map<std::string, std::string> &);//
 };
 
