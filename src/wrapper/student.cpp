@@ -85,8 +85,10 @@ int Student::save(const std::string name, const std::string &surname, int age,
        << ", '" << description << "', '" << tel_number << "', '" << parent_name << "') returning id;";
     db.exec("Save student");
 
+    int student_id = db.get_int(0);
+
     db.disconnect();
-    return db.get_int(0);
+    return student_id;
 }
 
 int Student::remove(int student_id) {
