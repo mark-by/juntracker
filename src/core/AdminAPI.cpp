@@ -123,27 +123,6 @@ int AdminAPI::deleteStudent(int student_id) {
     return 0;
 }
 
-int AdminAPI::createStudent(const std::unordered_multimap<std::string, std::string> &student, const User & user) {
-    if (student.empty()) {
-        return -1;
-    }
-
-    std::string name = student.find("name")->second;
-    std::string surname = student.find("surname")->second;
-    int age = std::stoi(student.find("age")->second);
-    std::string email = student.find("email")->second;
-    std::string description = student.find("description")->second;
-    std::string telNumber = student.find("tel_number")->second;
-    std::string parentName = student.find("parent_name")->second;
-
-    std::string username = randomStr(10);
-    User::save(username, randomStr(10), email, Permission::customer, user.school_id());
-    auto customer = User::get_user(username);
-    Student::save(name, surname, age, customer.id(), description, telNumber, parentName);
-
-    return 0;
-}
-
 templates::Context StudentDBSerializer(const Student &student) {
     templates::Context context;
     context.put("name", student.name() + " " + student.surname());
