@@ -47,7 +47,7 @@ public:
 
     std::string getPagePaymentsByStudent(const std::string &);
 
-    int saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+    std::pair<int, templates::Context> saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
 private:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);

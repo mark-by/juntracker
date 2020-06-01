@@ -221,18 +221,65 @@ templates::Context AdminAPI::get(const User &user) {
     return context;
 }
 
-int AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
-    auto name = data.find("name")->second;
-    auto surname = data.find("surname")->second;
-    int age = std::stoi(data.find("age")->second);
-    auto description = data.find("description")->second;
-    auto tel_number = data.find("tel_number")->second;
-    auto e_mail = data.find("email")->second;
-    auto parent_name = data.find("parent")->second;
-    auto avatar = data.find("avatar")->second;
-    int school_id = user.school_id();
+std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
+    templates::Context context;
 
-    Student::save(name, surname, age, description, tel_number, e_mail, parent_name, avatar, school_id);
+    if (student.empty()) {
+        return {404, context};
+    }
 
-    return 0;
+    int age = 0;
+    std::string name, surname, description, tel_number, e_mail, parent_name, avatar;
+    auto none = student.end();
+    auto match = student.find("name");
+
+    if (match != none) {
+        name = data.find("name")->second;
+    } else {
+        return {404, context};
+    }
+
+    match = student.find("surname");
+    if (match != none) {
+        surname = data.find("surname")->second;
+    } else {
+        return {404, context};
+    }
+
+    match = student.find("age");
+    if (match != none) {
+        age = std::stoi(data.find("age")->second);
+    }
+
+    match = student.find("description");
+    if (match != none) {
+        description = data.find("description")->second;
+    }
+
+    match = student.find("tel_number");
+    if (match != none) {
+        tel_number = data.find("tel_number")->second;
+    }
+
+    match = student.find("email");
+    if (match != none) {
+        e_mail = data.find("email")->second;
+    }
+
+    match = student.find("parent");
+    if (match != none) {
+        parent_name = data.find("parent")->second;
+    }
+
+    match = student.find("avatar");
+    if (match != none) {
+        avatar = data.find("avatar")->second;
+    }
+
+    school_id = user.school_id();
+
+    int id = Student::save(name, surname, age, description, tel_number, e_mail, parent_name, avatar, school_id);
+    context.put("id", id);
+
+    return {200, context};
 }
