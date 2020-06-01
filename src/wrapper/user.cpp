@@ -114,6 +114,7 @@ User User::get_user(int user_id) {
 int User::save(const std::string &username, const std::string &password,
         const std::string &email, int permission, int school_id) {
     SqlWrapper db;
+
     if (school_id < 0) {
         db << "insert into schools(school_title) values ('" << username << "');";
         db.exec("Create school");
