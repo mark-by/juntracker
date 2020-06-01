@@ -6,28 +6,11 @@
 #include "API.h"
 #include <template/template.h>
 #include <user.h>
+#include <StaffAPI.h>
 
-class AdminAPI : public API {
-    struct StudentOnLesson {
-        Student student;
-        Lesson lesson;
-
-        StudentOnLesson(const Student &student, const Lesson &lesson) : student(student), lesson(lesson) {}
-    };
-
-    struct WeekDay {
-        std::string weekday;
-        std::string date;
-        std::vector<Lesson> lessons;
-
-        WeekDay(const std::string &weekday, const std::string &date, const std::vector<Lesson> lessons) :
-                weekday(weekday), date(date), lessons(lessons) {}
-    };
-
+class AdminAPI : public StaffAPI {
 public:
     AdminAPI() = default;
-
-    std::string getMainPage(int userId) override;
 
     int updateLesson(const std::unordered_multimap<std::string, std::string> & data, const User & user);
 
@@ -37,30 +20,17 @@ public:
 
     int deleteStudent(int student_id);
 
-    std::string getPageStudents(int);
+    std::string getPageStudents(const User& user);
 
     int addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int deleteCourse(int course_id);
 
-    templates::Context get(const User& user);
-
     std::string getPagePaymentsByStudent(const std::string &);
 
     std::pair<int, templates::Context> saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
-private:
-    static templates::Context CurrentLessonSerializer(const Lesson &lesson);
-
-    static templates::Context StudentSerializer(const StudentOnLesson &student);
-
-    static templates::Context LessonSerializer(const Lesson &lesson);
-
-    static templates::Context DaySerializer(const WeekDay &weekday);
-
     templates::Template _render;
-
-    templates::Context UserSerializer(const User &user);
 };
 
 #endif //CORE_ADMINAPI_H

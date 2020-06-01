@@ -62,13 +62,13 @@ void Handler::adminHandler(Request request, Response& response, const User &user
     if (request.method() == "GET") {
         if (request.path() == "/") {
             std::cout << "Admin handler" << std::endl;
-            response = Response(adminApi.getMainPage(user.id()));
+            response = Response(adminApi.getMainPage(user));
         } else if (request.path() == "/api/students") {
-            response = Response(adminApi.getPageStudents(user.id()));
+            response = Response(adminApi.getPageStudents(user));
         } else if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
         } else if (request.path() == "/api/user_data") {
-            response = Response(adminApi.get(user));
+            response = Response(adminApi.getUserData(user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {

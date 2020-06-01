@@ -6,12 +6,20 @@
 #include <lesson.h>
 #include <context/context.h>
 #include <teacher.h>
+#include <template/template.h>
+#include <user.h>
+#include <unordered_map>
+#include <tuple>
+
 
 class API {
-public:
-    virtual std::string getMainPage(int user_id) = 0;
 
+public:
+    virtual std::string getMainPage(const User & user) = 0;
 protected:
+    static std::tuple<std::string, bool> fetch(const std::string & key, const std::unordered_multimap<std::string, std::string> & data);
+    std::string get(const std::string & key, const std::unordered_multimap<std::string, std::string> & data);
+
     template<class Person>
     struct SimplePersonSerializer {
         templates::Context operator()(const Person &person) {
@@ -31,6 +39,8 @@ protected:
             return context;
         }
     };
+
+    templates::Template _render;
 };
 
 
