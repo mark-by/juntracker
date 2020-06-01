@@ -99,12 +99,12 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
 
     if (name_surname.second.empty()) {
         db << "select * from student where name like '" << name_surname.first
-           << "' or surname like '" << name_surname.first << "';";
+           << "%' or surname like '" << name_surname.first << "%';";
     } else {
         db << "select * from student where name like '" << name_surname.first
-           << "' or surname like '" << name_surname.second << "' union "
+           << "%' and surname like '" << name_surname.second << "%' union "
            << "select * from student where name like '" << name_surname.second
-           << "' or surname like '" << name_surname.first << "';";
+           << "%' and surname like '" << name_surname.first << "%';";
     }
 
     db.exec("Find students like");
@@ -126,28 +126,6 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
     db.disconnect();
 
     return res_students;
-}
-
-int Student::save(const std::string &name, const std::string &surname, int school_id) {
-    SqlWrapper db;
-
-    db << "insert into user (login, password, permission, school_id) values ("
-       << name + surname << ", "
-       << name + surname << ", "
-       << 0 << ", "
-       << school_id << ") returning id;";
-    db.exec("Create new student user");
-
-    int user_id = db.get_int(0, 0);
-
-    db << "insert table student (name, surname, user_id) values(" << name << ", " << surname << ", " << user_id
-       << ") returning id;";
-    db.exec("Create student by name, surname, user_id");
-    int new_student_id = db.get_int(0, 0);
-
-    db.disconnect();
-
-    return new_student_id;
 }
 
 std::vector<Mark> Student::get_marks_by_course(int course_id) const {
