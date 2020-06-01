@@ -5,6 +5,7 @@ class Student;
 
 #include "course.h"
 #include "visit.h"
+#include "mark.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 class Student {
@@ -27,10 +28,12 @@ public:
 
     std::vector<Course> get_courses() const;
     Visit get_visit(int lesson_id, const boost::posix_time::ptime &date) const;
+    std::vector<Mark> get_marks_by_course(int course_id) const;
 
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string &surname,
             int age, int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name);
+    static int save(const std::string &name, const std::string &surname, int school_id);
     static int remove(int student_id);
     static std::vector<Student> get_students_like(const std::string &str);
 
@@ -39,6 +42,7 @@ public:
     std::string surname() const { return _surname;}
     int age() const { return _age;}
     std::string description() const { return _description;}
+
 private:
     int _id;
     std::string _name;
@@ -46,8 +50,8 @@ private:
     int _age;
     std::string _description;
     std::string _tel_number;
-
     std::string _parent_name;
+
 };
 
 #endif  // INCLUDE_DATABASE_STUDENT_H_

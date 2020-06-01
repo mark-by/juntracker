@@ -13,9 +13,6 @@ templates::Context AdminAPI::UserSerializer(const User & user) {
     templates::Context context;
     context.put("username", user.login());
     context.put("isAdmin", true);
-    context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
-    context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
-    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     return context;
 }
 
@@ -235,4 +232,12 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     auto students = lesson.get_students();
 
     return 200;
+}
+
+templates::Context AdminAPI::get(const User &user) {
+    templates::Context context;
+    context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
+    context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
+    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+    return context;
 }

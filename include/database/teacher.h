@@ -28,6 +28,7 @@ public:
             _avatar(avatar) {}
 
     std::vector<Course> get_courses() const;
+    int setMark(int lesson_id, int student_id, int mark, int school_id) const;
 
     static Teacher get_teacher(int teacher_id);
     static int save(const std::string &name, const std::string &surname, int salary,

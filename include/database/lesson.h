@@ -29,6 +29,8 @@ public:
     static int save(int course_id, int cabinet_id, int teacher_id, int weekday,
             const std::string& start_time, const std::string& end_time, int school_id);
     static int remove(int lesson_id);
+    static void delete_student(int student_id, int lesson_id);
+    static void add_student(int student_id, int lesson_id);
 
     int id() const { return _id; }
     int cabinet() const { return _cabinet_id; }

@@ -124,21 +124,38 @@ Cabinet Lesson::get_cabinet() const {
     );
 }
 
-int
-Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id, int weekday, const std::string &start_time,
+int Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id, int weekday, const std::string &start_time,
                const std::string &end_time, int school_id) {
     SqlWrapper db;
+
     db << "update lesson "
        << "set course_id=" << course_id << ", "
        << "cabinet_id=" << cabinet_id << ", "
        << "teacher_id=" << teacher_id << ", "
-       << "weekday='" << weekday << "', "
+       << "weekday=" << weekday << ", "
        << "start_time='" << start_time << "', "
-       << "end_time='" << end_time << "' where id=" << lesson_id << ";";
+       << "end_time='" << end_time << "', "
+       << "school_id=" << school_id
+       << " where id=" << lesson_id << ";";
     db.exec("Update lesson");
+
     db.disconnect();
+
     return 0;
 }
 
+void Lesson::delete_student(int student_id, int lesson_id) {
+    SqlWrapper db;
+    db << "delete from students_for_lesson where student_id" << student_id
+    << " and lesson_id=" << lesson_id << ";";
+    db.exec("delete student from lesson");
+    db.disconnect();
+}
 
-
+void Lesson::add_student(int student_id, int lesson_id) {
+    SqlWrapper db;
+    db << "insert into students_for_lesson (student_id, lesson_id) values(" << student_id
+       << ", " << lesson_id << ");";
+    db.exec("add student on lesson");
+    db.disconnect();
+}
