@@ -68,17 +68,20 @@ int Visit::save(int student_id, int lesson_id, bool was_in_class) {
     DateTimeConverter converter(format);
     auto today = converter.convert(boost::posix_time::second_clock::universal_time(), "");
 
-    int school_id = 0;
     char was_in_class_ch = (was_in_class ? 't' : 'f');
 
-    db << "select count(*) from visit where student_id=" << student_id << " and lesson_id=" << lesson_id <<
-    " and visit_date='" << today << "' and school_id=" << school_id << ";";
+    db << "select count(*), school_id from visit "
+       << "where student_id=" << student_id << " and lesson_id=" << lesson_id <<
+    " and visit_date='" << today << "';";
     db.exec("Count visit");
+    int school_id = db.get_int(1);
 
     if (db.get_int(0, 0)) {
-        db << "update visit set was_in_class='" << was_in_class_ch << "' where student_id=" << student_id <<
-        " and lesson_id=" << lesson_id << " and visit_date='" << today << "', and school_id=" << school_id << ";";
+        db << "update visit join lesson on visit.lesson_id=lesson.id set was_in_class='"
+           << was_in_class_ch << "' where student_id=" << student_id <<
+        " and lesson_id=" << lesson_id << " and visit_date='" << today << "', and school_id=lesson.school_id;";
     } else {
+        db << "select school_id"
         db << "insert into visit (student_id, lesson_id, was_in_class, visit_date, school_id) "
            << "values (" << student_id << ", " << lesson_id << ", '" << was_in_class << "', '"
            << today << "', " << school_id << ");";

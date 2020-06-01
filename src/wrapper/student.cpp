@@ -153,13 +153,9 @@ std::vector<Mark> Student::get_marks_by_course(int course_id) const {
                 db.get_int(4, i),
                 converter.convert(db.get_str(5, i)),
                 db.get_int(6, i)
-                );
+        );
     }
 
     db.disconnect();
     return marks;
 }
-
-
-
-
