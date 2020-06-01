@@ -29,7 +29,7 @@ public:
 
     std::string getMainPage(int userId) override;
 
-    int updateLesson(const std::unordered_multimap<std::string, std::string> & data);
+    int updateLesson(const std::unordered_multimap<std::string, std::string> & data, const User & user);
 
     static int saveCurrentLesson(const std::unordered_multimap<std::string, std::string> &data);
 

@@ -191,18 +191,38 @@ std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
     return std::string();
 }
 
-int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data) {
+int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data, const User& user) {
     if (data.empty()) {
         return 404;
     }
-    std::vector<int> students_id;
-    for (auto &pair : data) {
-        if (pair.first == "student") {
-            students_id.push_back(std::stoi(pair.second));
-        }
-    }
+
+//    "delete-student" = id
+//    "new-student" = "Михаил ТрУщелев"
+//   students_fot_lessons
+//    "lesson_id=1&
+//    weekday=0&
+//    course=1&
+//    cabinet=2&
+//    teacher=1&
+//    start-hours=2&
+//    start-minutes=00&
+//    end-hours=23&
+//    end-minutes=00&
+//    new-student=Михаил Трущелев&
+//    new-student=Тимофей Макаров&
+//    delete-student=34&
+//    delete-student-12"
 
     int lesson_id = std::stoi(data.find("lesson_id")->second);
+//    std::vector<int> students_id;
+//    for (auto &pair : data) {
+//        if (pair.first == "new-student") {
+//            Student::fast_save(pair.second, user.school_id(), lesson_id);
+//        } else if (pair.first == "delete-student") {
+//            Student::delete_student(std::stoi(pair.second), lesson_id);
+//        }
+//    }
+
     auto lesson = Lesson::get_lesson(lesson_id);
     lesson.update(lesson_id,
                   std::stoi(data.find("course")->second),
