@@ -128,32 +128,6 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
     return res_students;
 }
 
-int Student::fast_save(const std::string &name, const std::string &surname, int school_id, int lesson_id) {
-    SqlWrapper db;
-
-    std::string username = randomStr(10);
-    std::string password = randomStr(10);
-
-    db << "insert into user (login, password, permission, school_id) values ("
-       << username << ", "
-       << password << ", "
-       << 0 << ", "
-       << school_id << ") returning id;";
-    db.exec("Create new student user");
-
-    int user_id = db.get_int(0, 0);
-
-    db << "insert table student (name, surname, user_id) values(" << name << ", " << surname << ", " << user_id
-       << ") returning id;";
-    db.exec("Create student by name, surname, user_id");
-    int new_student_id = db.get_int(0, 0);
-
-
-    db.disconnect();
-
-    return new_student_id;
-}
-
 std::vector<Mark> Student::get_marks_by_course(int course_id) const {
     SqlWrapper db;
     const std::string format = "%Y-%m-%d";
