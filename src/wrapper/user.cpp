@@ -112,30 +112,23 @@ User User::get_user(int user_id) {
 }
 
 int User::save(const std::string &username, const std::string &password,
-        const std::string &email, int permission, int avatar, int school_id) {
+        const std::string &email, int permission, int school_id) {
     SqlWrapper db;
 
     if (username.empty()) {
         return -1;
     }
     db << "select * from users where login='" << username << "';";
-    if (db.count_tupls() == 0) {
-        return -1;
-    }
-    if (password.length() < 10) {
-        return -2;
-    }
 
-    /*if (school_id < 0) {
-        db << "insert into schools(school_title) values ('" << username << "');";
+    if (school_id < 0) {
+        db << "insert into schools(school_title) values ('" << username << "') returning id;";
         db.exec("Create school");
-        db << "select id from schools where school_title='" << username << "';";
-        db.exec("Get new school id");
         school_id = db.get_int(0);
-    }*/
+    }
 
-    db << "INSERT INTO users(email, login, password, permission, avatar, school_id) VALUES ('" << email << "', '" << username << "', '"
-      << password << "', " << permission << ", " << avatar << ", " << school_id << ");";
+    db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('"
+       << email << "', '" << username << "', '"
+       << password << "', " << permission << ", " << school_id << ");";
     db.exec("Save user");
     db.disconnect();
 

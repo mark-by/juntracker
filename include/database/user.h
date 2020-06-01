@@ -29,7 +29,7 @@ public:
     static User get_user(int user_id);
     static User get_user(const std::string &username);
     static int save(const std::string &username, const std::string &password,
-            const std::string &email, int permission, int avatar, int school_id);
+            const std::string &email, int permission, int school_id);
     static int remove(int user_id);
 
     int id() const { return _id; }
