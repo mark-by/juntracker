@@ -18,20 +18,29 @@ class CreationForm extends Component {
 
         window.submitSaveStudent = (event) => {
             event.preventDefault();
+            const formData = new FormData(event.target);
             fetch('/api/save_student', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams(new FormData(event.target)).toString()
+                body: new URLSearchParams(formData).toString()
             }).then(response => {
-                if (response.ok) {
-                    alert("saved")
-                    // window.location.reload();
-                } else {
-                    alert("error")
+                // if (response.ok) {
+                    // response.json().then(json => {
+                    window.updateStudents({
+                        id: 1,
+                        name: formData.get('name') + " " + formData.get('surname'),
+                        isDeleted: false,
+                        isNew: true
+                    });
+                    window.justCloseCreationForm();
+                    // })
+                    // } else {
+                    //     alert("error")
+                    // }
                 }
-            })
+            )
         }
     }
 
@@ -61,6 +70,37 @@ class CreationForm extends Component {
     }
 }
 
+class StudentList extends Component {
+    constructor(props) {
+        super();
+        this.state = {students: []}
+    }
+
+    render() {
+        console.log("render List")
+        console.log("std list", this.state.students)
+        return `
+        ${this.state.students.map(student => {
+            if (student.isNew) {
+                return `<input type="hidden" name="new_student" value="${student.id}"/>
+                        <div class='lesson__content_child' id="lesson__content_child${student.id}" hidden'>
+                            <div class='name'>${student.name}</div>
+                                <div class='delete-student-button' data='${student.id}' onclick="deleteStudent(event)" >
+                                    <img src='static/images/close.svg' data='${student.id}' alt='удалить'/>
+                                </div>
+                        </div>`
+            }
+            return student.isDeleted ? `<input type="hidden" name="delete_student" value="${student.id}"/>`
+                : `<div class='lesson__content_child' id="lesson__content_child${student.id}" hidden'>
+                        <div class='name'>${student.name}</div>
+                            <div class='delete-student-button' data='${student.id}' onclick="deleteStudent(event)" >
+                                <img src='static/images/close.svg' data='${student.id}' alt='удалить'/>
+                            </div>
+                   </div>`
+        }).join("")}`
+    }
+}
+
 class Form extends Component {
     constructor() {
         super();
@@ -84,6 +124,7 @@ class Form extends Component {
 
         this.getData();
         this.creationForm = new CreationForm();
+        this.studentList = new StudentList();
 
         window.closeForm = (event) => {
             if (["modal-wrapper", "close-form-button"].includes(event.target.className)) {
@@ -92,9 +133,12 @@ class Form extends Component {
         }
 
         window.deleteStudent = (event) => {
-            const id = event.target.getAttribute('data');
-            document.querySelector('#lesson__content_child' + id).outerHTML =
-                `<input type="hidden" name="delete_student" value="${id}"/>`;
+            window.updateStudents({
+                id: event.target.getAttribute('data'),
+                name: event.target.innerText,
+                isDeleted: true,
+                isNew: false
+            })
         }
 
         window.saveLesson = (event) => {
@@ -113,23 +157,44 @@ class Form extends Component {
                 }
             })
         }
+
         window.closeSearchForm = (event) => {
             this.setState({searchOpened: false});
         }
+
         window.openSearchForm = (event) => {
             this.setState({searchOpened: true});
         }
+
+        window.justCloseCreationForm = () => {
+            this.setState({creationOpened: false});
+        }
+
         window.closeCreationForm = (event) => {
             if (["modal-wrapper", "close-form-button"].includes(event.target.className)) {
                 this.setState({creationOpened: false});
             }
         }
+
         window.openCreationForm = (event) => {
             this.setState({creationOpened: true});
         }
 
-        window.addStudentToForm = () => {
-            this.setState({students: students})
+        window.updateStudents = (student) => {
+            console.log("student", student);
+            console.log("before", this.state.students);
+            let found = false;
+            for (let idx = 0; idx < this.state.students.length; idx++) {
+                if (this.state.students[idx].id == student.id) {
+                    this.state.students[idx] = student;
+                    found = true;
+                }
+            }
+            if (!found) {
+                this.state.students.push(student);
+            }
+            console.log("after", this.state.students);
+            this.setState({students: this.state.students});
         }
     }
 
@@ -143,6 +208,8 @@ class Form extends Component {
     }
 
     render() {
+        this.studentList.setState({students: this.state.students});
+
         return this.state.isOpen ?
             `
             ${this.state.creationOpened ? this.creationForm.render() : ""}
@@ -208,14 +275,7 @@ class Form extends Component {
                             <div class="students-title">Студенты</div>
                         </div>
                         <div class="students">
-                        ${this.state.students.map(student => {
-                return `<div class='lesson__content_child' id="lesson__content_child${student.id}" hidden'>
-                                        <div class='name'>${student.name}</div>
-                                        <div class='delete-student-button' data='${student.id}' onclick="deleteStudent(event)" >
-                                            <img src='static/images/close.svg' data='${student.id}' alt='удалить'/>
-                                        </div>
-                                    </div>`
-            }).join("")}
+                        ${this.studentList.render()}
                         </div>
                         <div class="bottom-control-wrapper">
                             <div class="add-student-button">
@@ -242,6 +302,14 @@ const root = new Root(document.querySelector("#root"), new Form);
         const [endH, endM] = end.split(":");
         root.app.setState({
             isOpen: true,
+            students: [...lesson.querySelectorAll('.lesson__content_child')].map(student => {
+                return {
+                    id: student.getAttribute('data'),
+                    name: student.innerText,
+                    isDeleted: false,
+                    isNew: false
+                }
+            }),
             lessonData: {
                 id: lesson.getAttribute('data'),
                 weekday: lesson.getAttribute('weekday'),
@@ -249,12 +317,7 @@ const root = new Root(document.querySelector("#root"), new Form);
                 courseId: lesson.getAttribute('course'),
                 cabinetId: lesson.getAttribute('cabinet'),
                 time: [startH, startM, endH, endM],
-                students: [...lesson.querySelectorAll('.lesson__content_child')].map(student => {
-                    return {
-                        id: student.getAttribute('data'),
-                        name: student.innerText
-                    }
-                })
+
             }
         });
     }
