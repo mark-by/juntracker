@@ -67,6 +67,8 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.getPageStudents(user.id()));
         } else if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
+        } else if (request.path() == "/api/user_data") {
+            response = Response(adminApi.get(user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
