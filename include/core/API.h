@@ -16,7 +16,7 @@ protected:
     struct SimplePersonSerializer {
         templates::Context operator()(const Person &person) {
             templates::Context context;
-            context.put("name", person.name() + person.surname());
+            context.put("name", person.name() + " " + person.surname());
             context.put("id", person.id());
             return context;
         }
