@@ -7,6 +7,9 @@
     {% block styles %}
     {% endblock %}
     <title>{% block title %}JunTracker{% endblock %}</title>
+    <script type="module" src="static/script/Component.js"></script>
+    <script type="module" src="static/script/header.js" defer></script>
+    <script type="module" src="static/script/currentWindow.js" defer></script>
 </head>
 <body>
 <header>
@@ -44,10 +47,4 @@
 {% block main %}
 {% endblock %}
 </body>
-<script type="module" src="static/script/Component.js"></script>
-<script type="module" src="static/script/header.js" defer></script>
-{% block scripts %}
-<script type="module" src="static/script/currentWindow.js" defer></script>
-<script type="module" src="static/script/lessons.js" defer></script>
-{% endblock %}
 </html>

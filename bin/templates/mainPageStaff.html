@@ -1,4 +1,4 @@
-{% extends baseAdmin.html %}
+{% extends base.html %}
 
 {% block title %}JunTracker | Окно {% if user.isAdmin %}Администратора{%else%}Учителя{%endif%}{% endblock %}
 
@@ -11,11 +11,7 @@
 
 {% block main %}
 <main class="administrator-main">
-    {% if user.isAdmin %}
-        {% include AdminSchedule.html %}
-    {% else %}
-        {% include TeacherSchedule.html %}
-    {% endif %}
+    {% include Schedule.html %}
     <div class="card-wrapper current-window">
         <div class="schedule__day_header">
             <div id="current-week-day" class="week-day"></div>
@@ -58,14 +54,11 @@
 </main>
 {% if user.isAdmin %}
 <div id="root"></div>
-
-
-
-
-
 <!--<div class="modal-wrapper" id="search-student-form-wrapper>-->
 <!--    <p class="student-add-form-wrapper__title">Найти ученика</p>-->
 <!--    -->
 <!--</div>-->
+
+<script type="module" src="static/script/lessons.js" defer></script>
 {% endif %}
 {% endblock %}
