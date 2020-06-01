@@ -29,7 +29,7 @@ class CreationForm extends Component {
                     if (response.ok) {
                         response.json().then(json => {
                             window.updateStudents({
-                                id: json.id ? json.id.toString : -1,
+                                id: json.id ? json.id : -1,
                                 name: formData.get('name') + " " + formData.get('surname'),
                                 isDeleted: false,
                                 isNew: true

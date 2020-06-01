@@ -26,19 +26,19 @@ class CreationForm extends Component {
                 },
                 body: new URLSearchParams(formData).toString()
             }).then(response => {
-                // if (response.ok) {
-                    // response.json().then(json => {
-                    window.updateStudents({
-                        id: 1,
-                        name: formData.get('name') + " " + formData.get('surname'),
-                        isDeleted: false,
-                        isNew: true
-                    });
-                    window.justCloseCreationForm();
-                    // })
-                    // } else {
-                    //     alert("error")
-                    // }
+                    if (response.ok) {
+                        response.json().then(json => {
+                            window.updateStudents({
+                                id: json.id ? json.id : -1,
+                                name: formData.get('name') + " " + formData.get('surname'),
+                                isDeleted: false,
+                                isNew: true
+                            });
+                            window.justCloseCreationForm();
+                        })
+                    } else {
+                        alert("error")
+                    }
                 }
             )
         }
