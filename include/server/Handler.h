@@ -8,9 +8,9 @@
 #include <string>
 #include "http/request.h"
 #include "http/response.h"
-#include "../database/user.h"/*
+#include "../database/user.h"
 #include "../core/TeacherAPI.h"
-#include "../core/CustomerAPI.h"*/
+//#include "../core/CustomerAPI.h"
 #include "../core/AdminAPI.h"
 #include "../core/UserAPI.h"
 
@@ -25,7 +25,7 @@ public:
 private:
     AdminAPI adminApi;
     UserAPI userApi;
-    //TeacherAPI teacherApi;
+    TeacherAPI teacherApi;
     //CustomerAPI customerApi;
 
     void teacherHandler(Request request, Response& response, const User& user);  // handler_.teacher();
