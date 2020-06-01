@@ -99,12 +99,12 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
 
     if (name_surname.second.empty()) {
         db << "select * from student where name like '" << name_surname.first
-           << "' or surname like '" << name_surname.first << "';";
+           << "%' or surname like '" << name_surname.first << "%';";
     } else {
         db << "select * from student where name like '" << name_surname.first
-           << "' or surname like '" << name_surname.second << "' union "
+           << "%' and surname like '" << name_surname.second << "%' union "
            << "select * from student where name like '" << name_surname.second
-           << "' or surname like '" << name_surname.first << "';";
+           << "%' and surname like '" << name_surname.first << "%';";
     }
 
     db.exec("Find students like");
