@@ -61,9 +61,8 @@ void Handler::adminHandler(Request request, Response& response, const User &user
     response.setStatus(status::NotFound);
     if (request.method() == "GET") {
         if (request.path() == "/") {
-            std::cout << "Admin handler" << std::endl;
             response = Response(adminApi.getMainPage(user.id()));
-        } else if (request.path() == "/api/students") {
+        } else if (request.path() == "/students") {
             response = Response(adminApi.getPageStudents(user.id()));
         } else if (request.path() == "/api/student") {
             response = Response(adminApi.findStudent(request.data("name")));
