@@ -74,8 +74,15 @@ int Student::save(const std::string name, const std::string &surname, int age,
                   const std::string &parent_name, const std::string& avatar, int school_id) {
     SqlWrapper db;
 
+    std::string login;
+    do {
+        login = randomStr(10);
+        db << "select * from users where login='" << login << "';";
+    } while (db.count_tupls() == 0);
+    std::string password = randomStr(12);
+
     db << "insert into users (email, login, password, permission, avatar, school_id) values ('" << email << "', '"
-       << randomStr(10) << "', '" << randomStr(12) << "', " << 0 << ", '"
+       << login << "', '" << password << "', " << 0 << ", '"
        << avatar << "', " << school_id << ") returning id;";
     db.exec("Create student from save");
 
@@ -153,13 +160,9 @@ std::vector<Mark> Student::get_marks_by_course(int course_id) const {
                 db.get_int(4, i),
                 converter.convert(db.get_str(5, i)),
                 db.get_int(6, i)
-                );
+        );
     }
 
     db.disconnect();
     return marks;
 }
-
-
-
-

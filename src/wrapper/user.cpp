@@ -28,7 +28,7 @@ std::vector<Teacher> User::get_teachers() const {
 std::vector<Lesson> User::get_current_lessons() const {
     SqlWrapper db;
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
-    int curr_weekday = d.day_of_week().as_number();
+    int curr_weekday = d.day_of_week().as_number() - 1;
     db << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
     db.exec("Get lessons for weekday by user");
 
@@ -114,15 +114,21 @@ User User::get_user(int user_id) {
 int User::save(const std::string &username, const std::string &password,
         const std::string &email, int permission, int school_id) {
     SqlWrapper db;
+
+    if (username.empty()) {
+        return -1;
+    }
+    db << "select * from users where login='" << username << "';";
+
     if (school_id < 0) {
-        db << "insert into schools(school_title) values ('" << username << "');";
+        db << "insert into schools(school_title) values ('" << username << "') returning id;";
         db.exec("Create school");
-        db << "select id from schools where school_title='" << username << "';";
-        db.exec("Get new school id");
         school_id = db.get_int(0);
     }
-    db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('" << email << "', '" << username << "', '"
-      << password << "', " << permission << ", " << school_id << ");";
+
+    db << "INSERT INTO users(email, login, password, permission, school_id) VALUES ('"
+       << email << "', '" << username << "', '"
+       << password << "', " << permission << ", " << school_id << ");";
     db.exec("Save user");
     db.disconnect();
 
