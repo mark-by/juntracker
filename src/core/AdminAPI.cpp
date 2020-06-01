@@ -242,7 +242,7 @@ templates::Context AdminAPI::get(const User &user) {
     return context;
 }
 
-int AdminAPI::save_student(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+int AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     auto name = data.find("name")->second;
     auto surname = data.find("surname")->second;
     int age = std::stoi(data.find("age")->second);
