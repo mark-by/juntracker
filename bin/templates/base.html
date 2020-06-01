@@ -16,7 +16,7 @@
     <a class="logo" href="/">JunTracker</a>
     <div class="header-menu menu">
         <div class="header-select">
-            <div class="current__option">{% block currentWindow %}Окно Админиcтратора{% endblock %}</div>
+            <div class="current__option">{% block currentWindow %}Окно {% if user.isAdmin %}Админиcтратора{%else%}Учителя{%endif%}{% endblock %}</div>
             <a class="control-button">
                 <img src="static/images/arrow-down.svg">
             </a>
@@ -31,10 +31,14 @@
     <div class="hidden-menu" data="off">
         <div class="header-menu-h hidden-part">
             {% block hiddenMenu %}
+            {% if user.isAdmin %}
             <a class="menu__option" href="/students">База учеников</a>
+            {% endif %}
             <a class="menu__option" href="/schedule">Расписание</a>
             <a class="menu__option" href="/diary">Журнал</a>
+            {% if user.isAdmin %}
             <a class="menu__option" href="/finance">Финансы</a>
+            {% endif %}
             {% endblock %}
         </div>
     </div>
