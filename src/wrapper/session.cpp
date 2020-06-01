@@ -38,13 +38,10 @@ Session Session::create_session(const std::string& username, const std::string& 
     std::string new_cookie = username;
 
     db << "insert into session (cookie, user_id) "
-       << "values ('" << new_cookie << "', " << user_id << ");";
+       << "values ('" << new_cookie << "', " << user_id << ") returning id, cookie;";
     db.exec("Create session");
 
-    db << "select id, cookie from session";
-    db.exec("Get session");
     db.disconnect();
-
     return Session(db.get_int(0), db.get_str(1));
 }
 
