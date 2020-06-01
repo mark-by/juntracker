@@ -77,7 +77,7 @@ int Student::save(const std::string name, const std::string &surname, int age,
     std::string login;
     do {
         login = randomStr(10);
-        db << "select * from users where login=" << login << ";";
+        db << "select * from users where login='" << login << "';";
     } while (db.count_tupls() == 0);
     std::string password = randomStr(12);
 
