@@ -40,21 +40,11 @@ void Handler::customerHandler(Request request, Response& response, const User &u
 
 void Handler::teacherHandler(Request request, Response& response, const User &user) {
     response.setStatus(status::NotFound);
-    /*if (request.method() == "GET") {
+    if (request.method() == "GET") {
         if (request.path() == "/") {
-            response = Response(teacherApi.getMainPage(user.id()));
-        } else if (request.path() == "/api/rating") {
-            response = Response(teacherApi.getRatingPage(user.id()));
+            response = Response(teacherApi.getMainPage(user));
         }
-    } else {
-        if (request.path() == "/api/save_current_lesson") {
-            response = Response(teacherApi.saveCurrentLesson(request.dataTable()));
-        } else if (request.path() == "/api/rate") {
-            response = Response(teacherApi.rate(request.dataTable()));
-        } else if (request.path() == "/api/final_marks") {
-            response = Response(teacherApi.finalRate(request.dataTable()));
-        }
-    }*/
+    }
 }
 
 void Handler::adminHandler(Request request, Response& response, const User &user) {
