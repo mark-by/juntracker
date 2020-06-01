@@ -82,11 +82,11 @@ int Student::save(const std::string name, const std::string &surname, int age,
     int user_id = db.get_int(0);
     db << "insert into student (name, surname, age, user_id, description, tel_number, parent_name) "
        << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
-       << ", '" << description << ", '" << tel_number << ", '" << parent_name << "');";
+       << ", '" << description << "', '" << tel_number << "', '" << parent_name << "') returning id;";
     db.exec("Save student");
-    db.disconnect();
 
-    return 0;
+    db.disconnect();
+    return db.get_int(0);
 }
 
 int Student::remove(int student_id) {

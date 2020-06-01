@@ -172,32 +172,15 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
         return 404;
     }
 
-//    "delete-student" = id
-//    "new-student" = "Михаил ТрУщелев"
-//   students_fot_lessons
-//    "lesson_id=1&
-//    weekday=0&
-//    course=1&
-//    cabinet=2&
-//    teacher=1&
-//    start-hours=2&
-//    start-minutes=00&
-//    end-hours=23&
-//    end-minutes=00&
-//    new-student=Михаил Трущелев&
-//    new-student=Тимофей Макаров&
-//    delete-student=34&
-//    delete-student-12"
-
     int lesson_id = std::stoi(data.find("lesson_id")->second);
-//    std::vector<int> students_id;
-//    for (auto &pair : data) {
-//        if (pair.first == "new-student") {
-//            Student::fast_save(pair.second, user.school_id(), lesson_id);
-//        } else if (pair.first == "delete-student") {
-//            Student::delete_student(std::stoi(pair.second), lesson_id);
-//        }
-//    }
+    std::vector<int> students_id;
+    for (auto &pair : data) {
+        if (pair.first == "new_student") {
+            Lesson::add_student(std::stoi(pair.second), lesson_id);
+        } else if (pair.first == "delete_student") {
+            Lesson::delete_student(std::stoi(pair.second), lesson_id);
+        }
+    }
 
     auto lesson = Lesson::get_lesson(lesson_id);
     lesson.update(lesson_id,
@@ -234,49 +217,49 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
     auto match = student.find("name");
 
     if (match != none) {
-        name = data.find("name")->second;
+        name = student.find("name")->second;
     } else {
         return {404, context};
     }
 
     match = student.find("surname");
     if (match != none) {
-        surname = data.find("surname")->second;
+        surname = student.find("surname")->second;
     } else {
         return {404, context};
     }
 
     match = student.find("age");
     if (match != none) {
-        age = std::stoi(data.find("age")->second);
+        age = std::stoi(student.find("age")->second);
     }
 
     match = student.find("description");
     if (match != none) {
-        description = data.find("description")->second;
+        description = student.find("description")->second;
     }
 
     match = student.find("tel_number");
     if (match != none) {
-        tel_number = data.find("tel_number")->second;
+        tel_number = student.find("tel_number")->second;
     }
 
     match = student.find("email");
     if (match != none) {
-        e_mail = data.find("email")->second;
+        e_mail = student.find("email")->second;
     }
 
     match = student.find("parent");
     if (match != none) {
-        parent_name = data.find("parent")->second;
+        parent_name = student.find("parent")->second;
     }
 
     match = student.find("avatar");
     if (match != none) {
-        avatar = data.find("avatar")->second;
+        avatar = student.find("avatar")->second;
     }
 
-    school_id = user.school_id();
+    int school_id = user.school_id();
 
     int id = Student::save(name, surname, age, description, tel_number, e_mail, parent_name, avatar, school_id);
     context.put("id", id);
