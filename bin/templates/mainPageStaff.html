@@ -57,94 +57,15 @@
         </div>
 </main>
 {% if user.isAdmin %}
-<div class="lesson-edit-form-wrapper">
-    <form method="POST" enctype="application/x-www-form-urlencoded">
-        <input id="lesson-id" name="lesson_id" type="hidden" value="">
-        <div class="lesson-edit-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
-        <div class="form-grid">
-            <p>Курс</p>
-            <select name="weekday" id="lesson-edit-weekday">
-                <option value="0">Понедельник</option>
-                <option value="1">Вторник</option>
-                <option value="2">Среда</option>
-                <option value="3">Четверг</option>
-                <option value="4">Пятница</option>
-                <option value="5">Cуббота</option>
-                <option value="6">Воскресенье</option>
-            </select>
-            <p>День недели</p>
-            <select name="course" id="lesson-edit-title">
-                {% for course in user.courses %}
-                <option value="{{course.id}}">{{course.title}}</option>
-                {% endfor %}
-            </select>
-            <p>Кабинет</p>
-            <select name="cabinet" id="lesson-edit-cabinet">
-                {% for cabinet in user.cabinets %}
-                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
-                {% endfor %}
-            </select>
-            <p>Преподаватель</p>
-            <select name="teacher" id="lesson-edit-teacher">
-                {% for teacher in user.teachers %}
-                <option value="{{teacher.id}}">{{teacher.name}}</option>
-                {% endfor %}
-            </select>
-            <p>Начало занятия</p>
-            <label>
-                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit"/>
-                <span>:</span>
-                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit"/>
-            </label>
-            <p>Конец занятия</p>
-            <label>
-                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit"/>
-                <span>:</span>
-                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit"/>
-            </label>
-        </div>
-        <div class="bottom-flex">
-            <div class="students-title">Студенты</div>
-        </div>
-        <div class="students">
-        </div>
-        <div class="bottom-control-wrapper">
-            <div class="add-student-button">
-                <div class="add-student-button__new">Создать</div>
-                <img class="add-student-button__plus" src="static/images/plus.svg" alt="добавить"/>
-                <div class="add-student-button__search">Найти</div>
-            </div>
-            <div class="bottom-flex">
-                <div class="close-form-button">Отмена</div>
-                <input type="submit" value="Сохранить"/>
-            </div>
-        </div>
-    </form>
-</div>
+<div id="root"></div>
 
-<div class="student-add-form-wrapper">
-    <p class="student-add-form-wrapper__title">Создать ученика</p>
-    <form class="student-add-form" method="POST" enctype="application/x-www-form-urlencoded">
-        <div class="student-add-form__content">
-            <p>Аватар</p><input type="image"/>
-            <input type="hidden" name="avatar" value=""/>
-            <p>Имя</p><input name="name" type="text"/>
-            <p>Фамилия</p><input name="surname" type="text"/>
-            <p>Возраст</p><input name="age" type="number"/>
-            <p>Родитель</p><input name="parent" type="text"/>
-            <p>Контактный номер</p><input name="tel_number" type="text"/>
-            <p>Электронная почта</p><input name="email" type="email"/>
-            <p>Описание</p><textarea name="description"></textarea>
-        </div>
-        <div class="bottom-flex">
-            <div class="close-form-button">Отмена</div>
-            <input type="submit" value="Сохранить"/>
-        </div>
-    </form>
-</div>
 
-<div class="student-search-wrapper">
 
-</div>
+
+
+<!--<div class="modal-wrapper" id="search-student-form-wrapper>-->
+<!--    <p class="student-add-form-wrapper__title">Найти ученика</p>-->
+<!--    -->
+<!--</div>-->
 {% endif %}
 {% endblock %}

@@ -6,14 +6,16 @@
             <div>{{day.date}}</div>
         </div>
         {% for lesson in day.lessons %}
-        <div class="card-wrapper lesson" data="{{lesson.id}}">
+        <div class="card-wrapper lesson" data="{{lesson.id}}" course="{{lesson.course.id}}"
+             cabinet="{{lesson.cabinet.id}}" teacher="{{lesson.teacher.id}}" weekday="{{day.weekDay}}">
             <div class="button-settings-lesson">
-                <img class="button-settings-lesson-img" alt="lesson settings button" src="static/images/more_horizontal.svg"/>
+                <img class="button-settings-lesson-img" alt="lesson settings button"
+                     src="static/images/more_horizontal.svg"/>
             </div>
             <div class="lesson__header">
-                <div class="lesson__header_course" data="{{lesson.course.id}}">{{lesson.course.title}}</div>
-                <div class="lesson__header_cab" data="{{lesson.cabinet.id}}">{{lesson.cabinet.title}}</div>
-                <div class="lesson__header_tutor" data="{{lesson.teacher.id}}">{{lesson.teacher.name}}</div>
+                <div class="lesson__header_course">{{lesson.course.title}}</div>
+                <div class="lesson__header_cab">{{lesson.cabinet.title}}</div>
+                <div class="lesson__header_tutor">{{lesson.teacher.name}}</div>
             </div>
             <div class="lesson__content">
                 {% for child in lesson.children %}

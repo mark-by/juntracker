@@ -12,8 +12,6 @@ a {
     color: unset;
 }
 
-
-
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
@@ -242,8 +240,7 @@ input[type=checkbox] {
     text-align: center;
 }
 
-.lesson-edit-form-wrapper {
-    display: none;
+.modal-wrapper {
     font-size: 18px;
     position: fixed;
     width: 100%;
@@ -252,11 +249,15 @@ input[type=checkbox] {
     z-index: 3000;
 }
 
+.modal-form #add-student-form-wrapper {
+    z-index: 5000;
+}
+
 .lesson__header_tutor {
     text-align: end;
 }
 
-.lesson-edit-form-wrapper>form {
+.modal-form, .student-add-form {
     background: white;
     position: absolute;
     left: 50%;
@@ -310,7 +311,7 @@ input[type=checkbox] {
     opacity: 100%;
 }
 
-.bottom-control-wrapper>.bottom-flex>.close-form-button, .bottom-control-wrapper>.bottom-flex>input[type=submit]{
+.bottom-flex>.close-form-button, .bottom-flex>input[type=submit]{
     font-size: 18px;
     background: black;
     border: none;
@@ -352,7 +353,9 @@ input[type=number] {
     position: relative;
 }
 
-.lesson-edit-title {
+
+
+.form-title {
     font-size: 20px;
     font-weight: bold;
     text-align: center;

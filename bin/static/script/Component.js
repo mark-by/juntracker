@@ -1,14 +1,21 @@
 class Component {
-    constructor(state) {
-        this.state = state
+    constructor(props) {
+        this.state;
+        this.props = props;
+        this.root;
     }
 
-    render() {
-
+    init(root) {
+       this.root = root;
     }
+
+    render() {}
 
     setState(state) {
         this.state = {...this.state, ...state}
+        if (this.root) {
+            this.root.render();
+        }
         this.render()
     }
 }
