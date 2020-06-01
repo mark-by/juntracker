@@ -32,7 +32,8 @@ public:
 
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string &surname,
-            int age, int user_id, const std::string& description, const std::string& tel_number, const std::string& parent_name);
+            int age, const std::string& description, const std::string& tel_number,
+            const std::string& email, const std::string& parent_name, const std::string& avatar, int school_id);
     static int remove(int student_id);
     static std::vector<Student> get_students_like(const std::string &str);
 

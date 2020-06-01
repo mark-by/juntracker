@@ -77,6 +77,8 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.updateLesson(request.dataTable(), user));
         } else if (request.path() == "/api/delete_student") {
             response = Response(adminApi.deleteStudent(std::stoi(request.data("id"))));
+        } else if (request.path() == "/api/save_student") {
+            response = Response(adminApi.saveStudent(request.dataTable(), user));
         } else if (request.path() == "/api/create_student") {
             response = Response(adminApi.createStudent(request.dataTable(), user));
         } else if (request.path() == "/api/add_course") {

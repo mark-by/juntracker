@@ -70,10 +70,16 @@ Student Student::get_student(int student_id) {
 }
 
 int Student::save(const std::string name, const std::string &surname, int age,
-                  int user_id, const std::string &description, const std::string &tel_number,
-                  const std::string &parent_name) {
+        const std::string &description, const std::string &tel_number, const std::string& email,
+                  const std::string &parent_name, const std::string& avatar, int school_id) {
     SqlWrapper db;
 
+    db << "insert into users (email, login, password, permission, avatar, school_id) values ('" << email << "', '"
+       << randomStr(10) << "', '" << randomStr(12) << "', " << 0 << ", '"
+       << avatar << "', " << school_id << ") returning id;";
+    db.exec("Create student from save");
+
+    int user_id = db.get_int(0);
     db << "insert into student (name, surname, age, user_id, description, tel_number, parent_name) "
        << "values('" << name << "', '" << surname << "', " << age << ", " << user_id
        << ", '" << description << ", '" << tel_number << ", '" << parent_name << "');";

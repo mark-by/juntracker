@@ -37,16 +37,17 @@ public:
 
     int deleteStudent(int student_id);
 
-    int createStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
-
     std::string getPageStudents(int);
 
     int addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+
     int deleteCourse(int course_id);
 
     templates::Context get(const User& user);
 
     std::string getPagePaymentsByStudent(const std::string &);
+
+    std::pair<int, templates::Context> saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
 private:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
