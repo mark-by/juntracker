@@ -241,3 +241,19 @@ templates::Context AdminAPI::get(const User &user) {
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     return context;
 }
+
+int AdminAPI::save_student(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    auto name = data.find("name")->second;
+    auto surname = data.find("surname")->second;
+    int age = std::stoi(data.find("age")->second);
+    auto description = data.find("description")->second;
+    auto tel_number = data.find("tel_number")->second;
+    auto e_mail = data.find("email")->second;
+    auto parent_name = data.find("parent")->second;
+    auto avatar = data.find("avatar")->second;
+    int school_id = user.school_id();
+
+    Student::save(name, surname, age, description, tel_number, e_mail, parent_name, avatar, school_id);
+
+    return 0;
+}
