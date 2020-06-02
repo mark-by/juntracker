@@ -29,6 +29,13 @@
             </div>
         </div>
         {% endfor %}
+        {% if user.isAdmin %}
+        <div class="flex-center">
+            <div class="add-lesson-button">
+                <img src="static/images/plus.svg"/>
+            </div>
+        </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>

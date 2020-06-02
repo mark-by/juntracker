@@ -1,12 +1,14 @@
 {% extends base.html %}
 
-{% block title %}JunTracker | Окно&nbsp;{% if user.isAdmin %}Администратора{%else%}Учителя{%endif%}{% endblock %}
+{% block currentWindow %}Окно&nbsp;{% if user.isAdmin %}Админиcтратора{%else%}Преподавателя{%endif%}{% endblock %}
 
 {% block hiddenMenu %}
-<a class="menu__option" href="/students">База учеников</a>
+    {%if user.isAdmin %}
+        <a class="menu__option" href="/students">База учеников</a>
+        <a class="menu__option" href="/finance">Финансы</a>
+    {% endif %}
 <a class="menu__option" href="/schedule">Расписание</a>
 <a class="menu__option" href="/diary">Журнал</a>
-<a class="menu__option" href="/finance">Финансы</a>
 {% endblock %}
 
 {% block main %}

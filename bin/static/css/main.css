@@ -327,6 +327,19 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+
+.add-lesson-button {
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .bottom-control-wrapper>.add-student-button {
     display: flex;
     width: 36%;

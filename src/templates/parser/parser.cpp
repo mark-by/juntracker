@@ -51,6 +51,7 @@ templates::NodeQueue templates::Parser::parse(const std::string::const_iterator 
             continue;
         }
         auto[endBlock, node] = parseNode(currMatch);
+
         _textParser.set(textStart, currMatch->prefix().second);
         if (!_textParser.empty()) {
             nodes.push(_textParser.parse());
