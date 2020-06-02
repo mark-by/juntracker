@@ -223,8 +223,7 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
 
 int AdminAPI::deleteLesson(const int lesson_id) {
     Lesson::remove(lesson_id);
-
-    return 0;
+    return 200;
 }
 
 std::string AdminAPI::schedule(const User &user) {
