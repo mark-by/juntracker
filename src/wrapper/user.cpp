@@ -75,7 +75,7 @@ std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
 std::vector<Student> User::get_students() const {
     SqlWrapper db;
     db << "select student.id, name, surname, age, description, tel_number, parent_name from student "
-       << "join users on users.id=student.id where users.school_id=" << _school_id << ";";
+       << "join users on users.id=student.user_id where users.school_id=" << _school_id << ";";
     db.exec("Get students");
 
     std::vector<Student> res_students;
