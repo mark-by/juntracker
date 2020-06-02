@@ -40,6 +40,10 @@ void Handler::teacherHandler(Request request, Response& response, const User &us
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user));
         }
+    } else {
+        if (request.path() == "/api/save_current_lesson") {
+            response = Response(adminApi.saveCurrentLesson(request.dataTable()));
+        }
     }
 }
 
