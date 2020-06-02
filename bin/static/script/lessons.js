@@ -167,6 +167,95 @@ class SearchForm extends Component {
     }
 }
 
+
+
+class Window extends Component {
+    constructor() {
+        super();
+        this.state = {
+            now: "schedule"
+        }
+        this.scheduleButton = document.querySelector("#schedule-button");
+        this.courseButton = document.querySelector("#course-button");
+
+        this.scheduleButton.onclick = () => this.setState({now: "schedule"});
+        this.courseButton.onclick = () => this.setState({now: "course"});
+        document.querySelector(".add-course-button").onclick = () => {
+            window.insertCourses([{
+                id: -1,
+                title: "Введите название курса",
+                price: 0,
+            }]);
+        }
+        this.win = document.querySelector(".window-courses");
+
+        this.coursesList = document.querySelector('#window-courses-list');
+        window.saveCourse = (event) => {
+            event.preventDefault();
+            fetch('/api/save_course', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/x-www-urlencoded'
+                },
+                body: new URLSearchParams(new FormData(event.target)).toString()
+            }).then(res => {
+                if (!res.ok) {
+                    alert("Не удалось сохранить курс")
+                }
+            })
+        }
+        window.insertCourses = (courses) => {
+            if (!courses) {
+                return;
+            }
+            this.coursesList.innerHTML += `${courses.map(course => {
+                return `
+                    <form class="course-form" data="${course.id}" onsubmit="saveCourse(event)">
+                        <input type="text" value="${course.title}" name="title"/>
+                        <input type="number" value="${course.price}" name="price"/>
+                        <div class="course-form-buttons">
+                            <input class="save-course-button" value type="submit"/>
+                            <img class="delete-course-button" src="static/images/trash.svg"/>
+                        </div>
+                    </form>  
+                ` 
+            }).join("")}`;
+
+            [...this.coursesList.querySelectorAll('.course-form')].map(element => {
+                element.querySelector('.delete-course-button').onclick = () => {
+                    fetch('/api/delete_course', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams(new FormData(element)).toString()
+                    }).then(res => {
+                        // if (res.ok) {
+                            element.remove();
+                        // }
+                    })
+                }
+            })
+        }
+    }
+
+    render() {
+        this.scheduleButton.classList.remove('active');
+        this.courseButton.classList.remove('active');
+
+        if (this.state.now === "schedule") {
+            this.scheduleButton.classList.add('active');
+            this.win.style.zIndex = "-100";
+        } else {
+            this.courseButton.classList.add('active');
+            this.win.style.zIndex = "100";
+        }
+    }
+}
+
+const win = new Window();
+win.render();
+
 class Form extends Component {
     constructor() {
         super();
@@ -185,7 +274,8 @@ class Form extends Component {
             },
             students: [],
             searchOpened: false,
-            creationOpened: false
+            creationOpened: false,
+            isNew: false
         }
 
         this.getData();
@@ -211,7 +301,13 @@ class Form extends Component {
 
         window.saveLesson = (event) => {
             event.preventDefault();
-            fetch('/api/update_lesson', {
+            let url;
+            if (this.state.isNew) {
+                url = "/api/create_lesson";
+            } else {
+                url = "/api/update_lesson";
+            }
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded',
@@ -271,10 +367,10 @@ class Form extends Component {
     async getData() {
         const response = await fetch('/api/user_data');
         const json = await response.json();
-        console.log(json)
         this.state.courses = json.courses;
         this.state.cabinets = json.cabinets;
-        this.state.teachers = json.teachers
+        this.state.teachers = json.teachers;
+        window.insertCourses(json.courses);
     }
 
     render() {
@@ -286,8 +382,8 @@ class Form extends Component {
             ${this.state.searchOpened ? this.searchForm.render() : ""}
             <div class="modal-wrapper" id="#lesson-edit-form-wrapper" onclick="closeForm(event)">
                 <form class="modal-form" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="saveLesson(event)">
-                    <input id="lesson-id" name="lesson_id" type="hidden" value="${this.state.lessonData.id}">
-                        <div class="form-title"><span id="edit-action">Изменить</span>&nbsp;урок</div>
+                    ${this.state.isNew ? "" : `<input id="lesson-id" name="lesson_id" type="hidden" value="${this.state.lessonData.id}">`}
+                        <div class="form-title">${this.state.isNew ? "Создать" : "Изменить"}&nbsp;урок</div>
                         <div class="form-grid">
                             <p>День недели</p>
                             <select name="weekday" id="lesson-edit-weekday">
@@ -364,7 +460,60 @@ class Form extends Component {
     }
 }
 
+class DeleteLessonModal extends Component{
+    constructor() {
+        super();
+        this.state = {
+            isOpen: false,
+            id: -1
+        }
+
+        window.closeDeleteModalForm = (event) => {
+            if (["modal-wrapper", "close-form-button"].includes(event.target.className)) {
+                this.setState({isOpen: false});
+            }
+        }
+
+        window.deleteLesson = (event) => {
+            event.preventDefault();
+            fetch('/api/delete_lesson', {
+                method: 'POST',
+                headers: {
+                    'content-type' : 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(new FormData(event.target)).toString()
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Не удалось удалить ;(');
+                    this.setState({isOpen: false});
+                }
+            })
+        }
+    }
+
+    render() {
+        if (!this.state.isOpen) {
+            return "";
+        }
+        return `
+        <div class="modal-wrapper" onclick="closeDeleteModalForm(event)">
+            <form class="modal-form" onsubmit="deleteLesson(event)">
+                <div class="form-title">Удалить?</div>
+                <input type="hidden" name="id" value="${this.state.id}"/>
+                <div class="bottom-flex">
+                    <div class="close-form-button" onclick="closeDeleteModalForm(event)">Отмена</div>
+                    <input type="submit" value="Удалить"/>
+                </div>
+            </form> 
+        </div>
+        `
+    }
+}
+
 const root = new Root(document.querySelector("#root"), new Form);
+const deleteRootModal = new Root(document.querySelector("#root"), new DeleteLessonModal());
 
 [...document.querySelectorAll(".schedule .card-wrapper")].map(lesson => {
     lesson.querySelector('.button-settings-lesson').onclick = () => {
@@ -389,7 +538,59 @@ const root = new Root(document.querySelector("#root"), new Form);
                 cabinetId: lesson.getAttribute('cabinet'),
                 time: [startH, startM, endH, endM],
 
-            }
+            },
+            isNew: false
         });
     }
+
+    lesson.querySelector('.button-delete-lesson').onclick = () => {
+        deleteRootModal.app.setState({
+            isOpen: true,
+            id: lesson.getAttribute('data'),
+        })
+    }
 });
+
+function iWeekToStr(week) {
+    switch (week) {
+        case 0:
+            return 'Понедельник';
+        case 1:
+            return 'Вторник';
+        case 2:
+            return 'Среда';
+        case 3:
+            return 'Четверг';
+        case 4:
+            return 'Пятница';
+        case 5:
+            return 'Суббота';
+        case 6:
+            return 'Воскресенье';
+    }
+}
+
+[...document.querySelectorAll('.add-lesson-button')].map((button, idx) => {
+    console.log(iWeekToStr(idx), idx);
+   button.onclick = () => {
+       root.app.setState({
+           isOpen: true,
+           students: [],
+           lessonData: {
+               id: -1,
+               weekday: iWeekToStr(idx),
+               teacherId: -1,
+               courseId: -1,
+               cabinetId: -1,
+               time: [0, 0, 0, 0],
+           },
+           isNew: true
+       });
+   }
+})
+
+
+
+
+
+
