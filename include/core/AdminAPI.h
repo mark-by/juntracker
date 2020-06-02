@@ -22,7 +22,7 @@ public:
 
     std::string getPageStudents(const User& user);
 
-    int addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+    int editCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int deleteCourse(int course_id);
 
