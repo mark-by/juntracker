@@ -60,9 +60,9 @@ int Teacher::save(const std::string& name, const std::string& surname, int schoo
 
     db << "insert into teacher(name, surname, age, tel_number, salary, description, user_id) "
        << "values ('" << name << "', '"
-           << surname << "', '"
+           << surname << "', "
            << 0 << ", '"
-           << "" << ", '"
+           << "" << "', "
            << 0 << ", '"
            << "" << "', "
            << user_id << ") returning id;";
@@ -103,7 +103,7 @@ int Teacher::update(int teacher_id, const std::string& name, const std::string& 
     db << "update teacher set "
        << "name='" << name << "', "
        << "surname='" << surname
-       << "' where teacher_id=" << teacher_id << ";";
+       << "' where id=" << teacher_id << ";";
     db.exec("Update teacher");
 
     db.disconnect();

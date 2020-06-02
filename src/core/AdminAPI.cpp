@@ -184,15 +184,15 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
 
     std::string result;
     bool success;
-    std::tie(result, success) = fetch("teacher_id", lesson);
+    std::tie(result, success) = fetch("teacher", lesson);
     if (!success)
         return 404;
     int teacher_id = std::stoi(result);
-    std::tie(result, success) = fetch("course_id", lesson);
+    std::tie(result, success) = fetch("course", lesson);
     if (!success)
         return 404;
     int course_id = std::stoi(result);
-    std::tie(result, success) = fetch("cabinet_id", lesson);
+    std::tie(result, success) = fetch("cabinet", lesson);
     if (!success)
         return 404;
     int cabinet_id = std::stoi(result);
