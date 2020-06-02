@@ -18,6 +18,7 @@
                 {% for course in courses %}
                 <form class="course-form" data="{{course.id}}" onsubmit="saveListElement(event)" title="course">
                     <input type="text" value="{{course.title}}" name="title"/>
+                    <input type="hidden" value="{{course.id}}" name="id"/>
                     <input type="number" value="{{course.price}}" name="price"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
@@ -42,6 +43,7 @@
                 {% for teacher in teachers %}
                 <form class="teacher-form" data="{{teacher.id}}" onsubmit="saveListElement(event)" title="teacher">
                     <input type="text" value="{{teacher.name}}" name="name"/>
+                    <input type="hidden" value="{{teacher.id}}" name="id"/>
                     <input type="text" value="{{teacher.surname}}" name="surname"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
@@ -65,6 +67,7 @@
                 {% for cabinet in cabinets %}
                 <form class="cabinet-form" data="{{cabinet.id}}" onsubmit="saveListElement(event)" title="cabinet">
                     <input type="text" value="{{cabinet.title}}" name="name"/>
+                    <input type="hidden" value="{{cabinet.id}}" name="id"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>

@@ -71,7 +71,7 @@ void Handler::adminHandler(Request request, Response& response, const User &user
         } else if (request.path() == "/api/save_student") {
             auto json_and_code = adminApi.saveStudent(request.dataTable(), user);
             response = Response(json_and_code.second, json_and_code.first);
-        } else if (request.path() == "/api/add_course") {
+        } else if (request.path() == "/api/save_course") {
             response = Response(adminApi.editCourse(request.dataTable(), user));
         } else if (request.path() == "/api/delete_course") {
             response = Response(adminApi.deleteCourse(std::stoi(request.data("id"))));

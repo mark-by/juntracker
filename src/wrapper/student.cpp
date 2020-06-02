@@ -5,7 +5,7 @@
 
 std::vector<Course> Student::get_courses() const {
     SqlWrapper db;
-    db << "select course.id, name, price, teacher_id, school_id "
+    db << "select course.id, name, price, school_id "
        << "from course "
        << "join students_for_course c on course.id=c.course_id "
        << "where c.student_id=" << _id << ";";
