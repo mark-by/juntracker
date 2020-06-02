@@ -175,7 +175,7 @@ int AdminAPI::addLesson(const std::unordered_multimap<std::string, std::string> 
     return 200;
 }
 
-int deleteLesson(int lesson_id) {
+int AdminAPI::deleteLesson(const int lesson_id) {
     Lesson::remove(lesson_id);
 
     return 0;
