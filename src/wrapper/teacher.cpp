@@ -52,7 +52,7 @@ int Teacher::save(const std::string& name, const std::string& surname, int schoo
     db << "insert into users (login, password, permission, school_id) values ('"
        << login << "', '"
        << password << "', "
-       << 1 << ", '"
+       << 1 << ", "
        << school_id << ") returning id;";
     db.exec("Create teacher from save");
 
