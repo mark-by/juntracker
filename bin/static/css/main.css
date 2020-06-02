@@ -178,18 +178,6 @@ input[type=checkbox] {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.button-settings-lesson {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    transform: translate(50%, -50%);
-}
-
 .schedule {
     margin: 30px 0 30px 30px;
     overflow-y: scroll;
@@ -289,6 +277,7 @@ input[type=checkbox] {
     align-items: center;
 }
 
+
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -338,6 +327,110 @@ input[type=checkbox] {
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-lesson-wrapper {
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    width: 30px;
+    height: calc(100% + 15px);
+    right: 0;
+    transform: translate(50%, -15px);
+}
+
+.schedule-control-wrapper {
+    display: flex;
+    width: 100%;
+    padding-left: 15px;
+    padding-top: 15px;
+}
+
+.window-courses {
+    position: absolute;
+    background: white;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.window {
+    position: relative;
+}
+
+.schedule-control-button {
+    font-weight: bold;
+    margin: 0 5px;
+    cursor: pointer;
+    color: gray;
+}
+
+.window-courses__title, .course-form {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+    margin-left: 15px;
+}
+
+.window-courses__title {
+    font-weight: bold;
+}
+
+.course-form-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.course-form>input[type=number], .course-form>input[type=text] {
+    width: 100%;
+    border: none;
+    font-size: 16px;
+}
+
+.save-course-button, .delete-course-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: white;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+.delete-course-button {
+    width: 30px;
+    height: 30px;
+}
+
+.save-course-button {
+    background: white url("../images/ok.svg") no-repeat center;
+}
+
+.active {
+    border-bottom: 1px gray solid;
+}
+
+.control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.control>img {
+    width: 25px;
+    height: 25px;
 }
 
 .bottom-control-wrapper>.add-student-button {
