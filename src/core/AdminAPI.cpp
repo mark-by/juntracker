@@ -115,12 +115,12 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
 
     auto lesson = Lesson::get_lesson(lesson_id);
     lesson.update(lesson_id,
-                  std::stoi(data.find("course")->second),
-                  std::stoi(data.find("cabinet")->second),
-                  std::stoi(data.find("teacher")->second),
-                  std::stoi(data.find("weekday")->second),
-                  data.find("start-hours")->second + ":" + data.find("start-minutes")->second,
-                  data.find("end-hours")->second + ":" + data.find("end-minutes")->second,
+                  std::stoi(get("course", data)),
+                  std::stoi(get("cabinet", data)),
+                  std::stoi(get("teacher", data)),
+                  std::stoi(get("weekday", data)),
+                  get("start-hours", data) + ":" + get("start-minutes", data),
+                  get("end-hours", data) + ":" + get("end-minutes", data),
                   lesson.school_id());
     auto students = lesson.get_students();
 
@@ -203,6 +203,7 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
     int school_id = user.school_id();
 
     Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+    updateLesson(lesson, user);
 
     return 200;
 }
