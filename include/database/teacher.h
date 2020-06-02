@@ -29,11 +29,8 @@ public:
     int setMark(int lesson_id, int student_id, int mark, int school_id) const;
 
     static Teacher get_teacher(int teacher_id);
-    static int save(const std::string& name, const std::string& surname, int salary,
-                    int age, const std::string& tel_number, const std::string& description,
-                    const std::string& email, const std::string& avatar, int school_id);
-    static int update(int teacher_id, const std::string& name, const std::string& surname, int salary,
-                      int age, const std::string& tel_number, const std::string& description);
+    static int save(const std::string& name, const std::string& surname, int school_id);
+    static int update(int teacher_id, const std::string& name, const std::string& surname);
     static int remove(int teacher_id);
 
     int id() const override { return _id; }
