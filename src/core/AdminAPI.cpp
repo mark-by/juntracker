@@ -142,6 +142,15 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     return context;
 }
 
+std::string AdminAPI::getMainPage(const User &user) {
+    auto context = mainStaffData(user);
+    context.putArray("teachers", user.get_teachers(), PersonSerializer<Teacher>());
+    context.putArray("courses", user.get_courses(), CourseSerializer);
+    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+    _render.set("mainPageStaff.html");
+    return _render.render(context);
+}
+
 int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::string> &lesson, const User &user) {
     templates::Context context;
 

@@ -37,6 +37,8 @@ public:
     templates::Template _render;
 
     templates::Context searchStudent(const std::string &search, const User& user);
+
+    std::string getMainPage(const User & user) override;
 };
 
 #endif //CORE_ADMINAPI_H

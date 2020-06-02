@@ -1,7 +1,7 @@
 #include <StaffAPI.h>
 #include <context/context.h>
 
-templates::Context CourseSerializer(const Course& course) {
+templates::Context StaffAPI::CourseSerializer(const Course& course) {
     templates::Context context;
     context.put("title", course.title());
     context.put("id", course.id());
@@ -11,6 +11,7 @@ templates::Context CourseSerializer(const Course& course) {
 
 templates::Context StaffAPI::getUserData(const User &user) {
     templates::Context context;
+    auto courses = user.get_courses();
     context.putArray("courses", user.get_courses(), CourseSerializer);
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
@@ -18,25 +19,8 @@ templates::Context StaffAPI::getUserData(const User &user) {
 }
 
 std::string StaffAPI::getMainPage(const User &user) {
-    templates::Context context;
-    context.set("user", UserSerializer(user));
-    std::vector<WeekDay> days;
-    DateTime dateTime;
-    for (int weekday = 0; weekday < 7; weekday++) {
-        try {
-            days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
-                              user.get_lessons_by_weekday(weekday));
-        } catch(...) {}
-    }
-    context.putArray("scheduleDays", days, DaySerializer);
-    std::vector<Lesson> currentLessons;
-    try {
-        currentLessons = user.get_current_lessons();
-    } catch(...) {}
-    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
-
     _render.set("mainPageStaff.html");
-
+    auto context = mainStaffData(user);
     return _render.render(context);
 }
 
@@ -102,5 +86,25 @@ templates::Context StaffAPI::LessonSerializer(const Lesson &lesson) {
     context.put("startTime", lesson.start_time());
     context.put("endTime", lesson.end_time());
 
+    return context;
+}
+
+templates::Context StaffAPI::mainStaffData(const User &user) {
+    templates::Context context;
+    context.set("user", UserSerializer(user));
+    std::vector<WeekDay> days;
+    DateTime dateTime;
+    for (int weekday = 0; weekday < 7; weekday++) {
+        try {
+            days.emplace_back(DateTime::weekdayToStr(weekday), dateTime.dateByWeekday(weekday),
+                              user.get_lessons_by_weekday(weekday));
+        } catch(...) {}
+    }
+    context.putArray("scheduleDays", days, DaySerializer);
+    std::vector<Lesson> currentLessons;
+    try {
+        currentLessons = user.get_current_lessons();
+    } catch(...) {}
+    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
     return context;
 }
