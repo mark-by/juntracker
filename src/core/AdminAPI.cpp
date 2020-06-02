@@ -202,8 +202,10 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
     auto end_time = get("end-hours", lesson) + ":" + get("end-minutes", lesson);
     int school_id = user.school_id();
 
-    Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
-    updateLesson(lesson, user);
+    int lesson_id = Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+    std::unordered_multimap<std::string, std::string> created_lesson = lesson;
+    created_lesson.insert({"lesson_id", std::to_string(lesson_id)});
+    updateLesson(created_lesson, user);
 
     return 200;
 }
