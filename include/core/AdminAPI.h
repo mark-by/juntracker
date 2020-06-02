@@ -39,6 +39,8 @@ public:
     templates::Context searchStudent(const std::string &search, const User& user);
 
     std::string getMainPage(const User & user) override;
+
+    std::string schedule(const User &user);
 };
 
 #endif //CORE_ADMINAPI_H

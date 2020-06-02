@@ -2,6 +2,10 @@
 
 {% block currentWindow %}Окно&nbsp;{% if user.isAdmin %}Админиcтратора{%else%}Преподавателя{%endif%}{% endblock %}
 
+{% block scripts %}
+<script type="module" src="static/script/currentWindow.js" defer></script>
+{% endblock %}
+
 {% block hiddenMenu %}
     {%if user.isAdmin %}
         <a class="menu__option" href="/students">База учеников</a>
@@ -12,7 +16,7 @@
 {% endblock %}
 
 {% block main %}
-<main class="administrator-main">
+<main class="administrator-main mainpage">
     {% include Schedule.html %}
     <div class="card-wrapper current-window">
         <div class="schedule__day_header">

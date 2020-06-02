@@ -549,6 +549,8 @@ class Window extends Component {
             }).then(res => {
                 if (!res.ok) {
                     alert("Неудача :(")
+                } else {
+                    alert("Успешно! :)")
                 }
             })
         }

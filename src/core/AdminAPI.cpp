@@ -212,3 +212,13 @@ int AdminAPI::deleteLesson(const int lesson_id) {
 
     return 0;
 }
+
+std::string AdminAPI::schedule(const User &user) {
+    auto context = mainScheduleStaffData(user);
+    context.putArray("teachers", user.get_teachers(), PersonSerializer<Teacher>());
+    context.putArray("courses", user.get_courses(), CourseSerializer);
+    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+    _render.set("scheduleStaff.html");
+    return _render.render(context);
+}
+

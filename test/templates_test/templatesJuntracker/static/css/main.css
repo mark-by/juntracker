@@ -168,6 +168,9 @@ input[type=checkbox] {
     height: calc(100% - 60px);
     overflow: hidden;
     display: grid;
+}
+
+.administrator-main.mainpage {
     grid-template-columns: 50% 50%;
 }
 
@@ -181,6 +184,11 @@ input[type=checkbox] {
 .schedule {
     margin: 30px 0 30px 30px;
     overflow-y: scroll;
+    max-width: 1140px;
+}
+
+.only-schedule>.schedule {
+    margin: 30px auto;
 }
 
 /*.schedule::-webkit-scrollbar {*/
@@ -614,11 +622,11 @@ main.container {
 /*}*/
 
 @media screen and (max-width: 1140px) {
-    .schedule {
+    .mainpage>.schedule {
         display: none;
     }
 
-    .administrator-main {
+    .administrator-main.mainpage {
         grid-template-columns: 100%;
     }
 }

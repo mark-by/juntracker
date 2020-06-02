@@ -1,7 +1,3 @@
-//
-// Created by gg on 15.04.2020.
-//
-
 #include "Handler.h"
 #include "../database/session.h"
 
@@ -39,6 +35,8 @@ void Handler::teacherHandler(Request request, Response& response, const User &us
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user));
+        } else if (request.path() == "/schedule") {
+            response = Response(teacherApi.schedule(user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
@@ -60,6 +58,8 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.getUserData(user));
         } else if (request.path() == "/api/search_student") {
             response = Response(adminApi.searchStudent(request.data("search"), user));
+        } else if (request.path() == "/schedule") {
+            response = Response(adminApi.schedule(user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
