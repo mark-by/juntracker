@@ -8,10 +8,12 @@
 
 {% block currentWindow %}База учеников{% endblock %}
 {% block hiddenMenu %}
-<a class="menu__option" href="index.html">Окно администратора</a>
-<a class="menu__option" href="scheduleStaff.html">Расписание</a>
-<a class="menu__option" href="diaryAdmin.html">Журнал</a>
-<a class="menu__option" href="financeAdmin.html">Финансы</a>
+<a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{%else%}преподавателя{%endif%}</a>
+<a class="menu__option" href="/schedule">Расписание</a>
+<a class="menu__option" href="/dairy">Журнал</a>
+{% if user.isAdmin %}
+<a class="menu__option" href="/finance">Финансы</a>
+{% endif %}
 {% endblock %}
 
 {% block main %}
