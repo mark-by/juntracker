@@ -543,7 +543,7 @@ class Window extends Component {
             fetch('/api/save_' + event.target.getAttribute('title'), {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/x-www-urlencoded'
+                    'content-type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams(new FormData(event.target)).toString()
             }).then(res => {
