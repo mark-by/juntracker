@@ -8,7 +8,7 @@ public:
     explicit Cabinet(int id, const std::string &title, int school_id): _id(id), _schoolId(school_id), _title(title) {};
 
     static int save(const std::string &title, int schoolId);
-    static int update(const std::string &title, int schoolId);
+    static int update(const std::string &title, int schoolId, int cabinetId);
     static int remove(int id);
     static Cabinet get(int id);
 
