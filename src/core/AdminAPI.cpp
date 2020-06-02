@@ -22,6 +22,17 @@ int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::
     return 200;
 }
 
+templates::Context AdminAPI::VerboseStudentSerializer(const VerboseStudent &student) {
+    templates::Context context;
+    context.put("id", student.id);
+    context.put("age", student.age);
+    context.put("name", student.name);
+    context.put("avatar", student.avatar);
+    context.putArray("courses", student.courses);
+
+    return context;
+}
+
 std::string AdminAPI::findStudent(const std::string &str) {
 
     return std::string();
@@ -172,7 +183,7 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     return context;
 }
 
-templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
+/*templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
     templates::Context context;
     auto students = Student::get_students_like(search, user.school_id());
 
@@ -190,7 +201,7 @@ templates::Context AdminAPI::verboseSearchStudent(const std::string &search, con
     context.putArray("students", verboseStudents, VerboseStudentSerializer);
 
     return context;
-}
+}*/
 
 std::string AdminAPI::getMainPage(const User &user) {
     auto context = mainStaffData(user);

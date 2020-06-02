@@ -175,7 +175,7 @@ std::string Student::avatar() const {
     db << "select avatar from student s join user u on s.user_id=u.id where id=" << _id << ";";
     db.exec("getting student avatar");
 
-    dn.disconnect();
+    db.disconnect();
     std::string res = db.get_str(0, 0);
 
     return res;

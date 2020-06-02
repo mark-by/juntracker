@@ -23,6 +23,7 @@ class StaffAPI: public API {
 
         StudentOnLesson(const Student &student, const Lesson &lesson) : student(student), lesson(lesson) {}
     };
+
 public:
     std::string getMainPage(const User & user) override;
     static templates::Context getUserData(const User &user);
@@ -36,7 +37,6 @@ protected:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
     static templates::Context StudentSerializer(const StudentOnLesson &student);
     static templates::Context CourseSerializer(const Course &course);
-    static templates::Context VerboseStudentSerializer(const VerboseStudent &student);
     static templates::Context mainScheduleStaffData(const User &user);
 };
 
