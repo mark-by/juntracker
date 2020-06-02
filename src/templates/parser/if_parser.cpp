@@ -2,9 +2,8 @@
 #include <parser/re_tags.h>
 
 std::shared_ptr<templates::Node> templates::IfParser::parse() const {
-    return std::make_shared<templates::IfNode>(std::string(_begin, _end),
-            std::string(_startFalseBlock, _endFalseBlock),
-            _statement);
+    auto trueBlock = std::string(_begin, _end);
+    return std::make_shared<templates::IfNode>(trueBlock, _falseBlock, _statement);
 }
 
 std::string::const_iterator
@@ -15,9 +14,9 @@ templates::IfParser::set(const std::sregex_iterator &tag) {
     _begin = start->suffix().first; // {% if isTrue %}<--
     if (elseMatch != none) {
         _end = elseMatch->prefix().second; // -->{% else %}
-        _startFalseBlock = elseMatch->suffix().first;  // {% else %}<--
-        _endFalseBlock = stop->prefix().second; // -->{% endif %}
+          _falseBlock = std::string(elseMatch->suffix().first, stop->prefix().second);
     } else {
+        _falseBlock = "";
         _end = stop->prefix().second; // -->{% endif %}
     }
 

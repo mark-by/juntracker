@@ -75,11 +75,11 @@ Course Course::get_course(int course_id) {
 
 }
 
-int Course::save(const std::string &name, int price, int schoolId, int teacher_id) {
+int Course::save(const std::string &name, int price, int schoolId) {
     SqlWrapper db;
 
-    db << "INSERT INTO course(name, price, teacher_id, school_id) VALUES ('"
-       << name << "', " << price << ", " << teacher_id << ", " << schoolId << ");";
+    db << "INSERT INTO course(name, price, school_id) VALUES ('"
+       << name << "', " << price << ", " << schoolId << ");";
     db.exec("Save course");
 
     db.disconnect();

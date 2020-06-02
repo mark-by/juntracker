@@ -1,9 +1,17 @@
 #include <StaffAPI.h>
 #include <context/context.h>
 
+templates::Context CourseSerializer(const Course& course) {
+    templates::Context context;
+    context.put("title", course.title());
+    context.put("id", course.id());
+    context.put("price", course.price());
+    return context;
+}
+
 templates::Context StaffAPI::getUserData(const User &user) {
     templates::Context context;
-    context.putArray("courses", user.get_courses(), SimpleTitleSerializer<Course>());
+    context.putArray("courses", user.get_courses(), CourseSerializer);
     context.putArray("teachers", user.get_teachers(), SimplePersonSerializer<Teacher>());
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     return context;

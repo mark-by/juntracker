@@ -75,8 +75,7 @@ namespace templates {
         findScope(const std::string::const_iterator &begin, const std::string::const_iterator &end) ;
 
         std::string _statement;
-        std::string::const_iterator _startFalseBlock;
-        std::string::const_iterator _endFalseBlock;
+        std::string _falseBlock;
     };
 
     class IncludeParser : public NodeParser {

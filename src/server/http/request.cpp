@@ -6,22 +6,24 @@
 #include <curl/curl.h>
 
 Request::Request(const std::string &request) {
+    auto __request = urlDecode(request.begin(), request.end());
     std::regex separator(R"(\r*\n\r*\n)");
-    std::sregex_iterator separatorMatch(request.cbegin(), request.cend(), separator);
+    std::sregex_iterator separatorMatch(__request.cbegin(), __request.cend(), separator);
     std::string::const_iterator endHeaders;
     if (separatorMatch->ready()) {
         endHeaders = separatorMatch->suffix().first;
         endHeaders--;
     } else {
-        endHeaders = request.cend();
+        endHeaders = __request.cend();
     }
-    parseStartLine(request.cbegin(), endHeaders);
-    parseHeaders(request.cbegin(), endHeaders);
+    auto req = std::string(__request.cbegin(), endHeaders);
+    parseStartLine(__request.cbegin(), endHeaders);
+    parseHeaders(__request.cbegin(), endHeaders);
     parseCookies();
     if (_method == "GET") {
         parseDataFromPath();
     } else if (_method == "POST") {
-        parseDataFromBody(endHeaders, request.cend());
+        parseDataFromBody(endHeaders, __request.cend());
     }
 }
 
@@ -79,20 +81,10 @@ void Request::parseDataFromPath() {
 void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::string::const_iterator start = begin;
     start++;
-    CURL *curl = curl_easy_init();
-    std::string temp_body = std::string(begin, end);
-    int outlength;
-    char *output = curl_easy_unescape(curl, temp_body.c_str(), temp_body.size(), &outlength);
-    temp_body = std::string(output);
-    curl_free(output);
-    curl_easy_cleanup(curl);
-    boost::trim(temp_body);
-    auto _start = temp_body.begin();
-    auto _end = temp_body.end();
     std::string contentType = header("Content-Type");
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
-        std::sregex_iterator parameterMatch(_start, _end, parameter);
+        std::sregex_iterator parameterMatch(start, end, parameter);
         std::sregex_iterator none;
         std::cout << "here" << std::endl;
         while (parameterMatch != none) {
@@ -106,10 +98,10 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     } else if (contentType == "multipart/form-data") {
 
     } else if (contentType == "text/plain") {
-        body = std::string(_start, _end);
+        body = std::string(start, end);
     } else if (contentType == "application/json") {
         start++;
-        std::string json_str = std::string(_start, _end);
+        std::string json_str = std::string(start, end);
         boost::trim(json_str);
         std::cout << json_str << std::endl;
         json_str[json_str.size()] = 0;
@@ -150,4 +142,30 @@ void Request::parseCookies() {
 
 std::string Request::cookie(const std::string &key) {
     return cookies[boost::to_lower_copy(key)];
+}
+
+std::string Request::urlDecode(const std::string& url) {
+    CURL *curl = curl_easy_init();
+    int outlength;
+    char *output = curl_easy_unescape(curl, url.c_str(), url.size(), &outlength);
+    auto temp_body = std::string(output);
+    curl_free(output);
+    curl_easy_cleanup(curl);
+    replacePlusToSpace(temp_body);
+    return temp_body;
+}
+
+std::string Request::urlDecode(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    return urlDecode(std::string(begin, end));
+}
+
+void Request::replacePlusToSpace(std::string &str) {
+    auto it = str.begin();
+    auto end = str.end();
+    while (it != end) {
+        if (*it == '+') {
+            *it = ' ';
+        }
+        it++;
+    }
 }

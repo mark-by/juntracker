@@ -26,11 +26,15 @@ public:
 
     int deleteCourse(int course_id);
 
+    int addLesson(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+
     std::string getPagePaymentsByStudent(const std::string &);
 
     std::pair<int, templates::Context> saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     templates::Template _render;
+
+    templates::Context searchStudent(const std::string &search, const User& user);
 };
 
 #endif //CORE_ADMINAPI_H

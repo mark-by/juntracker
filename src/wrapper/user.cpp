@@ -186,7 +186,7 @@ std::vector<Course> User::get_courses() const {
     SqlWrapper db;
 
     db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
-    db.exec("Get courses");
+    db.exec("Get courses of this school");
 
     std::vector<Course> courses;
     courses.reserve(db.count_tupls());
