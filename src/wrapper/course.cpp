@@ -69,8 +69,7 @@ Course Course::get_course(int course_id) {
             db.get_int(0),
             db.get_str(1),
             db.get_int(2),
-            db.get_int(3),
-            db.get_int(4)
+            db.get_int(3)
     );
 
 }
