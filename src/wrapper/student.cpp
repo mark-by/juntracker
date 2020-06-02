@@ -168,3 +168,15 @@ std::vector<Mark> Student::get_marks_by_course(int course_id) const {
     db.disconnect();
     return marks;
 }
+
+std::string Student::avatar() const {
+    SqlWrapper db;
+
+    db << "select avatar from student s join user u on s.user_id=u.id where id=" << _id << ";";
+    db.exec("getting student avatar");
+
+    dn.disconnect();
+    std::string res = db.get_str(0, 0);
+
+    return res;
+}

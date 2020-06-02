@@ -27,7 +27,7 @@ std::string AdminAPI::findStudent(const std::string &str) {
     return std::string();
 }
 
-int AdminAPI::deleteStudents(const std::unordered_multimap<std::string, std::string> &students, const User& user) {
+int AdminAPI::deleteStudents(const std::unordered_multimap<std::string, std::string> &students, const User &user) {
     for (auto &pair : students) {
         if (pair.first == "id")
             Student::remove(std::stoi(pair.second));
@@ -101,7 +101,7 @@ std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
     return std::string();
 }
 
-int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data, const User& user) {
+int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     if (data.empty()) {
         return 404;
     }
@@ -131,7 +131,8 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     return 200;
 }
 
-std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
+std::pair<int, templates::Context>
+AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
     templates::Context context;
 
     if (student.empty()) {
@@ -163,10 +164,30 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
     return {200, context};
 }
 
-templates::Context AdminAPI::searchStudent(const std::string &search, const User& user) {
+templates::Context AdminAPI::searchStudent(const std::string &search, const User &user) {
     templates::Context context;
     auto students = Student::get_students_like(search, user.school_id());
     context.putArray("students", students, SimplePersonSerializer<Student>());
+
+    return context;
+}
+
+templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
+    templates::Context context;
+    auto students = Student::get_students_like(search, user.school_id());
+
+    std::vector<VerboseStudent> verboseStudents;
+
+    for (auto student : students) {
+        try {
+            verboseStudents.emplace_back(student.id(),
+                                         student.age(),
+                                         student.name() + " " + student.surname(),
+                                         student.avatar(),
+                                         student.get_courses());
+        } catch (...) {}
+    }
+    context.putArray("students", verboseStudents, VerboseStudentSerializer);
 
     return context;
 }

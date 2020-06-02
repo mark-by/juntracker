@@ -115,6 +115,17 @@ templates::Context StaffAPI::mainScheduleStaffData(const User &user) {
     return context;
 }
 
+templates::Context StaffAPI::VerboseStudentSerializer(const VerboseStudent &student) {
+    templates::Context context;
+    context.put("id", student.id);
+    context.put("age", student.age);
+    context.put("name", student.name);
+    context.put("avatar", student.avatar);
+    context.putArray("courses", student.courses);
+
+    return context;
+}
+
 std::string StaffAPI::schedule(const User &user) {
     auto context = mainScheduleStaffData(user);
     _render.set("scheduleStaff.html");
