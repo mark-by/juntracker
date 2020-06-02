@@ -1,16 +1,5 @@
 import Component from "./Component.js";
-
-class Root {
-    constructor(element, app) {
-        this.element = element;
-        this.app = app;
-        this.app.init(this);
-    }
-
-    render() {
-        this.element.innerHTML = this.app.render();
-    }
-}
+import Root from "./root.js";
 
 class CreationForm extends Component {
     constructor(props) {
@@ -334,16 +323,17 @@ class Form extends Component {
                                 <option value="5" ${this.state.lessonData.weekday === "Суббота" ? 'selected="selected"' : ""}>Cуббота</option>
                                 <option value="6" ${this.state.lessonData.weekday === "Воскресенье" ? 'selected="selected"' : ""}>Воскресенье</option>
                             </select>
-                            <p>Курс</p>
+                            ${this.state.isNew ?
+                            `<p>Курс</p>
                             <select name="course" id="lesson-edit-title">
                                 ${this.state.courses.map(course => {
-                if (course.id == this.state.lessonData.courseId) {
-                    return `<option value="${course.id}" selected="selected">${course.title}</option>`
-                } else {
-                    return `<option value="${course.id}">${course.title}</option>`
-                }
-            }).join("")}
-                            </select>
+                                    if (course.id == this.state.lessonData.courseId) {
+                                        return `<option value="${course.id}" selected="selected">${course.title}</option>`
+                                    } else {
+                                        return `<option value="${course.id}">${course.title}</option>`
+                                    }
+                                }).join("")}
+                            </select>` : `<input type="hidden" name="course" value="${this.state.lessonData.courseId}"/>`}
                             <p>Кабинет</p>
                             <select name="cabinet" id="lesson-edit-cabinet">
                                 ${this.state.cabinets.map(cabinet => {
@@ -630,13 +620,14 @@ class Window extends Component {
         })
     }
 
-    initLists()
-    {
+    initLists() {
         [...this.coursesList.querySelectorAll('.course-form'),
             ...this.teachersList.querySelectorAll('.teacher-form'),
             ...this.cabinetsList.querySelectorAll('.cabinet-form')].map(element => {
-                console.log("1")
-            element.querySelector('.delete-course-button').onclick = () => {this.delEl(element)}
+            console.log("1")
+            element.querySelector('.delete-course-button').onclick = () => {
+                this.delEl(element)
+            }
         })
     }
 
@@ -661,11 +652,11 @@ class Window extends Component {
                 break;
             case "cabinet":
                 this.cabinetButton.classList.add('active');
-                this.cabinetsWin.classList.replace( 'background-window', 'active-window');
+                this.cabinetsWin.classList.replace('background-window', 'active-window');
                 break;
             case "course":
                 this.courseButton.classList.add('active');
-                this.coursesWin.classList.replace( 'background-window', 'active-window');
+                this.coursesWin.classList.replace('background-window', 'active-window');
                 break;
         }
     }
