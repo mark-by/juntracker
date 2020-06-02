@@ -143,7 +143,7 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     return context;
 }
 
-int AdminAPI::addLesson(const std::unordered_multimap<std::string, std::string> &lesson, const User &user) {
+int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::string> &lesson, const User &user) {
     templates::Context context;
 
     if (lesson.empty()) {

@@ -26,7 +26,7 @@ public:
 
     int deleteCourse(int course_id);
 
-    int addLesson(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+    int createLesson(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int deleteLesson(const int lesson_id);
 
