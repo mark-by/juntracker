@@ -224,12 +224,10 @@ int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string
     if (!success)
         return 404;
     auto name = result;
-
     std::tie(result, success) = fetch("surname", data);
     if (!success)
         return 404;
     auto surname = result;
-
     std::tie(result, success) = fetch("id", data);
     if (!success)
         return 404;
