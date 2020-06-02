@@ -39,7 +39,10 @@ public:
     templates::Context searchStudent(const std::string &search, const User& user);
 
     std::string getMainPage(const User & user) override;
+
     int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+
+    int editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 };
 
 #endif //CORE_ADMINAPI_H
