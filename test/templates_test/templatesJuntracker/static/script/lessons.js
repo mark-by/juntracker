@@ -538,7 +538,7 @@ class Window extends Component {
         this.cabinetsWin = document.querySelector(".window-cabinets");
         this.cabinetsList = document.querySelector('#window-cabinets-list');
 
-        window.saveListElemenet = (event) => {
+        window.saveListElement = (event) => {
             event.preventDefault();
             fetch('/api/save_' + event.target.getAttribute('title'), {
                 method: 'POST',
@@ -555,9 +555,10 @@ class Window extends Component {
 
         window.addCourse = () => {
             this.coursesList.innerHTML += `
-                    <form class="course-form" data="-1" onsubmit="saveListElement(event)">
+                    <form class="course-form" data="-1" onsubmit="saveListElement(event)" title="course">
                         <input type="text" value="" placeholder="Введите название" name="title"/>
                         <input type="number" value="" placeholder="Укажите цену" name="price"/>
+                        <input type="hidden" value="-1" name="id"/>
                         <div class="course-form-buttons">
                             <input class="save-course-button" value type="submit"/>
                             <img class="delete-course-button" src="static/images/trash.svg"/>
@@ -572,6 +573,7 @@ class Window extends Component {
                     <form class="teacher-form" data="-1" onsubmit="saveListElement(event)" title="teacher">
                     <input type="text" value="" placeholder="Введите имя" name="name"/>
                     <input type="text" value="" placeholder="Введите фамилию" name="surname"/>
+                    <input type="hidden" value="-1" name="id"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>
@@ -585,6 +587,7 @@ class Window extends Component {
             this.cabinetsList.innerHTML += `
                     <form class="cabinet-form" data="-1" onsubmit="saveListElement(event)" title="cabinet">
                     <input type="text" value="" placeholder="Введите аудиторию" name="name"/>
+                    <input type="hidden" value="-1" name="id"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>

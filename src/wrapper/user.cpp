@@ -29,8 +29,8 @@ std::vector<Lesson> User::get_current_lessons() const {
     SqlWrapper db;
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number() - 1;
-    db << "SELECT * FROM lesson WHERE weekday=" << curr_weekday << " and school_id=" << _school_id << ";";
-    db.exec("Get lessons for weekday by user");
+    db << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
+    db.exec("Get current lessons for weekday by user");
 
     std::vector<Lesson> res_lesson;
     res_lesson.reserve(db.count_tupls());
