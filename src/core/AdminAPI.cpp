@@ -184,22 +184,22 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
 
     std::string result;
     bool success;
-    std::tie(result, success) = fetch("teacher_id", lesson);
+    std::tie(result, success) = fetch("teacher", lesson);
     if (!success)
         return 404;
     int teacher_id = std::stoi(result);
-    std::tie(result, success) = fetch("course_id", lesson);
+    std::tie(result, success) = fetch("course", lesson);
     if (!success)
         return 404;
     int course_id = std::stoi(result);
-    std::tie(result, success) = fetch("cabinet_id", lesson);
+    std::tie(result, success) = fetch("cabinet", lesson);
     if (!success)
         return 404;
     int cabinet_id = std::stoi(result);
 
-    int weekday = std::stoi(lesson.find("weekday")->second);
-    auto start_time = lesson.find("start_time")->second;
-    auto end_time = lesson.find("end_time")->second;
+    int weekday = std::stoi(get("weekday", lesson));
+    auto start_time = get("start_time", lesson);
+    auto end_time = get("end_time", lesson);
     int school_id = user.school_id();
 
     Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
@@ -241,6 +241,34 @@ int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string
         Teacher::save(name, surname, school_id);
     } else {
         Teacher::update(id, name, surname);
+    }
+
+    return 200;
+}
+
+int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    if (data.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("title", data);
+    if (!success)
+        return 404;
+    auto title = result;
+
+    std::tie(result, success) = fetch("id", data);
+    if (!success)
+        return 404;
+    int id = std::stoi(result);
+
+    int school_id = user.school_id();
+
+    if (id == -1) {
+        Cabinet::save(title, school_id);
+    } else {
+        Cabinet::update(title, school_id);
     }
 
     return 200;
