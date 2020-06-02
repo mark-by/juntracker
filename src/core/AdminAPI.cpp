@@ -107,7 +107,7 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     }
 
     int lesson_id = std::stoi(data.find("lesson_id")->second);
-    int course_id = std::stoi(data.find("course_id")->second);
+    int course_id = std::stoi(data.find("course")->second);
     std::vector<int> students_id;
     for (auto &pair : data) {
         if (pair.first == "new_student") {

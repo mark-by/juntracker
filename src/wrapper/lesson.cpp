@@ -142,23 +142,32 @@ int Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id,
     return 0;
 }
 
-int Lesson::delete_student(int student_id, int lesson_id) {
+int Lesson::delete_student(int student_id, int lesson_id, int course_id) {
     SqlWrapper db;
 
     db << "delete from students_for_lesson where student_id=" << student_id
     << " and lesson_id=" << lesson_id << ";";
     db.exec("delete student from lesson");
-    db.disconnect();
 
+    db << "delete from students_for_course where student_id=" << student_id
+       << " and course_id=" << course_id << ";";
+    db.exec("delete student from course");
+
+    db.disconnect();
     return 0;
 }
 
-int Lesson::add_student(int student_id, int lesson_id) {
+int Lesson::add_student(int student_id, int lesson_id, int course_id) {
     SqlWrapper db;
 
     db << "insert into students_for_lesson (student_id, lesson_id) values("
         << student_id << ", " << lesson_id << ");";
     db.exec("add student on lesson");
+
+    db << "insert into students_for_course(student_id, course_id) values (" << student_id << ", "
+       << course_id << ");";
+    db.exec("add student on course");
+
     db.disconnect();
 
     return 0;
