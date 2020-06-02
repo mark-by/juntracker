@@ -104,8 +104,6 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     return 200;
 }
 
-
-
 std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
     templates::Context context;
 
@@ -175,4 +173,10 @@ int AdminAPI::addLesson(const std::unordered_multimap<std::string, std::string> 
     Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
 
     return 200;
+}
+
+int deleteLesson(int lesson_id) {
+    Lesson::remove(lesson_id);
+
+    return 0;
 }
