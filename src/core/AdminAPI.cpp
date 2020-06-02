@@ -198,8 +198,8 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
     int cabinet_id = std::stoi(result);
 
     int weekday = std::stoi(get("weekday", lesson));
-    auto start_time = get("start_time", lesson);
-    auto end_time = get("end_time", lesson);
+    auto start_time = get("start-hours", lesson) + ":" + get("start-minutes", lesson);
+    auto end_time = get("end-hours", lesson) + ":" + get("end-minutes", lesson);
     int school_id = user.school_id();
 
     Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
@@ -224,12 +224,10 @@ int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string
     if (!success)
         return 404;
     auto name = result;
-
     std::tie(result, success) = fetch("surname", data);
     if (!success)
         return 404;
     auto surname = result;
-
     std::tie(result, success) = fetch("id", data);
     if (!success)
         return 404;
