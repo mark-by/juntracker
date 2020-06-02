@@ -41,9 +41,23 @@ public:
     std::string getMainPage(const User & user) override;
 
     std::string schedule(const User &user);
+
+    templates::Context verboseSearchStudent(const std::string &search, const User& user);
+
     int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+private:
+    struct VerboseStudent {
+        int id;
+        int age;
+        std::string name;
+        std::vector<std::string> courses;
+        std::string avatar;
+
+        VerboseStudent(int id, int age, const std::string &name, const std::string &avatar, const std::vector<std::string>& courses) :
+                id(id), age(age), name(name), courses(courses), avatar(avatar) {}
+    };
 };
 
 #endif //CORE_ADMINAPI_H

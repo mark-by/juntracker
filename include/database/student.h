@@ -42,6 +42,7 @@ public:
     std::string surname() const { return _surname;}
     int age() const { return _age;}
     std::string description() const { return _description;}
+    std::string avatar() const;
 
 private:
     int _id;

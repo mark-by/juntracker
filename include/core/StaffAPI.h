@@ -36,6 +36,7 @@ protected:
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
     static templates::Context StudentSerializer(const StudentOnLesson &student);
     static templates::Context CourseSerializer(const Course &course);
+    static templates::Context VerboseStudentSerializer(const VerboseStudent &student);
     static templates::Context mainScheduleStaffData(const User &user);
 };
 
