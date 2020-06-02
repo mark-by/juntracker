@@ -115,12 +115,12 @@ std::vector<Student> Student::get_students_like(const std::string &str, int scho
     }
 
     if (name_surname.second.empty()) {
-        db << "select * from student s join user u on s.user_id=u.id where name like '" << name_surname.first
+        db << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.first
            << "%' or surname like '" << name_surname.first << "%' and school_id=" << school_id << ";";
     } else {
-        db << "select * from student s join user u on s.user_id=u.id where name like '" << name_surname.first
+        db << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.first
            << "%' and surname like '" << name_surname.second << "%' and school_id=" << school_id << " union "
-           << "select * from student s join user u on s.user_id=u.id where name like '" << name_surname.second
+           << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.second
            << "%' and surname like '" << name_surname.first << "%' and school_id=" << school_id << ";";
     }
 
