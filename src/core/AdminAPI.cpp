@@ -50,7 +50,7 @@ templates::Context StudentDBSerializer(const Student &student) {
 
 std::string AdminAPI::getPageStudents(const User &user) {
     templates::Context context;
-    context.put("username", user.login());
+    context.set("user", UserSerializer(user));
     context.putArray("students", user.get_students(), StudentDBSerializer);
     _render.set("students.html");
 
