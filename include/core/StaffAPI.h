@@ -26,15 +26,17 @@ class StaffAPI: public API {
 public:
     std::string getMainPage(const User & user) override;
     static templates::Context getUserData(const User &user);
+    std::string schedule(const User &user);
+
 protected:
-    templates::Context mainStaffData(const User & user);
+    static templates::Context mainStaffData(const User & user);
     static templates::Context UserSerializer(const User &user);
     static templates::Context LessonSerializer(const Lesson &lesson);
     static templates::Context DaySerializer(const WeekDay &weekday);
     static templates::Context CurrentLessonSerializer(const Lesson &lesson);
     static templates::Context StudentSerializer(const StudentOnLesson &student);
-
     static templates::Context CourseSerializer(const Course &course);
+    static templates::Context mainScheduleStaffData(const User &user);
 };
 
 #endif //JUNTRACKER_STAFFAPI_H

@@ -90,6 +90,17 @@ templates::Context StaffAPI::LessonSerializer(const Lesson &lesson) {
 }
 
 templates::Context StaffAPI::mainStaffData(const User &user) {
+    auto context = mainScheduleStaffData(user);
+    std::vector<Lesson> currentLessons;
+    try {
+        currentLessons = user.get_current_lessons();
+    } catch(...) {}
+    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
+    return context;
+}
+
+
+templates::Context StaffAPI::mainScheduleStaffData(const User &user) {
     templates::Context context;
     context.set("user", UserSerializer(user));
     std::vector<WeekDay> days;
@@ -101,10 +112,11 @@ templates::Context StaffAPI::mainStaffData(const User &user) {
         } catch(...) {}
     }
     context.putArray("scheduleDays", days, DaySerializer);
-    std::vector<Lesson> currentLessons;
-    try {
-        currentLessons = user.get_current_lessons();
-    } catch(...) {}
-    context.putArray("currentLessons", currentLessons, CurrentLessonSerializer);
     return context;
+}
+
+std::string StaffAPI::schedule(const User &user) {
+    auto context = mainScheduleStaffData(user);
+    _render.set("scheduleStaff.html");
+    return _render.render(context);
 }
