@@ -35,7 +35,7 @@ public:
             int age, const std::string& description, const std::string& tel_number,
             const std::string& email, const std::string& parent_name, const std::string& avatar, int school_id);
     static int remove(int student_id);
-    static std::vector<Student> get_students_like(const std::string &str);
+    static std::vector<Student> get_students_like(const std::string &str, int school_id);
 
     int id() const { return _id;}
     std::string name() const { return _name;}

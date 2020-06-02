@@ -78,7 +78,7 @@ int Student::save(const std::string name, const std::string &surname, int age,
     do {
         login = randomStr(10);
         db << "select * from users where login='" << login << "';";
-    } while (db.count_tupls() == 0);
+    } while (db.count_tupls() > 0);
     std::string password = randomStr(12);
 
     db << "insert into users (email, login, password, permission, avatar, school_id) values ('" << email << "', '"
@@ -106,9 +106,13 @@ int Student::remove(int student_id) {
     return 0;
 }
 
-std::vector<Student> Student::get_students_like(const std::string &str) {
+std::vector<Student> Student::get_students_like(const std::string &str, int school_id) {
     SqlWrapper db;
     std::pair<std::string, std::string> name_surname = parse_name_surname(str);
+    std::vector<Student> res_students;
+    if (name_surname.first.empty() && name_surname.second.empty()) {
+        return res_students;
+    }
 
     if (name_surname.second.empty()) {
         db << "select * from student where name like '" << name_surname.first
@@ -122,7 +126,6 @@ std::vector<Student> Student::get_students_like(const std::string &str) {
 
     db.exec("Find students like");
 
-    std::vector<Student> res_students;
     res_students.reserve(db.count_tupls());
     for (int i = 0; i < db.count_tupls(); i++) {
         res_students.emplace_back(

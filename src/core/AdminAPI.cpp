@@ -135,3 +135,10 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
 
     return {200, context};
 }
+
+templates::Context AdminAPI::searchStudent(const std::string &search, const User& user) {
+    templates::Context context;
+    auto students = Student::get_students_like(search, user.school_id());
+    context.putArray("students", students, SimplePersonSerializer<Student>());
+    return context;
+}

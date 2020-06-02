@@ -58,6 +58,8 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.findStudent(request.data("name")));
         } else if (request.path() == "/api/user_data") {
             response = Response(adminApi.getUserData(user));
+        } else if (request.path() == "/api/search_student") {
+            response = Response(adminApi.searchStudent(request.data("search"), user));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {

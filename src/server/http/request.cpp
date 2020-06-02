@@ -65,28 +65,22 @@ void Request::parseDataFromPath() {
     if (!separatorMatch->ready()) {
         return;
     }
+    auto decoded = urlDecode(separatorMatch->suffix().first, _path.cend());
+    _path = std::string(_path.cbegin(), separatorMatch->prefix().second);
     std::regex parameter(R"(([\w-_]+)=([^&\n\r\t\0\s]+))");
-    std::sregex_iterator parameterMatch(separatorMatch->suffix().first, _path.cend(), parameter);
+    std::sregex_iterator parameterMatch(decoded.cbegin(), decoded.cend(), parameter);
     std::sregex_iterator none;
     while (parameterMatch != none) {
         std::string str = parameterMatch->str();
         _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
         parameterMatch++;
     }
-    _path = std::string(_path.cbegin(), separatorMatch->prefix().second);
 }
 
 void Request::parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     std::string::const_iterator start = begin;
     start++;
-    CURL *curl = curl_easy_init();
-    std::string temp_body = std::string(begin, end);
-    int outlength;
-    char *output = curl_easy_unescape(curl, temp_body.c_str(), temp_body.size(), &outlength);
-    temp_body = std::string(output);
-    curl_free(output);
-    curl_easy_cleanup(curl);
-    boost::trim(temp_body);
+    auto temp_body = urlDecode(begin, start);
     auto _start = temp_body.begin();
     auto _end = temp_body.end();
     std::string contentType = header("Content-Type");
@@ -151,3 +145,16 @@ void Request::parseCookies() {
 std::string Request::cookie(const std::string &key) {
     return cookies[boost::to_lower_copy(key)];
 }
+
+std::string Request::urlDecode(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
+    CURL *curl = curl_easy_init();
+    std::string temp_body = std::string(begin, end);
+    int outlength;
+    char *output = curl_easy_unescape(curl, temp_body.c_str(), temp_body.size(), &outlength);
+    temp_body = std::string(output);
+    curl_free(output);
+    curl_easy_cleanup(curl);
+    boost::trim(temp_body);
+    return temp_body;
+}
+

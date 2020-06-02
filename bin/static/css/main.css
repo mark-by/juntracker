@@ -257,6 +257,12 @@ input[type=checkbox] {
     text-align: end;
 }
 
+.founded-student {
+    margin: 5px;
+    color: blueviolet;
+    cursor: pointer;
+}
+
 .modal-form, .student-add-form {
     background: white;
     position: absolute;
@@ -318,6 +324,7 @@ input[type=checkbox] {
     padding: 5px 15px;
     border-radius: 10px;
     color: white;
+    cursor: pointer;
 }
 
 .bottom-control-wrapper>.add-student-button {

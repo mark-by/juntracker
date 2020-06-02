@@ -101,6 +101,75 @@ class StudentList extends Component {
     }
 }
 
+class SearchForm extends Component {
+    constructor() {
+        super();
+        this.state = {
+            foundedStudents: [],
+            searching: false,
+            interval: false
+        }
+
+        window.searchByEnter = (event) => {
+            if (event.key == "Enter") {
+                window.search();
+            }
+        }
+
+        window.search = () => {
+            const student = document.querySelector("#search-student").value;
+            fetch('/api/search_student?search=' + student).then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        if (json.students) {
+                            this.insert(json.students)
+                        }
+                    });
+                }
+            })
+        }
+    }
+
+    insert(students) {
+        document.querySelector("#founded-students").innerHTML = `${students.map(student => {
+            return `<div class="founded-student" data="${student.id}">${student.name}</div>`
+        }).join("")}`;
+        const studentss = document.querySelectorAll(".founded-student");
+        console.log("foundedddd", studentss);
+        [...studentss].map(element => {
+            console.log("founded-student")
+            element.onclick = () => {
+                window.updateStudents({
+                    id: element.getAttribute("data"),
+                    name: element.innerText,
+                    isDeleted: false,
+                    isNew: true,
+                })
+                window.closeSearchForm(true, true);
+            }
+        })
+    }
+
+    render() {
+        console.log("fs", this.state.foundedStudents)
+        console.log("render search")
+        return `
+            <div class="modal-wrapper" id="search-student-form-wrapper" style="z-index: 9000" onclick="closeSearchForm(event)">
+                <div class="modal-form">
+                    <p class="form-title">Найти ученика</p>
+                    <div class="form-grid">
+                        <p>Найти: </p><input type="text" id="search-student" oninput="search()" onkeydown="searchByEnter(event)"/>
+                    </div> 
+                    <div id="founded-students"></div>
+                    <div class="bottom-flex">
+                        <div class="close-form-button" onclick="closeSearchForm(event);">Отмена</div> 
+                    </div>
+                </div>
+            </div>
+        `
+    }
+}
+
 class Form extends Component {
     constructor() {
         super();
@@ -124,6 +193,7 @@ class Form extends Component {
 
         this.getData();
         this.creationForm = new CreationForm();
+        this.searchForm = new SearchForm();
         this.studentList = new StudentList();
 
         window.closeForm = (event) => {
@@ -140,6 +210,7 @@ class Form extends Component {
                 isNew: false
             })
         }
+
 
         window.saveLesson = (event) => {
             event.preventDefault();
@@ -158,10 +229,6 @@ class Form extends Component {
             })
         }
 
-        window.closeSearchForm = (event) => {
-            this.setState({searchOpened: false});
-        }
-
         window.openSearchForm = (event) => {
             this.setState({searchOpened: true});
         }
@@ -178,6 +245,12 @@ class Form extends Component {
 
         window.openCreationForm = (event) => {
             this.setState({creationOpened: true});
+        }
+
+        window.closeSearchForm = (event, just) => {
+            if (just || ["modal-wrapper", "close-form-button"].includes(event.target.className)) {
+                this.setState({searchOpened: false});
+            }
         }
 
         window.updateStudents = (student) => {
@@ -213,6 +286,7 @@ class Form extends Component {
         return this.state.isOpen ?
             `
             ${this.state.creationOpened ? this.creationForm.render() : ""}
+            ${this.state.searchOpened ? this.searchForm.render() : ""}
             <div class="modal-wrapper" id="#lesson-edit-form-wrapper" onclick="closeForm(event)">
                 <form class="modal-form" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="saveLesson(event)">
                     <input id="lesson-id" name="lesson_id" type="hidden" value="${this.state.lessonData.id}">
@@ -281,7 +355,7 @@ class Form extends Component {
                             <div class="add-student-button">
                             <div class="add-student-button__new" onclick="openCreationForm(event)">Создать</div>
                             <img class="add-student-button__plus" src="static/images/plus.svg" alt="добавить"/>
-                            <div class="add-student-button__search">Найти</div>
+                            <div class="add-student-button__search" onclick="openSearchForm(event)">Найти</div>
                         </div>
                         <div class="bottom-flex">
                             <div class="close-form-button" onclick="closeForm()">Отмена</div>

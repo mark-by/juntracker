@@ -28,6 +28,7 @@ private:
     void parseCookies();
     void parseDataFromPath();
     void parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end);
+    std::string urlDecode(const std::string::const_iterator &begin, const std::string::const_iterator &end);
 };
 
 #endif  // JUNTRACKER_REQUEST_H
