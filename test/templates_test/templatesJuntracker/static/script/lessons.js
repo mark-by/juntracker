@@ -332,8 +332,8 @@ class Form extends Component {
                                     } else {
                                         return `<option value="${course.id}">${course.title}</option>`
                                     }
-                                }).join("")}` : ""}
-                            </select>
+                                }).join("")}
+                            </select>` : `<input type="hidden" name="course" value="${this.state.lessonData.courseId}"/>`}
                             <p>Кабинет</p>
                             <select name="cabinet" id="lesson-edit-cabinet">
                                 ${this.state.cabinets.map(cabinet => {

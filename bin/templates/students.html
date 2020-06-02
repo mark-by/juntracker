@@ -26,7 +26,7 @@
             <img src="static/images/filter.svg" alt="filter"/>
         </div>
     </div>
-    <form class="students-form">
+    <div class="students-form">
         {% for student in students %}
         <div class="student-search-wrapper">
             <input type="checkbox" name="id" value="{{student.id}}">
@@ -43,7 +43,7 @@
             <img class="student-delete-button" src="static/images/close.svg"/>
         </div>
         {% endfor %}
-    </form>
+    </div>
 </main>
 <div id="root"></div>
 
