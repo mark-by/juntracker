@@ -61,8 +61,7 @@ Course Lesson::get_course() const {
             db.get_int(0, 0),
             db.get_str(1, 0),
             db.get_int(2, 0),
-            db.get_int(3, 0),
-            db.get_int(4, 0)
+            db.get_int(3, 0)
     );
 }
 
