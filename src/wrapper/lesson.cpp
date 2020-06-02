@@ -91,7 +91,7 @@ int Lesson::save(int course_id, int cabinet_id, int teacher_id, int weekday,
 
     db << "insert into lesson (course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id) "
        << "values (" << course_id << ", " << cabinet_id << ", " << teacher_id << ", '" << weekday << "', '"
-       << start_time << "', '" << end_time << "', " << school_id << ";";
+       << start_time << "', '" << end_time << "', " << school_id << ");";
     db.exec("Save lesson");
 
     db.disconnect();

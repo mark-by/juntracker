@@ -33,6 +33,8 @@ int Cabinet::remove(int id) {
     db << "DELETE FROM cabinet WHERE id=" << id << ";";
     db.exec("Remove cabinet");
     db.disconnect();
+
+    return 0;
 }
 
 Cabinet Cabinet::get(int id) {

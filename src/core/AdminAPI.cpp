@@ -253,7 +253,7 @@ int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string
 
     std::string result;
     bool success;
-    std::tie(result, success) = fetch("title", data);
+    std::tie(result, success) = fetch("name", data);
     if (!success)
         return 404;
     auto title = result;
