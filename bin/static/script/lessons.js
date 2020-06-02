@@ -119,18 +119,15 @@ class SearchForm extends Component {
         window.search = () => {
             const student = document.querySelector("#search-student").value;
             fetch('/api/search_student?search=' + student).then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        if (json.students) {
-                            this.insert(json.students)
-                        }
-                    });
-                }
+                if (response.ok) { response.json().then(json => { this.insert(json.students) }); }
             })
         }
     }
 
     insert(students) {
+        if (!students) {
+            document.querySelector("#founded-students").innerHTML = `<div class="founded-student">Ничего нет :(</div>`
+        }
         document.querySelector("#founded-students").innerHTML = `${students.map(student => {
             return `<div class="founded-student" data="${student.id}">${student.name}</div>`
         }).join("")}`;
