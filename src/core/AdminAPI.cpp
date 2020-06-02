@@ -53,9 +53,9 @@ templates::Context StudentDBSerializer(const Student &student) {
 
 std::string AdminAPI::getPageStudents(const User &user) {
     templates::Context context;
-    context.put("username", user.login());
+    context.set("user", UserSerializer(user));
     context.putArray("students", user.get_students(), StudentDBSerializer);
-    _render.set("studentsAdmin.html");
+    _render.set("students.html");
 
     return _render.render(context);
 }
@@ -224,6 +224,15 @@ int AdminAPI::deleteLesson(const int lesson_id) {
     Lesson::remove(lesson_id);
 
     return 0;
+}
+
+std::string AdminAPI::schedule(const User &user) {
+    auto context = mainScheduleStaffData(user);
+    context.putArray("teachers", user.get_teachers(), PersonSerializer<Teacher>());
+    context.putArray("courses", user.get_courses(), CourseSerializer);
+    context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
+    _render.set("scheduleStaff.html");
+    return _render.render(context);
 }
 
 int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user) {

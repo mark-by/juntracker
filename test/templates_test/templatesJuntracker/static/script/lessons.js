@@ -264,6 +264,22 @@ class Form extends Component {
             }
         }
 
+        window.setLessonStartHours = (event) => {
+            this.state.lessonData.time[0] = event.target.value
+        }
+
+        window.setLessonStartMinutes = (event) => {
+            this.state.lessonData.time[1] = event.target.value
+        }
+
+        window.setLessonEndHours = (event) => {
+            this.state.lessonData.time[2] = event.target.value
+        }
+
+        window.setLessonEndMinutes = (event) => {
+            this.state.lessonData.time[3] = event.target.value
+        }
+
         window.updateStudents = (student) => {
             console.log("student", student);
             console.log("before", this.state.students);
@@ -350,15 +366,15 @@ class Form extends Component {
                             </select>
                             <p>Начало занятия</p>
                             <label>
-                                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit" value="${this.state.lessonData.time[0]}"/>
+                                <input type="number" maxlength="2" max="23" min="0" name="start-hours" id="start-hours-edit" value="${this.state.lessonData.time[0]}" oninput="setLessonStartHours(event)"/>
                                 <span>:</span>
-                                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit" value="${this.state.lessonData.time[1]}"/>
+                                <input type="number" maxlength="2" max="59" min="0" name="start-minutes" id="start-minutes-edit" value="${this.state.lessonData.time[1]}" oninput="setLessonStartMinutes(event)"/>
                             </label>
                             <p>Конец занятия</p>
                             <label>
-                                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit" value="${this.state.lessonData.time[2]}"/>
+                                <input type="number" maxlength="2" max="23" min="0" name="end-hours" id="end-hours-edit" value="${this.state.lessonData.time[2]}" oninput="setLessonEndHours(event)"/>
                                 <span>:</span>
-                                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit" value="${this.state.lessonData.time[3]}"/>
+                                <input type="number" maxlength="2" max="59" min="0" name="end-minutes" id="end-minutes-edit" value="${this.state.lessonData.time[3]}" oninput="setLessonEndMinutes(event)"/>
                             </label>
                         </div>
                         <div class="bottom-flex">

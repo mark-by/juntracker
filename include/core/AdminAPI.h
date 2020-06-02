@@ -40,6 +40,7 @@ public:
 
     std::string getMainPage(const User & user) override;
 
+    std::string schedule(const User &user);
     int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user);

@@ -4,14 +4,23 @@
 
 {% block currentWindow %}Расписание{% endblock %}
 {% block hiddenMenu %}
-<a class="menu__option" href="index.html">Окно администратора</a>
-<a class="menu__option" href="studentsAdmin.html">База учеников</a>
-<a class="menu__option" href="diaryAdmin.html">Журнал</a>
-<a class="menu__option" href="financeAdmin.html">Финансы</a>
+<a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{% else %}преподавателя{%endif%}</a>
+{% if user.isAdmin %}
+<a class="menu__option" href="/finance">Финансы</a>
+<a class="menu__option" href="/students">База учеников</a>
+{% endif %}
+<a class="menu__option" href="/diary">Журнал</a>
 {% endblock %}
 
 {% block main %}
-{% endblock %}
+<main class="administrator-main only-schedule">
+{% include Schedule.html %}
+</main>
+{% if user.isAdmin %}
+<div id="root"></div>
 
+<script type="module" src="static/script/lessons.js" defer></script>
+{% endif %}
+{% endblock %}
 {% block scripts %}
 {% endblock %}
