@@ -16,7 +16,7 @@ public:
     static Course get_course(int course_id);
     static int save(const std::string& name, int price, int schoolId);
     static int remove(int course_id);
-    static int Course::update(int course_id, const std::string &name, int price, int schoolId);
+    static int update(int course_id, const std::string &name, int price, int schoolId);
 
     int id() const { return  _id; }
     std::string title() const { return  _name; }
