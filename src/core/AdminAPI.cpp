@@ -116,10 +116,12 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
     std::string result;
     bool success;
     std::tie(result, success) = fetch("name", student);
-    if (!success) return {404, context};
+    if (!success)
+        return {404, context};
     auto name = result;
     std::tie(result, success) = fetch("surname", student);
-    if (!success) return {404, context};
+    if (!success)
+        return {404, context};
     auto surname = result;
     int age = std::stoi(get("age", student));
     auto description = get("description", student);
@@ -141,4 +143,36 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     auto students = Student::get_students_like(search, user.school_id());
     context.putArray("students", students, SimplePersonSerializer<Student>());
     return context;
+}
+
+int AdminAPI::addLesson(const std::unordered_multimap<std::string, std::string> &lesson, const User &user) {
+    templates::Context context;
+
+    if (lesson.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("teacher_id", lesson);
+    if (!success)
+        return 404;
+    int teacher_id = std::stoi(result);
+    std::tie(result, success) = fetch("course_id", lesson);
+    if (!success)
+        return 404;
+    int course_id = std::stoi(result);
+    std::tie(result, success) = fetch("cabinet_id", lesson);
+    if (!success)
+        return 404;
+    int cabinet_id = std::stoi(result);
+
+    int weekday = std::stoi(data.find("weekday")->second);
+    auto start_time = data.find("start_time")->second;
+    auto end_time = data.find("end_time")->second;
+    int school_id = user.school_id();
+
+    Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+
+    return 200;
 }
