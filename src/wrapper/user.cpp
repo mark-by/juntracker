@@ -53,7 +53,7 @@ std::vector<Lesson> User::get_current_lessons() const {
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     SqlWrapper db;
 
-    db << "SELECT * FROM lesson WHERE weekday=" << l_weekday << " and school_id=" << _school_id << ";";
+    db << "SELECT * FROM lesson WHERE weekday='" << l_weekday << "' and school_id=" << _school_id << ";";
     db.exec("Get lessons for weekday by user");
     std::vector<Lesson> res_lesson;
     res_lesson.reserve(db.count_tupls());
@@ -195,8 +195,7 @@ std::vector<Course> User::get_courses() const {
                 db.get_int(0, 0),
                 db.get_str(1, 0),
                 db.get_int(2, 0),
-                db.get_int(3, 0),
-                db.get_int(4, 0)
+                db.get_int(3, 0)
         );
     }
 

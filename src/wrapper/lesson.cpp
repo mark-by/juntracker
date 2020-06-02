@@ -61,8 +61,7 @@ Course Lesson::get_course() const {
             db.get_int(0, 0),
             db.get_str(1, 0),
             db.get_int(2, 0),
-            db.get_int(3, 0),
-            db.get_int(4, 0)
+            db.get_int(3, 0)
     );
 }
 
@@ -132,7 +131,7 @@ int Lesson::update(int lesson_id, int course_id, int cabinet_id, int teacher_id,
        << "set course_id=" << course_id << ", "
        << "cabinet_id=" << cabinet_id << ", "
        << "teacher_id=" << teacher_id << ", "
-       << "weekday=" << weekday << ", "
+       << "weekday='" << weekday << "', "
        << "start_time='" << start_time << "', "
        << "end_time='" << end_time << "', "
        << "school_id=" << school_id

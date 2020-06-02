@@ -23,7 +23,7 @@ Student Payment::get_student() const {
 Course Payment::get_course() const {
     SqlWrapper db;
 
-    db << "select course.id, course.name, course.price, course.school_id, course.teacher_id from course"
+    db << "select course.id, course.name, course.price, course.school_id from course"
           << "join payment on payment.course_id = course.id where payment.id" << _id << ";";
     db.exec("Get course by payment id");
     db.disconnect();
@@ -31,8 +31,7 @@ Course Payment::get_course() const {
             db.get_int(0, 0),
             db.get_str(1, 0),
             db.get_int(2, 0),
-            db.get_int(3, 0),
-            db.get_int(4, 0)
+            db.get_int(3, 0)
             );
 }
 

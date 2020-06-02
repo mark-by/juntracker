@@ -59,8 +59,7 @@ std::string AdminAPI::getPageStudents(const User &user) {
 int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     auto name = data.find("title")->second;
     int price = std::stoi(data.find("price")->second);
-    int teacher_id = std::stoi(data.find("teacher_id")->second);
-    Course::save(name, price, user.school_id(), teacher_id);
+    Course::save(name, price, user.school_id());
 
     return 0;
 }
@@ -165,9 +164,9 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
         return 404;
     int cabinet_id = std::stoi(result);
 
-    int weekday = std::stoi(data.find("weekday")->second);
-    auto start_time = data.find("start_time")->second;
-    auto end_time = data.find("end_time")->second;
+    int weekday = std::stoi(lesson.find("weekday")->second);
+    auto start_time = lesson.find("start_time")->second;
+    auto end_time = lesson.find("end_time")->second;
     int school_id = user.school_id();
 
     Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
