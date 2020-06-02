@@ -213,7 +213,7 @@ int AdminAPI::deleteLesson(const int lesson_id) {
     return 0;
 }
 
-int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     if (data.empty()) {
         return 404;
     }

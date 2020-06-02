@@ -45,8 +45,7 @@ Teacher Lesson::get_teacher() const {
             db.get_int(3, 0),
             db.get_int(4, 0),
             db.get_str(5, 0),
-            db.get_str(6, 0),
-            db.get_str(7, 0)
+            db.get_str(6, 0)
     );
 }
 

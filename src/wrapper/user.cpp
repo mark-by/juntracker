@@ -17,8 +17,7 @@ std::vector<Teacher> User::get_teachers() const {
                 db.get_int(3, i),
                 db.get_int(4, i),
                 db.get_str(5, i),
-                db.get_str(6, i),
-                db.get_str(7, i)
+                db.get_str(6, i)
         );
     }
     db.disconnect();
@@ -192,10 +191,10 @@ std::vector<Course> User::get_courses() const {
     courses.reserve(db.count_tupls());
     for (int i = 0; i < db.count_tupls(); i++) {
         courses.emplace_back(
-                db.get_int(0, 0),
-                db.get_str(1, 0),
-                db.get_int(2, 0),
-                db.get_int(3, 0)
+                db.get_int(0, i),
+                db.get_str(1, i),
+                db.get_int(2, i),
+                db.get_int(3, i)
         );
     }
 

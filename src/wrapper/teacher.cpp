@@ -35,8 +35,7 @@ Teacher Teacher::get_teacher(int teacher_id) {
             db.get_int(3, 0),
             db.get_int(4, 0),
             db.get_str(5, 0),
-            db.get_str(6, 0),
-            db.get_str(7, 0)
+            db.get_str(6, 0)
             );
 }
 
@@ -59,9 +58,9 @@ int Teacher::save(const std::string& name, const std::string& surname, int salar
 
     int teacher_id = db.get_int(0);
 
-    db << "insert into teacher(name, surname, age, salary, tel_number, description) "
+    db << "insert into teacher(name, surname, age, salary, tel_number, description, user_id) "
        << "values ('" << name << "', '" << surname << "', " << age << ", " << salary << ", '" << tel_number
-       << "', " << description << "') returning id;";
+       << "', " << description << "', " << teacher_id << ") returning id;";
     db.exec("Save teacher");
 
     db.disconnect();
