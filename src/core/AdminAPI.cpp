@@ -107,12 +107,13 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     }
 
     int lesson_id = std::stoi(data.find("lesson_id")->second);
+    int course_id = std::stoi(data.find("course_id")->second);
     std::vector<int> students_id;
     for (auto &pair : data) {
         if (pair.first == "new_student") {
-            Lesson::add_student(std::stoi(pair.second), lesson_id);
+            Lesson::add_student(std::stoi(pair.second), lesson_id, course_id);
         } else if (pair.first == "delete_student") {
-            Lesson::delete_student(std::stoi(pair.second), lesson_id);
+            Lesson::delete_student(std::stoi(pair.second), lesson_id, course_id);
         }
     }
 
@@ -211,9 +212,9 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
 
     for (auto &pair : lesson) {
         if (pair.first == "new_student") {
-            Lesson::add_student(std::stoi(pair.second), lesson_id);
+            Lesson::add_student(std::stoi(pair.second), lesson_id, course_id);
         } else if (pair.first == "delete_student") {
-            Lesson::delete_student(std::stoi(pair.second), lesson_id);
+            Lesson::delete_student(std::stoi(pair.second), lesson_id, course_id);
         }
     }
 
