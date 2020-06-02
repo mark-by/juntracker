@@ -350,7 +350,7 @@ input[type=checkbox] {
     padding-top: 15px;
 }
 
-.window-courses {
+.additional-window {
     position: absolute;
     background: white;
     top: 0;
@@ -370,13 +370,24 @@ input[type=checkbox] {
     color: gray;
 }
 
-.window-courses__title, .course-form {
+.window-courses__title, .course-form,
+.window-teachers__title, .teacher-form {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
     margin-left: 15px;
 }
 
-.window-courses__title {
+.window-teachers__title, .teacher-form {
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+.window-cabinets__title, .cabinet-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-left: 15px;
+}
+
+.window-courses__title, .window-teachers__title, .window-cabinets__title{
     font-weight: bold;
 }
 
@@ -385,7 +396,9 @@ input[type=checkbox] {
     justify-content: space-around;
 }
 
-.course-form>input[type=number], .course-form>input[type=text] {
+.course-form>input[type=number], .course-form>input[type=text],
+.teacher-form>input[type=number], .teacher-form>input[type=text],
+.cabinet-form>input[type=text] {
     width: 100%;
     border: none;
     font-size: 16px;
@@ -415,6 +428,15 @@ input[type=checkbox] {
 
 .active {
     border-bottom: 1px gray solid;
+}
+
+.background-window {
+    display: none;
+    z-index: -100;
+}
+
+.active-window {
+    z-index: 100;
 }
 
 .control {

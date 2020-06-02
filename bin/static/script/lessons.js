@@ -119,7 +119,11 @@ class SearchForm extends Component {
         window.search = () => {
             const student = document.querySelector("#search-student").value;
             fetch('/api/search_student?search=' + student).then(response => {
-                if (response.ok) { response.json().then(json => { this.insert(json.students) }); }
+                if (response.ok) {
+                    response.json().then(json => {
+                        this.insert(json.students)
+                    });
+                }
             })
         }
     }
@@ -168,94 +172,6 @@ class SearchForm extends Component {
 }
 
 
-
-class Window extends Component {
-    constructor() {
-        super();
-        this.state = {
-            now: "schedule"
-        }
-        this.scheduleButton = document.querySelector("#schedule-button");
-        this.courseButton = document.querySelector("#course-button");
-
-        this.scheduleButton.onclick = () => this.setState({now: "schedule"});
-        this.courseButton.onclick = () => this.setState({now: "course"});
-        document.querySelector(".add-course-button").onclick = () => {
-            window.insertCourses([{
-                id: -1,
-                title: "Введите название курса",
-                price: 0,
-            }]);
-        }
-        this.win = document.querySelector(".window-courses");
-
-        this.coursesList = document.querySelector('#window-courses-list');
-        window.saveCourse = (event) => {
-            event.preventDefault();
-            fetch('/api/save_course', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/x-www-urlencoded'
-                },
-                body: new URLSearchParams(new FormData(event.target)).toString()
-            }).then(res => {
-                if (!res.ok) {
-                    alert("Не удалось сохранить курс")
-                }
-            })
-        }
-        window.insertCourses = (courses) => {
-            if (!courses) {
-                return;
-            }
-            this.coursesList.innerHTML += `${courses.map(course => {
-                return `
-                    <form class="course-form" data="${course.id}" onsubmit="saveCourse(event)">
-                        <input type="text" value="${course.title}" name="title"/>
-                        <input type="number" value="${course.price}" name="price"/>
-                        <div class="course-form-buttons">
-                            <input class="save-course-button" value type="submit"/>
-                            <img class="delete-course-button" src="static/images/trash.svg"/>
-                        </div>
-                    </form>  
-                ` 
-            }).join("")}`;
-
-            [...this.coursesList.querySelectorAll('.course-form')].map(element => {
-                element.querySelector('.delete-course-button').onclick = () => {
-                    fetch('/api/delete_course', {
-                        method: 'POST',
-                        headers: {
-                            'content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: new URLSearchParams(new FormData(element)).toString()
-                    }).then(res => {
-                        // if (res.ok) {
-                            element.remove();
-                        // }
-                    })
-                }
-            })
-        }
-    }
-
-    render() {
-        this.scheduleButton.classList.remove('active');
-        this.courseButton.classList.remove('active');
-
-        if (this.state.now === "schedule") {
-            this.scheduleButton.classList.add('active');
-            this.win.style.zIndex = "-100";
-        } else {
-            this.courseButton.classList.add('active');
-            this.win.style.zIndex = "100";
-        }
-    }
-}
-
-const win = new Window();
-win.render();
-
 class Form extends Component {
     constructor() {
         super();
@@ -277,6 +193,8 @@ class Form extends Component {
             creationOpened: false,
             isNew: false
         }
+
+        this.count = 0;
 
         this.getData();
         this.creationForm = new CreationForm();
@@ -370,12 +288,17 @@ class Form extends Component {
         this.state.courses = json.courses;
         this.state.cabinets = json.cabinets;
         this.state.teachers = json.teachers;
-        window.insertCourses(json.courses);
     }
 
     render() {
+        this.count += 1;
         this.studentList.setState({students: this.state.students});
-
+        if (!this.state.courses || !this.state.cabinets || !this.state.teachers) {
+            if (this.count % 2 === 0) {
+                alert("Сначала заполните информацию о курсах, кабинетах и учителях. После обновите страницу");
+            }
+            return;
+        }
         return this.state.isOpen ?
             `
             ${this.state.creationOpened ? this.creationForm.render() : ""}
@@ -460,7 +383,7 @@ class Form extends Component {
     }
 }
 
-class DeleteLessonModal extends Component{
+class DeleteLessonModal extends Component {
     constructor() {
         super();
         this.state = {
@@ -479,7 +402,7 @@ class DeleteLessonModal extends Component{
             fetch('/api/delete_lesson', {
                 method: 'POST',
                 headers: {
-                    'content-type' : 'application/x-www-form-urlencoded',
+                    'content-type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams(new FormData(event.target)).toString()
             }).then(response => {
@@ -572,25 +495,161 @@ function iWeekToStr(week) {
 
 [...document.querySelectorAll('.add-lesson-button')].map((button, idx) => {
     console.log(iWeekToStr(idx), idx);
-   button.onclick = () => {
-       root.app.setState({
-           isOpen: true,
-           students: [],
-           lessonData: {
-               id: -1,
-               weekday: iWeekToStr(idx),
-               teacherId: -1,
-               courseId: -1,
-               cabinetId: -1,
-               time: [0, 0, 0, 0],
-           },
-           isNew: true
-       });
-   }
+    button.onclick = () => {
+        root.app.setState({
+            isOpen: true,
+            students: [],
+            lessonData: {
+                id: -1,
+                weekday: iWeekToStr(idx),
+                teacherId: -1,
+                courseId: -1,
+                cabinetId: -1,
+                time: [0, 0, 0, 0],
+            },
+            isNew: true
+        });
+    }
 })
 
 
+class Window extends Component {
+    constructor() {
+        super();
+        this.state = {
+            now: "schedule"
+        }
+        this.scheduleButton = document.querySelector("#schedule-button");
+        this.courseButton = document.querySelector("#course-button");
+        this.teacherButton = document.querySelector("#teacher-button");
+        this.cabinetButton = document.querySelector("#cabinet-button");
+
+        this.scheduleButton.onclick = () => this.setState({now: "schedule"});
+        this.courseButton.onclick = () => this.setState({now: "course"});
+        this.teacherButton.onclick = () => this.setState({now: "teacher"});
+        this.cabinetButton.onclick = () => this.setState({now: "cabinet"});
+
+        this.coursesWin = document.querySelector(".window-courses");
+        this.coursesList = document.querySelector('#window-courses-list');
+
+        this.teachersWin = document.querySelector(".window-teachers");
+        this.teachersList = document.querySelector('#window-teachers-list');
+
+        this.cabinetsWin = document.querySelector(".window-cabinets");
+        this.cabinetsList = document.querySelector('#window-cabinets-list');
+
+        window.saveListElemenet = (event) => {
+            event.preventDefault();
+            fetch('/api/save_' + event.target.getAttribute('title'), {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/x-www-urlencoded'
+                },
+                body: new URLSearchParams(new FormData(event.target)).toString()
+            }).then(res => {
+                if (!res.ok) {
+                    alert("Неудача :(")
+                }
+            })
+        }
+
+        window.addCourse = () => {
+            this.coursesList.innerHTML += `
+                    <form class="course-form" data="-1" onsubmit="saveListElement(event)">
+                        <input type="text" value="" placeholder="Введите название" name="title"/>
+                        <input type="number" value="" placeholder="Укажите цену" name="price"/>
+                        <div class="course-form-buttons">
+                            <input class="save-course-button" value type="submit"/>
+                            <img class="delete-course-button" src="static/images/trash.svg"/>
+                        </div>
+                    </form>  
+                `;
+            this.initLists();
+        }
+
+        window.addTeacher = () => {
+            this.teachersList.innerHTML += `
+                    <form class="teacher-form" data="-1" onsubmit="saveListElement(event)" title="teacher">
+                    <input type="text" value="" placeholder="Введите имя" name="name"/>
+                    <input type="text" value="" placeholder="Введите фамилию" name="surname"/>
+                    <div class="course-form-buttons">
+                        <input class="save-course-button" value type="submit"/>
+                        <img class="delete-course-button" src="static/images/trash.svg"/>
+                    </div>
+                    </form>  
+                `;
+            this.initLists()
+        }
+
+        window.addCabinet = () => {
+            this.cabinetsList.innerHTML += `
+                    <form class="cabinet-form" data="-1" onsubmit="saveListElement(event)" title="cabinet">
+                    <input type="text" value="" placeholder="Введите аудиторию" name="name"/>
+                    <div class="course-form-buttons">
+                        <input class="save-course-button" value type="submit"/>
+                        <img class="delete-course-button" src="static/images/trash.svg"/>
+                    </div>
+                    </form>  
+                `;
+            this.initLists();
+        }
+    }
+
+    delEl(element) {
+        fetch('/api/delete_' + element.getAttribute('title'), {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(new FormData(element)).toString()
+        }).then(res => {
+            // if (res.ok) {
+            element.remove();
+            // }
+        })
+    }
+
+    initLists()
+    {
+        [...this.coursesList.querySelectorAll('.course-form'),
+            ...this.teachersList.querySelectorAll('.teacher-form'),
+            ...this.cabinetsList.querySelectorAll('.cabinet-form')].map(element => {
+                console.log("1")
+            element.querySelector('.delete-course-button').onclick = () => {this.delEl(element)}
+        })
+    }
+
+    render() {
+        this.scheduleButton.classList.remove('active');
+        this.courseButton.classList.remove('active');
+        this.teacherButton.classList.remove('active');
+        this.cabinetButton.classList.remove('active');
+
+        this.coursesWin.classList.replace('active-window', 'background-window');
+        this.teachersWin.classList.replace('active-window', 'background-window');
+        this.cabinetsWin.classList.replace('active-window', 'background-window');
 
 
+        switch (this.state.now) {
+            case "schedule":
+                this.scheduleButton.classList.add('active');
+                break;
+            case "teacher":
+                this.teacherButton.classList.add('active');
+                this.teachersWin.classList.replace('background-window', 'active-window');
+                break;
+            case "cabinet":
+                this.cabinetButton.classList.add('active');
+                this.cabinetsWin.classList.replace( 'background-window', 'active-window');
+                break;
+            case "course":
+                this.courseButton.classList.add('active');
+                this.coursesWin.classList.replace( 'background-window', 'active-window');
+                break;
+        }
+    }
+}
 
-
+const win = new Window();
+win.render();
+win.initLists();

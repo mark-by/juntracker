@@ -30,6 +30,17 @@ protected:
         }
     };
 
+    template<class Person>
+    struct PersonSerializer {
+        templates::Context operator()(const Person &person) {
+            templates::Context context;
+            context.put("name", person.name());
+            context.put("surname", person.surname());
+            context.put("id", person.id());
+            return context;
+        }
+    };
+
     template<class Title>
     struct SimpleTitleSerializer {
         templates::Context operator()(const Title &title) {

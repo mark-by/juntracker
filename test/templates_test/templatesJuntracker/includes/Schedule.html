@@ -3,31 +3,82 @@
     <div class="schedule-control-wrapper">
         <div id="schedule-button" class="schedule-control-button schedule-button active">Расписание</div>
         <div id="course-button" class="schedule-control-button course-button">Учебные курсы</div>
+        <div id="teacher-button" class="schedule-control-button teachers-button">Преподаватели</div>
+        <div id="cabinet-button" class="schedule-control-button cabinets-button">Кабинеты</div>
     </div>
     {% endif %}
     <div class="window">
         {% if user.isAdmin %}
-        <div class="window-courses">
+        <div class="window-courses additional-window background-window">
             <div class="window-courses__title">
                 <p>Название</p>
                 <p>Цена</p>
             </div>
             <div id="window-courses-list">
-                <form class="course-form" data="12">
-                    <input type="text" value="Программирование Python" name="title"/>
-                    <input type="number" value="5000" name="price"/>
+                {% for course in courses %}
+                <form class="course-form" data="{{course.id}}" onsubmit="saveListElement(event)" title="course">
+                    <input type="text" value="{{course.title}}" name="title"/>
+                    <input type="number" value="{{course.price}}" name="price"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>
                     </div>
                 </form>
+                {% endfor %}
             </div>
             <div class="flex-center">
-                <div class="add-course-button">
+                <div class="add-course-button" onclick="addCourse()">
                     <img src="static/images/plus.svg"/>
                 </div>
             </div>
         </div>
+
+        <div class="window-teachers additional-window background-window">
+            <div class="window-teachers__title">
+                <p>Имя</p>
+                <p>Фамилия</p>
+            </div>
+            <div id="window-teachers-list">
+                {% for teacher in teachers %}
+                <form class="teacher-form" data="{{teacher.id}}" onsubmit="saveListElement(event)" title="teacher">
+                    <input type="text" value="{{teacher.name}}" name="name"/>
+                    <input type="text" value="{{teacher.surname}}" name="surname"/>
+                    <div class="course-form-buttons">
+                        <input class="save-course-button" value type="submit"/>
+                        <img class="delete-course-button" src="static/images/trash.svg"/>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+            <div class="flex-center">
+                <div class="add-course-button" onclick="addTeacher()">
+                    <img src="static/images/plus.svg"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="window-cabinets additional-window background-window">
+            <div class="window-cabinets__title">
+                <p>Название аудитории</p>
+            </div>
+            <div id="window-cabinets-list">
+                {% for cabinet in cabinets %}
+                <form class="cabinet-form" data="{{cabinet.id}}" onsubmit="saveListElement(event)" title="cabinet">
+                    <input type="text" value="{{cabinet.title}}" name="name"/>
+                    <div class="course-form-buttons">
+                        <input class="save-course-button" value type="submit"/>
+                        <img class="delete-course-button" src="static/images/trash.svg"/>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+            <div class="flex-center">
+                <div class="add-course-button" onclick="addCabinet()">
+                    <img src="static/images/plus.svg"/>
+                </div>
+            </div>
+        </div>
+
         {% endif %}
         {% for day in scheduleDays %}
         <div class="schedule__day">
