@@ -35,22 +35,41 @@ Teacher Teacher::get_teacher(int teacher_id) {
             db.get_int(3, 0),
             db.get_int(4, 0),
             db.get_str(5, 0),
-            db.get_str(6, 0),
-            db.get_str(7, 0)
+            db.get_str(6, 0)
             );
 }
 
-int Teacher::save(const std::string& name, const std::string& surname, int salary,
-                  int age, const std::string& tel_number, int user_id, const std::string& description) {
+int Teacher::save(const std::string& name, const std::string& surname, int school_id) {
     SqlWrapper db;
 
-    db << "insert into teacher(name, surname, age, salary, tel_number, user_id, description) "
-       << "values ('" << name << "', '" << surname << "', " << age << ", " << salary << ", '" << tel_number
-       << "', " << user_id << ", '" << description << "');";
+    std::string login;
+    do {
+        login = randomStr(10);
+        db << "select * from users where login='" << login << "';";
+    } while (db.count_tupls() > 0);
+    std::string password = randomStr(12);
+
+    db << "insert into users (login, password, permission, school_id) values ('"
+       << login << "', '"
+       << password << "', "
+       << 1 << ", "
+       << school_id << ") returning id;";
+    db.exec("Create teacher from save");
+
+    int user_id = db.get_int(0);
+
+    db << "insert into teacher(name, surname, age, tel_number, salary, description, user_id) "
+       << "values ('" << name << "', '"
+           << surname << "', "
+           << 0 << ", '"
+           << "" << "', "
+           << 0 << ", '"
+           << "" << "', "
+           << user_id << ") returning id;";
     db.exec("Save teacher");
 
     db.disconnect();
-    return 0;
+    return db.get_int(0);
 }
 
 int Teacher::remove(int teacher_id) {
@@ -75,5 +94,19 @@ int Teacher::setMark(int lesson_id, int student_id, int mark, int school_id) con
     db.exec("Set mark");
 
     db.disconnect();
+    return 0;
+}
+
+int Teacher::update(int teacher_id, const std::string& name, const std::string& surname) {
+    SqlWrapper db;
+
+    db << "update teacher set "
+       << "name='" << name << "', "
+       << "surname='" << surname
+       << "' where id=" << teacher_id << ";";
+    db.exec("Update teacher");
+
+    db.disconnect();
+
     return 0;
 }

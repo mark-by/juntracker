@@ -16,23 +16,21 @@ public:
             int age,
             int _salary,
             const std::string &_tel_number,
-            const std::string &_description,
-            const std::string &avatar)
+            const std::string &_description)
             : _id(_id),
             _name(_name),
             _surname(_surname),
             _age(age),
             _tel_number(_tel_number),
             _salary(_salary),
-            _description(_description),
-            _avatar(avatar) {}
+            _description(_description) {}
 
     std::vector<Course> get_courses() const;
     int setMark(int lesson_id, int student_id, int mark, int school_id) const;
 
     static Teacher get_teacher(int teacher_id);
-    static int save(const std::string &name, const std::string &surname, int salary,
-            int age, const std::string& tel_number, int user_id, const std::string& description);
+    static int save(const std::string& name, const std::string& surname, int school_id);
+    static int update(int teacher_id, const std::string& name, const std::string& surname);
     static int remove(int teacher_id);
 
     int id() const override { return _id; }
@@ -49,7 +47,6 @@ private:
     std::string _tel_number;
     int _salary;
     std::string _description;
-    std::string _avatar;
 };
 
 #endif  // INCLUDE_DATABASE_TEACHER_H_

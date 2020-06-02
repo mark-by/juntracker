@@ -115,12 +115,12 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
 
     auto lesson = Lesson::get_lesson(lesson_id);
     lesson.update(lesson_id,
-                  std::stoi(data.find("course")->second),
-                  std::stoi(data.find("cabinet")->second),
-                  std::stoi(data.find("teacher")->second),
-                  std::stoi(data.find("weekday")->second),
-                  data.find("start-hours")->second + ":" + data.find("start-minutes")->second,
-                  data.find("end-hours")->second + ":" + data.find("end-minutes")->second,
+                  std::stoi(get("course", data)),
+                  std::stoi(get("cabinet", data)),
+                  std::stoi(get("teacher", data)),
+                  std::stoi(get("weekday", data)),
+                  get("start-hours", data) + ":" + get("start-minutes", data),
+                  get("end-hours", data) + ":" + get("end-minutes", data),
                   lesson.school_id());
     auto students = lesson.get_students();
 
@@ -184,25 +184,33 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
 
     std::string result;
     bool success;
-    std::tie(result, success) = fetch("teacher_id", lesson);
+    std::tie(result, success) = fetch("teacher", lesson);
     if (!success)
         return 404;
     int teacher_id = std::stoi(result);
-    std::tie(result, success) = fetch("course_id", lesson);
+    std::tie(result, success) = fetch("course", lesson);
     if (!success)
         return 404;
     int course_id = std::stoi(result);
-    std::tie(result, success) = fetch("cabinet_id", lesson);
+    std::tie(result, success) = fetch("cabinet", lesson);
     if (!success)
         return 404;
     int cabinet_id = std::stoi(result);
 
-    int weekday = std::stoi(lesson.find("weekday")->second);
-    auto start_time = lesson.find("start_time")->second;
-    auto end_time = lesson.find("end_time")->second;
+    int weekday = std::stoi(get("weekday", lesson));
+    auto start_time = get("start-hours", lesson) + ":" + get("start-minutes", lesson);
+    auto end_time = get("end-hours", lesson) + ":" + get("end-minutes", lesson);
     int school_id = user.school_id();
 
-    Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+    int lesson_id = Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+
+    for (auto &pair : lesson) {
+        if (pair.first == "new_student") {
+            Lesson::add_student(std::stoi(pair.second), lesson_id);
+        } else if (pair.first == "delete_student") {
+            Lesson::delete_student(std::stoi(pair.second), lesson_id);
+        }
+    }
 
     return 200;
 }
@@ -222,3 +230,61 @@ std::string AdminAPI::schedule(const User &user) {
     return _render.render(context);
 }
 
+int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    if (data.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("name", data);
+    if (!success)
+        return 404;
+    auto name = result;
+    std::tie(result, success) = fetch("surname", data);
+    if (!success)
+        return 404;
+    auto surname = result;
+    std::tie(result, success) = fetch("id", data);
+    if (!success)
+        return 404;
+    int id = std::stoi(result);
+
+    int school_id = user.school_id();
+
+    if (id == -1) {
+        Teacher::save(name, surname, school_id);
+    } else {
+        Teacher::update(id, name, surname);
+    }
+
+    return 200;
+}
+
+int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    if (data.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("name", data);
+    if (!success)
+        return 404;
+    auto title = result;
+
+    std::tie(result, success) = fetch("id", data);
+    if (!success)
+        return 404;
+    int id = std::stoi(result);
+
+    int school_id = user.school_id();
+
+    if (id == -1) {
+        Cabinet::save(title, school_id);
+    } else {
+        Cabinet::update(title, school_id, id);
+    }
+
+    return 200;
+}

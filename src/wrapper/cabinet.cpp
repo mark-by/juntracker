@@ -6,19 +6,35 @@
 #include "sql_wrapper.h"
 
 
-void Cabinet::save(const std::string &title, int schoolId) {
+int Cabinet::save(const std::string &title, int schoolId) {
     SqlWrapper db;
-    db << "INSERT INTO cabinet(title, school_id) VALUES ('" << title << "', " << schoolId << ");";
 
+    db << "INSERT INTO cabinet(title, school_id) VALUES ('" << title << "', " << schoolId << ");";
     db.exec("Save cabinet");
+
     db.disconnect();
+
+    return 0;
 }
 
-void Cabinet::remove(int id) {
+int Cabinet::update(const std::string &title, int schoolId, int cabinetId) {
+    SqlWrapper db;
+
+    db << "update cabinet set title='" << title << "', school_id=" << schoolId << " where id=" << cabinetId << ";";
+    db.exec("Save cabinet");
+
+    db.disconnect();
+
+    return 0;
+}
+
+int Cabinet::remove(int id) {
     SqlWrapper db;
     db << "DELETE FROM cabinet WHERE id=" << id << ";";
     db.exec("Remove cabinet");
     db.disconnect();
+
+    return 0;
 }
 
 Cabinet Cabinet::get(int id) {
