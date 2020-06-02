@@ -538,7 +538,7 @@ class Window extends Component {
         this.cabinetsWin = document.querySelector(".window-cabinets");
         this.cabinetsList = document.querySelector('#window-cabinets-list');
 
-        window.saveListElemenet = (event) => {
+        window.saveListElement = (event) => {
             event.preventDefault();
             fetch('/api/save_' + event.target.getAttribute('title'), {
                 method: 'POST',
