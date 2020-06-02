@@ -17,10 +17,10 @@ int Cabinet::save(const std::string &title, int schoolId) {
     return 0;
 }
 
-int Cabinet::update(const std::string &title, int schoolId) {
+int Cabinet::update(const std::string &title, int schoolId, int cabinetId) {
     SqlWrapper db;
 
-    db << "update cabinet set title='" << title << "' where school_id=" << schoolId << ";";
+    db << "update cabinet set title='" << title << "', school_id=" << schoolId << " where id=" << cabinetId << ";";
     db.exec("Save cabinet");
 
     db.disconnect();

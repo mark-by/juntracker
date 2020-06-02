@@ -268,7 +268,7 @@ int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string
     if (id == -1) {
         Cabinet::save(title, school_id);
     } else {
-        Cabinet::update(title, school_id);
+        Cabinet::update(title, school_id, id);
     }
 
     return 200;
