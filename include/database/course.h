@@ -7,7 +7,7 @@ class Course;
 
 class Course {
 public:
-    explicit Course(int _id, const std::string& _name, int _price, int teacher_id, int school_id):
+    explicit Course(int _id, const std::string& _name, int _price, int school_id):
         _id(_id), _name(_name), _price(_price), _school_id(school_id) { }
 
     static int set_price(int price, int course_id);
