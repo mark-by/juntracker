@@ -58,9 +58,26 @@ std::string AdminAPI::getPageStudents(const User &user) {
 }
 
 int AdminAPI::editCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
-    auto name = data.find("title")->second;
-    int price = std::stoi(data.find("price")->second);
-    int id = std::stoi(data.find("id")->second);
+    if (data.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("title", data);
+    if (!success)
+        return 404;
+    auto name = result;
+
+    std::tie(result, success) = fetch("price", data);
+    if (!success)
+        return 404;
+    int price = std::stoi(result);
+
+    std::tie(result, success) = fetch("id", data);
+    if (!success)
+        return 404;
+    int id = std::stoi(result);
 
     if (id == -1) {
         Course::save(name, price, user.school_id());
@@ -68,7 +85,7 @@ int AdminAPI::editCourse(const std::unordered_multimap<std::string, std::string>
         Course::update(id, name, price, user.school_id());
     }
 
-    return 0;
+    return 200;
 }
 
 int AdminAPI::deleteCourse(int courseId) {
