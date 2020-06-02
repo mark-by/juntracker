@@ -26,6 +26,10 @@ public:
 
     int deleteCourse(int course_id);
 
+    int createLesson(const std::unordered_multimap<std::string, std::string> &data, const User &user);
+
+    int deleteLesson(const int lesson_id);
+
     std::string getPagePaymentsByStudent(const std::string &);
 
     std::pair<int, templates::Context> saveStudent(const std::unordered_multimap<std::string, std::string> &data, const User &user);

@@ -61,8 +61,7 @@ Course Lesson::get_course() const {
             db.get_int(0, 0),
             db.get_str(1, 0),
             db.get_int(2, 0),
-            db.get_int(3, 0),
-            db.get_int(4, 0)
+            db.get_int(3, 0)
     );
 }
 
@@ -158,8 +157,8 @@ int Lesson::delete_student(int student_id, int lesson_id) {
 int Lesson::add_student(int student_id, int lesson_id) {
     SqlWrapper db;
 
-    db << "insert into students_for_lesson (student_id, lesson_id) values(" << student_id
-       << ", " << lesson_id << ");";
+    db << "insert into students_for_lesson (student_id, lesson_id) values("
+        << student_id << ", " << lesson_id << ");";
     db.exec("add student on lesson");
     db.disconnect();
 

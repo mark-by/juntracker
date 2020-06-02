@@ -13,7 +13,6 @@ std::vector<Course> Teacher::get_courses() const {
                 db.get_int(0, i),
                 db.get_str(1, i),
                 db.get_int(2, i),
-                _id,
                 db.get_int(3, i)
                 );
     }

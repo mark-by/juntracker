@@ -8,19 +8,15 @@
 void Handler::choosePermission(Request request, Response& response, const User &user) {
     switch(user.permission()) {
         case Permission::admin:
-            std::cout << "ADMIN" << std::endl;
             adminHandler(request, response, user);
             break;
         case Permission::teacher:
-            std::cout << "TEACHER" << std::endl;
             teacherHandler(request, response, user);
             break;
         case Permission::customer:
-            std::cout << "CUSTOMER" << std::endl;
             customerHandler(request, response, user);
             break;
         default:
-            std::cout << "DEFAULT" << std::endl;
             response.setHeader("Location", "/login");
             response.setStatus(status::Unauthorized);
             break;
@@ -43,6 +39,10 @@ void Handler::teacherHandler(Request request, Response& response, const User &us
     if (request.method() == "GET") {
         if (request.path() == "/") {
             response = Response(teacherApi.getMainPage(user));
+        }
+    } else {
+        if (request.path() == "/api/save_current_lesson") {
+            response = Response(adminApi.saveCurrentLesson(request.dataTable()));
         }
     }
 }
@@ -75,6 +75,10 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.addCourse(request.dataTable(), user));
         } else if (request.path() == "/api/delete_course") {
             response = Response(adminApi.deleteCourse(std::stoi(request.data("id"))));
+        } else if (request.path() == "/api/create_lesson") {
+            response = Response(adminApi.createLesson(request.dataTable(), user));
+        } else if (request.path() == "/api/delete_lesson") {
+            response = Response(adminApi.deleteLesson(std::stoi(request.data("id"))));
         }
     }
 }

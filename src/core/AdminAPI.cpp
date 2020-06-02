@@ -59,8 +59,7 @@ std::string AdminAPI::getPageStudents(const User &user) {
 int AdminAPI::addCourse(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     auto name = data.find("title")->second;
     int price = std::stoi(data.find("price")->second);
-    int teacher_id = std::stoi(data.find("teacher_id")->second);
-    Course::save(name, price, user.school_id(), teacher_id);
+    Course::save(name, price, user.school_id());
 
     return 0;
 }
@@ -104,8 +103,6 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
     return 200;
 }
 
-
-
 std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &student, const User &user) {
     templates::Context context;
 
@@ -116,10 +113,12 @@ std::pair<int, templates::Context> AdminAPI::saveStudent(const std::unordered_mu
     std::string result;
     bool success;
     std::tie(result, success) = fetch("name", student);
-    if (!success) return {404, context};
+    if (!success)
+        return {404, context};
     auto name = result;
     std::tie(result, success) = fetch("surname", student);
-    if (!success) return {404, context};
+    if (!success)
+        return {404, context};
     auto surname = result;
     int age = std::stoi(get("age", student));
     auto description = get("description", student);
@@ -150,4 +149,42 @@ std::string AdminAPI::getMainPage(const User &user) {
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     _render.set("mainPageStaff.html");
     return _render.render(context);
+}
+
+int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::string> &lesson, const User &user) {
+    templates::Context context;
+
+    if (lesson.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("teacher_id", lesson);
+    if (!success)
+        return 404;
+    int teacher_id = std::stoi(result);
+    std::tie(result, success) = fetch("course_id", lesson);
+    if (!success)
+        return 404;
+    int course_id = std::stoi(result);
+    std::tie(result, success) = fetch("cabinet_id", lesson);
+    if (!success)
+        return 404;
+    int cabinet_id = std::stoi(result);
+
+    int weekday = std::stoi(lesson.find("weekday")->second);
+    auto start_time = lesson.find("start_time")->second;
+    auto end_time = lesson.find("end_time")->second;
+    int school_id = user.school_id();
+
+    Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
+
+    return 200;
+}
+
+int AdminAPI::deleteLesson(const int lesson_id) {
+    Lesson::remove(lesson_id);
+
+    return 0;
 }

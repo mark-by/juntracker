@@ -29,7 +29,7 @@ std::vector<Lesson> User::get_current_lessons() const {
     SqlWrapper db;
     boost::gregorian::date d = boost::gregorian::day_clock::universal_day();
     int curr_weekday = d.day_of_week().as_number() - 1;
-    db << "SELECT * FROM lesson WHERE weekday='" << curr_weekday << "' and school_id=" << _school_id << ";";
+    db << "SELECT * FROM lesson WHERE weekday=" << curr_weekday << " and school_id=" << _school_id << ";";
     db.exec("Get lessons for weekday by user");
 
     std::vector<Lesson> res_lesson;
@@ -53,7 +53,7 @@ std::vector<Lesson> User::get_current_lessons() const {
 std::vector<Lesson> User::get_lessons_by_weekday(int l_weekday) const {
     SqlWrapper db;
 
-    db << "SELECT * FROM lesson WHERE weekday='" << l_weekday << "' and school_id=" << _school_id << ";";
+    db << "SELECT * FROM lesson WHERE weekday=" << l_weekday << " and school_id=" << _school_id << ";";
     db.exec("Get lessons for weekday by user");
     std::vector<Lesson> res_lesson;
     res_lesson.reserve(db.count_tupls());
@@ -147,7 +147,7 @@ int User::remove(int user_id) {
 
 User User::get_user(const std::string &username) {
     SqlWrapper db;
-    db << "SELECT * FROM users WHERE login=" << username << ";";
+    db << "SELECT * FROM users WHERE login='" << username << "';";
     db.exec("Get user by username");
 
     db.disconnect();
@@ -185,8 +185,8 @@ std::vector<Cabinet> User::get_cabinets() const {
 std::vector<Course> User::get_courses() const {
     SqlWrapper db;
 
-    db << "SELECT * FROM course WHERE school_id='" << _school_id << "';";
-    db.exec("Get courses");
+    db << "SELECT * FROM course WHERE school_id=" << _school_id << ";";
+    db.exec("Get courses of this school");
 
     std::vector<Course> courses;
     courses.reserve(db.count_tupls());
@@ -195,8 +195,7 @@ std::vector<Course> User::get_courses() const {
                 db.get_int(0, 0),
                 db.get_str(1, 0),
                 db.get_int(2, 0),
-                db.get_int(3, 0),
-                db.get_int(4, 0)
+                db.get_int(3, 0)
         );
     }
 
