@@ -151,9 +151,21 @@ std::string Request::urlDecode(const std::string& url) {
     auto temp_body = std::string(output);
     curl_free(output);
     curl_easy_cleanup(curl);
+    replacePlusToSpace(temp_body);
     return temp_body;
 }
 
 std::string Request::urlDecode(const std::string::const_iterator &begin, const std::string::const_iterator &end) {
     return urlDecode(std::string(begin, end));
+}
+
+void Request::replacePlusToSpace(std::string &str) {
+    auto it = str.begin();
+    auto end = str.end();
+    while (it != end) {
+        if (*it == '+') {
+            *it = ' ';
+        }
+        it++;
+    }
 }
