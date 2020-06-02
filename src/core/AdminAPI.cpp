@@ -212,3 +212,43 @@ int AdminAPI::deleteLesson(const int lesson_id) {
 
     return 0;
 }
+
+int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
+    if (data.empty()) {
+        return 404;
+    }
+
+    std::string result;
+    bool success;
+    std::tie(result, success) = fetch("name", data);
+    if (!success)
+        return 404;
+    auto name = result;
+
+    std::tie(result, success) = fetch("surname", data);
+    if (!success)
+        return 404;
+    auto surname = result;
+
+    std::tie(result, success) = fetch("id", data);
+    if (!success)
+        return 404;
+    int id = std::stoi(result);
+
+    int age = std::stoi(get("age", data));
+    auto tel_number = get("tel_number", data);
+    int salary = std::stoi(get("salary", data));
+    auto description = get("description", data);
+    auto email = get("email", data);
+    auto parent = get("parent", data);
+    auto avatar = get("avatar", data);
+    int school_id = user.school_id();
+
+    if (id == -1) {
+        Teacher::save(name, surname, salary, age, tel_number, description, email, avatar, school_id);
+    } else {
+        Teacher::update(id, name, surname, salary, age, tel_number, description);
+    }
+
+    return 200;
+}
