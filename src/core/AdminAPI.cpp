@@ -27,10 +27,13 @@ std::string AdminAPI::findStudent(const std::string &str) {
     return std::string();
 }
 
-int AdminAPI::deleteStudent(int student_id) {
-    Student::remove(student_id);
+int AdminAPI::deleteStudents(const std::unordered_multimap<std::string, std::string> &students, const User& user) {
+    for (auto &pair : students) {
+        if (pair.first == "id")
+            Student::remove(std::stoi(pair.second));
+    }
 
-    return 0;
+    return 200;
 }
 
 templates::Context StudentDBSerializer(const Student &student) {
@@ -163,6 +166,7 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     templates::Context context;
     auto students = Student::get_students_like(search, user.school_id());
     context.putArray("students", students, SimplePersonSerializer<Student>());
+
     return context;
 }
 
@@ -172,6 +176,7 @@ std::string AdminAPI::getMainPage(const User &user) {
     context.putArray("courses", user.get_courses(), CourseSerializer);
     context.putArray("cabinets", user.get_cabinets(), SimpleTitleSerializer<Cabinet>());
     _render.set("mainPageStaff.html");
+
     return _render.render(context);
 }
 

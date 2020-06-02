@@ -18,7 +18,7 @@ public:
 
     std::string findStudent(const std::string &);
 
-    int deleteStudent(int student_id);
+    int deleteStudents(const std::unordered_multimap<std::string, std::string> &students, const User& user);
 
     std::string getPageStudents(const User& user);
 
