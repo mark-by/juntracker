@@ -6,24 +6,23 @@
 #include <curl/curl.h>
 
 Request::Request(const std::string &request) {
-    auto __request = urlDecode(request.begin(), request.end());
     std::regex separator(R"(\r*\n\r*\n)");
-    std::sregex_iterator separatorMatch(__request.cbegin(), __request.cend(), separator);
+    std::sregex_iterator separatorMatch(request.cbegin(), request.cend(), separator);
     std::string::const_iterator endHeaders;
     if (separatorMatch->ready()) {
         endHeaders = separatorMatch->suffix().first;
         endHeaders--;
     } else {
-        endHeaders = __request.cend();
+        endHeaders = request.cend();
     }
-    auto req = std::string(__request.cbegin(), endHeaders);
-    parseStartLine(__request.cbegin(), endHeaders);
-    parseHeaders(__request.cbegin(), endHeaders);
+    auto req = std::string(request.cbegin(), endHeaders);
+    parseStartLine(request.cbegin(), endHeaders);
+    parseHeaders(request.cbegin(), endHeaders);
     parseCookies();
     if (_method == "GET") {
         parseDataFromPath();
     } else if (_method == "POST") {
-        parseDataFromBody(endHeaders, __request.cend());
+        parseDataFromBody(endHeaders, request.cend());
     }
 }
 
@@ -31,7 +30,7 @@ void Request::parseStartLine(const std::string::const_iterator &begin, const std
     const std::regex startLine(R"((PUT|GET|POST|HEAD)\s(/[^\n\s\r\t\0]*)\sHTTP/([\d.]+)\r*\n)");
     std::sregex_iterator match(begin, end, startLine);
     _method = match->format("$1");
-    _path = match->format("$2");
+    _path = urlDecode(match->format("$2"));
 }
 
 std::string Request::method() {
@@ -84,16 +83,12 @@ void Request::parseDataFromBody(const std::string::const_iterator &begin, const 
     std::string contentType = header("Content-Type");
     if (contentType == "application/x-www-form-urlencoded") {
         std::regex parameter(R"(([^&]+)=([^&]+))");
-        std::sregex_iterator parameterMatch(start, end, parameter);
+        auto temp_body = urlDecode(start, end);
+        std::sregex_iterator parameterMatch(temp_body.begin(), temp_body.end(), parameter);
         std::sregex_iterator none;
-        std::cout << "here" << std::endl;
         while (parameterMatch != none) {
-            std::cout << parameterMatch->format("$1") << " | " <<  parameterMatch->format("$2") << std::endl;
             _data.insert({parameterMatch->format("$1"), parameterMatch->format("$2")});
             parameterMatch++;
-        }
-        for (auto &pair : _data) {
-            std::cout << pair.first << " = " << pair.second << std::endl;
         }
     } else if (contentType == "multipart/form-data") {
 
