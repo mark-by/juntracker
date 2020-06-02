@@ -203,9 +203,14 @@ int AdminAPI::createLesson(const std::unordered_multimap<std::string, std::strin
     int school_id = user.school_id();
 
     int lesson_id = Lesson::save(course_id, cabinet_id, teacher_id, weekday, start_time, end_time, school_id);
-    std::unordered_multimap<std::string, std::string> created_lesson = lesson;
-    created_lesson.insert({"lesson_id", std::to_string(lesson_id)});
-    updateLesson(created_lesson, user);
+
+    for (auto &pair : lesson) {
+        if (pair.first == "new_student") {
+            Lesson::add_student(std::stoi(pair.second), lesson_id);
+        } else if (pair.first == "delete_student") {
+            Lesson::delete_student(std::stoi(pair.second), lesson_id);
+        }
+    }
 
     return 200;
 }
