@@ -29,7 +29,7 @@
     <form class="students-form">
         {% for student in students %}
         <div class="student-search-wrapper">
-            <input type="checkbox" value="{{student.id}}">
+            <input type="checkbox" name="id" value="{{student.id}}">
             <img src="{% if student.avatar %}{{student.avatar}}{% else %}static/images/avatar.svg{%endif%}"/>
             <div class="student-name">{{student.name}}</div>
             <div class="student-age">{{student.age }}лет</div>
@@ -45,7 +45,7 @@
         {% endfor %}
     </form>
 </main>
-{% endblock %}
+<div id="root"></div>
 
-{% block scripts %}
+<script type="module" src="static/script/students.js" defer></script>
 {% endblock %}
