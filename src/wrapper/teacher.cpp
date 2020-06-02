@@ -58,8 +58,14 @@ int Teacher::save(const std::string& name, const std::string& surname, int schoo
 
     int user_id = db.get_int(0);
 
-    db << "insert into teacher(name, surname, user_id) "
-       << "values ('" << name << "', '" << surname << "', " << user_id << ") returning id;";
+    db << "insert into teacher(name, surname, age, tel_number, salary, description, user_id) "
+       << "values ('" << name << "', '"
+           << surname << "', '"
+           << 0 << ", '"
+           << "" << ", '"
+           << 0 << ", '"
+           << "" << "', "
+           << user_id << ") returning id;";
     db.exec("Save teacher");
 
     db.disconnect();
