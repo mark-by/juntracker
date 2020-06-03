@@ -217,8 +217,8 @@ std::string Student::email() const {
     return res;
 }
 
-int Student::update(int id, std::string name, std::string surname, int age, std::string description,
-                    std::string tel_number) {
+int Student::update(int id, const std::string &name, const std::string & surname, int age, const std::string &description,
+                    const std::string & tel_number, const std::string &parent_name) {
     SqlWrapper db;
 
     db << "update student set "
@@ -227,7 +227,7 @@ int Student::update(int id, std::string name, std::string surname, int age, std:
        << "age=" << age << ", "
        << "description='" << description << "', "
        << "tel_number='" << tel_number
-       << "' where id=" << teacher_id << ";";
+       << "' where id=" << id << ";";
     db.exec("Update student");
 
     db.disconnect();
