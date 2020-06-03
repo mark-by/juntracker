@@ -174,7 +174,6 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
 
 templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
     templates::Context context;
-    std::cout << "SEARCHED: " << search << std::endl;
     auto students = Student::get_students_like(search, user.school_id());
     context.putArray("students", students, StudentDBSerializer);
     return context;
