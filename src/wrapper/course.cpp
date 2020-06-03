@@ -80,7 +80,7 @@ int Course::update(int course_id, const std::string &name, int price, int school
        << "name='" << name << "', "
        << "price=" << price << ", "
        << "school_id=" << schoolId
-       << " where course_id=" << course_id << ";";
+       << " where id=" << course_id << ";";
     db.exec("Update course");
 
     db.disconnect();
