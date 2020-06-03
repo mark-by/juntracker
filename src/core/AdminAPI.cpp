@@ -314,12 +314,36 @@ int AdminAPI::deleteCabinet(int cabinet_id) {
     return 200;
 }
 
-std::string AdminAPI::getStudentPage(int student_id) {
-//    templates::Context context;
-//
-//    auto student = Student::get_student(student_id);
-//    context.put("student", student);
-//    _render.set("student.html");
+templates::Context VisitSerializer(const Visit& visit) {
+    templates::Context context;
+    auto lesson = visit.get_lesson();
+    context.put("wasInClass", visit.was_in_class());
+    context.put("course", lesson.get_course().title());
+    context.put("weekday", DateTime::weekdayToStr(lesson.weekday()));
+    DateTimeConverter converter("%d.%m.%y");
+    context.put("date", converter.convert(visit.date()));
+    return context;
+}
 
-    return std::string();
+templates::Context StudentVerboseSerializer(const Student& student) {
+    templates::Context context;
+    context.put("id", student.id());
+    context.put("name", student.name());
+    context.put("surname", student.surname());
+    context.put("avatar", student.avatar());
+    context.put("age", student.age());
+    context.put("parent", student.parent());
+    context.put("telNumber", student.tel_number());
+    context.put("email", student.email());
+    context.put("description", student.description());
+    return context;
+}
+
+std::string AdminAPI::getStudentPage(int student_id) {
+    templates::Context context;
+    auto student = Student::get_student(student_id);
+    context.set("student", StudentVerboseSerializer(student));
+    context.putArray("visits", student.get_visits(), VisitSerializer);
+    _render.set("student.html");
+    return _render.render(context);
 }
