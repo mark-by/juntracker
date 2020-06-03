@@ -89,6 +89,9 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.editCabinet(request.dataTable(), user));
         } else if (request.path() == "/api/delete_cabinet") {
             response = Response(adminApi.deleteCabinet(std::stoi(request.data("id"))));
+        } else if (request.path() == "/student") {
+            auto json_and_code = adminApi.saveStudent(request.dataTable(), user);
+            response = Response(json_and_code.second, json_and_code.first);
         }
     }
 }
