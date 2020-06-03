@@ -43,21 +43,18 @@ Lesson Visit::get_lesson() const {
 
 Visit Visit::get_visit(int visit_id) {
     SqlWrapper db;
-    const std::string format = "%Y-%m-%d";
-    DateTimeConverter converter(format);
 
     db << "select id, student_id, lesson_id, was_in_class, visit_date, school_id from visit where id="
        << visit_id << ";";
     db.exec("Get visit");
 
-    boost::posix_time::ptime v_date = converter.convert(db.get_str(4, 0));
     db.disconnect();
     return Visit(
             db.get_int(0, 0),
             db.get_int(1, 0),
             db.get_int(2, 0),
             db.get_bool(3, 0),
-            v_date,
+            db.get_str(4, 0),
             db.get_int(5, 0)
             );
 }

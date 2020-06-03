@@ -15,7 +15,7 @@
 
 {% block main %}
 <main class="student-main">
-    <form class="card-wrapper student-form" method="POST" enctype="application/x-www-form-urlencoded">
+    <form class="card-wrapper student-form" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="saveStudent(event)">
         <div class="student-card-wrapper">
             <img id="avatar" src="{% if student.avatar %}{{student.avatar}}{% else %} static/images/avatar.svg {% endif %}"
                  class="student-avatar">
@@ -58,6 +58,23 @@
     </form>
 </main>
 <script>
+    window.saveStudent = (event) => {
+        event.preventDefault();
+        fetch('/api/save_student', {
+            method: "POST",
+            headers: {
+                "content-type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams(new FormData(event.target)).toString()
+        }).then(response => {
+            if (response.ok) {
+                location.replace('/');
+            } else {
+                message.show("Не сохранить cтудента", "fail");
+            }
+        })
+    }
+
     window.deleteStudent = (id) => {
         const urlParams = new URLSearchParams();
         urlParams.set("id", id)

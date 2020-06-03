@@ -320,8 +320,7 @@ templates::Context VisitSerializer(const Visit& visit) {
     context.put("wasInClass", visit.was_in_class());
     context.put("course", lesson.get_course().title());
     context.put("weekday", DateTime::weekdayToStr(lesson.weekday()));
-    DateTimeConverter converter("%d.%m.%y");
-    context.put("date", converter.convert(visit.date()));
+    context.put("date", visit.date());
     return context;
 }
 

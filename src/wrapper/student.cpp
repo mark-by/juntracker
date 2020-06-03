@@ -44,7 +44,7 @@ Visit Student::get_visit(int lesson_id, const boost::posix_time::ptime &date) co
             db.get_int(1, 0),
             db.get_int(2, 0),
             db.get_bool(3, 0),
-            converter.convert(db.get_str(4)),
+            db.get_str(4),
             db.get_int(5, 0)
     );
 }
@@ -184,8 +184,6 @@ std::string Student::avatar() const {
 
 std::vector<Visit> Student::get_visits() const {
     SqlWrapper db;
-    const std::string format = "%Y-%m-%d";
-    DateTimeConverter converter(format);
 
     db << "select * from visit where student_id=" << _id << ";";
     db.exec("Find students visits");
@@ -198,7 +196,7 @@ std::vector<Visit> Student::get_visits() const {
                 db.get_int(1, i),
                 db.get_int(2, i),
                 db.get_bool(3, i),
-                converter.convert(db.get_str(4, i)),
+                db.get_str(4, i),
                 db.get_int(5, i)
         );
     }
