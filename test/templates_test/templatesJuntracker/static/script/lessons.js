@@ -1,10 +1,31 @@
 import Component from "./Component.js";
 import Root from "./root.js";
+import Message from "./message.js";
+
+const message = new  Message();
+
+function iWeekToStr(week) {
+    switch (week) {
+        case 0:
+            return 'Понедельник';
+        case 1:
+            return 'Вторник';
+        case 2:
+            return 'Среда';
+        case 3:
+            return 'Четверг';
+        case 4:
+            return 'Пятница';
+        case 5:
+            return 'Суббота';
+        case 6:
+            return 'Воскресенье';
+    }
+}
 
 class CreationForm extends Component {
     constructor(props) {
         super();
-
         window.submitSaveStudent = (event) => {
             event.preventDefault();
             const formData = new FormData(event.target);
@@ -24,9 +45,10 @@ class CreationForm extends Component {
                                 isNew: true
                             });
                             window.justCloseCreationForm();
+                            message.show("Успешно сохранено", "success");
                         })
                     } else {
-                        alert("error")
+                        message.show("Не удалось сохранить студента", "fail");
                     }
                 }
             )
@@ -41,8 +63,8 @@ class CreationForm extends Component {
                     <div class="student-add-form__content  form-grid">
                         <p>Фото</p><input type="file" />
                         <input type="hidden" name="avatar" value=""/>
-                        <p>Имя*</p><input name="name" type="text"/>
-                        <p>Фамилия*</p><input name="surname" type="text"/>
+                        <p>Имя*</p><input required name="name" type="text"/>
+                        <p>Фамилия*</p><input required name="surname" type="text"/>
                         <p>Возраст</p><input name="age" type="number"/>
                         <p>Родитель</p><input name="parent" type="text"/>
                         <p>Контактный номер</p><input name="tel_number" type="text"/>
@@ -66,8 +88,6 @@ class StudentList extends Component {
     }
 
     render() {
-        console.log("render List")
-        console.log("std list", this.state.students)
         return `
         ${this.state.students.map(student => {
             if (student.isNew) {
@@ -141,8 +161,6 @@ class SearchForm extends Component {
     }
 
     render() {
-        console.log("fs", this.state.foundedStudents)
-        console.log("render search")
         return `
             <div class="modal-wrapper" id="search-student-form-wrapper" style="z-index: 9000" onclick="closeSearchForm(event)">
                 <div class="modal-form">
@@ -285,6 +303,23 @@ class Form extends Component {
             console.log("after", this.state.students);
             this.setState({students: this.state.students});
         }
+
+        window.setFormWeekday = (event) => {
+            this.state.lessonData.weekday = event.target.item(event.target.value).innerText;
+        }
+
+        window.setFormCourse = (event) => {
+            this.state.lessonData.courseId = event.target.item(event.target.selectedIndex).value;
+        }
+
+        window.setFormTeacher = (event) => {
+            this.state.lessonData.teacherId = event.target.item(event.target.selectedIndex).value;
+        }
+
+        window.setFormCabinet = (event) => {
+            this.state.lessonData.cabinetId = event.target.item(event.target.selectedIndex).value;
+        }
+
     }
 
     async getData() {
@@ -293,17 +328,32 @@ class Form extends Component {
         this.state.courses = json.courses;
         this.state.cabinets = json.cabinets;
         this.state.teachers = json.teachers;
+        localStorage.setItem("isUpdated", "1");
+    }
+
+    async setData() {
+        const response = await fetch('/api/user_data');
+        const json = await response.json();
+        this.setState({courses: json.courses});
+        this.setState({cabinets : json.cabinets});
+        this.setState({teachers : json.teachers});
+        localStorage.setItem("isUpdated", "1");
     }
 
     render() {
         this.count += 1;
-        this.studentList.setState({students: this.state.students});
+        if (localStorage.getItem("isUpdated") !== "1") {
+            this.setData();
+        }
+
         if (!this.state.courses || !this.state.cabinets || !this.state.teachers) {
             if (this.count % 2 === 0) {
-                alert("Сначала заполните информацию о курсах, кабинетах и учителях. После обновите страницу");
+                message.show("Сначала заполните информацию о курсах, кабинетах и учителях.", "fail");
             }
             return;
         }
+
+        this.studentList.setState({students: this.state.students});
         return this.state.isOpen ?
             `
             ${this.state.creationOpened ? this.creationForm.render() : ""}
@@ -314,7 +364,7 @@ class Form extends Component {
                         <div class="form-title">${this.state.isNew ? "Создать" : "Изменить"}&nbsp;урок</div>
                         <div class="form-grid">
                             <p>День недели</p>
-                            <select name="weekday" id="lesson-edit-weekday">
+                            <select name="weekday" id="lesson-edit-weekday" oninput="setFormWeekday(event)">
                                 <option value="0" ${this.state.lessonData.weekday === "Понедельник" ? 'selected="selected"' : ""} >Понедельник</option>
                                 <option value="1" ${this.state.lessonData.weekday === "Вторник" ? 'selected="selected"' : ""} >Вторник</option>
                                 <option value="2" ${this.state.lessonData.weekday === "Среда" ? 'selected="selected"' : ""} >Среда</option>
@@ -325,7 +375,7 @@ class Form extends Component {
                             </select>
                             ${this.state.isNew ?
                             `<p>Курс</p>
-                            <select name="course" id="lesson-edit-title">
+                            <select name="course" id="lesson-edit-title" oninput="setFormCourse(event)">
                                 ${this.state.courses.map(course => {
                                     if (course.id == this.state.lessonData.courseId) {
                                         return `<option value="${course.id}" selected="selected">${course.title}</option>`
@@ -335,7 +385,7 @@ class Form extends Component {
                                 }).join("")}
                             </select>` : `<input type="hidden" name="course" value="${this.state.lessonData.courseId}"/>`}
                             <p>Кабинет</p>
-                            <select name="cabinet" id="lesson-edit-cabinet">
+                            <select name="cabinet" id="lesson-edit-cabinet" oninput="setFormCabinet(event)">
                                 ${this.state.cabinets.map(cabinet => {
                 if (cabinet.id == this.state.lessonData.cabinetId) {
                     return `<option value="${cabinet.id}" selected="selected">${cabinet.title}</option>`
@@ -345,7 +395,7 @@ class Form extends Component {
             }).join("")}
                             </select>
                             <p>Преподаватель</p>
-                            <select name="teacher" id="lesson-edit-teacher">
+                            <select name="teacher" id="lesson-edit-teacher" oninput="setFormTeacher(event)">
                                 ${this.state.teachers.map(teacher => {
                 if (teacher.id == this.state.lessonData.teacherId) {
                     return `<option value="${teacher.id}" selected="selected">${teacher.name}</option>`
@@ -415,7 +465,7 @@ class DeleteLessonModal extends Component {
                 if (response.ok) {
                     window.location.reload();
                 } else {
-                    alert('Не удалось удалить ;(');
+                    message.show('Не удалось удалить', "fail");
                     this.setState({isOpen: false});
                 }
             })
@@ -480,24 +530,7 @@ const deleteRootModal = new Root(document.querySelector("#root"), new DeleteLess
     }
 });
 
-function iWeekToStr(week) {
-    switch (week) {
-        case 0:
-            return 'Понедельник';
-        case 1:
-            return 'Вторник';
-        case 2:
-            return 'Среда';
-        case 3:
-            return 'Четверг';
-        case 4:
-            return 'Пятница';
-        case 5:
-            return 'Суббота';
-        case 6:
-            return 'Воскресенье';
-    }
-}
+
 
 [...document.querySelectorAll('.add-lesson-button')].map((button, idx) => {
     console.log(iWeekToStr(idx), idx);
@@ -554,9 +587,10 @@ class Window extends Component {
                 body: new URLSearchParams(new FormData(event.target)).toString()
             }).then(res => {
                 if (!res.ok) {
-                    alert("Неудача :(")
+                    message.show("Неудача :(", "fail");
                 } else {
-                    alert("Успешно! :)")
+                    localStorage.setItem("isUpdated", "0");
+                    message.show("Успешно! :)", "success");
                 }
             })
         }
@@ -564,9 +598,9 @@ class Window extends Component {
         window.addCourse = () => {
             this.coursesList.innerHTML += `
                     <form class="course-form" data="-1" onsubmit="saveListElement(event)" title="course">
-                        <input type="text" value="" placeholder="Введите название" name="title"/>
-                        <input type="number" value="" placeholder="Укажите цену" name="price"/>
-                        <input type="hidden" value="-1" name="id"/>
+                        <input type="text" required value="" placeholder="Введите название" name="title" oninput="setInputValue(event)"/>
+                        <input type="number" required value="" placeholder="Укажите цену" name="price" oninput="setInputValue(event)"/>
+                        <input type="hidden" required value="-1" name="id"/>
                         <div class="course-form-buttons">
                             <input class="save-course-button" value type="submit"/>
                             <img class="delete-course-button" src="static/images/trash.svg"/>
@@ -579,9 +613,9 @@ class Window extends Component {
         window.addTeacher = () => {
             this.teachersList.innerHTML += `
                     <form class="teacher-form" data="-1" onsubmit="saveListElement(event)" title="teacher">
-                    <input type="text" value="" placeholder="Введите имя" name="name"/>
-                    <input type="text" value="" placeholder="Введите фамилию" name="surname"/>
-                    <input type="hidden" value="-1" name="id"/>
+                    <input type="text" value="" required placeholder="Введите имя" name="name" oninput="setInputValue(event)"/>
+                    <input type="text" value="" required placeholder="Введите фамилию" name="surname" oninput="setInputValue(event)"/>
+                    <input type="hidden" required value="-1" name="id"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>
@@ -594,8 +628,8 @@ class Window extends Component {
         window.addCabinet = () => {
             this.cabinetsList.innerHTML += `
                     <form class="cabinet-form" data="-1" onsubmit="saveListElement(event)" title="cabinet">
-                    <input type="text" value="" placeholder="Введите аудиторию" name="name"/>
-                    <input type="hidden" value="-1" name="id"/>
+                    <input type="text" value="" required placeholder="Введите аудиторию" name="name" oninput="setInputValue(event)"/>
+                    <input type="hidden" value="-1" required name="id"/>
                     <div class="course-form-buttons">
                         <input class="save-course-button" value type="submit"/>
                         <img class="delete-course-button" src="static/images/trash.svg"/>
@@ -603,6 +637,10 @@ class Window extends Component {
                     </form>  
                 `;
             this.initLists();
+        }
+
+        window.setInputValue = (event) => {
+            event.target.setAttribute("value", event.target.value);
         }
     }
 
@@ -614,9 +652,13 @@ class Window extends Component {
             },
             body: new URLSearchParams(new FormData(element)).toString()
         }).then(res => {
-            // if (res.ok) {
-            element.remove();
-            // }
+            if (res.ok) {
+                localStorage.setItem("isUpdated", "0");
+                element.remove();
+                message.show("Успешно", "success");
+            } else {
+                message.show("Не удалось удалить :(", "fail");
+            }
         })
     }
 
@@ -624,7 +666,6 @@ class Window extends Component {
         [...this.coursesList.querySelectorAll('.course-form'),
             ...this.teachersList.querySelectorAll('.teacher-form'),
             ...this.cabinetsList.querySelectorAll('.cabinet-form')].map(element => {
-            console.log("1")
             element.querySelector('.delete-course-button').onclick = () => {
                 this.delEl(element)
             }

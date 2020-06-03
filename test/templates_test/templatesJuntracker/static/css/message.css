@@ -1,0 +1,27 @@
+.message {
+    position: absolute;
+    background: white;
+    min-width: 200px;
+    min-height: 100px;
+    z-index: 10000;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 10px;
+    max-width: 300px;
+    padding: 10px;
+    bottom: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    transform: translate(0, 100%);
+    transition: transform 0.5s;
+}
+
+.success {
+    background: #e2ffe2;
+}
+
+.fail {
+    background: #ff9595;
+}
+

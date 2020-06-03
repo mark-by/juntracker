@@ -112,7 +112,8 @@ std::vector<Student> Student::get_students_like(const std::string &str, int scho
     if (name_surname.first.empty() && name_surname.second.empty()) {
         return res_students;
     }
-
+    std::cout << "STR: " << str << std::endl;
+    std::cout << "FOUNDED: " << name_surname.first << " " << name_surname.second << std::endl;
     if (name_surname.second.empty()) {
         db << "select * from student s join users u on s.user_id=u.id where (name like '" << name_surname.first
            << "%' or surname like '" << name_surname.first << "%') and school_id=" << school_id << ";";
