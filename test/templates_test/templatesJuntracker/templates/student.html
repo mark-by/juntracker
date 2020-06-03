@@ -9,15 +9,15 @@
     {% if user.isAdmin %}
         <!--<a class="menu__option" href="/finance">Финансы</a>-->
         <a class="menu__option" href="/students">База учеников</a>
-    {% endif %}
+    {%endif%}
     <!--<a class="menu__option" href="/diary">Журнал</a>-->
 {% endblock %}
 
 {% block main %}
 <main class="student-main">
-    <form class="modal-form student-add-form" method="POST" enctype="application/x-www-form-urlencoded">
+    <form class="card-wrapper student-form" method="POST" enctype="application/x-www-form-urlencoded">
         <div class="student-card-wrapper">
-            <img id="avatar" src="{% if student.avatar %}{{student.avatar}}{%else%}static/images/avatar.svg{%endif%}"
+            <img id="avatar" src="{% if student.avatar %}{{student.avatar}}{% else %} static/images/avatar.svg {% endif %}"
                  class="student-avatar">
             <div class="student-name">
                 {{student.name }}{{student.surname}}
@@ -35,10 +35,10 @@
             <p>Описание</p><textarea name="description" value="{{student.description}}"></textarea>
         </div>
         <div class="bottom-flex">
-            <div class="close-form-button" onclick="deleteStudent('{{student.id}}')">Отмена</div>
-        <input type="submit" value="Сохранить"/>
+            <input type="submit" value="Сохранить"/>
+            <div class="close-form-button" onclick="deleteStudent('{{student.id}}')">Удалить</div>
         </div>
-        <div class="modal-form visit-history">
+        <div class="card-wrapper visit-history">
             <div class="title-visit-history">История посещения студента</div>
             <div class="header-visit-history">
                 <p>Курс</p>
@@ -47,10 +47,10 @@
                 <p>Дата</p>
             </div>
             {% for visit in student.visits %}
-                <div class="visit-wrapper {% if visit.wasInClass %}success{% endif %}fail{%endif%}">
+                <div class="visit-wrapper" title="{% if visit.wasInClass %} success{% else %}fail{% endif %}">
                     <div>{{visit.course}}</div>
                     <div>{{visit.weekday}}</div>
-                    <div>{% if visit.wasInClass %}Присутствовал{% else %}Отсутствовал{%endif%}</div>
+                    <div>{% if visit.wasInClass %}Присутствовал{% else %}Отсутствовал{% endif %}</div>
                     <div>{{visit.date}}</div>
                 </div>
             {% endfor %}
@@ -58,9 +58,9 @@
     </form>
 </main>
 <script>
-    const urlParams = new URLSearchParams();
-    urlParams.set("id", id)
     window.deleteStudent = (id) => {
+        const urlParams = new URLSearchParams();
+        urlParams.set("id", id)
         fetch('/api/delete_student', {
             method: "POST",
             headers: {
@@ -75,9 +75,9 @@
             }
         })
     }
-</script>
-{% endblock %}
 
-{% block scripts %}
-<script type="module" src="static/script/lessons.js" defer></script>
+    [...document.querySelectorAll(".visit-wrapper")].map(element => {
+        element.classList.add(element.getAttribute('title'));
+    })
+</script>
 {% endblock %}

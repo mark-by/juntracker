@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" type="text/css" href="static/css/main.css"><link rel="stylesheet" type="text/css" href="static/css/message.css"><title>JunTracker |Марк Быховец</title></head><body><header><a class="logo" href="/">JunTracker</a><div class="header-menu menu"><div class="header-select"><div class="current__option">Марк Быховец</div><a class="control-button"><img src="static/images/arrow-down.svg"></a></div></div><div class="header-user-wrapper menu"><div class="username">Homer Simpson</div><div class="avatar-wrapper"><img class="header__avatar" src="static/images/avatar.svg"></div></div><div class="hidden-menu" data="off"><div class="header-menu-h hidden-part"><a class="menu__option" href="/">Окно&nbsp;администратора</a><a class="menu__option" href="/schedule">Расписание</a><!--<a class="menu__option" href="/finance">Финансы</a>--><a class="menu__option" href="/students">База учеников</a><!--<a class="menu__option" href="/diary">Журнал</a>--></div></div><div class="hidden-menu" data="off"><div class="user-menu hidden-part"><a class="menu__option" href="/logout">Выйти</a></div></div></header><main class="student-main"><form class="card-wrapper student-form" method="POST" enctype="application/x-www-form-urlencoded"><div class="student-card-wrapper"><img id="avatar" src="static/images/avatar.svg"
+                 class="student-avatar"><div class="student-name">Марк Быховец</div></div><div class="student-add-form__content  form-grid"><p>Фото</p><input type="file"/><input type="hidden" name="avatar" value=""/><p>Имя*</p><input required name="name" type="text" value="Марк"/><p>Фамилия*</p><input required name="surname" type="text" value="Быховец"/><p>Возраст</p><input name="age" type="number" value="22"/><p>Родитель</p><input name="parent" type="text" value="Ирина Быховец"/><p>Контактный номер</p><input name="tel_number" type="text" value="89998355535"/><p>Электронная почта</p><input name="email" type="email" value="m@m.ru"/><p>Описание</p><textarea name="description" value="asodifpoiwejewg"></textarea></div><div class="bottom-flex"><input type="submit" value="Сохранить"/><div class="close-form-button" onclick="deleteStudent('1')">Удалить</div></div><div class="card-wrapper visit-history"><div class="title-visit-history">История посещения студента</div><div class="header-visit-history"><p>Курс</p><p>День недели</p><p>Посещение</p><p>Дата</p></div><div class="visit-wrapper" title="success"><div>Робототехника</div><div>Понедельник</div><div>Присутствовал</div><div>25.05.20</div></div><div class="visit-wrapper" title="fail"><div>Робототехника</div><div>Понедельник</div><div>Отсутствовал</div><div>25.05.20</div></div></div></form></main><script>window.deleteStudent = (id) =>{
+        const urlParams = new URLSearchParams();
+        urlParams.set("id", id)
+        fetch('/api/delete_student', {
+            method: "POST",
+            headers: {
+                "content-type": "application/x-www-form-urlencoded",
+            },
+            body: urlParams.toString()
+        }).then(response => {
+            if (response.ok) {
+                location.replace('/');
+            } else {
+                message.show("Не удалось удалить студента", "fail");
+            }
+        })
+    }
+
+    [...document.querySelectorAll(".visit-wrapper")].map(element => {
+        element.classList.add(element.getAttribute('title'));
+    })</script><message></message></body><script type="module" src="static/script/message.js" defer></script><script type="module" src="static/script/Component.js" defer></script><script type="module" src="static/script/root.js" defer></script><script type="module" src="static/script/header.js" defer></script></html>
