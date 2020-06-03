@@ -38,6 +38,8 @@ public:
     static int remove(int student_id);
     static std::vector<Student> get_students_like(const std::string &str, int school_id);
 
+    std::vector<Visit> get_visits();
+
     int id() const { return _id;}
     std::string name() const { return _name;}
     std::string surname() const { return _surname;}

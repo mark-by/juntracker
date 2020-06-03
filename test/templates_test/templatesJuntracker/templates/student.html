@@ -1,0 +1,83 @@
+{% extends base.html %}
+
+{% block title %}JunTracker | {{student.name }}{{student.surname}}{% endblock %}
+
+{% block currentWindow %}{{student.name }}{{student.surname}}{% endblock %}
+{% block hiddenMenu %}
+    <a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{% else %}преподавателя{%endif%}</a>
+    <a class="menu__option" href="/schedule">Расписание</a>
+    {% if user.isAdmin %}
+        <!--<a class="menu__option" href="/finance">Финансы</a>-->
+        <a class="menu__option" href="/students">База учеников</a>
+    {% endif %}
+    <!--<a class="menu__option" href="/diary">Журнал</a>-->
+{% endblock %}
+
+{% block main %}
+<main class="student-main">
+    <form class="modal-form student-add-form" method="POST" enctype="application/x-www-form-urlencoded">
+        <div class="student-card-wrapper">
+            <img id="avatar" src="{% if student.avatar %}{{student.avatar}}{%else%}static/images/avatar.svg{%endif%}"
+                 class="student-avatar">
+            <div class="student-name">
+                {{student.name }}{{student.surname}}
+            </div>
+        </div>
+        <div class="student-add-form__content  form-grid">
+            <p>Фото</p><input type="file"/>
+            <input type="hidden" name="avatar" value=""/>
+            <p>Имя*</p><input required name="name" type="text" value="{{student.name}}"/>
+            <p>Фамилия*</p><input required name="surname" type="text" value="{{student.surname}}"/>
+            <p>Возраст</p><input name="age" type="number" value="{{student.age}}"/>
+            <p>Родитель</p><input name="parent" type="text" value="{{student.parent}}"/>
+            <p>Контактный номер</p><input name="tel_number" type="text" value="{{student.telNumber}}"/>
+            <p>Электронная почта</p><input name="email" type="email" value="{{student.email}}"/>
+            <p>Описание</p><textarea name="description" value="{{student.description}}"></textarea>
+        </div>
+        <div class="bottom-flex">
+            <div class="close-form-button" onclick="deleteStudent('{{student.id}}')">Отмена</div>
+        <input type="submit" value="Сохранить"/>
+        </div>
+        <div class="modal-form visit-history">
+            <div class="title-visit-history">История посещения студента</div>
+            <div class="header-visit-history">
+                <p>Курс</p>
+                <p>День недели</p>
+                <p>Посещение</p>
+                <p>Дата</p>
+            </div>
+            {% for visit in student.visits %}
+                <div class="visit-wrapper {% if visit.wasInClass %}success{% endif %}fail{%endif%}">
+                    <div>{{visit.course}}</div>
+                    <div>{{visit.weekday}}</div>
+                    <div>{% if visit.wasInClass %}Присутствовал{% else %}Отсутствовал{%endif%}</div>
+                    <div>{{visit.date}}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </form>
+</main>
+<script>
+    const urlParams = new URLSearchParams();
+    urlParams.set("id", id)
+    window.deleteStudent = (id) => {
+        fetch('/api/delete_student', {
+            method: "POST",
+            headers: {
+                "content-type": "application/x-www-form-urlencoded",
+            },
+            body: urlParams.toString()
+        }).then(response => {
+            if (response.ok) {
+                location.replace('/');
+            } else {
+                message.show("Не удалось удалить студента", "fail");
+            }
+        })
+    }
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="static/script/lessons.js" defer></script>
+{% endblock %}

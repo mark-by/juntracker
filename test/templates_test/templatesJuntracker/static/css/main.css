@@ -189,6 +189,7 @@ input[type=checkbox] {
 
 .only-schedule>.schedule {
     margin: 30px auto;
+    width: 80%;
 }
 
 /*.schedule::-webkit-scrollbar {*/
@@ -294,6 +295,10 @@ input[type=checkbox] {
 
 .add-student-button__plus {
     transition: opacity 0.2s;
+}
+
+.button {
+    cursor: pointer;
 }
 
 .add-student-button:hover> .add-student-button__plus {

@@ -5,7 +5,7 @@
     min-height: 100px;
     z-index: 10000;
     border-radius: 10px;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     right: 10px;

@@ -50,8 +50,6 @@ public:
     int deleteCabinet(int cabinet_id);
 
     std::string getStudentPage(int student_id);
-private:
-
 };
 
 #endif //CORE_ADMINAPI_H

@@ -20,6 +20,7 @@ class Menu {
     }
 
     render() {
+        console.log("header")
         if (this.state.event && (this.state.event.target === this.hiddenPart || this.state.event.target.className === "menu__option")) {
             return;
         }

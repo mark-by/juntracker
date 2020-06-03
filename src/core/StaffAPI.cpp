@@ -37,8 +37,9 @@ templates::Context StaffAPI::CurrentLessonSerializer(const Lesson &lesson) {
     templates::Context context;
     context.put("title", lesson.get_course().title());
     context.put("id", lesson.id());
-    context.put("cabinet", lesson.cabinet());
-    context.put("tutor", lesson.get_teacher().name());
+    context.put("cabinet", lesson.get_cabinet().title());
+    auto teacher = lesson.get_teacher();
+    context.put("tutor", teacher.name() + " " + teacher.surname());
     std::vector<StudentOnLesson> students;
     for (auto &student : lesson.get_students()) {
         students.emplace_back(student, lesson);
@@ -77,7 +78,6 @@ templates::Context StaffAPI::LessonSerializer(const Lesson &lesson) {
     templates::Context context;
     auto course = lesson.get_course();
     context.put("title", course.title());
-    context.put("cabinet", lesson.cabinet());
     context.set("cabinet", SimpleTitleSerializer<Cabinet>()(lesson.get_cabinet()));
     context.set("course", SimpleTitleSerializer<Course>()(course));
     context.put("id", lesson.id());

@@ -296,6 +296,10 @@ input[type=checkbox] {
     transition: opacity 0.2s;
 }
 
+.button {
+    cursor: pointer;
+}
+
 .add-student-button:hover> .add-student-button__plus {
     opacity: 0;
 }
