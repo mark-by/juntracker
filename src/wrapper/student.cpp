@@ -180,3 +180,28 @@ std::string Student::avatar() const {
 
     return res;
 }
+
+std::vector<Visit> Student::get_visits() {
+    SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
+
+    db << "select * from visit where student_id=" << _id << ";";
+    db.exec("Find students visits");
+
+    std::vector<Visit> visits;
+    visits.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        visits.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_bool(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i)
+                );
+    }
+
+    db.disconnect();
+    return visits;
+}
