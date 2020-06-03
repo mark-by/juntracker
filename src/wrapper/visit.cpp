@@ -24,7 +24,7 @@ Lesson Visit::get_lesson() const {
     SqlWrapper db;
 
     db << "SELECT lesson.id, lesson.course_id, lesson.cabinet_id, lesson.teacher_id, "
-       << "lesson.weekday, lesson.start_time, lesson.end_time FROM lesson "
+       << "lesson.weekday, lesson.start_time, lesson.end_time, lesson.school_id FROM lesson "
        << "join visit on visit.lesson_id=lesson.id where visit.id=" << _id << ";";
     db.exec("Get student by visit id");
     db.disconnect();

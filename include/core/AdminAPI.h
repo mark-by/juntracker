@@ -49,7 +49,7 @@ public:
 
     int deleteCabinet(int cabinet_id);
 
-    std::string getStudentPage(int student_id);
+    std::string getStudentPage(int student_id, const User& user);
 
     templates::Context verboseSearchStudent(const std::string &search, const User &user);
 };

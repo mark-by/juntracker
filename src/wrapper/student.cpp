@@ -182,7 +182,7 @@ std::string Student::avatar() const {
     return res;
 }
 
-std::vector<Visit> Student::get_visits() {
+std::vector<Visit> Student::get_visits() const {
     SqlWrapper db;
     const std::string format = "%Y-%m-%d";
     DateTimeConverter converter(format);

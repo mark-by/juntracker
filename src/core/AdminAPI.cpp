@@ -336,14 +336,15 @@ templates::Context StudentVerboseSerializer(const Student& student) {
     context.put("telNumber", student.tel_number());
     context.put("email", student.email());
     context.put("description", student.description());
+    context.putArray("visits", student.get_visits(), VisitSerializer);
     return context;
 }
 
-std::string AdminAPI::getStudentPage(int student_id) {
+std::string AdminAPI::getStudentPage(int student_id, const User& user) {
     templates::Context context;
     auto student = Student::get_student(student_id);
     context.set("student", StudentVerboseSerializer(student));
-    context.putArray("visits", student.get_visits(), VisitSerializer);
+    context.set("user", UserSerializer(user));
     _render.set("student.html");
     return _render.render(context);
 }
