@@ -41,11 +41,11 @@
                 <form class="lesson__content">
                     <input type="hidden" name="lesson_id" value="{{lesson.id}}"/>
                     {% for child in lesson.children %}
-                    <div class="lesson__content_child">
+                    <a class="lesson__content_child" href="/student?id={{child.id}}">
                         <input type="checkbox" name="check" data="{%if child.isHere %}1{%else%}0{%endif%}" {% if child.isHere %}checked{%endif%}/>
                         <input type="hidden" name="{{child.id}}" value="{{child.isHere}}"/>
                         <div class="name">{{child.name}}</div>
-                    </div>
+                    </a>
                     {% endfor %}
                 </form>
                 <div class="progress-wrapper">

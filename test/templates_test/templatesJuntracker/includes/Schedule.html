@@ -111,7 +111,7 @@
                 </div>
                 <div class="lesson__content">
                     {% for child in lesson.children %}
-                    <div class="lesson__content_child" data="{{child.id}}">{{child.name}}</div>
+                    <a class="lesson__content_child" href="/student?id={{child.id}}" data="{{child.id}}">{{child.name}}</a>
                     {% endfor %}
                 </div>
                 <div class="lesson__footer">
