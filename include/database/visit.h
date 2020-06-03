@@ -16,7 +16,7 @@ class Lesson;
 class Visit {
 public:
     explicit Visit(int _id, int _student_id, int _lesson_id, bool _was_in_class,
-            const boost::posix_time::ptime &_visit_date, int _school_id):
+            const std::string &_visit_date, int _school_id):
             _id(_id),
             _student_id(_student_id),
             _lesson_id(_lesson_id),
@@ -33,14 +33,14 @@ public:
 
     int id() const { return _id; }
     bool was_in_class() const { return _was_in_class; }
-    boost::posix_time::ptime date() const { return _visit_date; }
+    std::string date() const { return _visit_date; }
 
 private:
     int _id;
     int _student_id;
     int _lesson_id;
     bool _was_in_class;
-    boost::posix_time::ptime _visit_date;
+    std::string _visit_date;
     int _school_id;
 
 };
