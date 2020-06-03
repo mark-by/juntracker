@@ -192,6 +192,50 @@ input[type=checkbox] {
     width: 80%;
 }
 
+.student-form, .visit-history {
+    max-width: 800px;
+    padding: 15px;
+}
+.student-form {
+    width: 90%;
+}
+
+.visit-history {
+    margin-top: 50px;
+}
+
+.title-visit-history {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.header-visit-history, .visit-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.visit-wrapper {
+    margin: 2px 0;
+}
+
+.student-card-wrapper {
+    display: flex;
+    margin: 10px auto;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    justify-content: space-around;
+    width: 300px;
+}
+
+.student-main {
+    position: relative;
+    top: 70px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
 /*.schedule::-webkit-scrollbar {*/
 /*    display: none;*/
 /*}*/

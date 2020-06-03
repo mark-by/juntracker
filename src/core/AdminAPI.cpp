@@ -172,6 +172,13 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     return context;
 }
 
+templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
+    templates::Context context;
+    auto students = Student::get_students_like(search, user.school_id());
+    context.putArray("students", students, StudentDBSerializer);
+    return context;
+}
+
 std::string AdminAPI::getMainPage(const User &user) {
     auto context = mainStaffData(user);
     context.putArray("teachers", user.get_teachers(), PersonSerializer<Teacher>());
@@ -316,5 +323,3 @@ std::string AdminAPI::getStudentPage(int student_id) {
 
     return std::string();
 }
-
-
