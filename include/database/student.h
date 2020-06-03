@@ -29,6 +29,7 @@ public:
     std::vector<Course> get_courses() const;
     Visit get_visit(int lesson_id, const boost::posix_time::ptime &date) const;
     std::vector<Mark> get_marks_by_course(int course_id) const;
+    std::vector<Visit> get_visits() const;
 
     static Student get_student(int student_id);
     static int save(const std::string name, const std::string &surname,

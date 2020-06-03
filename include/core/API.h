@@ -18,7 +18,7 @@ public:
     virtual std::string getMainPage(const User & user) = 0;
 protected:
     static std::tuple<std::string, bool> fetch(const std::string & key, const std::unordered_multimap<std::string, std::string> & data);
-    std::string get(const std::string & key, const std::unordered_multimap<std::string, std::string> & data);
+    static std::string get(const std::string & key, const std::unordered_multimap<std::string, std::string> & data);
 
     template<class Person>
     struct SimplePersonSerializer {

@@ -43,9 +43,11 @@ public:
 
     int editTeacher(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
+    int deleteTeacher(int  teacher_id);
+
     int editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
-    templates::Context verboseSearchStudent(const std::string &search, const User &user);
+    int deleteCabinet(int cabinet_id);
 private:
 
 };

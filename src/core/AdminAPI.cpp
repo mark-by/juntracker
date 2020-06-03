@@ -1,4 +1,4 @@
-#include "../../include/core/AdminAPI.h"
+#include <AdminAPI.h>
 #include <context/context.h>
 #include <user.h>
 #include <lesson.h>
@@ -11,7 +11,8 @@ int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::
     if (data.empty()) {
         return 400;
     }
-    int lesson_id = std::stoi(data.find("lesson_id")->second);
+
+    int lesson_id = std::stoi(get("lesson_id", data));
 
     for (auto &pair : data) {
         if (pair.first != "check" && pair.first != "lesson_id") {
@@ -104,8 +105,8 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
         return 404;
     }
 
-    int lesson_id = std::stoi(data.find("lesson_id")->second);
-    int course_id = std::stoi(data.find("course")->second);
+    int lesson_id = std::stoi(get("lesson_id", data));
+    int course_id = std::stoi(get("course", data));
     std::vector<int> students_id;
     for (auto &pair : data) {
         if (pair.first == "new_student") {
@@ -274,6 +275,12 @@ int AdminAPI::editTeacher(const std::unordered_multimap<std::string, std::string
     return 200;
 }
 
+int AdminAPI::deleteTeacher(int teacher_id) {
+    Teacher::remove(teacher_id);
+
+    return 200;
+}
+
 int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user) {
     if (data.empty()) {
         return 404;
@@ -298,6 +305,12 @@ int AdminAPI::editCabinet(const std::unordered_multimap<std::string, std::string
     } else {
         Cabinet::update(title, school_id, id);
     }
+
+    return 200;
+}
+
+int AdminAPI::deleteCabinet(int cabinet_id) {
+    Cabinet::remove(cabinet_id);
 
     return 200;
 }

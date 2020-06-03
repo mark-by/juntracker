@@ -115,13 +115,13 @@ std::vector<Student> Student::get_students_like(const std::string &str, int scho
     std::cout << "STR: " << str << std::endl;
     std::cout << "FOUNDED: " << name_surname.first << " " << name_surname.second << std::endl;
     if (name_surname.second.empty()) {
-        db << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.first
-           << "%' or surname like '" << name_surname.first << "%' and school_id=" << school_id << ";";
+        db << "select * from student s join users u on s.user_id=u.id where (name like '" << name_surname.first
+           << "%' or surname like '" << name_surname.first << "%') and school_id=" << school_id << ";";
     } else {
-        db << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.first
-           << "%' and surname like '" << name_surname.second << "%' and school_id=" << school_id << " union "
-           << "select * from student s join users u on s.user_id=u.id where name like '" << name_surname.second
-           << "%' and surname like '" << name_surname.first << "%' and school_id=" << school_id << ";";
+        db << "select * from student s join users u on s.user_id=u.id where (name like '" << name_surname.first
+           << "%' and surname like '" << name_surname.second << "%') and school_id=" << school_id << " union "
+           << "select * from student s join users u on s.user_id=u.id where (name like '" << name_surname.second
+           << "%' and surname like '" << name_surname.first << "%') and school_id=" << school_id << ";";
     }
 
     db.exec("Find students like");
@@ -180,4 +180,29 @@ std::string Student::avatar() const {
     std::string res = db.get_str(0, 0);
 
     return res;
+}
+
+std::vector<Visit> Student::get_visits() {
+    SqlWrapper db;
+    const std::string format = "%Y-%m-%d";
+    DateTimeConverter converter(format);
+
+    db << "select * from visit where student_id=" << _id << ";";
+    db.exec("Find students visits");
+
+    std::vector<Visit> visits;
+    visits.reserve(db.count_tupls());
+    for (int i = 0; i < db.count_tupls(); i++) {
+        visits.emplace_back(
+                db.get_int(0, i),
+                db.get_int(1, i),
+                db.get_int(2, i),
+                db.get_bool(3, i),
+                converter.convert(db.get_str(4, i)),
+                db.get_int(5, i)
+                );
+    }
+
+    db.disconnect();
+    return visits;
 }
