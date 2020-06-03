@@ -2,7 +2,7 @@
 
 {% block title %}JunTracker | {{student.name }}{{student.surname}}{% endblock %}
 
-{% block currentWindow %}{{student.name }}{{student.surname}}{% endblock %}
+{% block currentWindow %}Карточка Cтудента{% endblock %}
 {% block hiddenMenu %}
     <a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{% else %}преподавателя{%endif%}</a>
     <a class="menu__option" href="/schedule">Расписание</a>
