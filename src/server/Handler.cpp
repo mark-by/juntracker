@@ -52,8 +52,6 @@ void Handler::adminHandler(Request request, Response& response, const User &user
             response = Response(adminApi.getMainPage(user));
         } else if (request.path() == "/students") {
             response = Response(adminApi.getPageStudents(user));
-        } else if (request.path() == "/api/student") {
-            response = Response(adminApi.findStudent(request.data("name")));
         } else if (request.path() == "/api/user_data") {
             response = Response(adminApi.getUserData(user));
         } else if (request.path() == "/api/search_student") {

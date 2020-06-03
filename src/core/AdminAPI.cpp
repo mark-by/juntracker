@@ -22,22 +22,6 @@ int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::
     return 200;
 }
 
-templates::Context AdminAPI::VerboseStudentSerializer(const VerboseStudent &student) {
-    templates::Context context;
-    context.put("id", student.id);
-    context.put("age", student.age);
-    context.put("name", student.name);
-    context.put("avatar", student.avatar);
-    context.putArray("courses", student.courses);
-
-    return context;
-}
-
-std::string AdminAPI::findStudent(const std::string &str) {
-
-    return std::string();
-}
-
 int AdminAPI::deleteStudents(const std::unordered_multimap<std::string, std::string> &students, const User &user) {
     for (auto &pair : students) {
         if (pair.first == "id")
@@ -103,9 +87,12 @@ int AdminAPI::editCourse(const std::unordered_multimap<std::string, std::string>
 }
 
 int AdminAPI::deleteCourse(int courseId) {
-    Course::remove(courseId);
-
-    return 0;
+    try {
+        Course::remove(courseId);
+        return 200;
+    } catch(...) {
+        return 400;
+    }
 }
 
 std::string AdminAPI::getPagePaymentsByStudent(const std::string &) {
@@ -160,7 +147,8 @@ AdminAPI::saveStudent(const std::unordered_multimap<std::string, std::string> &s
     if (!success)
         return {404, context};
     auto surname = result;
-    int age = std::stoi(get("age", student));
+    auto res = get("age", student);
+    int age = res.empty() ? 0 : std::stoi(res);
     auto description = get("description", student);
     auto tel_number = get("tel_number", student);
     auto email = get("email", student);
@@ -183,25 +171,13 @@ templates::Context AdminAPI::searchStudent(const std::string &search, const User
     return context;
 }
 
-/*templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
+templates::Context AdminAPI::verboseSearchStudent(const std::string &search, const User &user) {
     templates::Context context;
+    std::cout << "SEARCHED: " << search << std::endl;
     auto students = Student::get_students_like(search, user.school_id());
-
-    std::vector<VerboseStudent> verboseStudents;
-
-    for (auto student : students) {
-        try {
-            verboseStudents.emplace_back(student.id(),
-                                         student.age(),
-                                         student.name() + " " + student.surname(),
-                                         student.avatar(),
-                                         student.get_courses());
-        } catch (...) {}
-    }
-    context.putArray("students", verboseStudents, VerboseStudentSerializer);
-
+    context.putArray("students", students, StudentDBSerializer);
     return context;
-}*/
+}
 
 std::string AdminAPI::getMainPage(const User &user) {
     auto context = mainStaffData(user);

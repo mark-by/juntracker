@@ -26,9 +26,10 @@ Session Session::create_session(const std::string& username, const std::string& 
 
     db << "select password from users where login='" << username << "';";
     db.exec("Compare passwords");
-    if (strcmp(db.get_str(0), password.c_str()) != 0) {
+    auto pass = db.get_str(0);
+    if (!pass || strcmp(pass, password.c_str()) != 0) {
         db.disconnect();
-        throw std::exception();
+        throw std::runtime_error("Session::create_session : no user");
     }
 
     db << "SELECT id FROM users WHERE login='" << username << "';";
