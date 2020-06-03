@@ -21,7 +21,7 @@ int Cabinet::update(const std::string &title, int schoolId, int cabinetId) {
     SqlWrapper db;
 
     db << "update cabinet set title='" << title << "', school_id=" << schoolId << " where id=" << cabinetId << ";";
-    db.exec("Save cabinet");
+    db.exec("Update cabinet");
 
     db.disconnect();
 

@@ -48,6 +48,8 @@ public:
     int editCabinet(const std::unordered_multimap<std::string, std::string> &data, const User &user);
 
     int deleteCabinet(int cabinet_id);
+
+    std::string getStudentPage(int student_id);
 private:
 
 };

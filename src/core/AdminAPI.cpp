@@ -177,6 +177,7 @@ templates::Context AdminAPI::verboseSearchStudent(const std::string &search, con
     std::cout << "SEARCHED: " << search << std::endl;
     auto students = Student::get_students_like(search, user.school_id());
     context.putArray("students", students, StudentDBSerializer);
+
     return context;
 }
 
@@ -313,4 +314,14 @@ int AdminAPI::deleteCabinet(int cabinet_id) {
     Cabinet::remove(cabinet_id);
 
     return 200;
+}
+
+std::string AdminAPI::getStudentPage(int student_id) {
+    templates::Context context;
+
+    auto student = Student::get_student(student_id);
+    context.put("student", student);
+    _render.set("student.html");
+
+    return _render.render(context);
 }
