@@ -61,7 +61,7 @@ void Handler::adminHandler(Request request, Response& response, const User &user
         } else if (request.path() == "/api/verbose_search_student") {
             response = Response(adminApi.verboseSearchStudent(request.data("search"), user));
         } else if (request.path() == "/student") {
-            response = Response(adminApi.student(request.data("id")));
+            response = Response(adminApi.getStudentPage(request.data("id")));
         }
     } else {
         if (request.path() == "/api/save_current_lesson") {
