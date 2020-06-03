@@ -45,6 +45,9 @@ public:
     std::string surname() const { return _surname;}
     int age() const { return _age;}
     std::string description() const { return _description;}
+    std::string parent() const { return _parent_name;}
+    std::string tel_number() const { return _tel_number;}
+    std::string email() const;
     std::string avatar() const;
 
 private:
