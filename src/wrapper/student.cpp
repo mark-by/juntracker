@@ -69,8 +69,8 @@ Student Student::get_student(int student_id) {
 }
 
 int Student::save(const std::string name, const std::string &surname, int age,
-        const std::string &description, const std::string &tel_number, const std::string& email,
-                  const std::string &parent_name, const std::string& avatar, int school_id) {
+                  const std::string &description, const std::string &tel_number, const std::string &email,
+                  const std::string &parent_name, const std::string &avatar, int school_id) {
     SqlWrapper db;
 
     std::string login;
@@ -200,7 +200,7 @@ std::vector<Visit> Student::get_visits() const {
                 db.get_bool(3, i),
                 converter.convert(db.get_str(4, i)),
                 db.get_int(5, i)
-                );
+        );
     }
 
     db.disconnect();
@@ -217,4 +217,22 @@ std::string Student::email() const {
     std::string res = db.get_str(0, 0);
 
     return res;
+}
+
+int Student::update(int id, std::string name, std::string surname, int age, std::string description,
+                    std::string tel_number) {
+    SqlWrapper db;
+
+    db << "update student set "
+       << "name='" << name << "', "
+       << "surname='" << surname << "', "
+       << "age=" << age << ", "
+       << "description='" << description << "', "
+       << "tel_number='" << tel_number
+       << "' where id=" << teacher_id << ";";
+    db.exec("Update student");
+
+    db.disconnect();
+
+    return 0;
 }

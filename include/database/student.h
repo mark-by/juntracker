@@ -37,6 +37,8 @@ public:
             const std::string& email, const std::string& parent_name, const std::string& avatar, int school_id);
     static int remove(int student_id);
     static std::vector<Student> get_students_like(const std::string &str, int school_id);
+    static int update(int id, std::string name, std::string surname, int age, std::string description,
+            std::string tel_number, std::string parent_name);
 
     int id() const { return _id;}
     std::string name() const { return _name;}
