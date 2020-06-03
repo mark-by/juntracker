@@ -8,12 +8,6 @@
     {% block styles %}
     {% endblock %}
     <title>{% block title %}JunTracker{% endblock %}</title>
-    <script type="module" src="static/script/message.js"></script>
-    <script type="module" src="static/script/Component.js"></script>
-    <script type="module" src="static/script/root.js"></script>
-    <script type="module" src="static/script/header.js" defer></script>
-    {% block scripts %}
-    {% endblock %}
 </head>
 <body>
 <header>
@@ -54,5 +48,12 @@
 </header>
 {% block main %}
 {% endblock %}
+<message></message>
 </body>
+<script type="module" src="static/script/message.js" defer></script>
+<script type="module" src="static/script/Component.js" defer></script>
+<script type="module" src="static/script/root.js" defer></script>
+<script type="module" src="static/script/header.js" defer></script>
+{% block scripts %}
+{% endblock %}
 </html>

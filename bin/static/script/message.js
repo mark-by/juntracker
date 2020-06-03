@@ -1,6 +1,6 @@
 export default class Message {
     constructor() {
-        document.body.innerHTML += `
+        document.querySelector("message").outerHTML = `
         <div class="message">
             <div class="message-content">
             </div>
@@ -24,11 +24,13 @@ export default class Message {
 
     close() {
         this.element.style.transform = "";
-        setTimeout(() => this.element.style.display = "none", 500);
+        setTimeout(() => {
+            this.element.style.display = "none";
+            this.element.classList.remove("success");
+            this.element.classList.remove("fail")
+        }, 500);
 
 
-        this.element.classList.remove("success");
-        this.element.classList.remove("fail")
     }
 
 }

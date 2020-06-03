@@ -1,0 +1,23 @@
+{% extends base.html %}
+
+{% block title %}JunTracker | {{student.name }}{{student.surname}}{% endblock %}
+
+{% block currentWindow %}{{student.name }}{{student.surname}}{% endblock %}
+{% block hiddenMenu %}
+    <a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{% else %}преподавателя{%endif%}</a>
+    <a class="menu__option" href="/schedule">Расписание</a>
+    {% if user.isAdmin %}
+        <!--<a class="menu__option" href="/finance">Финансы</a>-->
+        <a class="menu__option" href="/students">База учеников</a>
+    {% endif %}
+    <!--<a class="menu__option" href="/diary">Журнал</a>-->
+{% endblock %}
+
+{% block main %}
+    <main class="student-main">
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="static/script/lessons.js" defer></script>
+{% endblock %}

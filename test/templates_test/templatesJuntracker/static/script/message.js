@@ -1,6 +1,6 @@
 export default class Message {
     constructor() {
-        document.body.innerHTML += `
+        document.querySelector("message").outerHTML = `
         <div class="message">
             <div class="message-content">
             </div>
