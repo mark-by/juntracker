@@ -1,4 +1,4 @@
-#include "AdminAPI.h"
+#include <AdminAPI.h>
 #include <context/context.h>
 #include <user.h>
 #include <lesson.h>
@@ -11,7 +11,8 @@ int AdminAPI::saveCurrentLesson(const std::unordered_multimap<std::string, std::
     if (data.empty()) {
         return 400;
     }
-    int lesson_id = std::stoi(data.find("lesson_id")->second);
+
+    int lesson_id = std::stoi(get("lesson_id", data));
 
     for (auto &pair : data) {
         if (pair.first != "check" && pair.first != "lesson_id") {
@@ -117,8 +118,8 @@ int AdminAPI::updateLesson(const std::unordered_multimap<std::string, std::strin
         return 404;
     }
 
-    int lesson_id = std::stoi(data.find("lesson_id")->second);
-    int course_id = std::stoi(data.find("course")->second);
+    int lesson_id = std::stoi(get("lesson_id", data));
+    int course_id = std::stoi(get("course", data));
     std::vector<int> students_id;
     for (auto &pair : data) {
         if (pair.first == "new_student") {
