@@ -49,8 +49,7 @@ public:
 
     int deleteCabinet(int cabinet_id);
 
-    templates::Context verboseSearchStudent(const std::string &search, const User &user);
-
+    std::string getStudentPage(int student_id);
 };
 
 #endif //CORE_ADMINAPI_H
