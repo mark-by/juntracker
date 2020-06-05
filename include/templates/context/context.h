@@ -5,6 +5,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 namespace templates {
     template <class T>
@@ -39,6 +40,7 @@ namespace templates {
 
         inline std::vector<Context> getObjects(boost::property_tree::ptree::key_type const &key);
 
+        inline std::unordered_multimap<std::string, std::string> toMap();
     private:
         boost::property_tree::ptree root;
     };

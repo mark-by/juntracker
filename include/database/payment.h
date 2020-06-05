@@ -1,20 +1,38 @@
-#ifndef _PAYMENT_H_
-#define _PAYMENT_H_
+#ifndef INCLUDE_DATABASE_PAYMENT_H_
+#define INCLUDE_DATABASE_PAYMENT_H_
 
-#include <string>
+#include "sql_wrapper.h"
+#include "course.h"
 
 class Payment {
  public:
-    explicit Payment();
+    explicit Payment(int _id, int _student_id, int _course_id, int _amount,
+            const boost::posix_time::ptime& _payment_date, int _school_id):
+            _id(_id),
+            _student_id(_student_id),
+            _course_id(_course_id),
+            _amount(_amount),
+            _payment_date(_payment_date),
+            _school_id(_school_id) { }
     
-    int get_student_id() const;
-    int get_course_id() const;
+    Student get_student() const;
+    Course get_course() const;
+
+    static Payment get_payment(int payment_id);
+    static int save(int student_id, int course_id, int amount, std::string& payment_date, int school_id);
+    static int remove(int payment_id);
+
+    int id() const { return _id; }
+    int amount() const { return _amount; }
+    boost::posix_time::ptime payment_date() const { return _payment_date; }
+
  private:
-    int id;
-    int student_id;
-    int course_id;
-    int amount;
-    std::string payment_date;
+    int _id;
+    int _student_id;
+    int _course_id;
+    int _amount;
+    boost::posix_time::ptime _payment_date;
+    int _school_id;
 };
 
-#endif  // _PAYMENT_H_
+#endif  // INCLUDE_DATABASE_PAYMENT_H_

@@ -5,11 +5,14 @@
 #ifndef CORE_TEACHERAPI_H
 #define CORE_TEACHERAPI_H
 
+#include <string>
+#include <unordered_map>
+#include <StaffAPI.h>
 
-class TeacherAPI: public API {
+class TeacherAPI: public StaffAPI {
 public:
     TeacherAPI();
-    std::string getMainPage(const std::string&);
+    int rate(std::unordered_map<std::string, std::string> &);//
 };
 
 

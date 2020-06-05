@@ -11,7 +11,7 @@ void Response::setCookie(const std::string &key, const std::string &value, const
 
 void Response::setDate() {
     auto now = boost::posix_time::second_clock::universal_time();
-    headers.insert({"Date", ptimeConverter.convert(now)});
+    setHeader("Date", ptimeConverter.convert(now));
 }
 
 Response::Response(const templates::Context &jsonData, const int &status) : statusCode(status) {
@@ -60,7 +60,7 @@ void Response::cookiesToStream(std::stringstream &ss) {
 }
 
 void Response::setHeader(const std::string &key, const std::string &value) {
-    headers.insert({key, value});
+    headers.insert({boost::to_lower_copy(key), value});
 }
 
 std::string Response::statusToStr() const {
@@ -88,4 +88,23 @@ std::string Response::statusToStr() const {
         case (502): return "Bad Gateway";
         default: return "undefined";
     }
+}
+
+Response &Response::operator=(Response &&other) {
+    headers = other.headers;
+    cookies = other.cookies;
+    body = other.body;
+    statusCode = other.statusCode;
+    return *this;
+}
+
+void Response::setStatus(const int &status) {
+    statusCode = status;
+}
+
+Response::Response(const Response &other) {
+    headers = other.headers;
+    cookies = other.cookies;
+    body = other.body;
+    statusCode = other.statusCode;
 }

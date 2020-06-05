@@ -1,0 +1,31 @@
+{
+  "user": {
+    "username": "Homer Simpson",
+    "isAdmin": true
+  },
+  "student" : {
+    "name": "Марк",
+    "surname": "Быховец",
+    "avatar": false,
+    "age": 22,
+    "parent": "Ирина Быховец",
+    "telNumber": "89998355535",
+    "email": "m@m.ru",
+    "description": "asodifpoiwejewg",
+    "id": 1,
+    "visits": [
+      {
+        "wasInClass": true,
+        "course": "Робототехника",
+        "weekday": "Понедельник",
+        "date": "25.05.20"
+      },
+      {
+        "wasInClass": false,
+        "course": "Робототехника",
+        "weekday": "Понедельник",
+        "date": "25.05.20"
+      }
+    ]
+  }
+}

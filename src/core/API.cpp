@@ -1,21 +1,22 @@
-//
-// Created by timofei on 22.04.2020.
-//
+#include <API.h>
+#include <student.h>
+#include <user.h>
 
-#include "../../include/core/API.h"
 
-API::API() {}
+std::tuple<std::string, bool> API::fetch(const std::string &key, const std::unordered_multimap<std::string, std::string> &data) {
+    auto match = data.find(key);
+    if (match != data.end()) {
+        return {match->second, true};
+    } else {
+        return {"", false};
+    }
+}
 
-templates::Context API::shortStudentSerializer(Student) {}
-
-templates::Context API::studentSerializer(Student) {}
-
-templates::Context API::scheduleSerializer(Schedule) {}
-
-templates::Context API::visitHistorySerializer(VisitHistory) {}
-
-templates::Context API::paymentHistorySerializer(PaymentHistory) {}
-
-templates::Context API::courseSerializer(Course) {}
-
-templates::Context API::journalSerializer(Journal) {}
+std::string API::get(const std::string &key, const std::unordered_multimap<std::string, std::string> &data) {
+    auto match = data.find(key);
+    if (match != data.end()) {
+        return match->second;
+    } else {
+        return "";
+    }
+}

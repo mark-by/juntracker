@@ -13,14 +13,14 @@ public:
     std::string data(const std::string& key);
     std::string data();
     std::string cookie(const std::string & key);
-    std::unordered_map<std::string, std::string> dataTable();
+    std::unordered_multimap<std::string, std::string> dataTable();
 
 private:
     std::string _method;
     std::string _path;
     std::string body;
-    std::unordered_map<std::string, std::string> headers;
-    std::unordered_map<std::string, std::string> _data;
+    std::unordered_multimap<std::string, std::string> headers;
+    std::unordered_multimap<std::string, std::string> _data;
     std::unordered_map<std::string, std::string> cookies;
 
     void parseStartLine(const std::string::const_iterator &begin, const std::string::const_iterator &end);
@@ -28,6 +28,10 @@ private:
     void parseCookies();
     void parseDataFromPath();
     void parseDataFromBody(const std::string::const_iterator &begin, const std::string::const_iterator &end);
+    std::string urlDecode(const std::string::const_iterator &begin, const std::string::const_iterator &end);
+    std::string urlDecode(const std::string &url);
+
+    void replacePlusToSpace(std::string &str);
 };
 
-#endif //JUNTRACKER_REQUEST_H
+#endif  // JUNTRACKER_REQUEST_H

@@ -1,0 +1,65 @@
+{% extends base.html %}
+
+{% block currentWindow %}Окно&nbsp;{% if user.isAdmin %}Админиcтратора{%else%}Преподавателя{%endif%}{% endblock %}
+
+{% block scripts %}
+<script type="module" src="static/script/currentWindow.js" defer></script>
+{% endblock %}
+
+{% block hiddenMenu %}
+    {%if user.isAdmin %}
+        <a class="menu__option" href="/students">База учеников</a>
+<!--        <a class="menu__option" href="/finance">Финансы</a>-->
+    {% endif %}
+<a class="menu__option" href="/schedule">Расписание</a>
+<!--<a class="menu__option" href="/diary">Журнал</a>-->
+{% endblock %}
+
+{% block main %}
+<main class="administrator-main mainpage">
+    {% include Schedule.html %}
+    <div class="card-wrapper current-window">
+        <div class="schedule__day_header">
+            <div id="current-week-day" class="week-day"></div>
+            <div id="current-time" class="current-header__time"></div>
+            <div id="current-date" class="current-header__date"></div>
+        </div>
+        <div class="title">Сейчас идет</div>
+        <div id="current-wrapper">
+        </div>
+        <div class="title">Далее</div>
+        <div id="next-wrapper">
+            {% for lesson in currentLessons %}
+            <div class="card-wrapper lesson">
+                <div class="lesson__header">
+                    <div class="lesson__header_course">
+                        {{lesson.title}}
+                    </div>
+                    <div class="lesson__header_cab">{{lesson.cabinet}}</div>
+                    <div class="lesson__header_tutor">{{lesson.tutor}}</div>
+                </div>
+                <form class="lesson__content">
+                    <input type="hidden" name="lesson_id" value="{{lesson.id}}"/>
+                    {% for child in lesson.children %}
+                    <a class="lesson__content_child" href="/student?id={{child.id}}">
+                        <input type="checkbox" name="check" data="{%if child.isHere %}1{%else%}0{%endif%}" {% if child.isHere %}checked{%endif%}/>
+                        <input type="hidden" name="{{child.id}}" value="{{child.isHere}}"/>
+                        <div class="name">{{child.name}}</div>
+                    </a>
+                    {% endfor %}
+                </form>
+                <div class="progress-wrapper">
+                    <div class="start-time">{{lesson.startTime}}</div>
+                    <div class="progress-bar"><span></span></div>
+                    <div class="end-time">{{lesson.endTime}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</main>
+{% if user.isAdmin %}
+<div id="root"></div>
+
+<script type="module" src="static/script/lessons.js" defer></script>
+{% endif %}
+{% endblock %}

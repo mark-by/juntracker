@@ -1,39 +1,32 @@
-#ifndef _COURSE_H_
-#define _COURSE_H_
+#ifndef INCLUDE_DATABASE_COURSE_H_
+#define INCLUDE_DATABASE_COURSE_H_
 
-#include <string>
-#include <utility>
-#include <vector>
-
+class Course;
 #include "teacher.h"
 #include "student.h"
 
-#include "sql_wrapper.h"
-
 class Course {
- public:
-    Course(SqlWrapper& postgres)
-    : postgres(postgres) {}
-    explicit Course(int id, std::string& name, int price, std::string& start_date, std::string& end_date)
-        : id(id)
-        , name(name)
-        , price(price)
-        , start_date(start_date)
-        , end_date(end_date) {}
+public:
+    explicit Course(int _id, const std::string& _name, int _price, int school_id):
+        _id(_id), _name(_name), _price(_price), _school_id(school_id) { }
 
-    [[nodiscard]] Teacher get_teacher(const std::string& course_name) const;
-    [[nodiscard]] int get_price(const std::string& course_name) const;
-    void set_price(int price, const std::string& course_name);
-    std::vector<Student> get_student_list(const std::string& course_name);
+    static int set_price(int price, int course_id);
+    std::vector<Student> get_students() const;
+
+    static Course get_course(int course_id);
+    static int save(const std::string& name, int price, int schoolId);
+    static int remove(int course_id);
+    static int update(int course_id, const std::string &name, int price, int schoolId);
+
+    int id() const { return  _id; }
+    std::string title() const { return  _name; }
+    int price() const { return  _price; }
 
  private:
-    int id;
-    std::string name;
-    int price;
-    std::string start_date;
-    std::string end_date;
-
-    SqlWrapper postgres;
+    int _id;
+    std::string _name;
+    int _price;
+    int _school_id;
 };
 
-#endif  // _COURSE_H_
+#endif  // INCLUDE_DATABASE_COURSE_H_

@@ -1,0 +1,51 @@
+{% extends base.html %}
+
+{% block title %}JunTracker | База учеников{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="static/css/students.css"/>
+{% endblock %}
+
+{% block currentWindow %}База учеников{% endblock %}
+{% block hiddenMenu %}
+<a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{%else%}преподавателя{%endif%}</a>
+<a class="menu__option" href="/schedule">Расписание</a>
+<a class="menu__option" href="/dairy">Журнал</a>
+{% if user.isAdmin %}
+<a class="menu__option" href="/finance">Финансы</a>
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<main class="container">
+    <div class="students-header-control">
+        <input id="search-input" name="search" type="text">
+        <div class="students-header-control__group">
+            <img src="static/images/search.svg" alt="search"/>
+            <img src="static/images/trash.svg" alt="delete"/>
+            <img src="static/images/filter.svg" alt="filter"/>
+        </div>
+    </div>
+    <div class="students-form">
+        {% for student in students %}
+        <div class="student-search-wrapper">
+            <input type="checkbox" name="id" value="{{student.id}}">
+            <img src="{% if student.avatar %}{{student.avatar}}{% else %}static/images/avatar.svg{%endif%}"/>
+            <div class="student-name">{{student.name}}</div>
+            <div class="student-age">{{student.age }}лет</div>
+            <div class="student-groups">
+                {% for course in student.courses %}
+                <div class="course">
+                    {{ course }}
+                </div>
+                {% endfor %}
+            </div>
+            <img class="student-delete-button" src="static/images/close.svg"/>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+<div id="root"></div>
+
+<script type="module" src="static/script/students.js" defer></script>
+{% endblock %}

@@ -54,6 +54,7 @@ void templates::Loader::fillIncludes(std::unordered_map<std::string, std::shared
     templates::TextParser textParser;
     for (auto & pair : includes) {
         auto includeStr = fileToStr(_includesPath.append(pair.first));
+        _includesPath.remove_filename();
         textParser.set(includeStr.cbegin(), includeStr.cend());
         pair.second = textParser.parse();
     }

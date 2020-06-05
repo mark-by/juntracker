@@ -1,35 +1,52 @@
-#ifndef _TEACHER_H_
-#define _TEACHER_H_
-
-#include <string>
-#include <vector>
+#ifndef INCLUDE_DATABASE_TEACHER_H_
+#define INCLUDE_DATABASE_TEACHER_H_
 
 #include "person.h"
-#include "sql_wrapper.h"
+
+class Teacher;
+
+#include "course.h"
 
 class Teacher : public Person {
- public:
-    explicit Teacher(int id, std::string& name, std::string& surname, int salary, std::string& description)
-        : id(id)
-        , name(name)
-        , surname(surname)
-        , salary(salary)
-        , description(description) {}
+public:
+    explicit Teacher(
+            int _id,
+            const std::string &_name,
+            const std::string &_surname,
+            int age,
+            int _salary,
+            const std::string &_tel_number,
+            const std::string &_description)
+            : _id(_id),
+            _name(_name),
+            _surname(_surname),
+            _age(age),
+            _tel_number(_tel_number),
+            _salary(_salary),
+            _description(_description) {}
 
-    std::string get_name(int t_id) const override;
-    std::string get_surname(int t_id) const override;
-    std::vector<std::string> get_courses() const;
-    [[nodiscard]] std::string return_surname() const { return surname; }
+    std::vector<Course> get_courses() const;
+    int setMark(int lesson_id, int student_id, int mark, int school_id) const;
 
- private:
-    int id;
-    std::string name;
-    std::string surname;
-    int salary;
-//    std::vector<std::string> courses;
-    std::string description;
+    static Teacher get_teacher(int teacher_id);
+    static int save(const std::string& name, const std::string& surname, int school_id);
+    static int update(int teacher_id, const std::string& name, const std::string& surname);
+    static int remove(int teacher_id);
 
-    SqlWrapper postgres;
+    int id() const override { return _id; }
+    std::string name() const override { return _name; }
+    std::string surname() const override { return _surname; }
+    int salary() const { return _salary; }
+    std::string description() const { return _description; }
+
+private:
+    int _id;
+    std::string _name;
+    std::string _surname;
+    int _age;
+    std::string _tel_number;
+    int _salary;
+    std::string _description;
 };
 
-#endif  // _TEACHER_H_
+#endif  // INCLUDE_DATABASE_TEACHER_H_

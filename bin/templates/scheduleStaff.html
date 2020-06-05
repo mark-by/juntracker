@@ -1,0 +1,27 @@
+{% extends base.html %}
+
+{% block title %}JunTracker | Расписание{% endblock %}
+
+{% block currentWindow %}Расписание{% endblock %}
+{% block hiddenMenu %}
+<a class="menu__option" href="/">Окно&nbsp;{% if user.isAdmin %}администратора{% else %}преподавателя{%endif%}</a>
+{% if user.isAdmin %}
+<!--<a class="menu__option" href="/finance">Финансы</a>-->
+<a class="menu__option" href="/students">База учеников</a>
+{% endif %}
+<!--<a class="menu__option" href="/diary">Журнал</a>-->
+{% endblock %}
+
+{% block main %}
+    <main class="administrator-main only-schedule">
+    {% include Schedule.html %}
+    </main>
+
+    {% if user.isAdmin %}
+        <div id="root"></div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="static/script/lessons.js" defer></script>
+{% endblock %}
